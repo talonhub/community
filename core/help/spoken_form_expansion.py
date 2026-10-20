@@ -1,8 +1,7 @@
 from talon import Module, actions, registry
 
 import egui
-from talon.egui import Window
-import skia
+from ..gui.gui import open_gui
 
 class SpokenForm:
 	def __init__(self, type_name, text, get_description, get_key_value_pairs, name):
@@ -11,7 +10,6 @@ class SpokenForm:
 		self.get_description = get_description
 		self.get_key_value_pairs = get_key_value_pairs
 		self.name = name
-		self.children = None
 
 def get_list_description(name):
 	return registry.decls.lists[name].desc
@@ -86,21 +84,17 @@ def compute_spoken_forms(text, exclude_total=True):
 
 
 
-class ExpansionDemo:
+class Expansion:
 	def __init__(self):
-		self.window = Window()
-		self.window.rect = skia.Rect(500, 100, 700, 800)
-		self.window.toplevel = True
-		self.window.draggable = True
-		self.window.decorated = False
-		self.window.set_content(self.ui)
-		self.root = None
+		self.root = egui.Mutable("")
+
 
 	async def show_expansion(self, ui, encountered=None, root=None, capture: SpokenForm | None=None):
 		if encountered is None:
 			encountered = set()
 		if root is None:
-			root = self.root
+			root = self.root.get()
+			ui.add(egui.TextEdit.singleline(self.root))
 		if capture is None:
 			title = f"Expansion of {root}"
 			show_by_default = True
@@ -123,7 +117,7 @@ class ExpansionDemo:
 						async with ui.horizontal_wrapped():
 							ui.label(f"Rule: {capture.text}")
 							if ui.button("Make root").clicked():
-								self.root = capture.text
+								self.root.set(capture.text)
 					lists, captures = compute_spoken_forms(root, exclude_total=False)
 					async with ui.horizontal_wrapped():
 						if lists:
@@ -134,34 +128,37 @@ class ExpansionDemo:
 					for c in captures:
 						await self.show_expansion(ui, encountered, c.text, c)
 
-	async def ui(self, ui):
-		if self.root:
+	async def render(self, ui):
+		if self.root.get():
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
 			async with scroll_area.show():
 				await self.show_expansion(ui) 
-
-		
 		
 		if ui.button("hide").clicked():
-			self.hide()
+			actions.user.spoken_form_expansion_hide()
 
 	def show(self, root):
-		self.root = root
-		self.window.show()
+		self.root.set(root)
 
-	def hide(self):
-		self.window.hide()
-
-demo = None
+expansion = None
+@open_gui(width=0.5, height=0.5)
+async def gui_expansion(ui, ui_wrapper):
+	await expansion.render(ui, ui_wrapper)
 
 mod = Module()
 @mod.action_class
-class Actions:
-	def screenshot_expansion_demo():
-		"""Remove before merge"""
-		actions.user.samuel_screenshot_around_window(demo.window)
+class Actions:	
+	def spoken_form_expansion_show(text: str=""):
+		"""Show the spoken form expansion window"""
+		actions.user.spoken_form_expansion_hide()
+		expansion = Expansion()
+		expansion.show(text)
+		gui_expansion.show()
 
-	def hide_expansion_window():
-		""""""
-		demo.hide()
+	def spoken_form_expansion_hide():
+		"""Hide the spoken form expansion window"""
+		if gui_expansion.showing():
+			gui_expansion.hide()
+		if expansion:
+			expansion = None
