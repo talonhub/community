@@ -1,0 +1,32 @@
+list: user.html_attribute
+-
+
+# Common Attributes for HTML Tags
+alt: alt
+aria hidden: aria-hidden
+aria label: aria-label
+autofocus: autofocus
+checked: checked
+class: class
+col span: colspan
+colspan: colspan
+disabled: disabled
+for: for
+href: href
+id: id
+name: name
+placeholder: placeholder
+read only: readonly
+readonly: readonly
+rel: rel
+required: required
+role: role
+row span: rowspan
+rowspan: rowspan
+src: src
+style: style
+tab index: tabindex
+tabindex: tabindex
+target: target
+type: type
+value: value
