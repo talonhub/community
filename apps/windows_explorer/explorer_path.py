@@ -27,10 +27,19 @@ class ExplorerPath(str):
         obj.is_virtual = is_virtual
         return obj
 
+
 if app.platform == "windows":
     import ctypes
-    from ctypes import POINTER, byref, c_void_p, c_long, c_ulong, c_longlong, c_ushort
-    from ctypes import wintypes
+    from ctypes import (
+        POINTER,
+        byref,
+        c_long,
+        c_longlong,
+        c_ulong,
+        c_ushort,
+        c_void_p,
+        wintypes,
+    )
 
     # ---- Minimal ctypes COM plumbing (free-threaded compatible) ------------
     S_OK = 0
@@ -73,7 +82,11 @@ if app.platform == "windows":
     _user32 = ctypes.WinDLL("user32")
 
     _ole32.CoCreateInstance.argtypes = [
-        POINTER(GUID), c_void_p, wintypes.DWORD, POINTER(GUID), POINTER(c_void_p)
+        POINTER(GUID),
+        c_void_p,
+        wintypes.DWORD,
+        POINTER(GUID),
+        POINTER(c_void_p),
     ]
     _ole32.CoCreateInstance.restype = c_long
     _ole32.IIDFromString.argtypes = [ctypes.c_wchar_p, POINTER(GUID)]
@@ -82,14 +95,19 @@ if app.platform == "windows":
     # string). It is used in place of the MAX_PATH-bound SHGetPathFromIDListW
     # so that long filesystem paths are not truncated.
     _shell32.SHGetNameFromIDList.argtypes = [
-        c_void_p, wintypes.DWORD, POINTER(c_void_p)
+        c_void_p,
+        wintypes.DWORD,
+        POINTER(c_void_p),
     ]
     _shell32.SHGetNameFromIDList.restype = c_long
     _user32.GetForegroundWindow.restype = wintypes.HWND
     _user32.GetAncestor.argtypes = [wintypes.HWND, wintypes.UINT]
     _user32.GetAncestor.restype = wintypes.HWND
     _user32.FindWindowExW.argtypes = [
-        wintypes.HWND, wintypes.HWND, ctypes.c_wchar_p, ctypes.c_wchar_p
+        wintypes.HWND,
+        wintypes.HWND,
+        ctypes.c_wchar_p,
+        ctypes.c_wchar_p,
     ]
     _user32.FindWindowExW.restype = wintypes.HWND
 
@@ -156,24 +174,42 @@ if app.platform == "windows":
     def _path_from_browser(disp, hwnd_fg, active_tab):
         # IUnknown::QueryInterface for IServiceProvider
         sp = c_void_p()
-        if _vtable_call(disp, 0, c_long,
-                        (POINTER(GUID), byref(IID_IServiceProvider)),
-                        (POINTER(c_void_p), byref(sp))) != S_OK or not sp:
+        if (
+            _vtable_call(
+                disp,
+                0,
+                c_long,
+                (POINTER(GUID), byref(IID_IServiceProvider)),
+                (POINTER(c_void_p), byref(sp)),
+            )
+            != S_OK
+            or not sp
+        ):
             return None
         try:
             # IServiceProvider::QueryService(SID_SShellBrowser) -> the
             # IShellBrowser for this specific tab.
             sb = c_void_p()
-            if _vtable_call(sp, 3, c_long,
-                            (POINTER(GUID), byref(SID_SShellBrowser)),
-                            (POINTER(GUID), byref(IID_IShellBrowser)),
-                            (POINTER(c_void_p), byref(sb))) != S_OK or not sb:
+            if (
+                _vtable_call(
+                    sp,
+                    3,
+                    c_long,
+                    (POINTER(GUID), byref(SID_SShellBrowser)),
+                    (POINTER(GUID), byref(IID_IShellBrowser)),
+                    (POINTER(c_void_p), byref(sb)),
+                )
+                != S_OK
+                or not sb
+            ):
                 return None
             try:
                 # IOleWindow::GetWindow -> this tab's window handle.
                 hwnd = wintypes.HWND()
-                if _vtable_call(sb, 3, c_long,
-                                (POINTER(wintypes.HWND), byref(hwnd))) != S_OK:
+                if (
+                    _vtable_call(sb, 3, c_long, (POINTER(wintypes.HWND), byref(hwnd)))
+                    != S_OK
+                ):
                     return None
                 if active_tab:
                     # Window has tabs: match the active tab exactly.
@@ -186,28 +222,51 @@ if app.platform == "windows":
 
                 # IShellBrowser::QueryActiveShellView -> IShellView
                 sv = c_void_p()
-                if _vtable_call(sb, 15, c_long,
-                                (POINTER(c_void_p), byref(sv))) != S_OK or not sv:
+                if (
+                    _vtable_call(sb, 15, c_long, (POINTER(c_void_p), byref(sv))) != S_OK
+                    or not sv
+                ):
                     return None
                 try:
                     # IShellView -> IFolderView
                     fv = c_void_p()
-                    if _vtable_call(sv, 0, c_long,
-                                    (POINTER(GUID), byref(IID_IFolderView)),
-                                    (POINTER(c_void_p), byref(fv))) != S_OK or not fv:
+                    if (
+                        _vtable_call(
+                            sv,
+                            0,
+                            c_long,
+                            (POINTER(GUID), byref(IID_IFolderView)),
+                            (POINTER(c_void_p), byref(fv)),
+                        )
+                        != S_OK
+                        or not fv
+                    ):
                         return None
                     try:
                         # IFolderView::GetFolder -> IPersistFolder2
                         pf2 = c_void_p()
-                        if _vtable_call(fv, 5, c_long,
-                                        (POINTER(GUID), byref(IID_IPersistFolder2)),
-                                        (POINTER(c_void_p), byref(pf2))) != S_OK or not pf2:
+                        if (
+                            _vtable_call(
+                                fv,
+                                5,
+                                c_long,
+                                (POINTER(GUID), byref(IID_IPersistFolder2)),
+                                (POINTER(c_void_p), byref(pf2)),
+                            )
+                            != S_OK
+                            or not pf2
+                        ):
                             return None
                         try:
                             # IPersistFolder2::GetCurFolder -> PIDL
                             pidl = c_void_p()
-                            if _vtable_call(pf2, 5, c_long,
-                                            (POINTER(c_void_p), byref(pidl))) != S_OK or not pidl:
+                            if (
+                                _vtable_call(
+                                    pf2, 5, c_long, (POINTER(c_void_p), byref(pidl))
+                                )
+                                != S_OK
+                                or not pidl
+                            ):
                                 return None
                             try:
                                 return _location_from_pidl(pidl)
@@ -233,24 +292,33 @@ if app.platform == "windows":
         # of the foreground window. FindWindowEx enumerates children in
         # z-order, so the first match is the active tab. Returns 0 when the
         # window has no such child (e.g. older Explorer without tabs).
-        active_tab = _user32.FindWindowExW(
-            hwnd_fg, None, SHELL_TAB_WINDOW_CLASS, None
-        )
+        active_tab = _user32.FindWindowExW(hwnd_fg, None, SHELL_TAB_WINDOW_CLASS, None)
 
         hr = _ole32.CoInitializeEx(None, COINIT_APARTMENTTHREADED)
         need_uninit = hr in (S_OK, S_FALSE)
         try:
             shell_windows = c_void_p()
-            if _ole32.CoCreateInstance(
-                byref(CLSID_ShellWindows), None, CLSCTX_ALL,
-                byref(IID_IShellWindows), byref(shell_windows),
-            ) != S_OK or not shell_windows:
+            if (
+                _ole32.CoCreateInstance(
+                    byref(CLSID_ShellWindows),
+                    None,
+                    CLSCTX_ALL,
+                    byref(IID_IShellWindows),
+                    byref(shell_windows),
+                )
+                != S_OK
+                or not shell_windows
+            ):
                 return None
             try:
                 # IShellWindows::get_Count
                 count = c_long(0)
-                if _vtable_call(shell_windows, 7, c_long,
-                                (POINTER(c_long), byref(count))) != S_OK:
+                if (
+                    _vtable_call(
+                        shell_windows, 7, c_long, (POINTER(c_long), byref(count))
+                    )
+                    != S_OK
+                ):
                     return None
                 for i in range(count.value):
                     # IShellWindows::Item(VARIANT index) -> IDispatch
@@ -258,9 +326,17 @@ if app.platform == "windows":
                     var.vt = VT_I4
                     var.val = i
                     disp = c_void_p()
-                    if _vtable_call(shell_windows, 8, c_long,
-                                    (VARIANT, var),
-                                    (POINTER(c_void_p), byref(disp))) != S_OK or not disp:
+                    if (
+                        _vtable_call(
+                            shell_windows,
+                            8,
+                            c_long,
+                            (VARIANT, var),
+                            (POINTER(c_void_p), byref(disp)),
+                        )
+                        != S_OK
+                        or not disp
+                    ):
                         continue
                     try:
                         path = _path_from_browser(disp, hwnd_fg, active_tab)
@@ -281,7 +357,7 @@ def get_active_explorer_path():
 
     The result is an ExplorerPath (a str): a filesystem path for
     ordinary folders, or a shell parsing name for virtual folders such as
-    This PC or Home. Check .is_virtual to tell them apart. 
+    This PC or Home. Check .is_virtual to tell them apart.
     """
     if app.platform != "windows":
         return None
