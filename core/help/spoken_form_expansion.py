@@ -60,7 +60,7 @@ def compute_spoken_forms(text, exclude_total=True, prior_encountered=None):
 	start = None
 	for i, c in enumerate(text):
 		if exclude_total and i == len(text) - 1 and start == 0:
-			return []
+			return [], []
 		if c in ("{", "<"):
 			start = i
 		elif c == "}":
@@ -79,18 +79,17 @@ def compute_spoken_forms(text, exclude_total=True, prior_encountered=None):
 			form_text = text[start:i+1]
 			capture_name = form_text[1:-1]
 			if form_text not in encountered:
-				if form_text not in encountered:
+				if form_text in encountered:
 					form = prior_encountered[form_text]
 				else:
 					form = TalonCapture(capture_name)
+					if form.rule:
+						form.child_lists, form.child_captures = compute_spoken_forms(
+							form.rule,
+							prior_encountered=prior_encountered,
+						)
 					prior_encountered[form_text] = form
 				captures.append(form)
-				if form.rule:
-					form.child_lists, form.child_captures = compute_spoken_forms(
-						form.rule,
-						exclude_total=False,
-						prior_encountered=prior_encountered,
-					)
 			encountered.add(form_text)
 			start = None
 	return lists, captures
@@ -135,7 +134,7 @@ class Expansion:
 						async with ui.horizontal_wrapped():
 							ui.label(f"Rule: {capture.rule}")
 							if ui.button("Make root").clicked():
-								self.root.set(f"{capture.compute_talon_script_representation()}")
+								self.show(f"{capture.compute_talon_script_representation()}")
 					async with ui.horizontal_wrapped():
 						if lists:
 							ui.label("lists: ")
@@ -170,7 +169,7 @@ class Expansion:
 	
 	def update_expansion(self):
 		self.new_showing = True
-		self.lists, self.captures = compute_spoken_forms(self.root.get())
+		self.lists, self.captures = compute_spoken_forms(self.root.get(), exclude_total=False)
 
 def show_list_help(name):
 	# doing this in the egui thread freezes Talon
