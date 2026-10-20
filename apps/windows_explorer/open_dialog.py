@@ -1,12 +1,6 @@
 
 from talon import Context, Module, actions, app, ui, clip
 import os
-#from ...core.operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID
-
-# if app.platform == "windows":
-#     import win32com.client
-#     import win32gui
-
 
 mod = Module()
 apps = mod.apps
@@ -22,12 +16,10 @@ win.class: #32770
 
 ctx = Context()
 ctx.matches = r"""
-os: windows
-win.class: #32770
+app: windows_file_browser
 """
 
-
-def get_active_explorer_path():
+def get_path():
     try: 
         toolbar = ui.active_window().element.find_one(automation_id = "1001", max_depth=0)
         if toolbar:
@@ -46,14 +38,7 @@ class UserActions:
         actions.key("alt-up")
 
     def file_manager_current_path():
-        path = get_active_explorer_path()
-        # if path in directories_to_remap:
-        #     path = directories_to_remap[path]
-
-        # if path in directories_to_exclude:
-        #     actions.user.file_manager_hide_pickers()
-        #     path = ""
-
+        path = get_path()
         return path
 
     def file_manager_terminal_here():
