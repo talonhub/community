@@ -1,5 +1,5 @@
 app: windows_explorer
-app: windows_file_browser
+app: windows_open_dialog
 -
 settings():
     user.context_sensitive_dictation = true

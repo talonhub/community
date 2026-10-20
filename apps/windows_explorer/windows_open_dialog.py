@@ -1,36 +1,36 @@
 
-from talon import Context, Module, actions, app, ui, clip
+from talon import Context, Module, actions, ui, clip
 import os
 
 mod = Module()
 apps = mod.apps
 
-
-# many commands should work in most save/open dialog.
-# note the "show options" stuff won't work unless work
-# unless the path is displayed in the title, which is rare for those
-apps.windows_file_browser = r"""
+# the standard file -> open file/older dialog
+# uses a fixed class name and supports most of the same
+# actions defined for file explorer
+apps.windows_open_dialog = r"""
 os: windows
-win.class: #32770
+and app.name: /.*/
+and win.class: #32770
 """
 
 ctx = Context()
 ctx.matches = r"""
-app: windows_file_browser
+app: windows_open_dialog
 """
 
 def get_path():
+    path = None
     try: 
         toolbar = ui.active_window().element.find_one(automation_id = "1001", max_depth=0)
         if toolbar:
             path = toolbar.legacyiaccessible_pattern.name.replace("Address: ", "")
-            return path
         else:
-            print("didn't find toolbar")
+            print("Failed to retrieve toolbar for open dialog in active window")
     except:
         pass
 
-    return None
+    return path
 
 @ctx.action_class("user")
 class UserActions:
@@ -38,13 +38,7 @@ class UserActions:
         actions.key("alt-up")
 
     def file_manager_current_path():
-        path = get_path()
-        return path
-
-    def file_manager_terminal_here():
-        actions.key("ctrl-l")
-        actions.insert("cmd.exe")
-        actions.key("enter")
+        return get_path()
 
     def file_manager_show_properties():
         """Shows the properties for the file"""
@@ -68,10 +62,15 @@ class UserActions:
 
     def file_manager_open_file(path: str):
         """opens the file"""
-        actions.key("ctrl-l")
-        toolbar = ui.active_window().element.find_one(automation_id = "1001", max_depth=0)
-        toolbar.value_pattern.value = path
+        actions.key("home")
+        actions.insert(path)
         actions.key("enter")
+
+    def file_manager_select_file(path: str):
+        """selects the file"""
+        actions.key("home")
+        actions.insert(path)
+
 
     def file_manager_select_file(path: str):
         """selects the file"""
@@ -86,7 +85,7 @@ class UserActions:
         actions.key("ctrl-l")
 
     def address_copy_address():
-        path = get_active_explorer_path()
+        path = get_path()
         if path:
             clip.set_text(path)
 

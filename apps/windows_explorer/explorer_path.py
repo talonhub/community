@@ -1,31 +1,23 @@
 """Read the filesystem path of the active File Explorer window.
 
 pywin32 (win32com / win32gui) has no free-threaded build, so instead of
-``Shell.Application`` late binding we drive the Shell COM interfaces directly
+Shell.Application late binding we drive the Shell COM interfaces directly
 through ctypes. This works with or without the GIL and has no third-party
 dependency.
 
-The public entry point is :func:`get_active_explorer_path`, which returns an
-:class:`ExplorerPath` for the foreground Explorer window, or ``None`` when the
-foreground window is not an Explorer view (for example a save/open common
-dialog). The result is a ``str`` subclass, so existing callers that treat it
-as a path keep working; its ``is_virtual`` attribute lets callers distinguish
-a real filesystem path from a virtual folder (This PC, Home, Network, Recycle
-Bin, ...) whose value is a shell parsing name instead of a filesystem path.
+The public entry point is get_active_explorer_path
 """
 
 from talon import app, ui
 
 
 class ExplorerPath(str):
-    """The active Explorer location, as a ``str`` with an origin flag.
+    """The active Explorer location, as a str with an origin flag.
 
     For ordinary folders the value is the filesystem path and
-    :attr:`is_virtual` is ``False``. For virtual folders that have no
+    is_virtual is false. For virtual folders that have no
     filesystem path the value is the shell parsing name (e.g.
-    ``::{20D04FE0-3AEA-1069-A2D8-08002B30309D}`` for This PC), which can be
-    typed back into the Explorer address bar, and :attr:`is_virtual` is
-    ``True``.
+    ::{20D04FE0-3AEA-1069-A2D8-08002B30309D} for This PC).
     """
 
     is_virtual: bool
@@ -124,9 +116,9 @@ if app.platform == "windows":
     IID_IPersistFolder2 = _guid("{1AC3D9F0-175C-11D1-95BE-00609797EA4F}")
 
     def _vtable_call(this, index, restype, *args):
-        """Call the vtable method at `index` on a raw COM interface pointer.
+        """Call the vtable method at index on a raw COM interface pointer.
 
-        Each entry in `args` is a (ctype, value) tuple for that argument.
+        Each entry in args is a (ctype, value) tuple for that argument.
         """
         vtbl = ctypes.cast(this, POINTER(c_void_p))[0]
         fn_addr = ctypes.cast(vtbl, POINTER(c_void_p))[index]
@@ -138,13 +130,13 @@ if app.platform == "windows":
             _vtable_call(ptr, 2, c_ulong)
 
     def _location_from_pidl(pidl):
-        """Resolve an absolute PIDL to an :class:`ExplorerPath`, or None.
+        """Resolve an absolute PIDL to an ExplorerPath, or None.
 
         SIGDN_FILESYSPATH succeeds only for filesystem-backed items and,
         because the shell allocates the string, is not capped at MAX_PATH, so
-        long (>260) paths come back intact and ``is_virtual`` is False.
+        long (>260) paths come back intact and is_virtual is False.
         Virtual folders (This PC, Home, Network, Recycle Bin, ...) fail that
-        and fall back to the canonical parsing name (``is_virtual`` True).
+        and fall back to the canonical parsing name (is_virtual True).
         Returns None if neither can be obtained.
         """
         for sigdn, is_virtual in (
@@ -287,10 +279,9 @@ if app.platform == "windows":
 def get_active_explorer_path():
     """Return the active Explorer window's location, or None.
 
-    The result is an :class:`ExplorerPath` (a ``str``): a filesystem path for
+    The result is an ExplorerPath (a str): a filesystem path for
     ordinary folders, or a shell parsing name for virtual folders such as
-    This PC or Home. Check ``.is_virtual`` to tell them apart. Returns None
-    when the foreground window is not an Explorer view.
+    This PC or Home. Check .is_virtual to tell them apart. 
     """
     if app.platform != "windows":
         return None

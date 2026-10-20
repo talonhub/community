@@ -1,6 +1,6 @@
-from talon import Context, Module, actions, app, ui, clip
 import os
 
+from talon import Context, Module, actions, app, ui
 from .explorer_path import get_active_explorer_path
 
 mod = Module()
@@ -26,7 +26,7 @@ class UserActions:
 
     def file_manager_current_path():
         path = get_active_explorer_path()
-        print(path)
+
         if path.is_virtual:
             # note:  possibly explore whether we can do anything useful with these folders via accessibility
             actions.app.notify("Cannot get path for virtual folder, command skipped")
@@ -46,8 +46,7 @@ class UserActions:
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
         actions.key("ctrl-l")
-        toolbar = ui.active_window().element.find_one(automation_id = "TextBox", max_depth=0)
-        toolbar.value_pattern.value = path
+        actions.insert(path)
         actions.key("enter")
 
     def file_manager_select_directory(path: str):
@@ -62,9 +61,8 @@ class UserActions:
 
     def file_manager_open_file(path: str):
         """opens the file"""
-        actions.key("ctrl-l")
-        toolbar = ui.active_window().element.find_one(automation_id = "TextBox", max_depth=0)
-        toolbar.value_pattern.value = path
+        actions.key("home")
+        actions.insert(path)
         actions.key("enter")
 
     def file_manager_select_file(path: str):
@@ -80,7 +78,8 @@ class UserActions:
         actions.key("ctrl-l")
 
     def address_copy_address():
-        clip.set_text(get_active_explorer_path())
+        actions.key("ctrl-l")
+        actions.edit.copy()
 
     def address_navigate(address: str):
         actions.user.file_manager_open_directory(address)
