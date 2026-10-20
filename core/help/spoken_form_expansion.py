@@ -83,9 +83,9 @@ def compute_spoken_forms(text, exclude_capture_matching_total=True, prior_encoun
 	lists = []
 	captures = []
 	encountered = set()
-	if not prior_encountered_lists:
+	if prior_encountered_lists is None:
 		prior_encountered_lists = {}
-	if not prior_encountered_captures:
+	if prior_encountered_captures is None:
 		prior_encountered_captures = {}
 
 	start = None
@@ -185,12 +185,19 @@ class Expansion:
 		self.root.set(root)
 		self.update_expansion()
 
+	@staticmethod
+	def _compute_number_to_spoken_form_dictionary(forms):
+		return {f.number: f for f in forms.values()}
+
 	def update_expansion(self):
 		self.new_showing = True
 		try:
-			self.lists, self.captures, self.number_to_list, self.number_to_capture = compute_spoken_forms(self.root.get(), exclude_capture_matching_total=False)
+			self.lists, self.captures, all_lists, all_captures = compute_spoken_forms(self.root.get(), exclude_capture_matching_total=False)
 		except ValueError:
-			self.lists, self.captures, self.number_to_list, self.number_to_capture = [], [], {}, {}
+			self.lists, self.captures, all_lists, all_captures = [], [], {}, {}
+		self.number_to_list = self._compute_number_to_spoken_form_dictionary(all_lists)
+		self.number_to_capture = self._compute_number_to_spoken_form_dictionary(all_captures)
+	
 
 	def get_list(self, number):
 		return self.number_to_list.get(number)
@@ -235,6 +242,4 @@ class Actions:
 	def spoken_form_expansion_show_help_for_list(number: int):
 		"""Show the help for the list with a given number in the spoken form expansion"""
 		if target_list := expansion.get_list(number):
-			print('target_list', target_list)
 			actions.user.help_list(target_list.name)
-		print(expansion.number_to_list)
