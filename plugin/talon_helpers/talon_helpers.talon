@@ -1,6 +1,6 @@
 talon check updates: menu.check_for_updates()
 # the debug window is only available in the talon beta
-talon debug | talon command editor: gui.show_command_editor()
+talon open debug | talon command editor: gui.show_command_editor()
 talon open log: menu.open_log()
 talon open rebel: menu.open_repl()
 talon home: menu.open_talon_home()
