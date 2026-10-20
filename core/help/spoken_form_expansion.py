@@ -181,7 +181,7 @@ class Expansion:
 		try:
 			self.lists, self.captures = compute_spoken_forms(self.root.get(), exclude_total=False)
 		except ValueError:
-			self.lists, self.captures = []
+			self.lists, self.captures = [], []
 
 def show_list_help(name):
 	# doing this in the egui thread freezes Talon
