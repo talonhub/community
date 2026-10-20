@@ -1,6 +1,7 @@
 import os
 
 from talon import Context, Module, actions, app, ui
+from .explorer_path import get_active_explorer_path
 
 mod = Module()
 apps = mod.apps
@@ -13,75 +14,10 @@ and app.name: Windows-Explorer
 os: windows
 and app.exe: /^explorer\.exe$/i
 """
-
-# many commands should work in most save/open dialog.
-# note the "show options" stuff won't work
-# unless the path is displayed in the title, which is rare for those
-apps.windows_file_browser = """
-os: windows
-and app.name: /.*/
-and title: /(Save|Open|Browse|Select)/
-"""
-
 ctx = Context()
 ctx.matches = r"""
 app: windows_explorer
-app: windows_file_browser
 """
-
-user_path = os.path.expanduser("~")
-directories_to_remap = {}
-directories_to_exclude = {}
-
-if app.platform == "windows":
-    is_windows = True
-    import ctypes
-
-    GetUserNameEx = ctypes.windll.secur32.GetUserNameExW
-    NameDisplay = 3
-
-    size = ctypes.pointer(ctypes.c_ulong(0))
-    GetUserNameEx(NameDisplay, None, size)
-
-    nameBuffer = ctypes.create_unicode_buffer(size.contents.value)
-    GetUserNameEx(NameDisplay, nameBuffer, size)
-    one_drive_path = os.path.expanduser(os.path.join("~", "OneDrive"))
-
-    # this is probably not the correct way to check for onedrive, quick and dirty
-    if os.path.isdir(os.path.expanduser(os.path.join("~", r"OneDrive\Desktop"))):
-        directories_to_remap = {
-            "Desktop": os.path.join(one_drive_path, "Desktop"),
-            "Documents": os.path.join(one_drive_path, "Documents"),
-            "Downloads": os.path.join(user_path, "Downloads"),
-            "Music": os.path.join(user_path, "Music"),
-            "OneDrive": one_drive_path,
-            "Pictures": os.path.join(one_drive_path, "Pictures"),
-            "Videos": os.path.join(user_path, "Videos"),
-        }
-    else:
-        directories_to_remap = {
-            "Desktop": os.path.join(user_path, "Desktop"),
-            "Documents": os.path.join(user_path, "Documents"),
-            "Downloads": os.path.join(user_path, "Downloads"),
-            "Music": os.path.join(user_path, "Music"),
-            "OneDrive": one_drive_path,
-            "Pictures": os.path.join(user_path, "Pictures"),
-            "Videos": os.path.join(user_path, "Videos"),
-        }
-
-    if nameBuffer.value:
-        directories_to_remap[nameBuffer.value] = user_path
-
-    directories_to_exclude = [
-        "",
-        "Run",
-        "Task Switching",
-        "Task View",
-        "This PC",
-        "File Explorer",
-        "Program Manager",
-    ]
-
 
 @ctx.action_class("user")
 class UserActions:
@@ -89,16 +25,14 @@ class UserActions:
         actions.key("alt-up")
 
     def file_manager_current_path():
-        path = ui.active_window().title
+        path = get_active_explorer_path()
 
-        if path in directories_to_remap:
-            path = directories_to_remap[path]
-
-        if path in directories_to_exclude:
-            actions.user.file_manager_hide_pickers()
-            path = ""
-
-        return path
+        if path.is_virtual:
+            # note:  possibly explore whether we can do anything useful with these folders via accessibility
+            actions.app.notify("Cannot get path for virtual folder, command skipped")
+            return None
+        else:
+            return path
 
     def file_manager_terminal_here():
         actions.key("ctrl-l")
