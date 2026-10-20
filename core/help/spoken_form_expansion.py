@@ -4,8 +4,7 @@ import egui
 from ..gui.gui import open_gui
 
 class SpokenForm:
-	def __init__(self, type_name, text, get_description, name):
-		self.type_name = type_name
+	def __init__(self, text, get_description, name):
 		self.text = text
 		self.get_description = get_description
 		self.name = name
@@ -29,7 +28,6 @@ def get_capture_rule(name):
 
 def create_list(name, form_text):
 	return SpokenForm(
-			"list",
 			form_text,
 			lambda : get_list_description(name),
 			name,
@@ -37,7 +35,6 @@ def create_list(name, form_text):
 
 def create_capture(name):
 	return SpokenForm(
-		"capture",
 		get_capture_rule(name),
 		lambda : get_capture_description(name),
 		name,
