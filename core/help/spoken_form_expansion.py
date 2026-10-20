@@ -74,7 +74,7 @@ def create_spoken_form(text, start, i, create_function, forms, encountered, prio
 	return result
 
 
-def compute_spoken_forms(text, exclude_total=True, prior_encountered=None):
+def compute_spoken_forms(text, exclude_capture_matching_total=True, prior_encountered=None):
 	text = text.strip()
 	lists = []
 	captures = []
@@ -84,14 +84,14 @@ def compute_spoken_forms(text, exclude_total=True, prior_encountered=None):
 
 	start = None
 	for i, c in enumerate(text):
-		if exclude_total and i == len(text) - 1 and start == 0:
-			return [], []
 		if c in ("{", "<"):
 			start = i
 		elif c == "}":
 			create_spoken_form(text, start, i, TalonList, lists, encountered, prior_encountered)
 			start = None
 		elif c == ">":
+			if exclude_capture_matching_total and i == len(text) - 1 and start == 0:
+				return [], []
 			form = create_spoken_form(text, start, i, TalonCapture, captures, encountered, prior_encountered)
 			if form and form.rule:
 				form.child_lists, form.child_captures = compute_spoken_forms(
@@ -179,7 +179,7 @@ class Expansion:
 	def update_expansion(self):
 		self.new_showing = True
 		try:
-			self.lists, self.captures = compute_spoken_forms(self.root.get(), exclude_total=False)
+			self.lists, self.captures = compute_spoken_forms(self.root.get(), exclude_capture_matching_total=False)
 		except ValueError:
 			self.lists, self.captures = [], []
 
