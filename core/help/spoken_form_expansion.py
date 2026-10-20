@@ -49,10 +49,17 @@ def get_capture_rule(name):
 	except Exception:
 		return "Could not find rule"
 
+def do_delimiters_conflict(text: str):
+	a = text[0]
+	b = text[-1]
+	return (a == "{") != (b == "}")
+
 def create_spoken_form(text, start, i, create_function, forms, encountered, prior_encountered):
 	"""Create the spoken form object at the location. Return the object of a new one is created. Return None if it does not need to be created."""
 	form_text = text[start:i+1]
 	name = form_text[1:-1]
+	if do_delimiters_conflict(form_text):
+		raise ValueError(f"Delimiters did not match for {form_text}")
 	if form_text in encountered or i - start < 2:
 		return None
 	if form_text in prior_encountered:
@@ -171,7 +178,10 @@ class Expansion:
 	
 	def update_expansion(self):
 		self.new_showing = True
-		self.lists, self.captures = compute_spoken_forms(self.root.get(), exclude_total=False)
+		try:
+			self.lists, self.captures = compute_spoken_forms(self.root.get(), exclude_total=False)
+		except ValueError:
+			self.lists, self.captures = []
 
 def show_list_help(name):
 	# doing this in the egui thread freezes Talon
