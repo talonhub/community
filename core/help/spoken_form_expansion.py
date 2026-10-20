@@ -1,4 +1,4 @@
-from talon import Module, actions, registry
+from talon import Module, actions, registry, cron
 
 import egui
 from ..gui.gui import open_gui
@@ -110,7 +110,7 @@ class Expansion:
 							ui.label("lists: ")
 							for l in lists:
 								if ui.button(l.name).clicked():
-									pass
+									show_list_help(l.name)
 					for c in captures:
 						await self.show_expansion(ui, encountered, c.text, c)
 
@@ -129,6 +129,10 @@ class Expansion:
 
 	def show(self, root):
 		self.root.set(root)
+
+def show_list_help(name):
+	# doing this in the egui thread freezes Talon
+	cron.after("0ms", lambda : actions.user.help_list(name))
 
 expansion = None
 @open_gui(width=0.5, height=0.5)
