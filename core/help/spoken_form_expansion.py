@@ -117,7 +117,8 @@ class Expansion:
 	async def render(self, ui, ui_wrapper):
 		async with ui.horizontal_wrapped():
 			ui.strong("Spoken form to expand:")
-			ui.add(egui.TextEdit.singleline(self.root))
+			response = ui.add(egui.TextEdit.singleline(self.root))
+			#response.request_focus()
 		if self.root.get():
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
@@ -137,7 +138,8 @@ def show_list_help(name):
 expansion = None
 @open_gui(width=0.5, height=0.5)
 async def gui_expansion(ui, ui_wrapper):
-	await expansion.render(ui, ui_wrapper)
+	if expansion:
+		await expansion.render(ui, ui_wrapper)
 
 mod = Module()
 @mod.action_class
