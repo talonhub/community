@@ -169,7 +169,7 @@ class Expansion:
 			async with scroll_area.show():
 				await self.show_expansion(ui) 
 		
-		if ui.button("hide").clicked():
+		if ui.button("expansion close").clicked():
 			actions.user.spoken_form_expansion_hide()
 
 	def set_root(self, root):
