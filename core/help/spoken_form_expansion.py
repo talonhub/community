@@ -49,6 +49,24 @@ def get_capture_rule(name):
 	except Exception:
 		return "Could not find rule"
 
+def create_spoken_form(text, start, i, create_function, forms, encountered, prior_encountered):
+	"""Create the spoken form object at the location. Return the object of a new one is created. Return None if it does not need to be created."""
+	form_text = text[start:i+1]
+	name = form_text[1:-1]
+	if form_text not in encountered:
+		if form_text in prior_encountered:
+			form = prior_encountered[form_text]
+			result = None
+		else:
+			form = create_function(name)
+			prior_encountered[form_text] = form
+			result = form
+		forms.append(form)
+		encountered.add(form_text)
+		return result
+	return None
+
+
 def compute_spoken_forms(text, exclude_total=True, prior_encountered=None):
 	text = text.strip()
 	lists = []
@@ -64,33 +82,15 @@ def compute_spoken_forms(text, exclude_total=True, prior_encountered=None):
 		if c in ("{", "<"):
 			start = i
 		elif c == "}":
-			form_text = text[start:i+1]
-			list_name = form_text[1:-1]
-			if form_text not in encountered:
-				if form_text in prior_encountered:
-					form = prior_encountered[form_text]
-				else:
-					form = TalonList(list_name)
-					prior_encountered[form_text] = form
-				lists.append(form)
-			encountered.add(form_text)
+			create_spoken_form(text, start, i, TalonList, lists, encountered, prior_encountered)
 			start = None
 		elif c == ">":
-			form_text = text[start:i+1]
-			capture_name = form_text[1:-1]
-			if form_text not in encountered:
-				if form_text in prior_encountered:
-					form = prior_encountered[form_text]
-				else:
-					form = TalonCapture(capture_name)
-					if form.rule:
-						form.child_lists, form.child_captures = compute_spoken_forms(
-							form.rule,
-							prior_encountered=prior_encountered,
-						)
-					prior_encountered[form_text] = form
-				captures.append(form)
-			encountered.add(form_text)
+			form = create_spoken_form(text, start, i, TalonCapture, captures, encountered, prior_encountered)
+			if form and form.rule:
+				form.child_lists, form.child_captures = compute_spoken_forms(
+					form.rule,
+					prior_encountered=prior_encountered,
+				)
 			start = None
 	return lists, captures
 
