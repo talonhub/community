@@ -1,7 +1,7 @@
+from skia import Canvas as SkiaCanvas
 from talon import Context, Module, ui
 from talon.canvas import Canvas, MouseEvent
 from talon.screen import Screen
-from talon.skia.canvas import Canvas as SkiaCanvas
 from talon.types import Point2d, Rect
 
 mod = Module()
@@ -88,7 +88,7 @@ def render_buttons(
     c.paint.style = c.paint.Style.STROKE
     c.draw_circle(x, y, CIRCLE_RADIUS)
     for i, button_id in enumerate(buttons_ids):
-        (offset_x, offset_y) = BUTTON_OFFSETS[i]
+        offset_x, offset_y = BUTTON_OFFSETS[i]
         button_x = x + offset_x * BUTTON_OFFSET
         button_y = y + offset_y * BUTTON_OFFSET
         is_pressed = buttons[button_id]

@@ -88,6 +88,7 @@ class UserActionsWin:
     def dictation_peek(left, right):
         # Latency for this approach when I tested it with Slack in Firefox was <16ms.
         try:
+            print("Peeking dictation context")
             focused_element = ui.focused_element()
             # print("focused_element")
             text_pattern = focused_element.text_pattern
@@ -120,10 +121,11 @@ class UserActionsWin:
                 document_text[chars_before_start:selection_start],
                 document_text[selection_end:chars_after_end])
         except OSError as e:
+            print("OS error when trying to peek dictation context: " + str(e))
             print(str(e))
             return actions.next(left, right)
         except Exception as e: 
-            print(str(e))
+            print("Error when trying to peek dictation context: " + str(e))
             return actions.next(left, right)
                         
     

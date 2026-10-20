@@ -1,7 +1,4 @@
-from talon import Context, Module, actions, ui, app
-
-if app.platform == "mac":
-    from talon.mac import applescript
+from talon import Context, Module, actions, ui
 
 ctx = Context()
 mod = Module()
@@ -44,16 +41,16 @@ class BrowserActions:
             )
             address = address_field.AXValue
         except (ui.UIErr, AttributeError):
-            address = applescript.run(
-                f"""
+            from talon.mac import applescript
+
+            address = applescript.run(f"""
                 tell application id "{actions.app.bundle()}"
                     with timeout of 0.1 seconds
                         if not (exists (window 1)) then return ""
                         return window 1's current tab's URL
                     end timeout
                 end tell
-            """
-            )
+            """)
         return address
 
     def bookmark_tabs():

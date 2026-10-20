@@ -41,7 +41,7 @@ navigation_target_names = {
     "method": r"\w+\((.*?)\)",
     "constant": r"[A-Z_][A-Z_]+",
 }
-ctx.lists["self.navigation_target_name"] = navigation_target_names
+ctx.lists["user.navigation_target_name"] = navigation_target_names
 
 
 @mod.capture(
@@ -119,7 +119,7 @@ def get_text_right():
 def get_text_up():
     actions.edit.up()
     actions.edit.line_end()
-    for j in range(0, settings.get("user.text_navigation_max_line_search")):
+    for _ in range(0, settings.get("user.text_navigation_max_line_search")):
         actions.edit.extend_up()
     actions.edit.extend_line_start()
     text = actions.edit.selected_text()
@@ -130,7 +130,7 @@ def get_text_up():
 def get_text_down():
     actions.edit.down()
     actions.edit.line_start()
-    for j in range(0, settings.get("user.text_navigation_max_line_search")):
+    for _ in range(0, settings.get("user.text_navigation_max_line_search")):
         actions.edit.extend_down()
     actions.edit.extend_line_end()
     text = actions.edit.selected_text()
@@ -143,22 +143,22 @@ def get_current_selection_size():
 
 
 def go_right(i):
-    for j in range(0, i):
+    for _ in range(0, i):
         actions.edit.right()
 
 
 def go_left(i):
-    for j in range(0, i):
+    for _ in range(0, i):
         actions.edit.left()
 
 
 def extend_left(i):
-    for j in range(0, i):
+    for _ in range(0, i):
         actions.edit.extend_left()
 
 
 def extend_right(i):
-    for j in range(0, i):
+    for _ in range(0, i):
         actions.edit.extend_right()
 
 
@@ -326,17 +326,15 @@ def handle_extend(before_or_after, direction, start, end, length):
 
 def match_backwards(regex, occurrence_number, subtext):
     try:
-        match = list(regex.finditer(subtext))[-occurrence_number]
-        return match
+        return list(regex.finditer(subtext))[-occurrence_number]
     except IndexError:
-        return
+        return None
 
 
 def match_forward(regex, occurrence_number, sub_text):
     try:
-        match = next(
+        return next(
             itertools.islice(regex.finditer(sub_text), occurrence_number - 1, None)
         )
-        return match
     except StopIteration:
         return None

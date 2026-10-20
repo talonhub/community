@@ -9,7 +9,9 @@ from talon import Module, actions, app, clip, registry, scope, speech_system, ui
 from talon.grammar import Phrase
 from talon.scripting.types import ListTypeFull
 
-from ...core.operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window
+
+from ...core.app_switcher.windows.installed_applications import get_installed_windows_apps, get_valid_windows_by_app_user_model_id, get_application_user_model_id, get_application_user_model_for_window
+
 
 pp = pprint.PrettyPrinter()
 
@@ -85,14 +87,15 @@ class Actions:
 
     def talon_dump_explorer():
         """"""
-        import win32com.client
-        import win32gui
-        shell = win32com.client.Dispatch("Shell.Application")
-        hwnd = win32gui.GetForegroundWindow()
+        pass
+        # import win32com.client
+        # import win32gui
+        # shell = win32com.client.Dispatch("Shell.Application")
+        # hwnd = win32gui.GetForegroundWindow()
 
-        for window in shell.Windows():
-            if window.HWND == hwnd:
-                print(window.Title)
+        # for window in shell.Windows():
+        #     if window.HWND == hwnd:
+        #         print(window.Title)
 
 
     def talon_add_context_clipboard():
@@ -174,10 +177,10 @@ class Actions:
         title = actions.win.title()
         hostname = scope.get("hostname")
 
-        try:
-            app_user_model_id = get_application_user_model_id(ui.active_app().pid)
-        except:
-            app_user_model_id = "None"
+        # try:
+        #     app_user_model_id = get_application_user_model_id(ui.active_app().pid)
+        # except:
+        app_user_model_id = "None"
 
         if app.platform == "windows":
             result = f"Name: {name}\nExecutable: {executable}\nAppUserModelId: {app_user_model_id}\nWindow AppUserModelId: {get_application_user_model_for_window(ui.active_window().id)}\nTitle: {title}\nhostname: {hostname}"
@@ -201,8 +204,8 @@ class Actions:
         result += "\nBundle: " + actions.app.bundle()
         result += "\nTitle: " + actions.win.title()
 
-        if app.platform == "windows":
-            result +="\nAppUserModelId: " + get_application_user_model_id(ui.active_app().pid)
+        #if app.platform == "windows":
+            #result +="\nAppUserModelId: " + get_application_user_model_id(ui.active_app().pid)
 
         return result
 
@@ -312,15 +315,16 @@ class Actions:
 		
     def talon_get_windows_app_id():
         """do it"""
-        import win32com.client
+        pass
+        # import win32com.client
 
-        shell = win32com.client.Dispatch("Shell.Application")
-        folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
-        items = folder.Items()
+        # shell = win32com.client.Dispatch("Shell.Application")
+        # folder = shell.NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}')
+        # items = folder.Items()
         
-        for item in items:
-            if ui.active_app().name.lower() in item.Name.lower():
-                clip.set_text(item.path)
+        # for item in items:
+        #     if ui.active_app().name.lower() in item.Name.lower():
+        #         clip.set_text(item.path)
 
     def talon_toggle_scope_gui():
         """dsfadf"""

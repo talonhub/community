@@ -35,7 +35,7 @@ common_properties = {
 }
 
 mod.list("terraform_common_property", desc="Terraform Modifier")
-ctx.lists["self.terraform_common_property"] = common_properties
+ctx.lists["user.terraform_common_property"] = common_properties
 
 module_blocks = {
     "variable": "variable",
@@ -45,7 +45,7 @@ module_blocks = {
 }
 
 mod.list("terraform_module_block", desc="Simple Terraform Block")
-ctx.lists["self.terraform_module_block"] = module_blocks
+ctx.lists["user.terraform_module_block"] = module_blocks
 
 operators = Operators(
     # code_operators_assignment
@@ -90,13 +90,13 @@ class UserActions:
         actions.user.insert_between(text + ' "', '"')
 
     def code_terraform_resource(text: str):
-        result = f"resource \"{actions.user.formatted_text(text, 'SNAKE_CASE')}\" \"\""
+        result = f'resource "{actions.user.formatted_text(text, "SNAKE_CASE")}" ""'
 
         actions.insert(result)
         actions.key("left")
 
     def code_terraform_data_source(text: str):
-        result = f"data \"{actions.user.formatted_text(text, 'SNAKE_CASE')}\" \"\""
+        result = f'data "{actions.user.formatted_text(text, "SNAKE_CASE")}" ""'
 
         actions.insert(result)
         actions.key("left")

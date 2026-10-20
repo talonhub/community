@@ -1,0 +1,10 @@
+list: user.code_keyword_unprefixed
+code.language: cpp
+-
+
+const expr: "constexpr "
+const expression: "constexpr "
+const: "const "
+explicit: "explicit "
+static: "static "
+virtual: "virtual "

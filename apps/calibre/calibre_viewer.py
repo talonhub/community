@@ -15,7 +15,6 @@ os: windows
 os: linux
 app: calibre_viewer
 """
-# TODO: mac implementation
 
 
 # --- Implement actions ---

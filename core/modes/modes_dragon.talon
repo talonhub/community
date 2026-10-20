@@ -16,7 +16,7 @@ speech.engine: dragon
 ^talon wake [<phrase>]$: speech.enable()
 
 ^sleep all [<phrase>]$:
-    user.switcher_hide_running()
+    #user.switcher_hide_running()
     user.history_disable()
     user.homophones_hide()
     user.help_hide()

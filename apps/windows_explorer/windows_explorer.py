@@ -1,11 +1,7 @@
-from talon import Context, Module, actions, app, ui, clip
 import os
 
-if app.platform == "windows":
-    import win32com.client
-    import win32gui
-
-from ...core.operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID
+from talon import Context, Module, actions, app, ui
+from .explorer_path import get_active_explorer_path
 
 mod = Module()
 apps = mod.apps
@@ -13,74 +9,15 @@ apps = mod.apps
 apps.windows_explorer = r"""
 os: windows
 and app.name: Windows Explorer
-and win.title: /File Explorer/
 os: windows
 and app.name: Windows-Explorer
 os: windows
 and app.exe: /^explorer\.exe$/i
-and win.title: /File Explorer/
 """
-
-# # many commands should work in most save/open dialog.
-# # note the "show options" stuff won't work unless work
-# # unless the path is displayed in the title, which is rare for those
-# apps.windows_file_browser = """
-# os: windows
-# and app.name: /.*/
-# and title: /(Save|Open|Browse|Select)/
-# """
-
 ctx = Context()
 ctx.matches = r"""
 app: windows_explorer
-# app: windows_file_browser
 """
-
-user_path = os.path.expanduser("~")
-directories_to_remap = {}
-directories_to_exclude = {}
-
-
-if app.platform == "windows":
-    is_windows = True
-  
-    known_paths_to_resolve = {
-        "Desktop": FOLDERID.Desktop,
-        "Documents": FOLDERID.Documents,
-        "Downloads": FOLDERID.Documents,
-        "Music": FOLDERID.Music,
-        "Pictures": FOLDERID.Pictures,
-        "Videos": FOLDERID.Profile
-    }
-
-    for key, value in known_paths_to_resolve.items():
-        try:
-            path = resolve_known_windows_path(value)
-        except Exception as e:
-            path = None
-
-    directories_to_exclude = [
-        "",
-        "Run",
-        "Task Switching",
-        "Task View",
-        "This PC",
-        "File Explorer",
-        "Program Manager",
-    ]
-
-def get_active_explorer_path():
-    shell = win32com.client.Dispatch("Shell.Application")
-    hwnd = win32gui.GetForegroundWindow()
-
-    for window in shell.Windows():
-        try:
-            if window.HWND == hwnd:
-                return window.Document.Folder.Self.Path
-        except Exception:
-            continue
-
-    return None
 
 @ctx.action_class("user")
 class UserActions:
@@ -90,14 +27,12 @@ class UserActions:
     def file_manager_current_path():
         path = get_active_explorer_path()
 
-        # if path in directories_to_remap:
-        #     path = directories_to_remap[path]
-
-        # if path in directories_to_exclude:
-        #     actions.user.file_manager_hide_pickers()
-        #     path = ""
-
-        return path
+        if path.is_virtual:
+            # note:  possibly explore whether we can do anything useful with these folders via accessibility
+            actions.app.notify("Cannot get path for virtual folder, command skipped")
+            return None
+        else:
+            return path
 
     def file_manager_terminal_here():
         actions.key("ctrl-l")
@@ -111,8 +46,7 @@ class UserActions:
     def file_manager_open_directory(path: str):
         """opens the directory that's already visible in the view"""
         actions.key("ctrl-l")
-        toolbar = ui.active_window().element.find_one(automation_id = "TextBox", max_depth=0)
-        toolbar.value_pattern.value = path
+        actions.insert(path)
         actions.key("enter")
 
     def file_manager_select_directory(path: str):
@@ -127,9 +61,8 @@ class UserActions:
 
     def file_manager_open_file(path: str):
         """opens the file"""
-        actions.key("ctrl-l")
-        toolbar = ui.active_window().element.find_one(automation_id = "TextBox", max_depth=0)
-        toolbar.value_pattern.value = path
+        actions.key("home")
+        actions.insert(path)
         actions.key("enter")
 
     def file_manager_select_file(path: str):
@@ -145,7 +78,8 @@ class UserActions:
         actions.key("ctrl-l")
 
     def address_copy_address():
-        clip.set_text(get_active_explorer_path())
+        actions.key("ctrl-l")
+        actions.edit.copy()
 
     def address_navigate(address: str):
         actions.user.file_manager_open_directory(address)

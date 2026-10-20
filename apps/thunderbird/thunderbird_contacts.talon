@@ -1,5 +1,6 @@
 app: thunderbird_contacts
 -
+
 contact new: user.thunderbird_mod("n")
 contact edit: user.thunderbird_mod("i")
 contact delete: key(delete)

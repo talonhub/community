@@ -6,9 +6,7 @@ from pathlib import Path
 import csv
 import talon
 from talon import Context, Module, actions, app, imgui, ui, resource
-from ..operating_system.windows.app_user_model_id import get_application_user_model_id, get_application_user_model_for_window, get_valid_windows_by_app_user_model_id
-from ..windows_and_tabs.windows_and_tabs import get_valid_windows, is_window_valid
-from .windows.installed_applications import get_installed_windows_apps
+from .windows.installed_applications import get_installed_windows_apps, get_valid_windows_by_app_user_model_id, get_application_user_model_id, get_application_user_model_for_window
 from .mac.installed_applications import get_installed_mac_apps
 from .common_classes.exclusion import ExclusionType, RunningApplicationExclusion
 from typing import Union
@@ -100,8 +98,11 @@ words_to_exclude = [
     "dot",
     "exe",
     "help",
+    "Google",
+    "google",
     "install",
     "installer",
+    "Microsoft",
     "microsoft",
     "nine",
     "readme",
@@ -200,7 +201,7 @@ def get_window_class(window: ui.Window) -> bool:
         cls = window.cls
     except Exception as e:
         print(f"exception = {e}")
-        app.notify("get_window_class exception - switcher askbar")
+        #app.notify("get_window_class exception - switcher askbar")
         cls = None
     
     return cls
@@ -209,6 +210,27 @@ def is_valid_explorer_window(window: ui.Window) -> bool:
     #invalid_exlorer_titles = ["windows hello", "program manager", "folderview", "shellview", "tree view", "namespace tree control"]
     return get_window_class(window) in ["explorerwclass", "cabinetwclass"]
 
+
+def is_window_valid(window: ui.Window) -> bool:
+    """Returns true if this window is valid for focusing"""
+    return (
+        not window.hidden
+        # On Windows, there are many fake windows with empty titles -- this excludes them.
+        and len(window.title) > 0
+        and "chrome legacy window" not in window.title.lower()
+        # This excludes many tiny windows that are not actual windows, and is a rough heuristic.
+        and window.rect.width > window.screen.dpi
+        and window.rect.height > window.screen.dpi
+    )
+
+
+def get_valid_windows(app: ui.App):
+    valid_windows = []
+    for window in app.windows():
+        if is_window_valid(window):
+            valid_windows.append(window)
+
+    return valid_windows
 
 def get_spoken_form_mapping_for_host_app(host_app, valid_window_checker=is_window_valid, host_cache=None, empty_window_model_id_mapping=None):
     spoken_form_map = {}
@@ -652,6 +674,8 @@ def update_launch_applications(f):
         process_launch_applications_file(True)
     else:
         update_running_list()
+        if app.platform == "windows":
+            rebuild_taskbar_app_list()
         update_launch_list()
 
 @mod.action_class
@@ -721,19 +745,10 @@ class Actions:
 
         if len(splits) == 3:
             title = splits[2].lower()
-
-            try:
-                windows = app.windows()
-            except Exception as e:
-                app.notify("app switcher - caught exception {e}")
-                print(f"app switcher - caught exception {e}")
-                return 
-            
-            for window in windows:
+            for window in app.windows():
                 if title == window.title.lower():
                     window.focus()
                     break
-
         elif len(splits) == 2:
             application_user_model_id = splits[1]
             valid_windows_for_pending_app = []
@@ -741,37 +756,30 @@ class Actions:
                 valid_windows_for_pending_app = RUNNING_APPLICATION_DICT[application_user_model_id.lower()]
             else:
                 for app in set(apps):
-
-                    try:
-                        windows = app.windows()
-                    except Exception as e:
-                        app.notify("app switcher - caught exception {e}")
-                        print(f"app switcher - caught exception {e}")
-                        continue
-
-                    for window in windows:
+                    for window in app.windows():
                         if valid_window_checker(window) and str(application_user_model_id) == str(get_application_user_model_for_window(window.id)):
                             valid_windows_for_pending_app.append(window)
             
-            if len(valid_windows_for_pending_app) > 1:
-                gui_switcher_chooser.show()
-                ctx.tags = ["user.app_switcher_selector_showing"] 
-            else:
-                actions.user.switcher_focus_window(valid_windows_for_pending_app[-1]) 
+            # if len(valid_windows_for_pending_app) > 1:
+            #     gui_switcher_chooser.show()
+            #     ctx.tags = ["user.app_switcher_selector_showing"] 
+            # else:
+            actions.user.switcher_focus_window(valid_windows_for_pending_app[-1]) 
                 
         else:
-            for app in set(apps):
-                valid_windows = get_valid_windows(app)
-                if not valid_windows_for_pending_app:
-                    valid_windows_for_pending_app = valid_windows
-                else:
-                    valid_windows_for_pending_app.extend(valid_windows) 
+            actions.user.switcher_focus_app(apps[-1])
+            # for app in set(apps):
+            #     valid_windows = get_valid_windows(app)
+            #     if not valid_windows_for_pending_app:
+            #         valid_windows_for_pending_app = valid_windows
+            #     else:
+            #         valid_windows_for_pending_app.extend(valid_windows) 
 
-            if len(valid_windows_for_pending_app) > 1:
-                gui_switcher_chooser.show()
-                ctx.tags = ["user.app_switcher_selector_showing"] 
-            else:
-                actions.user.switcher_focus_window(valid_windows_for_pending_app[-1])                
+            # if len(valid_windows_for_pending_app) > 1:
+            #     gui_switcher_chooser.show()
+            #     ctx.tags = ["user.app_switcher_selector_showing"] 
+            # else:
+            #actions.user.switcher_focus_window(valid_windows_for_pending_app[-1])                
         
     def switcher_focus_app(app: ui.App):
         """Focus application and wait until switch is made"""
@@ -953,11 +961,65 @@ def first_matching_child(element, **kw):
     attr, values = list(kw.items())[0]
     return next(e for e in element.children if getattr(e, attr) in values)
 
+taskbar = None
+ms_tasklist = None
+def rebuild_taskbar_app_list(forced: bool = False):
+    return
+    global cache, taskbar, ms_tasklist
+
+        
+    if not taskbar:
+        apps = ui.apps(name="Windows Explorer")
+        for app in apps:
+            for window in app.windows():
+                if window.cls == "Shell_TrayWnd":
+                    taskbar = window
+                    break
+            if taskbar:
+                ms_tasklist = first_matching_child(taskbar.element, class_name=["MSTaskListWClass"])
+                break
+                
+    if not taskbar:
+        actions.app.notify("taskbar window not found")
+        return
+    
+    #update_canvas = forced or len(running_applications.children) != len(cache)
+    cache = []
+    running_applications_result = {}
+    #running = {}
+    for e in ms_tasklist.children:
+
+        title = e.name
+        splits = title.split(" - ")
+        name = splits[0] 
+        cache.append(TaskBarItem(title, str(e.control_type), e))
+        override = None
+        if name in APPLICATIONS_OVERRIDES:
+            override = APPLICATIONS_OVERRIDES[name]
+            
+        if override and override.spoken_forms:
+            for form in override.spoken_forms:
+                running_applications_result[form] = title
+                #running[form] = name if name not in WINDOWS_NAME_TO_TALON_NAME else WINDOWS_NAME_TO_TALON_NAME[name]
+        else:
+            running_applications_result[name] = title
+            #running[name] = name if name not in WINDOWS_NAME_TO_TALON_NAME else WINDOWS_NAME_TO_TALON_NAME[name]
+
+    update_dict = {
+        "user.running_applications": running_applications_result, 
+        #"user.running": running
+    }
+
+    ctx.lists.update(update_dict)
+
 def ui_event(event, arg):
     if event in ("app_launch", "app_close", "app_activate", "app_deactivate"):
         update_running_list()
+        if app.platform == "windows":
+            rebuild_taskbar_app_list()
 
-# def on_ready():
-#     ui.register("", ui_event)
+def on_ready():
+    ui.register("", ui_event)
 
-# app.register("ready", on_ready)
+
+app.register("ready", on_ready)

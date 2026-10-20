@@ -1,9 +1,11 @@
 import re
+from typing import Optional
 
-from talon import Module, actions
+from talon import Module, actions, settings
 
 from .snippet_types import Snippet
 from .snippets_insert_raw_text import go_to_next_stop_raw, insert_snippet_raw_text
+from .snippets_parser import add_final_stop_to_snippet_body
 
 mod = Module()
 
@@ -23,34 +25,102 @@ class Actions:
         substitutions: dict[str, str] = None,
     ):
         """Insert snippet <name>"""
-        snippet: Snippet = actions.user.get_snippet(name)
-        body = snippet.body
-
-        if substitutions:
-            for k, v in substitutions.items():
-                reg = re.compile(rf"\${k}|\$\{{{k}\}}")
-                if not reg.search(body):
-                    raise ValueError(
-                        f"Can't substitute non existing variable '{k}' in snippet '{name}'"
-                    )
-                body = reg.sub(v, body)
-
+        body = get_snippet_body_by_name_with_substitutions(name, substitutions)
         actions.user.insert_snippet(body)
+
+    def insert_snippet_by_name_with_stop_at_end(
+        name: str,
+        substitutions: dict[str, str] = None,
+    ):
+        """Insert snippet <name> with a final stop guaranteed to be at the end of the snippet"""
+        body = get_snippet_body_by_name_with_substitutions(name, substitutions)
+        insert_snippet_with_stop_at_the_end(body)
 
     def insert_snippet_by_name_with_phrase(name: str, phrase: str):
         """Insert snippet <name> with phrase <phrase>"""
-        snippet: Snippet = actions.user.get_snippet(name)
-        substitutions = {}
+        body = get_snippet_body_by_name_with_phrase_substitutions(name, phrase)
+        actions.user.insert_snippet(body)
 
-        for variable in snippet.variables:
-            if variable.insertion_formatters is not None:
-                formatters = ",".join(variable.insertion_formatters)
-                formatted_phrase = actions.user.formatted_text(phrase, formatters)
-                substitutions[variable.name] = formatted_phrase
+    def insert_snippet_by_name_with_phrase_and_stop_at_end(name: str, phrase: str):
+        """Insert snippet <name> with phrase <phrase> and a stop at the end"""
+        body = get_snippet_body_by_name_with_phrase_substitutions(name, phrase)
+        insert_snippet_with_stop_at_the_end(body)
 
-        if not substitutions:
+    def insert_snippet_body_with_substitutions(
+        body: str, substitutions: dict[str, str]
+    ):
+        """Insert snippet with substitutions"""
+        body = expand_snippet_body_with_substitutions(body, substitutions)
+        actions.user.insert_snippet(body)
+
+
+def get_snippet_body_by_name_with_phrase_substitutions(name: str, phrase: str):
+    snippet: Snippet = actions.user.get_snippet(name)
+    substitutions = compute_phrase_substitutions(snippet, phrase)
+    return expand_snippet_with_substitutions(snippet, substitutions)
+
+
+def get_snippet_body_by_name_with_substitutions(
+    name: str, substitutions: dict[str, str]
+) -> str:
+    snippet: Snippet = actions.user.get_snippet(name)
+    return expand_snippet_with_substitutions(snippet, substitutions)
+
+
+def insert_snippet_with_stop_at_the_end(body):
+    body = add_final_stop_to_snippet_body(body)
+    actions.user.insert_snippet(body)
+
+
+def expand_snippet_with_substitutions(
+    snippet: Snippet, substitutions: dict[str, str]
+) -> str:
+    return expand_snippet_body_with_substitutions(
+        snippet.body, substitutions, snippet.name
+    )
+
+
+def expand_snippet_body_with_substitutions(
+    body: str, substitutions: dict[str, str], name: Optional[str] = None
+) -> str:
+    result = body
+    if substitutions:
+        for k, v in substitutions.items():
+            v = v.replace("$", r"\$")
+            reg = re.compile(rf"\${k}|\$\{{{k}\}}")
+            if not reg.search(result):
+                if name is None:
+                    snippet_text = body
+                else:
+                    snippet_text = name
+                raise ValueError(
+                    f"Can't substitute non existing variable '{k}' in snippet '{snippet_text}'"
+                )
+            result = reg.sub(v, result)
+    return result
+
+
+def compute_phrase_substitutions(snippet: Snippet, phrase: str):
+    substitutions = {}
+
+    def get_setting(m: re.Match[str]):
+        try:
+            return str(settings.get(m.group(1)))
+        except KeyError as ex:
             raise ValueError(
-                f"Can't use snippet phrase. No variable with insertion formatter in snippet '{name}'"
-            )
+                f"Undefined formatter setting {ex} in snippet '{snippet.name}'"
+            ) from ex
 
-        actions.user.insert_snippet_by_name(name, substitutions)
+    for variable in snippet.variables:
+        if variable.insertion_formatters is not None:
+            formatters = ",".join(variable.insertion_formatters)
+            formatters = re.sub(r"setting\(([\w.]+)\)", get_setting, formatters)
+            formatted_phrase = actions.user.formatted_text(phrase, formatters)
+            substitutions[variable.name] = formatted_phrase
+
+    if not substitutions:
+        raise ValueError(
+            f"Can't use snippet phrase. No variable with insertion formatter in snippet '{snippet.name}'"
+        )
+
+    return substitutions

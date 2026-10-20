@@ -1,27 +1,32 @@
+from collections.abc import Callable
 from contextlib import suppress
 from dataclasses import dataclass
-from typing import Callable, Literal
+from typing import Literal
 
 from talon import Module, actions, settings
 
 
 @dataclass
 class NavigationStep:
-    type: Literal["wordLeft", "wordRight", "word", "left", "right", "lineUp", "lineDown"]
+    modifier: Literal[
+        "wordLeft", "wordRight", "word", "left", "right", "lineUp", "lineDown"
+    ]
     count: int
 
+
 mod = Module()
+
 
 @mod.capture(rule="[<number_small>] {user.edit_modifier_repeatable}")
 def navigation_step(m) -> NavigationStep:
     count = 1
-    type = m.edit_modifier_repeatable
+    modifier = m.edit_modifier_repeatable
 
     with suppress(AttributeError):
         count = m.number_small
 
     return NavigationStep(
-        type=type,
+        modifier=modifier,
         count=count,
     )
 
@@ -31,7 +36,7 @@ class Actions:
     def perform_navigation_steps(steps: list[NavigationStep]):
         """Navigate by a series of steps"""
         for step in steps:
-            match step.type:
+            match step.modifier:
                 case "wordLeft":
                     repeat_action(actions.edit.word_left, step.count, True)
                 case "wordRight":
@@ -48,14 +53,14 @@ class Actions:
                     repeat_action(actions.edit.down, step.count)
 
 
-def repeat_action(action: Callable, count: int, delay: bool = False):
+def repeat_action(action: Callable[[], None], count: int, delay: bool = False):
     delay_string = None
 
     if delay:
-        delay_string = f"{settings.get('user.edit_command_word_selection_delay')}ms" 
+        delay_string = f"{settings.get('user.edit_command_word_selection_delay')}ms"
 
     for _ in range(count):
         action()
-        
+
         if delay_string:
             actions.sleep(delay_string)

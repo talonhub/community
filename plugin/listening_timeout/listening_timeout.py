@@ -1,6 +1,6 @@
 import time
 
-from talon import Context, Module, actions, app, cron, settings, speech_system, ui
+from talon import Context, Module, actions, app, cron, settings, speech_system
 
 mod = Module()
 ctx = Context()

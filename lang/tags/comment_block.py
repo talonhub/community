@@ -1,18 +1,73 @@
+from typing import Optional
+
 from talon import Context, Module, actions
 
+c_like_ctx = Context()
 mod = Module()
 
 mod.tag("code_comment_block", desc="Tag for enabling generic block comment commands")
 mod.tag("code_comment_block_c_like", desc="Denotes usage of C-style block comments")
 
+c_like_ctx.matches = """
+tag: user.code_comment_block_c_like
+"""
+c_like_ctx.tags = ["user.code_comment_block"]
+
+
 @mod.action_class
 class Actions:
-    def code_comment_block():
+    def code_comment_block(text: Optional[str] = None):
         """Block comment"""
-        actions.user.insert_snippet_by_name("commentBlock")
+        actions.user.code_block_comment_inline(text)
 
     def code_comment_block_prefix():
         """Block comment start syntax"""
 
     def code_comment_block_suffix():
         """Block comment end syntax"""
+
+    def code_comment_block_line():
+        """Wraps current line in block comment markers"""
+        actions.edit.line_start()
+        actions.user.code_comment_block_prefix()
+        actions.key("space")
+        actions.edit.line_end()
+        actions.key("space")
+        actions.user.code_comment_block_suffix()
+
+    def code_block_comment_inline(text: Optional[str]):
+        """Inserts an inline block comment"""
+        if text is None:
+            substitutions = None
+        else:
+            substitutions = {"0": text}
+        actions.user.insert_snippet_by_name("commentBlock", substitutions)
+
+
+@c_like_ctx.action_class("user")
+class CActions:
+    def code_comment_block(text: Optional[str] = None):
+        # inserting this way instead of using a snippet
+        # has advantages by allowing editor specific behavior such as
+        # putting a star at the start of the lines inside the block comment for some languages
+        # illustration:
+        # /*
+        #  * (cursor goes here)
+        #  */
+        actions.insert("/*\n\n*/")
+        actions.edit.up()
+        if text is not None:
+            actions.insert(text)
+
+    def code_block_comment_inline(text: Optional[str]):
+        if text is None:
+            substitutions = None
+        else:
+            substitutions = {"0": text}
+        actions.user.insert_snippet_body_with_substitutions("/* $0 */", substitutions)
+
+    def code_comment_block_prefix():
+        actions.insert("/*")
+
+    def code_comment_block_suffix():
+        actions.insert("*/")

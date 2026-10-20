@@ -1,5 +1,6 @@
 tag: user.find_and_replace
 -
+
 tag(): user.find
 
 hunt all: user.find_everywhere("")
@@ -7,7 +8,7 @@ hunt all (pace | paste):
     user.find_everywhere("")
     sleep(25ms)
     edit.paste()
-hunt all <user.text> [over]: user.find_everywhere(text)
+hunt all <user.text>: user.find_everywhere(text)
 hunt case: user.find_toggle_match_by_case()
 hunt word: user.find_toggle_match_by_word()
 hunt expression: user.find_toggle_match_by_regex()

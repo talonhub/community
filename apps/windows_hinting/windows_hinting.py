@@ -21,7 +21,8 @@ def scope():
 
 def on_title(win):
     global is_window_hinting_active
-    if win.app.name == "Windows-Hinting":
+    if win.app.name in ("Windows-Hinting", "Windows-Hinting.exe"):
+        print(f"Window title: {win.title}")
         if "[Active]" in win.title:
             is_window_hinting_active = True
         else:

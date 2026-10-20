@@ -3,6 +3,7 @@ os: windows
 app: stata
 win.title: /^Do-file Editor/
 -
+
 do this: key(ctrl-d)
 
 do line:

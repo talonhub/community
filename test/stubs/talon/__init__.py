@@ -1,5 +1,6 @@
 import inspect
-from typing import Callable
+from collections.abc import Callable
+from typing import Optional
 
 
 class RegisteredActionsAccessor:
@@ -10,7 +11,7 @@ class RegisteredActionsAccessor:
     def __getattr__(self, name):
         for category in ("test", "module"):
             cat_actions = self.registered_actions[category]
-            if self.namespace in cat_actions:
+            if self.namespace in cat_actions:  # noqa: SIM102
                 if name in cat_actions[self.namespace]:
                     return cat_actions[self.namespace][name]
 
@@ -134,7 +135,7 @@ class Context:
 
         return __funcwrapper
 
-    def capture(self, name: str, rule: str = None):
+    def capture(self, name: str, rule: Optional[str] = None):
         def __funcwrapper(func):
             def __inner(*args, **kwargs):
                 return func(*args, **kwargs)
@@ -168,6 +169,8 @@ class UI:
 
     def register(*args, **kwargs):
         pass
+
+    Rect = object
 
 
 class Settings:
