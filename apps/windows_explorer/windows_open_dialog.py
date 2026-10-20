@@ -70,11 +70,6 @@ class UserActions:
         actions.key("home")
         actions.insert(path)
 
-    def file_manager_select_file(path: str):
-        """selects the file"""
-        actions.key("home")
-        actions.insert(path)
-
     def file_manager_open_volume(volume: str):
         """file_manager_open_volume"""
         actions.user.file_manager_open_directory(volume)
