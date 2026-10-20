@@ -5,13 +5,12 @@ import os
 mod = Module()
 apps = mod.apps
 
-# the standard file -> open file/older dialog
-# uses a fixed class name and supports most of the same
-# actions defined for file explorer
+# attempt to detect the standard file -> open file/folder dialog
 apps.windows_open_dialog = r"""
 os: windows
 and app.name: /.*/
 and win.class: #32770
+and title: /(Save|Open|Browse|Select)/
 """
 
 ctx = Context()
