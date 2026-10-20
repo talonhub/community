@@ -3,11 +3,30 @@ from talon import Context, Module, actions, registry, cron
 import egui
 from ..gui.gui import open_gui
 
-class SpokenForm:
-	def __init__(self, text, description, name):
-		self.text = text
-		self.description = description
+from dataclasses import dataclass
+
+@dataclass
+class TalonList:
+	name: str
+	description: str
+
+	def __init__(self, name: str):
 		self.name = name
+		self.description = get_list_description(name)
+
+@dataclass
+class TalonCapture:
+	name: str
+	description: str
+	rule: str
+
+	def __init__(self, name: str):
+		self.name = name
+		self.description = get_capture_description(name)
+		self.rule = get_capture_rule(name)
+	
+	def compute_talon_script_representation(self):
+		return f"<{self.name}>"
 
 def get_list_description(name):
 	return registry.decls.lists[name].desc
@@ -26,20 +45,6 @@ def get_capture_rule(name):
 	except Exception as ex:
 		return "Could not find rule. Something went wrong."
 
-def create_list(name, form_text):
-	return SpokenForm(
-			form_text,
-			get_list_description(name),
-			name,
-		)
-
-def create_capture(name):
-	return SpokenForm(
-		get_capture_rule(name),
-		get_capture_description(name),
-		name,
-	)
-
 def compute_spoken_forms(text, exclude_total=True):
 	text = text.strip()
 	lists = []
@@ -55,7 +60,7 @@ def compute_spoken_forms(text, exclude_total=True):
 			form_text = text[start:i+1]
 			list_name = form_text[1:-1]
 			if form_text not in encountered:
-				form = create_list(list_name, form_text)
+				form = TalonList(list_name)
 				lists.append(form)
 			encountered.add(form_text)
 			start = None
@@ -63,7 +68,7 @@ def compute_spoken_forms(text, exclude_total=True):
 			form_text = text[start:i+1]
 			capture_name = form_text[1:-1]
 			if form_text not in encountered:
-				form = create_capture(capture_name)
+				form = TalonCapture(capture_name)
 				captures.append(form)
 			encountered.add(form_text)
 			start = None
@@ -76,7 +81,7 @@ class Expansion:
 		self.root = egui.Mutable("")
 		self.new_showing = False
 
-	async def show_expansion(self, ui, encountered=None, root=None, capture: SpokenForm | None=None):
+	async def show_expansion(self, ui, encountered=None, root=None, capture: TalonCapture | None=None):
 		if encountered is None:
 			encountered = set()
 		if root is None:
@@ -85,9 +90,9 @@ class Expansion:
 			title = f"Expansion of {root}"
 			show_by_default = True
 		else:
-			title = f"Capture <{capture.name}>."
-			show_by_default = capture.text not in encountered
-			encountered.add(capture.text)
+			title = f"Capture {capture.compute_talon_script_representation()}."
+			show_by_default = capture.name not in encountered
+			encountered.add(capture.name)
 		collapsing_header = egui.CollapsingHeader(title).default_open(show_by_default)
 		async with ui.group():
 			async with ui.scope() as scope, scope.style_mut() as style:
@@ -101,9 +106,9 @@ class Expansion:
 						if description:
 							ui.label(f"Description: {description}")
 						async with ui.horizontal_wrapped():
-							ui.label(f"Rule: {capture.text}")
+							ui.label(f"Rule: {capture.rule}")
 							if ui.button("Make root").clicked():
-								self.root.set(capture.text)
+								self.root.set(f"{capture.compute_talon_script_representation()}")
 					lists, captures = compute_spoken_forms(root, exclude_total=False)
 					async with ui.horizontal_wrapped():
 						if lists:
@@ -112,7 +117,7 @@ class Expansion:
 								if ui.button(l.name).clicked():
 									show_list_help(l.name)
 					for c in captures:
-						await self.show_expansion(ui, encountered, c.text, c)
+						await self.show_expansion(ui, encountered, c.rule, c)
 
 	async def render(self, ui, ui_wrapper):
 		async with ui.horizontal_wrapped():
