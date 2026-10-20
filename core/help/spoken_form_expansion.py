@@ -49,14 +49,11 @@ def get_capture_rule(name):
 	except Exception:
 		return "Could not find rule"
 
-def is_plausibly_valid_name(name: str):
-	return all(c.isalpha() or c == "." or c == "_" for c in name)
-
 def create_spoken_form(text, start, i, create_function, forms, encountered, prior_encountered):
 	"""Create the spoken form object at the location. Return the object of a new one is created. Return None if it does not need to be created."""
 	form_text = text[start:i+1]
 	name = form_text[1:-1]
-	if form_text in encountered or not is_plausibly_valid_name(name) or i - start < 2:
+	if form_text in encountered or i - start < 2:
 		return None
 	if form_text in prior_encountered:
 		form = prior_encountered[form_text]
