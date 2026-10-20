@@ -9,22 +9,26 @@ from dataclasses import dataclass
 class TalonList:
 	name: str
 	description: str
+	number: int
 
-	def __init__(self, name: str):
+	def __init__(self, name: str, number: int):
 		self.name = name
 		self.description = get_list_description(name)
+		self.number = number
 
 @dataclass
 class TalonCapture:
 	name: str
 	description: str
+	number: int
 	rule: str
 	child_captures: list
 	child_lists: list
 
-	def __init__(self, name: str):
+	def __init__(self, name: str, number: int):
 		self.name = name
 		self.description = get_capture_description(name)
+		self.number = number
 		self.rule = get_capture_rule(name)
 		self.child_captures = []
 		self.child_lists = []
@@ -66,7 +70,7 @@ def create_spoken_form(text, start, i, create_function, forms, encountered, prio
 		form = prior_encountered[form_text]
 		result = None
 	else:
-		form = create_function(name)
+		form = create_function(name, len(prior_encountered) + 1)
 		prior_encountered[form_text] = form
 		result = form
 	forms.append(form)
@@ -74,32 +78,35 @@ def create_spoken_form(text, start, i, create_function, forms, encountered, prio
 	return result
 
 
-def compute_spoken_forms(text, exclude_capture_matching_total=True, prior_encountered=None):
+def compute_spoken_forms(text, exclude_capture_matching_total=True, prior_encountered_lists=None, prior_encountered_captures=None):
 	text = text.strip()
 	lists = []
 	captures = []
 	encountered = set()
-	if not prior_encountered:
-		prior_encountered = {}
+	if not prior_encountered_lists:
+		prior_encountered_lists = {}
+	if not prior_encountered_captures:
+		prior_encountered_captures = {}
 
 	start = None
 	for i, c in enumerate(text):
 		if c in ("{", "<"):
 			start = i
 		elif c == "}":
-			create_spoken_form(text, start, i, TalonList, lists, encountered, prior_encountered)
+			create_spoken_form(text, start, i, TalonList, lists, encountered, prior_encountered_lists)
 			start = None
 		elif c == ">":
 			if exclude_capture_matching_total and i == len(text) - 1 and start == 0:
-				return [], []
-			form = create_spoken_form(text, start, i, TalonCapture, captures, encountered, prior_encountered)
+				return [], [], {}, {}
+			form = create_spoken_form(text, start, i, TalonCapture, captures, encountered, prior_encountered_captures)
 			if form and form.rule:
-				form.child_lists, form.child_captures = compute_spoken_forms(
+				form.child_lists, form.child_captures, _, _ = compute_spoken_forms(
 					form.rule,
-					prior_encountered=prior_encountered,
+					prior_encountered_lists=prior_encountered_lists,
+					prior_encountered_captures=prior_encountered_captures
 				)
 			start = None
-	return lists, captures
+	return lists, captures, prior_encountered_lists, prior_encountered_captures
 
 
 
@@ -109,6 +116,8 @@ class Expansion:
 		self.new_showing = False
 		self.lists = []
 		self.captures = []
+		self.number_to_list = {}
+		self.number_to_capture = {}
 
 	async def show_expansion(self, ui, encountered=None, root=None, capture: TalonCapture | None=None):
 		if encountered is None:
@@ -123,13 +132,13 @@ class Expansion:
 					ui.label(f"Description: {description}")
 				async with ui.horizontal_wrapped():
 					ui.label(f"Rule: {capture.rule}")
-					if ui.button("Make root").clicked():
+					if ui.button(f"expansion show {capture.number}").clicked():
 						self.set_root(f"{capture.compute_talon_script_representation()}")
 			async with ui.horizontal_wrapped():
 				if lists:
 					ui.label("lists: ")
 					for l in lists:
-						if ui.button(l.name).clicked():
+						if ui.button(f"help {l.number}: {l.name}").clicked():
 							show_list_help(l.name)
 			for c in captures:
 				await self.show_expansion(ui, encountered, c.rule, c)
@@ -175,11 +184,11 @@ class Expansion:
 	def set_root(self, root):
 		self.root.set(root)
 		self.update_expansion()
-	
+
 	def update_expansion(self):
 		self.new_showing = True
 		try:
-			self.lists, self.captures = compute_spoken_forms(self.root.get(), exclude_capture_matching_total=False)
+			self.lists, self.captures, self.number_to_list, self.number_to_capture = compute_spoken_forms(self.root.get(), exclude_capture_matching_total=False)
 		except ValueError:
 			self.lists, self.captures = [], []
 
