@@ -108,41 +108,41 @@ class Expansion:
 			encountered = set()
 		if root is None:
 			root = self.root.get()
+
+		async def show_children(lists, captures):
+			if capture:
+				description = capture.description
+				if description:
+					ui.label(f"Description: {description}")
+				async with ui.horizontal_wrapped():
+					ui.label(f"Rule: {capture.rule}")
+					if ui.button("Make root").clicked():
+						self.set_root(f"{capture.compute_talon_script_representation()}")
+			async with ui.horizontal_wrapped():
+				if lists:
+					ui.label("lists: ")
+					for l in lists:
+						if ui.button(l.name).clicked():
+							show_list_help(l.name)
+			for c in captures:
+				await self.show_expansion(ui, encountered, c.rule, c)
+
 		if capture is None:
-			title = f"Expansion of {root}"
-			show_by_default = True
-			lists = self.lists
-			captures = self.captures
+			async with ui.group():
+				await show_children(self.lists, self.captures)
 		else:
 			title = f"Capture {capture.compute_talon_script_representation()}."
 			show_by_default = capture.name not in encountered
 			encountered.add(capture.name)
-			lists = capture.child_lists
-			captures = capture.child_captures
-		collapsing_header = egui.CollapsingHeader(title).default_open(show_by_default)
-		async with ui.group():
+			collapsing_header = egui.CollapsingHeader(title).default_open(show_by_default)
 			async with ui.scope() as scope, scope.style_mut() as style:
 				# make scrollbar always visible when a scroll area is needed
 				visuals = style.visuals()
 				visuals.indent_has_left_vline = False
 				style.set_visuals(visuals)
-				async with collapsing_header.show():
-					if capture:
-						description = capture.description
-						if description:
-							ui.label(f"Description: {description}")
-						async with ui.horizontal_wrapped():
-							ui.label(f"Rule: {capture.rule}")
-							if ui.button("Make root").clicked():
-								self.set_root(f"{capture.compute_talon_script_representation()}")
-					async with ui.horizontal_wrapped():
-						if lists:
-							ui.label("lists: ")
-							for l in lists:
-								if ui.button(l.name).clicked():
-									show_list_help(l.name)
-					for c in captures:
-						await self.show_expansion(ui, encountered, c.rule, c)
+				async with ui.group(), collapsing_header.show():
+					await show_children(capture.child_lists, capture.child_captures)
+
 
 	async def render(self, ui, ui_wrapper):
 		async with ui.horizontal_wrapped():
