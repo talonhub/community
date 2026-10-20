@@ -115,7 +115,9 @@ class Expansion:
 						await self.show_expansion(ui, encountered, c.text, c)
 
 	async def render(self, ui, ui_wrapper):
-		ui.add(egui.TextEdit.singleline(self.root))
+		async with ui.horizontal_wrapped():
+			ui.strong("Spoken form to expand:")
+			ui.add(egui.TextEdit.singleline(self.root))
 		if self.root.get():
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
