@@ -138,6 +138,7 @@ mod = Module()
 class Actions:	
 	def spoken_form_expansion_show(text: str=""):
 		"""Show the spoken form expansion window"""
+		global expansion
 		actions.user.spoken_form_expansion_hide()
 		expansion = Expansion()
 		expansion.show(text)
@@ -145,6 +146,7 @@ class Actions:
 
 	def spoken_form_expansion_hide():
 		"""Hide the spoken form expansion window"""
+		global expansion
 		if gui_expansion.showing():
 			gui_expansion.hide()
 		if expansion:
