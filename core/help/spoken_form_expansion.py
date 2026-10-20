@@ -38,7 +38,7 @@ def get_list_description(name):
 def get_capture_description(name):
 	try:
 		return registry.decls.captures[name].desc
-	except KeyError as ex:
+	except KeyError:
 		return "Could not find description"
 
 def get_capture_rule(name):
@@ -46,7 +46,7 @@ def get_capture_rule(name):
 		capture = registry.captures[name][-1]
 		rule = capture.rule
 		return rule.rule
-	except Exception as ex:
+	except Exception:
 		return "Could not find rule"
 
 def compute_spoken_forms(text, exclude_total=True, prior_encountered=None):
