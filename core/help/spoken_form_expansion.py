@@ -79,7 +79,7 @@ def compute_spoken_forms(text, exclude_total=True, prior_encountered=None):
 			form_text = text[start:i+1]
 			capture_name = form_text[1:-1]
 			if form_text not in encountered:
-				if form_text in encountered:
+				if form_text in prior_encountered:
 					form = prior_encountered[form_text]
 				else:
 					form = TalonCapture(capture_name)
