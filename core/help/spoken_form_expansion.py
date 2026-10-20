@@ -4,21 +4,14 @@ import egui
 from ..gui.gui import open_gui
 
 class SpokenForm:
-	def __init__(self, type_name, text, get_description, get_key_value_pairs, name):
+	def __init__(self, type_name, text, get_description, name):
 		self.type_name = type_name
 		self.text = text
 		self.get_description = get_description
-		self.get_key_value_pairs = get_key_value_pairs
 		self.name = name
 
 def get_list_description(name):
 	return registry.decls.lists[name].desc
-
-def get_list_contents(name):
-	try:
-		return actions.user.talon_get_active_registry_list(name).items()
-	except Exception as ex:
-		return []
 
 def get_capture_description(name):
 	try:
@@ -39,7 +32,6 @@ def create_list(name, form_text):
 			"list",
 			form_text,
 			lambda : get_list_description(name),
-			lambda : get_list_contents(name),
 			name,
 		)
 
@@ -48,8 +40,6 @@ def create_capture(name):
 		"capture",
 		get_capture_rule(name),
 		lambda : get_capture_description(name),
-		
-		lambda : [],
 		name,
 	)
 
