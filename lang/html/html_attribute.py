@@ -4,6 +4,7 @@ mod = Module()
 
 mod.list("html_attribute", "This is a list of common HTML attributes")
 
+
 @mod.action_class
 class Actions:
     def insert_html_attribute(name: str):
