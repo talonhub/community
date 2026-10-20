@@ -190,7 +190,13 @@ class Expansion:
 		try:
 			self.lists, self.captures, self.number_to_list, self.number_to_capture = compute_spoken_forms(self.root.get(), exclude_capture_matching_total=False)
 		except ValueError:
-			self.lists, self.captures = [], []
+			self.lists, self.captures, self.number_to_list, self.number_to_capture = [], [], {}, {}
+
+	def get_list(self, number):
+		return self.number_to_list.get(number)
+			
+	def get_capture(self, number):
+		return self.number_to_capture.get(number)
 
 def show_list_help(name):
 	# doing this in the egui thread freezes Talon
@@ -225,3 +231,10 @@ class Actions:
 		if expansion:
 			expansion = None
 		ctx.tags = []
+
+	def spoken_form_expansion_show_help_for_list(number: int):
+		"""Show the help for the list with a given number in the spoken form expansion"""
+		if target_list := expansion.get_list(number):
+			print('target_list', target_list)
+			actions.user.help_list(target_list.name)
+		print(expansion.number_to_list)
