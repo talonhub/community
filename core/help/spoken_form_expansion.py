@@ -1,0 +1,167 @@
+from talon import Module, actions, registry
+
+import egui
+from talon.egui import Window
+import skia
+
+class SpokenForm:
+	def __init__(self, type_name, text, get_description, get_key_value_pairs, name):
+		self.type_name = type_name
+		self.text = text
+		self.get_description = get_description
+		self.get_key_value_pairs = get_key_value_pairs
+		self.name = name
+		self.children = None
+
+def get_list_description(name):
+	return registry.decls.lists[name].desc
+
+def get_list_contents(name):
+	try:
+		return actions.user.talon_get_active_registry_list(name).items()
+	except Exception as ex:
+		return []
+
+def get_capture_description(name):
+	try:
+		return registry.decls.captures[name].desc
+	except KeyError as ex:
+		return "Could not find description"
+
+def get_capture_rule(name):
+	try:
+		capture = registry.captures[name][-1]
+		rule = capture.rule
+		return rule.rule
+	except Exception as ex:
+		return "Could not find rule. Something went wrong."
+
+def create_list(name, form_text):
+	return SpokenForm(
+			"list",
+			form_text,
+			lambda : get_list_description(name),
+			lambda : get_list_contents(name),
+			name,
+		)
+
+def create_capture(name):
+	return SpokenForm(
+		"capture",
+		get_capture_rule(name),
+		lambda : get_capture_description(name),
+		
+		lambda : [],
+		name,
+	)
+
+def compute_spoken_forms(text, exclude_total=True):
+	text = text.strip()
+	lists = []
+	captures = []
+	encountered = set()
+	start = None
+	for i, c in enumerate(text):
+		if exclude_total and i == len(text) - 1 and start == 0:
+			return []
+		if c in ("{", "<"):
+			start = i
+		elif c == "}":
+			form_text = text[start:i+1]
+			list_name = form_text[1:-1]
+			if form_text not in encountered:
+				form = create_list(list_name, form_text)
+				lists.append(form)
+			encountered.add(form_text)
+			start = None
+		elif c == ">":
+			form_text = text[start:i+1]
+			capture_name = form_text[1:-1]
+			if form_text not in encountered:
+				form = create_capture(capture_name)
+				captures.append(form)
+			encountered.add(form_text)
+			start = None
+	return lists, captures
+
+
+
+class ExpansionDemo:
+	def __init__(self):
+		self.window = Window()
+		self.window.rect = skia.Rect(500, 100, 700, 800)
+		self.window.toplevel = True
+		self.window.draggable = True
+		self.window.decorated = False
+		self.window.set_content(self.ui)
+		self.root = None
+
+	async def show_expansion(self, ui, encountered=None, root=None, capture: SpokenForm | None=None):
+		if encountered is None:
+			encountered = set()
+		if root is None:
+			root = self.root
+		if capture is None:
+			title = f"Expansion of {root}"
+			show_by_default = True
+		else:
+			title = f"Capture <{capture.name}>."
+			show_by_default = capture.text not in encountered
+			encountered.add(capture.text)
+		collapsing_header = egui.CollapsingHeader(title).default_open(show_by_default)
+		async with ui.group():
+			async with ui.scope() as scope, scope.style_mut() as style:
+				# make scrollbar always visible when a scroll area is needed
+				visuals = style.visuals()
+				visuals.indent_has_left_vline = False
+				style.set_visuals(visuals)
+				async with collapsing_header.show():
+					if capture:
+						description = capture.get_description()
+						if description:
+							ui.label(f"Description: {description}")
+						async with ui.horizontal_wrapped():
+							ui.label(f"Rule: {capture.text}")
+							if ui.button("Make root").clicked():
+								self.root = capture.text
+					lists, captures = compute_spoken_forms(root, exclude_total=False)
+					async with ui.horizontal_wrapped():
+						if lists:
+							ui.label("lists: ")
+							for l in lists:
+								if ui.button(l.name).clicked():
+									pass
+					for c in captures:
+						await self.show_expansion(ui, encountered, c.text, c)
+
+	async def ui(self, ui):
+		if self.root:
+			maximum_height = ui.available_height() - 30
+			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
+			async with scroll_area.show():
+				await self.show_expansion(ui) 
+
+		
+		
+		if ui.button("hide").clicked():
+			self.hide()
+
+	def show(self, root):
+		self.root = root
+		self.window.show()
+
+	def hide(self):
+		self.window.hide()
+
+demo = None
+
+mod = Module()
+@mod.action_class
+class Actions:
+	def screenshot_expansion_demo():
+		"""Remove before merge"""
+		actions.user.samuel_screenshot_around_window(demo.window)
+
+	def hide_expansion_window():
+		""""""
+		demo.hide()
