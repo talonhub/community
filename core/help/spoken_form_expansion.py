@@ -4,9 +4,9 @@ import egui
 from ..gui.gui import open_gui
 
 class SpokenForm:
-	def __init__(self, text, get_description, name):
+	def __init__(self, text, description, name):
 		self.text = text
-		self.get_description = get_description
+		self.description = description
 		self.name = name
 
 def get_list_description(name):
@@ -29,14 +29,14 @@ def get_capture_rule(name):
 def create_list(name, form_text):
 	return SpokenForm(
 			form_text,
-			lambda : get_list_description(name),
+			get_list_description(name),
 			name,
 		)
 
 def create_capture(name):
 	return SpokenForm(
 		get_capture_rule(name),
-		lambda : get_capture_description(name),
+		get_capture_description(name),
 		name,
 	)
 
@@ -98,7 +98,7 @@ class Expansion:
 				style.set_visuals(visuals)
 				async with collapsing_header.show():
 					if capture:
-						description = capture.get_description()
+						description = capture.description
 						if description:
 							ui.label(f"Description: {description}")
 						async with ui.horizontal_wrapped():
