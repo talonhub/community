@@ -134,7 +134,7 @@ class Expansion:
 						async with ui.horizontal_wrapped():
 							ui.label(f"Rule: {capture.rule}")
 							if ui.button("Make root").clicked():
-								self.show(f"{capture.compute_talon_script_representation()}")
+								self.set_root(f"{capture.compute_talon_script_representation()}")
 					async with ui.horizontal_wrapped():
 						if lists:
 							ui.label("lists: ")
@@ -163,7 +163,7 @@ class Expansion:
 		if ui.button("hide").clicked():
 			actions.user.spoken_form_expansion_hide()
 
-	def show(self, root):
+	def set_root(self, root):
 		self.root.set(root)
 		self.update_expansion()
 	
@@ -192,7 +192,7 @@ class Actions:
 		global expansion
 		actions.user.spoken_form_expansion_hide()
 		expansion = Expansion()
-		expansion.show(text)
+		expansion.set_root(text)
 		gui_expansion.show()
 		ctx.tags = ["user.spoken_form_expansion_showing"]
 
