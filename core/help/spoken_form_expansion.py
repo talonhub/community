@@ -81,7 +81,6 @@ class Expansion:
 			encountered = set()
 		if root is None:
 			root = self.root.get()
-			ui.add(egui.TextEdit.singleline(self.root))
 		if capture is None:
 			title = f"Expansion of {root}"
 			show_by_default = True
@@ -115,7 +114,8 @@ class Expansion:
 					for c in captures:
 						await self.show_expansion(ui, encountered, c.text, c)
 
-	async def render(self, ui):
+	async def render(self, ui, ui_wrapper):
+		ui.add(egui.TextEdit.singleline(self.root))
 		if self.root.get():
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
@@ -147,7 +147,7 @@ class Actions:
 	def spoken_form_expansion_hide():
 		"""Hide the spoken form expansion window"""
 		global expansion
-		if gui_expansion.showing():
+		if gui_expansion.showing:
 			gui_expansion.hide()
 		if expansion:
 			expansion = None

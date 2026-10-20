@@ -32,3 +32,5 @@ help formatters | help format | format help:
     user.help_formatters(user.get_formatters_words(), false)
 help re formatters | help re format | re format help:
     user.help_formatters(user.get_reformatters_words(), true)
+
+expansion show: user.spoken_form_expansion_show()
