@@ -47,7 +47,7 @@ def get_capture_rule(name):
 		rule = capture.rule
 		return rule.rule
 	except Exception as ex:
-		return "Could not find rule. Something went wrong."
+		return "Could not find rule"
 
 def compute_spoken_forms(text, exclude_total=True, prior_encountered=None):
 	text = text.strip()
