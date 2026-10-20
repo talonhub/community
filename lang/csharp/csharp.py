@@ -1,8 +1,7 @@
-from talon import Context, Module, actions, settings
+from talon import Context, actions, settings
 
 from ...core.described_functions import create_described_insert_between
 from ..tags.operators import Operators
-
 
 ctx = Context()
 ctx.matches = r"""
