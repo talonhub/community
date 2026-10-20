@@ -37,4 +37,3 @@ expansion show: user.spoken_form_expansion_show()
 expansion show clip:
     text = clip.text()
     user.spoken_form_expansion_show(text)
-expansion hide: user.spoken_form_expansion_hide()

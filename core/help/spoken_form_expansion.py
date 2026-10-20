@@ -1,4 +1,4 @@
-from talon import Module, actions, registry, cron
+from talon import Context, Module, actions, registry, cron
 
 import egui
 from ..gui.gui import open_gui
@@ -145,6 +145,9 @@ async def gui_expansion(ui, ui_wrapper):
 		await expansion.render(ui, ui_wrapper)
 
 mod = Module()
+mod.tag("spoken_form_expansion_showing", desc="The spoken form expansion window is showing")
+ctx = Context()
+
 @mod.action_class
 class Actions:	
 	def spoken_form_expansion_show(text: str=""):
@@ -154,6 +157,7 @@ class Actions:
 		expansion = Expansion()
 		expansion.show(text)
 		gui_expansion.show()
+		ctx.tags = ["user.spoken_form_expansion_showing"]
 
 	def spoken_form_expansion_hide():
 		"""Hide the spoken form expansion window"""
@@ -162,3 +166,4 @@ class Actions:
 			gui_expansion.hide()
 		if expansion:
 			expansion = None
+		ctx.tags = []
