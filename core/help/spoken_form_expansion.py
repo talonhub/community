@@ -74,7 +74,7 @@ def compute_spoken_forms(text, exclude_total=True):
 class Expansion:
 	def __init__(self):
 		self.root = egui.Mutable("")
-
+		self.new_showing = False
 
 	async def show_expansion(self, ui, encountered=None, root=None, capture: SpokenForm | None=None):
 		if encountered is None:
@@ -118,7 +118,9 @@ class Expansion:
 		async with ui.horizontal_wrapped():
 			ui.strong("Spoken form to expand:")
 			response = ui.add(egui.TextEdit.singleline(self.root))
-			#response.request_focus()
+			if self.new_showing:
+				response.request_focus()
+				self.new_showing = False
 		if self.root.get():
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
@@ -130,13 +132,14 @@ class Expansion:
 
 	def show(self, root):
 		self.root.set(root)
+		self.new_showing = True
 
 def show_list_help(name):
 	# doing this in the egui thread freezes Talon
 	cron.after("0ms", lambda : actions.user.help_list(name))
 
 expansion = None
-@open_gui(width=0.5, height=0.5)
+@open_gui(width=0.5, height=0.5, always_on_top=False)
 async def gui_expansion(ui, ui_wrapper):
 	if expansion:
 		await expansion.render(ui, ui_wrapper)
