@@ -143,6 +143,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
 
 ### Naming Practices
+
 - Use singular form instead of plural form for a Talon list or capture name. Example: Our code keywords list is called `user.code_keyword` and not `user.code_keywords`.
 - The name of a capture returning the string representation of a number should end with `_string`. If the capture converts the result of another capture to a string, the name should start with the name of the input capture.
 - The name of a programming-related tag, action, list, or capture that will be used by multiple languages should start with `code_`. If it is intended to be used by a single language, and other languages are unlikely to use it, the name can instead start with the language name.
