@@ -240,7 +240,7 @@ class ExpansionTreeManager:
 		self.set_root(root)
 
 	def update_tree(self):
-		self.new_showing = True
+		self.is_showing_new_tree = True
 		try:
 			self.tree = SpokenFormExpansionTree(self.root.get())
 		except ValueError:
