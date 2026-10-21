@@ -71,7 +71,7 @@ def do_delimiters_conflict(text: str):
 def compute_number_to_spoken_form_dictionary(forms):
 	return {f.number: f for f in forms.values()}
 
-class SpokenFormExpansionTree:
+class SpokenFormTree:
 	def __init__(self, text):
 		self._all_lists = {}
 		self._all_captures = {}
@@ -131,7 +131,7 @@ class SpokenFormExpansionTree:
 	def is_empty(self):
 		return not self.children.is_empty()
 
-class ExpansionTreeRenderer:
+class TreeRenderer:
 	def __init__(self, set_root_to_child_callback, update_tree_callback, set_root_to_parent_callback):
 		self._encountered_this_render = set()
 		self._set_root_to_child_callback = set_root_to_child_callback
@@ -226,13 +226,13 @@ class ExpansionTreeRenderer:
 					actions.key("pageup")
 			self._ui.separator()
 
-class ExpansionTreeManager:
+class TreeManager:
 	def __init__(self, refresh_callback):
 		self._root = egui.Mutable("")
 		self._is_showing_new_tree = True
 		self._tree = None
 		self._history = []
-		self._tree_renderer = ExpansionTreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent)
+		self._tree_renderer = TreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent)
 		self._refresh_callback = refresh_callback
 
 	async def render(self, ui, ui_wrapper):
@@ -254,7 +254,7 @@ class ExpansionTreeManager:
 	def update_tree(self):
 		self._is_showing_new_tree = True
 		try:
-			self._tree = SpokenFormExpansionTree(self._root.get())
+			self._tree = SpokenFormTree(self._root.get())
 		except ValueError:
 			self._tree = None
 		self._refresh_callback()
@@ -289,7 +289,7 @@ class Actions:
 		"""Show the spoken form expansion window"""
 		global expansion
 		actions.user.spoken_form_expansion_hide()
-		expansion = ExpansionTreeManager(gui_expansion.refresh)
+		expansion = TreeManager(gui_expansion.refresh)
 		expansion.set_root(text)
 		gui_expansion.show()
 		ctx.tags = ["user.spoken_form_expansion_showing"]
