@@ -130,30 +130,18 @@ class SpokenFormExpansionTree:
 	def is_empty(self):
 		return not self.children.is_empty()
 
-
-
-class Expansion:
-	def __init__(self):
-		self.root = egui.Mutable("")
-		self.new_showing = False
-		self.tree = None
-		self.history = []
+class ExpansionTreeRenderer:
+	def __init__(self, set_root_to_child_callback):
 		self._encountered_this_render = set()
+		self.set_root_to_child_callback = set_root_to_child_callback
 
-	async def render_expansion_tree(self, ui, ui_wrapper, root_text=None, capture: TalonCapture | None=None):
-		if root_text is None:
-			# this is the start of the rendering
-			root_text = self.root.get()
-			self._encountered_this_render = set()
-
-		if capture is None:
-			if not self.tree or self.tree.is_empty():
-				return 
-			async with ui.group():
-				await self.render_children(ui, ui_wrapper, self.tree.children)
-		else:
-			await self.render_capture_card(ui, ui_wrapper, capture)
-
+	async def render_expansion_tree(self, ui, ui_wrapper, tree):
+		self._encountered_this_render.clear() 
+ 
+		if not tree or tree.is_empty():
+			return 
+		async with ui.group():
+			await self.render_children(ui, ui_wrapper, tree.children)
 
 	async def render_capture_card(self, ui, ui_wrapper, capture):
 		"""Renders the card around the capture ui"""
@@ -177,7 +165,7 @@ class Expansion:
 		async with ui.horizontal_wrapped():
 			ui.label(f"Rule: {capture.rule}")
 			if ui_wrapper.button(f"expansion show {capture.number}"):
-				self.set_root_to_child(f"{capture.compute_talon_script_representation()}")
+				self.set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
 		await self.render_children(ui, ui_wrapper, capture.children)
 
 	async def render_children(self, ui, ui_wrapper, children):
@@ -188,7 +176,17 @@ class Expansion:
 					if ui_wrapper.button(f"help list {l.number}: {l.name}"):
 						show_list_help(l.name)
 		for c in children.captures:
-			await self.render_expansion_tree(ui, ui_wrapper, c.rule, c)
+			await self.render_capture_card(ui, ui_wrapper, c)
+
+	
+
+class ExpansionTreeManager:
+	def __init__(self):
+		self.root = egui.Mutable("")
+		self.new_showing = False
+		self.tree = None
+		self.history = []
+		self.tree_renderer = ExpansionTreeRenderer(set_root_to_child_callback=self.set_root_to_child)
 
 	async def render(self, ui, ui_wrapper):
 		async with ui.horizontal_wrapped():
@@ -207,7 +205,7 @@ class Expansion:
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
 			async with scroll_area.show() as scroll_ui:
 				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
-				await self.render_expansion_tree(scroll_ui, ui_wrapper) 
+				await self.tree_renderer.render_expansion_tree(scroll_ui, ui_wrapper, self.tree)
 		
 		async with ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
 			async with ui.horizontal_wrapped():
@@ -268,7 +266,7 @@ class Actions:
 		"""Show the spoken form expansion window"""
 		global expansion
 		actions.user.spoken_form_expansion_hide()
-		expansion = Expansion()
+		expansion = ExpansionTreeManager()
 		expansion.set_root(text)
 		gui_expansion.show()
 		ctx.tags = ["user.spoken_form_expansion_showing"]
