@@ -243,3 +243,8 @@ class Actions:
 		"""Show the help for the list with a given number in the spoken form expansion"""
 		if target_list := expansion.get_list(number):
 			actions.user.help_list(target_list.name)
+
+	def spoken_form_expansion_make_capture_root(number: int):
+		"""Show the spoken form expansion for the capture with the given number in the current expansion"""
+		if target_list := expansion.get_capture(number):
+			expansion.set_root(target_list.compute_talon_script_representation())
