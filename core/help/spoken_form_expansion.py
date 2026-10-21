@@ -1,13 +1,15 @@
-from talon import Context, Module, actions, registry, cron
+from dataclasses import dataclass, field
 
 import egui
-from ..gui.gui import open_gui, let_user_use_page_keys_to_scroll_scroll_area
+from talon import Context, Module, actions, cron, registry
 
-from dataclasses import dataclass, field
+from ..gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui
+
 
 @dataclass
 class TalonList:
     """Information on a Talon list used to represent it graphically in the expansion"""
+
     name: str
     id_number: int
 
@@ -16,18 +18,22 @@ class TalonList:
         self.name = name
         self.id_number = number
 
+
 @dataclass
 class SpokenFormChildren:
     """The children of a parent spoken form"""
+
     lists: list = field(default_factory=list)
     captures: list = field(default_factory=list)
 
     def is_empty(self):
         return not self.lists and not self.captures
 
+
 @dataclass
 class TalonCapture:
     """Information on a Talon capture used to represent it graphically in the expansion"""
+
     name: str
     description: str | None
     id_number: int
@@ -47,11 +53,13 @@ class TalonCapture:
     def compute_talon_script_representation(self):
         return f"<{self.name}>"
 
+
 def get_capture_description(name):
     try:
         return registry.decls.captures[name].desc
     except KeyError:
         return None
+
 
 def get_capture_rule(name):
     try:
@@ -61,6 +69,7 @@ def get_capture_rule(name):
     except Exception:
         return None
 
+
 def do_delimiters_conflict(text: str):
     # the only relevant delimiters are angle brackets and curly braces
     # this checks if the delimiters at the start and end match using that assumption
@@ -68,40 +77,58 @@ def do_delimiters_conflict(text: str):
     b = text[-1]
     return (a == "{") != (b == "}")
 
+
 def compute_number_to_spoken_form_dictionary(forms):
     return {f.id_number: f for f in forms.values()}
+
 
 def get_description_or_default(description):
     if not description:
         return "Could not find description"
     return description
 
+
 def get_rule_or_default(rule):
     if not rule:
         return "Could not find rule"
     return rule
 
+
 class SpokenFormTree:
     """Represents the children of the input spoken form"""
+
     def __init__(self, text):
         self._all_lists = {}
         self._all_captures = {}
         self.children = self._compute_spoken_forms(text)
         self.number_to_list = compute_number_to_spoken_form_dictionary(self._all_lists)
-        self.number_to_capture = compute_number_to_spoken_form_dictionary(self._all_captures)
+        self.number_to_capture = compute_number_to_spoken_form_dictionary(
+            self._all_captures
+        )
         # these were used for the calculations but are not needed after construction
         del self._all_lists
         del self._all_captures
-    
-    def _create_spoken_form(self, text, start, i, create_function, forms, encountered_at_this_level, prior_encountered):
+
+    def _create_spoken_form(
+        self,
+        text,
+        start,
+        i,
+        create_function,
+        forms,
+        encountered_at_this_level,
+        prior_encountered,
+    ):
         """Create the spoken form object at the location. Raises ValueError with invalid delimiters."""
         if start is None:
-            raise ValueError(f"Encountered closing delimiter {start[i]} with no opening delimiter in {text}!")
-        form_text = text[start:i+1]
+            raise ValueError(
+                f"Encountered closing delimiter {start[i]} with no opening delimiter in {text}!"
+            )
+        form_text = text[start : i + 1]
         name = form_text[1:-1]
         if do_delimiters_conflict(form_text):
             raise ValueError(f"Delimiters did not match for {form_text}")
-        # avoid redundancy at the current level. There is no point in listing a list or capture as the child of a spoken form multiple times just because it uses them multiple times. 
+        # avoid redundancy at the current level. There is no point in listing a list or capture as the child of a spoken form multiple times just because it uses them multiple times.
         if form_text in encountered_at_this_level or i - start < 2:
             return
         # reuse values when possible to improve time and memory efficiency
@@ -109,7 +136,9 @@ class SpokenFormTree:
         # nonetheless, if something encountered before is a child of a spoken form, it needs to be shown as one of its children, so still add it to the list of forms encountered at this level
         form = prior_encountered.get(form_text)
         if form is None:
-            form = create_function(name, len(prior_encountered) + 1, self._compute_spoken_forms)
+            form = create_function(
+                name, len(prior_encountered) + 1, self._compute_spoken_forms
+            )
             prior_encountered[form_text] = form
         forms.append(form)
         encountered_at_this_level.add(form_text)
@@ -124,18 +153,40 @@ class SpokenFormTree:
             if c in ("{", "<"):
                 start = i
             elif c == "}":
-                self._create_spoken_form(text, start, i, TalonList, children.lists, encountered_at_this_level, self._all_lists)
+                self._create_spoken_form(
+                    text,
+                    start,
+                    i,
+                    TalonList,
+                    children.lists,
+                    encountered_at_this_level,
+                    self._all_lists,
+                )
                 start = None
             elif c == ">":
-                self._create_spoken_form(text, start, i, TalonCapture, children.captures, encountered_at_this_level, self._all_captures)
+                self._create_spoken_form(
+                    text,
+                    start,
+                    i,
+                    TalonCapture,
+                    children.captures,
+                    encountered_at_this_level,
+                    self._all_captures,
+                )
                 start = None
         return children
 
     def is_empty(self):
         return self.children.is_empty()
 
+
 class TreeRenderer:
-    def __init__(self, set_root_to_child_callback, update_tree_callback, set_root_to_parent_callback):
+    def __init__(
+        self,
+        set_root_to_child_callback,
+        update_tree_callback,
+        set_root_to_parent_callback,
+    ):
         """Used to let the user input a spoken form and render its tree"""
         self._encountered_this_render = set()
         self._set_root_to_child_callback = set_root_to_child_callback
@@ -146,9 +197,13 @@ class TreeRenderer:
 
     async def _render_capture_ui(self, capture):
         """Renders information about the capture"""
-        if capture.description is None and capture.rule is None and capture.children.is_empty():
+        if (
+            capture.description is None
+            and capture.rule is None
+            and capture.children.is_empty()
+        ):
             self._ui.label("Could not find information on this capture.")
-            return 
+            return
         description = capture.description
         if description is not None:
             description = get_description_or_default(description)
@@ -157,7 +212,9 @@ class TreeRenderer:
             rule = get_rule_or_default(capture.rule)
             self._ui.label(f"Rule: {rule}")
             if self._ui_wrapper.button(f"expansion show {capture.id_number}"):
-                self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
+                self._set_root_to_child_callback(
+                    f"{capture.compute_talon_script_representation()}"
+                )
         await self._render_children(capture.children)
 
     async def _render_capture_card(self, capture):
@@ -192,7 +249,7 @@ class TreeRenderer:
     async def _render_expansion_tree(self, tree):
         """Render a spoken form expansion tree"""
         if not tree or tree.is_empty():
-            return 
+            return
         async with self._ui.group():
             print("got here", tree.is_empty())
             await self._render_children(tree.children)
@@ -223,7 +280,15 @@ class TreeRenderer:
                     actions.key("pageup")
             self._ui.separator()
 
-    async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_rendering_new_tree: bool):
+    async def render(
+        self,
+        ui,
+        ui_wrapper,
+        root: egui.Mutable[str],
+        tree,
+        history: list[str],
+        is_rendering_new_tree: bool,
+    ):
         """Render the ui for inputting a spoken form and seeing the resulting expansion tree"""
         self._ui = ui
         self._ui_wrapper = ui_wrapper
@@ -238,19 +303,30 @@ class TreeRenderer:
         self._ui = None
         self._ui_wrapper = None
 
+
 class TreeManager:
     """Manages tree state"""
+
     def __init__(self, refresh_callback):
         self._root = egui.Mutable("")
         self._is_rendering_new_tree = True
         self._tree = None
         self._history = []
-        self._tree_renderer = TreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent)
+        self._tree_renderer = TreeRenderer(
+            self.set_root_to_child, self.update_tree, self.set_root_to_parent
+        )
         self._refresh_callback = refresh_callback
 
     async def render(self, ui, ui_wrapper):
         """Render the tree ui"""
-        await self._tree_renderer.render(ui, ui_wrapper, self._root, self._tree, self._history, self._is_rendering_new_tree)
+        await self._tree_renderer.render(
+            ui,
+            ui_wrapper,
+            self._root,
+            self._tree,
+            self._history,
+            self._is_rendering_new_tree,
+        )
         self._is_rendering_new_tree = False
 
     def set_root(self, root):
@@ -284,30 +360,38 @@ class TreeManager:
         if not self._tree:
             return None
         return self._tree.number_to_list.get(number)
-            
+
     def get_capture(self, number):
         """Get the capture by id number"""
         if not self._tree:
             return None
         return self._tree.number_to_capture.get(number)
 
+
 def open_list_help(name):
     # doing this in the egui thread freezes Talon
-    cron.after("0ms", lambda : actions.user.help_list(name))
+    cron.after("0ms", lambda: actions.user.help_list(name))
+
 
 expansion = None
+
+
 @open_gui(width=0.75, height=0.75, always_on_top=False)
 async def gui_expansion(ui, ui_wrapper):
     if expansion:
         await expansion.render(ui, ui_wrapper)
 
+
 mod = Module()
-mod.tag("spoken_form_expansion_showing", desc="The spoken form expansion window is showing")
+mod.tag(
+    "spoken_form_expansion_showing", desc="The spoken form expansion window is showing"
+)
 ctx = Context()
 
+
 @mod.action_class
-class Actions:    
-    def spoken_form_expansion_show(text: str=""):
+class Actions:
+    def spoken_form_expansion_show(text: str = ""):
         """Show the spoken form expansion window"""
         global expansion
         actions.user.spoken_form_expansion_hide()
@@ -333,7 +417,9 @@ class Actions:
     def spoken_form_expansion_make_capture_root(number: int):
         """Show the spoken form expansion for the capture with the given number in the current expansion"""
         if target_list := expansion.get_capture(number):
-            expansion.set_root_to_child(target_list.compute_talon_script_representation())
+            expansion.set_root_to_child(
+                target_list.compute_talon_script_representation()
+            )
 
     def spoken_form_expansion_return_to_parent():
         """Return to showing the spoken form expansion for the parent"""
