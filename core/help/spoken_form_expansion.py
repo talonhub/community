@@ -164,17 +164,23 @@ class ExpansionTreeRenderer:
 			async with self._ui.group(), collapsing_header.show():
 				await self.render_capture_ui(capture)
 
-	async def render_children(self, children):
-		async with self._ui.horizontal_wrapped():
-			if children.lists:
+	async def render_lists(self, lists):
+		"""Render a list of Talon lists"""
+		if lists:
+			async with self._ui.horizontal_wrapped():
 				self._ui.label("lists: ")
-				for l in children.lists:
+				for l in lists:
 					if self._ui_wrapper.button(f"help list {l.number}: {l.name}"):
 						show_list_help(l.name)
+
+	async def render_children(self, children):
+		"""Render the children of a current spoken"""
+		await self.render_lists(children.lists)
 		for c in children.captures:
 			await self.render_capture_card(c)
 
 	async def render_expansion_tree(self, tree):
+		"""Render a spoken form expansion tree"""
 		if not tree or tree.is_empty():
 			return 
 		async with self._ui.group():
@@ -182,6 +188,7 @@ class ExpansionTreeRenderer:
 		self._encountered_this_render.clear()
 
 	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_showing_new_tree: bool):
+		"""Render the ui for and putting a spoken form and seeing the resulting expansion tree"""
 		self._ui = ui
 		self._ui_wrapper = ui_wrapper
 		async with ui.horizontal_wrapped():
