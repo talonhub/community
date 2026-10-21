@@ -118,6 +118,7 @@ class Expansion:
 		self.captures = []
 		self.number_to_list = {}
 		self.number_to_capture = {}
+		self.history = []
 
 	async def show_expansion(self, ui, encountered=None, root=None, capture: TalonCapture | None=None):
 		if encountered is None:
@@ -133,7 +134,7 @@ class Expansion:
 				async with ui.horizontal_wrapped():
 					ui.label(f"Rule: {capture.rule}")
 					if ui.button(f"expansion show {capture.number}").clicked():
-						self.set_root(f"{capture.compute_talon_script_representation()}")
+						self.set_root_to_child(f"{capture.compute_talon_script_representation()}")
 			async with ui.horizontal_wrapped():
 				if lists:
 					ui.label("lists: ")
@@ -172,6 +173,8 @@ class Expansion:
 			if self.new_showing:
 				response.request_focus()
 				self.new_showing = False
+			if self.history and ui_wrapper.button(f"expansion return: {self.history[-1]}"):
+				self.set_root_to_parent()
 		if self.root.get():
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
@@ -184,6 +187,14 @@ class Expansion:
 	def set_root(self, root):
 		self.root.set(root)
 		self.update_expansion()
+
+	def set_root_to_child(self, child):
+		self.history.append(self.root.get())
+		self.set_root(child)
+
+	def set_root_to_parent(self):
+		root = self.history.pop()
+		self.set_root(root)
 
 	@staticmethod
 	def _compute_number_to_spoken_form_dictionary(forms):
@@ -247,4 +258,8 @@ class Actions:
 	def spoken_form_expansion_make_capture_root(number: int):
 		"""Show the spoken form expansion for the capture with the given number in the current expansion"""
 		if target_list := expansion.get_capture(number):
-			expansion.set_root(target_list.compute_talon_script_representation())
+			expansion.set_root_to_child(target_list.compute_talon_script_representation())
+
+	def spoken_form_expansion_return_to_parent():
+		"""Return to showing the spoken form expansion for the parent"""
+		expansion.set_root_to_parent()
