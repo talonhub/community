@@ -46,7 +46,7 @@ class TalonCapture:
 
 	def create_children(self, callback):
 		if self.rule:
-			self.children = callback(self.compute_talon_script_representation())
+			self.children = callback(self.rule)
 	
 	def compute_talon_script_representation(self):
 		return f"<{self.name}>"
@@ -105,7 +105,7 @@ class SpokenFormTree:
 		form = prior_encountered.get(form_text)
 		if form is None:
 			form = create_function(name, len(prior_encountered) + 1)
-			form.create_children(lambda text: self._compute_spoken_forms(text))
+			form.create_children(self._compute_spoken_forms)
 			prior_encountered[form_text] = form
 		forms.append(form)
 		encountered_at_this_level.add(form_text)
