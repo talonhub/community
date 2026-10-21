@@ -114,7 +114,6 @@ class SpokenFormTree:
         forms.append(form)
         encountered_at_this_level.add(form_text)
 
-
     def _compute_spoken_forms(self, text):
         """Identify the lists and captures that are children of the given text."""
         children = SpokenFormChildren()
