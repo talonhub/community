@@ -86,7 +86,7 @@ def get_rule_or_default(rule):
 	return rule
 
 class SpokenFormTree:
-	"""Represents the spoken form tree starting with the child spoken forms in the given text"""
+	"""Represents the children of the input spoken form"""
 	def __init__(self, text):
 		self._all_lists = {}
 		self._all_captures = {}
@@ -190,7 +190,7 @@ class TreeRenderer:
 						open_list_help(l.name)
 
 	async def _render_children(self, children):
-		"""Render the children of a current spoken"""
+		"""Render the children of the current spoken"""
 		await self._render_lists(children.lists)
 		for c in children.captures:
 			await self._render_capture_card(c)
@@ -264,12 +264,14 @@ class TreeManager:
 		self.update_tree()
 
 	def set_root_to_child(self, child):
-		"""Update the tree root to the child and remember the parent node we got there from"""
+		"""Navigate to the child node and remember the parent so we can return to it"""
 		self._history.append(self._root.get())
 		self.set_root(child)
 
 	def set_root_to_parent(self):
-		"""Go back to the parent node we got to the current root from"""
+		"""Navigate back to the parent node"""
+		if not self._history:
+			return
 		root = self._history.pop()
 		self.set_root(root)
 
