@@ -182,14 +182,13 @@ class Expansion:
 			async with scroll_area.show() as scroll_ui:
 				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
 				await self.show_expansion(scroll_ui) 
-		
-		async with ui.horizontal_wrapped():
+		async with ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)), ui.horizontal_wrapped():
 			if ui.button("expansion close").clicked():
 				actions.user.spoken_form_expansion_hide()
-			if ui_wrapper.button("page up"):
-				actions.key("pageup")
 			if ui_wrapper.button("page down"):
 				actions.key("pagedown")
+			if ui_wrapper.button("page up"):
+				actions.key("pageup")
 
 	def set_root(self, root):
 		self.root.set(root)
