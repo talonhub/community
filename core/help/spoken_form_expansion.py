@@ -11,13 +11,10 @@ class TalonList:
     name: str
     id_number: int
 
-    def __init__(self, name: str, number: int):
+    def __init__(self, name: str, number: int, create_children_callback):
+        # lists have no children
         self.name = name
         self.id_number = number
-
-    def create_children(self, callback):
-        # lists have no children
-        pass
 
 @dataclass
 class SpokenFormChildren:
@@ -34,20 +31,19 @@ class TalonCapture:
     name: str
     description: str | None
     id_number: int
-    rule: str
+    rule: str | None
     children: SpokenFormChildren
 
-    def __init__(self, name: str, number: int):
+    def __init__(self, name: str, number: int, create_children_callback):
         self.name = name
         self.description = get_capture_description(name)
         self.id_number = number
         self.rule = get_capture_rule(name)
-        self.children = SpokenFormChildren()
-
-    def create_children(self, callback):
         if self.rule:
-            self.children = callback(self.rule)
-    
+            self.children = create_children_callback(self.rule)
+        else:
+            self.children = SpokenFormChildren()
+
     def compute_talon_script_representation(self):
         return f"<{self.name}>"
 
@@ -113,8 +109,7 @@ class SpokenFormTree:
         # nonetheless, if something encountered before is a child of a spoken form, it needs to be shown as one of its children, so still add it to the list of forms encountered at this level
         form = prior_encountered.get(form_text)
         if form is None:
-            form = create_function(name, len(prior_encountered) + 1)
-            form.create_children(self._compute_spoken_forms)
+            form = create_function(name, len(prior_encountered) + 1, self._compute_spoken_forms)
             prior_encountered[form_text] = form
         forms.append(form)
         encountered_at_this_level.add(form_text)
