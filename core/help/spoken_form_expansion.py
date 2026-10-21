@@ -139,12 +139,16 @@ class ExpansionTreeRenderer:
 		self._ui = None
 		self._ui_wrapper = None
 
-	async def render_expansion_tree(self, tree):
-		if not tree or tree.is_empty():
-			return 
-		async with self._ui.group():
-			await self.render_children(tree.children)
-		self._encountered_this_render.clear()
+	async def render_capture_ui(self, capture):
+		"""Renders information about the capture"""
+		description = capture.description
+		if description:
+			self._ui.label(f"Description: {description}")
+		async with self._ui.horizontal_wrapped():
+			self._ui.label(f"Rule: {capture.rule}")
+			if self._ui_wrapper.button(f"expansion show {capture.number}"):
+				self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
+		await self.render_children(capture.children)
 
 	async def render_capture_card(self, capture):
 		"""Renders the card around the capture ui"""
@@ -160,17 +164,6 @@ class ExpansionTreeRenderer:
 			async with self._ui.group(), collapsing_header.show():
 				await self.render_capture_ui(capture)
 
-	async def render_capture_ui(self, capture):
-		"""Renders information about the capture"""
-		description = capture.description
-		if description:
-			self._ui.label(f"Description: {description}")
-		async with self._ui.horizontal_wrapped():
-			self._ui.label(f"Rule: {capture.rule}")
-			if self._ui_wrapper.button(f"expansion show {capture.number}"):
-				self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
-		await self.render_children(capture.children)
-
 	async def render_children(self, children):
 		async with self._ui.horizontal_wrapped():
 			if children.lists:
@@ -180,6 +173,13 @@ class ExpansionTreeRenderer:
 						show_list_help(l.name)
 		for c in children.captures:
 			await self.render_capture_card(c)
+
+	async def render_expansion_tree(self, tree):
+		if not tree or tree.is_empty():
+			return 
+		async with self._ui.group():
+			await self.render_children(tree.children)
+		self._encountered_this_render.clear()
 
 	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_showing_new_tree: bool):
 		self._ui = ui
