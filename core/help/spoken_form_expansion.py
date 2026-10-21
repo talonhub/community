@@ -191,16 +191,7 @@ class ExpansionTreeRenderer:
 		"""Render the ui for and putting a spoken form and seeing the resulting expansion tree"""
 		self._ui = ui
 		self._ui_wrapper = ui_wrapper
-		async with ui.horizontal_wrapped():
-			ui.strong("Spoken form to expand:")
-			old_root = root.get()
-			response = ui.add(egui.TextEdit.singleline(root))
-			if old_root != root.get():
-				self._update_tree_callback()
-			if is_showing_new_tree:
-				response.request_focus()
-			if history and ui_wrapper.button(f"expansion return: {history[-1]}"):
-				self._set_root_to_parent_callback()
+		await self.renderer_header(root, history, is_showing_new_tree)
 		if root.get() and tree:
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
@@ -210,6 +201,18 @@ class ExpansionTreeRenderer:
 		await self.render_bottom_buttons()
 		self._ui = None
 		self._ui_wrapper = None
+
+	async def renderer_header(self, root, history, is_showing_new_tree):
+		async with self._ui.horizontal_wrapped():
+			self._ui.strong("Spoken form to expand:")
+			old_root = root.get()
+			response = self._ui.add(egui.TextEdit.singleline(root))
+			if old_root != root.get():
+				self._update_tree_callback()
+			if is_showing_new_tree:
+				response.request_focus()
+			if history and self._ui_wrapper.button(f"expansion return: {history[-1]}"):
+				self._set_root_to_parent_callback()
 
 	async def render_bottom_buttons(self):
 		async with self._ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
