@@ -136,52 +136,54 @@ class ExpansionTreeRenderer:
 		self._set_root_to_child_callback = set_root_to_child_callback
 		self._update_tree_callback = update_tree_callback
 		self._set_root_to_parent_callback = set_root_to_parent_callback
-		
+		self._ui = None
+		self._ui_wrapper = None
 
-	async def render_expansion_tree(self, ui, ui_wrapper, tree):
-		self._encountered_this_render.clear() 
- 
+	async def render_expansion_tree(self, tree):
 		if not tree or tree.is_empty():
 			return 
-		async with ui.group():
-			await self.render_children(ui, ui_wrapper, tree.children)
+		async with self._ui.group():
+			await self.render_children(tree.children)
+		self._encountered_this_render.clear()
 
-	async def render_capture_card(self, ui, ui_wrapper, capture):
+	async def render_capture_card(self, capture):
 		"""Renders the card around the capture ui"""
 		title = f"Capture {capture.compute_talon_script_representation()}."
 		show_by_default = capture.name not in self._encountered_this_render
 		self._encountered_this_render.add(capture.name)
 		collapsing_header = egui.CollapsingHeader(title).default_open(show_by_default)
-		async with ui.scope() as scope, scope.style_mut() as style:
+		async with self._ui.scope() as scope, scope.style_mut() as style:
 			# do not show vertical line for the collapsing header
 			visuals = style.visuals()
 			visuals.indent_has_left_vline = False
 			style.set_visuals(visuals)
-			async with ui.group(), collapsing_header.show():
-				await self.render_capture_ui(ui, ui_wrapper, capture)
+			async with self._ui.group(), collapsing_header.show():
+				await self.render_capture_ui(capture)
 
-	async def render_capture_ui(self, ui, ui_wrapper, capture):
+	async def render_capture_ui(self, capture):
 		"""Renders information about the capture"""
 		description = capture.description
 		if description:
-			ui.label(f"Description: {description}")
-		async with ui.horizontal_wrapped():
-			ui.label(f"Rule: {capture.rule}")
-			if ui_wrapper.button(f"expansion show {capture.number}"):
+			self._ui.label(f"Description: {description}")
+		async with self._ui.horizontal_wrapped():
+			self._ui.label(f"Rule: {capture.rule}")
+			if self._ui_wrapper.button(f"expansion show {capture.number}"):
 				self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
-		await self.render_children(ui, ui_wrapper, capture.children)
+		await self.render_children(capture.children)
 
-	async def render_children(self, ui, ui_wrapper, children):
-		async with ui.horizontal_wrapped():
+	async def render_children(self, children):
+		async with self._ui.horizontal_wrapped():
 			if children.lists:
-				ui.label("lists: ")
+				self._ui.label("lists: ")
 				for l in children.lists:
-					if ui_wrapper.button(f"help list {l.number}: {l.name}"):
+					if self._ui_wrapper.button(f"help list {l.number}: {l.name}"):
 						show_list_help(l.name)
 		for c in children.captures:
-			await self.render_capture_card(ui, ui_wrapper, c)
+			await self.render_capture_card(c)
 
 	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_showing_new_tree: bool):
+		self._ui = ui
+		self._ui_wrapper = ui_wrapper
 		async with ui.horizontal_wrapped():
 			ui.strong("Spoken form to expand:")
 			old_root = root.get()
@@ -197,7 +199,7 @@ class ExpansionTreeRenderer:
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
 			async with scroll_area.show() as scroll_ui:
 				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
-				await self.render_expansion_tree(scroll_ui, ui_wrapper, tree)
+				await self.render_expansion_tree(tree)
 		
 		async with ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
 			async with ui.horizontal_wrapped():
@@ -208,6 +210,8 @@ class ExpansionTreeRenderer:
 				if ui_wrapper.button("page up"):
 					actions.key("pageup")
 			ui.separator()
+		self._ui = None
+		self._ui_wrapper = None
 
 	
 
