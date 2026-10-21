@@ -131,9 +131,11 @@ class SpokenFormExpansionTree:
 		return not self.children.is_empty()
 
 class ExpansionTreeRenderer:
-	def __init__(self, set_root_to_child_callback):
+	def __init__(self, set_root_to_child_callback, update_tree_callback, set_root_to_parent_callback):
 		self._encountered_this_render = set()
-		self.set_root_to_child_callback = set_root_to_child_callback
+		self._set_root_to_child_callback = set_root_to_child_callback
+		self._update_tree_callback = update_tree_callback
+		self._set_root_to_parent_callback = set_root_to_parent_callback
 
 	async def render_expansion_tree(self, ui, ui_wrapper, tree):
 		self._encountered_this_render.clear() 
@@ -165,7 +167,7 @@ class ExpansionTreeRenderer:
 		async with ui.horizontal_wrapped():
 			ui.label(f"Rule: {capture.rule}")
 			if ui_wrapper.button(f"expansion show {capture.number}"):
-				self.set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
+				self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
 		await self.render_children(ui, ui_wrapper, capture.children)
 
 	async def render_children(self, ui, ui_wrapper, children):
@@ -184,12 +186,12 @@ class ExpansionTreeRenderer:
 			old_root = root.get()
 			response = ui.add(egui.TextEdit.singleline(root))
 			if old_root != root.get():
-				self.update_tree()
+				self._update_tree_callback()
 			if self.new_showing:
 				response.request_focus()
 				self.new_showing = False
 			if history and ui_wrapper.button(f"expansion return: {history[-1]}"):
-				self.set_root_to_parent()
+				self._set_root_to_parent_callback()
 		if root.get() and tree:
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
@@ -215,7 +217,7 @@ class ExpansionTreeManager:
 		self.new_showing = False
 		self.tree = None
 		self.history = []
-		self.tree_renderer = ExpansionTreeRenderer(set_root_to_child_callback=self.set_root_to_child)
+		self.tree_renderer = ExpansionTreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent)
 
 	async def render(self, ui, ui_wrapper):
 		await self.tree_renderer.render(ui, ui_wrapper, self.root, self.tree, self.history)
