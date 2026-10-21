@@ -15,6 +15,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - [Spoken Form Considerations](#spoken-form-considerations-and-practices)
 - [Sleep Practices](#sleep-practices)
 - [GUI Practices](#gui-practices)
+- [Naming Practices](#naming-practices)
 
 ## Breaking Changes
 
