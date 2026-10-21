@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 @dataclass
 class TalonList:
+	"""Information on a Talon list used to represent it graphically in the expansion"""
 	name: str
 	description: str
 	number: int
@@ -18,6 +19,7 @@ class TalonList:
 
 @dataclass
 class TalonCapture:
+	"""Information on a Talon capture used to represent it graphically in the expansion"""
 	name: str
 	description: str
 	number: int
@@ -54,18 +56,24 @@ def get_capture_rule(name):
 		return "Could not find rule"
 
 def do_delimiters_conflict(text: str):
+	# the only relevant delimiters are angle brackets and curly braces
+	# this checks if the delimiters at the start and end match using that assumption
 	a = text[0]
 	b = text[-1]
 	return (a == "{") != (b == "}")
 
-def create_spoken_form(text, start, i, create_function, forms, encountered, prior_encountered):
-	"""Create the spoken form object at the location. Return the object of a new one is created. Return None if it does not need to be created."""
+def create_spoken_form(text, start, i, create_function, forms, encountered_at_this_level, prior_encountered):
+	"""Create the spoken form object at the location. Return the object if a new one is created. Return None if it does not need to be created or the delimiters have nothing in between them. Raises ValueError with invalid delimiters."""
 	form_text = text[start:i+1]
 	name = form_text[1:-1]
 	if do_delimiters_conflict(form_text):
 		raise ValueError(f"Delimiters did not match for {form_text}")
-	if form_text in encountered or i - start < 2:
+	# avoid redundancy at the current level. There is no point in listing a list or capture as the child of a spoken form multiple times just because it uses them multiple times. 
+	if form_text in encountered_at_this_level or i - start < 2:
 		return None
+	# reuse values when possible to improve time and memory efficiency
+	# this avoids having to recompute the children of a capture every time it is encountered
+	# nonetheless, if something encountered before is a child of a spoken form, it needs to be shown as one of its children, so still add it to the list of forms encountered at this level
 	if form_text in prior_encountered:
 		form = prior_encountered[form_text]
 		result = None
@@ -74,15 +82,16 @@ def create_spoken_form(text, start, i, create_function, forms, encountered, prio
 		prior_encountered[form_text] = form
 		result = form
 	forms.append(form)
-	encountered.add(form_text)
+	encountered_at_this_level.add(form_text)
 	return result
 
 
 def compute_spoken_forms(text, exclude_capture_matching_total=True, prior_encountered_lists=None, prior_encountered_captures=None):
+	"""Identify the lists and captures that are children of the given text. Return the lists and captures encountered at the top level as well as all of the list and captures encountered"""
 	text = text.strip()
 	lists = []
 	captures = []
-	encountered = set()
+	encountered_at_this_level = set()
 	if prior_encountered_lists is None:
 		prior_encountered_lists = {}
 	if prior_encountered_captures is None:
@@ -93,12 +102,12 @@ def compute_spoken_forms(text, exclude_capture_matching_total=True, prior_encoun
 		if c in ("{", "<"):
 			start = i
 		elif c == "}":
-			create_spoken_form(text, start, i, TalonList, lists, encountered, prior_encountered_lists)
+			create_spoken_form(text, start, i, TalonList, lists, encountered_at_this_level, prior_encountered_lists)
 			start = None
 		elif c == ">":
 			if exclude_capture_matching_total and i == len(text) - 1 and start == 0:
 				return [], [], {}, {}
-			form = create_spoken_form(text, start, i, TalonCapture, captures, encountered, prior_encountered_captures)
+			form = create_spoken_form(text, start, i, TalonCapture, captures, encountered_at_this_level, prior_encountered_captures)
 			if form and form.rule:
 				form.child_lists, form.child_captures, _, _ = compute_spoken_forms(
 					form.rule,
