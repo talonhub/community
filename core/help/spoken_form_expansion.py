@@ -217,6 +217,9 @@ class ExpansionTreeManager:
 		self.history = []
 		self.tree_renderer = ExpansionTreeRenderer(set_root_to_child_callback=self.set_root_to_child)
 
+	async def render(self, ui, ui_wrapper):
+		await self.tree_renderer.render(ui, ui_wrapper, self.root, self.tree, self.history)
+
 	def set_root(self, root):
 		self.root.set(root)
 		self.update_tree()
