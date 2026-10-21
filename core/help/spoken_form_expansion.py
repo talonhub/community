@@ -145,7 +145,7 @@ class Expansion:
 		if root is None:
 			root = self.root.get()
 
-		async def show_children(node):
+		async def show_children(children):
 			if capture:
 				description = capture.description
 				if description:
@@ -155,12 +155,12 @@ class Expansion:
 					if ui.button(f"expansion show {capture.number}").clicked():
 						self.set_root_to_child(f"{capture.compute_talon_script_representation()}")
 			async with ui.horizontal_wrapped():
-				if node.lists:
+				if children.lists:
 					ui.label("lists: ")
-					for l in node.lists:
+					for l in children.lists:
 						if ui.button(f"help list {l.number}: {l.name}").clicked():
 							show_list_help(l.name)
-			for c in node.captures:
+			for c in children.captures:
 				await self.show_expansion(ui, encountered, c.rule, c)
 
 		if capture is None:
