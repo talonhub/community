@@ -9,12 +9,10 @@ from dataclasses import dataclass, field
 class TalonList:
 	"""Information on a Talon list used to represent it graphically in the expansion"""
 	name: str
-	description: str
 	number: int
 
 	def __init__(self, name: str, number: int):
 		self.name = name
-		self.description = get_list_description(name)
 		self.number = number
 
 	def create_children(self, callback):
@@ -52,9 +50,6 @@ class TalonCapture:
 	
 	def compute_talon_script_representation(self):
 		return f"<{self.name}>"
-
-def get_list_description(name):
-	return registry.decls.lists[name].desc
 
 def get_capture_description(name):
 	try:
