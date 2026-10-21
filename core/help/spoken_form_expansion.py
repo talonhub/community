@@ -251,7 +251,6 @@ class TreeRenderer:
         if not tree or tree.is_empty():
             return
         async with self._ui.group():
-            print("got here", tree.is_empty())
             await self._render_children(tree.children)
         self._encountered_this_render.clear()
 
