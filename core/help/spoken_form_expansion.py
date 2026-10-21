@@ -83,6 +83,8 @@ class SpokenFormExpansionTree:
 	
 	def _create_spoken_form(self, text, start, i, create_function, forms, encountered_at_this_level, prior_encountered):
 		"""Create the spoken form object at the location. Return the object if a new one is created. Return None if it does not need to be created or the delimiters have nothing in between them. Raises ValueError with invalid delimiters."""
+		if start is None:
+			raise ValueError(f"Encountered closing delimiter {start[i]} with no opening delimiter in {text}!")
 		form_text = text[start:i+1]
 		name = form_text[1:-1]
 		if do_delimiters_conflict(form_text):
