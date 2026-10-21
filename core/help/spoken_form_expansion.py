@@ -80,6 +80,16 @@ def do_delimiters_conflict(text: str):
 def compute_number_to_spoken_form_dictionary(forms):
 	return {f.number: f for f in forms.values()}
 
+def get_description_or_default(description):
+	if not description:
+		return "Could not find description"
+	return description
+
+def get_rule_or_default(rule):
+	if not rule:
+		return "Could not find rule"
+	return rule
+
 class SpokenFormTree:
 	def __init__(self, text):
 		self._all_lists = {}
@@ -149,13 +159,10 @@ class TreeRenderer:
 			return 
 		description = capture.description
 		if description is not None:
-			if description == "":
-				description = "Could not find description"
+			description = get_description_or_default(description)
 			self._ui.label(f"Description: {description}")
 		async with self._ui.horizontal_wrapped():
-			rule = capture.rule
-			if not rule:
-				rule = "Could not find rule"
+			rule = get_rule_or_default(capture.rule)
 			self._ui.label(f"Rule: {rule}")
 			if self._ui_wrapper.button(f"expansion show {capture.number}"):
 				self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
