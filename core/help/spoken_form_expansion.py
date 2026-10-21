@@ -73,7 +73,7 @@ def do_delimiters_conflict(text: str):
     return (a == "{") != (b == "}")
 
 def compute_number_to_spoken_form_dictionary(forms):
-    return {f.number: f for f in forms.values()}
+    return {f.id_number: f for f in forms.values()}
 
 def get_description_or_default(description):
     if not description:
@@ -162,7 +162,7 @@ class TreeRenderer:
         async with self._ui.horizontal_wrapped():
             rule = get_rule_or_default(capture.rule)
             self._ui.label(f"Rule: {rule}")
-            if self._ui_wrapper.button(f"expansion show {capture.number}"):
+            if self._ui_wrapper.button(f"expansion show {capture.id_number}"):
                 self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
         await self._render_children(capture.children)
 
@@ -186,7 +186,7 @@ class TreeRenderer:
             async with self._ui.horizontal_wrapped():
                 self._ui.label("lists: ")
                 for l in lists:
-                    if self._ui_wrapper.button(f"help list {l.number}: {l.name}"):
+                    if self._ui_wrapper.button(f"help list {l.id_number}: {l.name}"):
                         open_list_help(l.name)
 
     async def _render_children(self, children):
