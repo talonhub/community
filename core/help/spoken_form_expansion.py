@@ -105,7 +105,7 @@ class SpokenFormTree:
 		form = prior_encountered.get(form_text)
 		if form is None:
 			form = create_function(name, len(prior_encountered) + 1)
-			form.createChildren(lambda text: self._compute_spoken_forms(text))
+			form.create_children(lambda text: self._compute_spoken_forms(text))
 			prior_encountered[form_text] = form
 		forms.append(form)
 		encountered_at_this_level.add(form_text)
