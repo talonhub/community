@@ -146,14 +146,6 @@ class Expansion:
 			root = self.root.get()
 
 		async def show_children(children):
-			if capture:
-				description = capture.description
-				if description:
-					ui.label(f"Description: {description}")
-				async with ui.horizontal_wrapped():
-					ui.label(f"Rule: {capture.rule}")
-					if ui.button(f"expansion show {capture.number}").clicked():
-						self.set_root_to_child(f"{capture.compute_talon_script_representation()}")
 			async with ui.horizontal_wrapped():
 				if children.lists:
 					ui.label("lists: ")
@@ -180,6 +172,14 @@ class Expansion:
 				style.set_visuals(visuals)
 
 				async with ui.group(), collapsing_header.show():
+					if capture:
+						description = capture.description
+						if description:
+							ui.label(f"Description: {description}")
+						async with ui.horizontal_wrapped():
+							ui.label(f"Rule: {capture.rule}")
+							if ui.button(f"expansion show {capture.number}").clicked():
+								self.set_root_to_child(f"{capture.compute_talon_script_representation()}")
 					await show_children(capture.children)
 
 
