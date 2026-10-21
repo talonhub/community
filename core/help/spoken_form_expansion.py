@@ -3,7 +3,7 @@ from talon import Context, Module, actions, registry, cron
 import egui
 from ..gui.gui import open_gui, let_user_use_page_keys_to_scroll_scroll_area
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class TalonList:
@@ -18,22 +18,28 @@ class TalonList:
 		self.number = number
 
 @dataclass
+class SpokenFormExpansionChildren:
+	lists: list = field(default_factory=list)
+	captures: list = field(default_factory=list)
+
+	def is_empty(self):
+		return not self.lists or not self.captures
+
+@dataclass
 class TalonCapture:
 	"""Information on a Talon capture used to represent it graphically in the expansion"""
 	name: str
 	description: str
 	number: int
 	rule: str
-	child_captures: list
-	child_lists: list
+	children: SpokenFormExpansionChildren
 
 	def __init__(self, name: str, number: int):
 		self.name = name
 		self.description = get_capture_description(name)
 		self.number = number
 		self.rule = get_capture_rule(name)
-		self.child_captures = []
-		self.child_lists = []
+		self.children = SpokenFormExpansionChildren()
 	
 	def compute_talon_script_representation(self):
 		return f"<{self.name}>"
@@ -69,7 +75,7 @@ class SpokenFormExpansionTree:
 	def __init__(self, text):
 		self._all_lists = {}
 		self._all_captures = {}
-		self.top_level_lists, self.top_level_captures = self._compute_spoken_forms(text)
+		self.node = self._compute_spoken_forms(text)
 		self.number_to_list = compute_number_to_spoken_form_dictionary(self._all_lists)
 		self.number_to_capture = compute_number_to_spoken_form_dictionary(self._all_captures)
 		del self._all_lists
@@ -102,8 +108,7 @@ class SpokenFormExpansionTree:
 	def _compute_spoken_forms(self, text):
 		"""Identify the lists and captures that are children of the given text. Return the lists and captures encountered at the top level as well as all of the list and captures encountered"""
 		text = text.strip()
-		lists = []
-		captures = []
+		children = SpokenFormExpansionChildren()
 		encountered_at_this_level = set()
 
 		start = None
@@ -111,19 +116,19 @@ class SpokenFormExpansionTree:
 			if c in ("{", "<"):
 				start = i
 			elif c == "}":
-				self._create_spoken_form(text, start, i, TalonList, lists, encountered_at_this_level, self._all_lists)
+				self._create_spoken_form(text, start, i, TalonList, children.lists, encountered_at_this_level, self._all_lists)
 				start = None
 			elif c == ">":
-				form = self._create_spoken_form(text, start, i, TalonCapture, captures, encountered_at_this_level, self._all_captures)
+				form = self._create_spoken_form(text, start, i, TalonCapture, children.captures, encountered_at_this_level, self._all_captures)
 				if form and form.rule:
-					form.child_lists, form.child_captures = self._compute_spoken_forms(
+					form.children = self._compute_spoken_forms(
 						form.rule,
 					)
 				start = None
-		return lists, captures
+		return children
 
 	def is_empty(self):
-		return not self.top_level_lists and not self.top_level_captures
+		return not self.node.is_empty()
 
 
 
@@ -140,7 +145,7 @@ class Expansion:
 		if root is None:
 			root = self.root.get()
 
-		async def show_children(lists, captures):
+		async def show_children(node):
 			if capture:
 				description = capture.description
 				if description:
@@ -150,19 +155,19 @@ class Expansion:
 					if ui.button(f"expansion show {capture.number}").clicked():
 						self.set_root_to_child(f"{capture.compute_talon_script_representation()}")
 			async with ui.horizontal_wrapped():
-				if lists:
+				if node.lists:
 					ui.label("lists: ")
-					for l in lists:
+					for l in node.lists:
 						if ui.button(f"help list {l.number}: {l.name}").clicked():
 							show_list_help(l.name)
-			for c in captures:
+			for c in node.captures:
 				await self.show_expansion(ui, encountered, c.rule, c)
 
 		if capture is None:
 			if not self.tree or self.tree.is_empty():
 				return 
 			async with ui.group():
-				await show_children(self.tree.top_level_lists, self.tree.top_level_captures)
+				await show_children(self.tree.node)
 		else:
 			title = f"Capture {capture.compute_talon_script_representation()}."
 			show_by_default = capture.name not in encountered
@@ -175,7 +180,7 @@ class Expansion:
 				style.set_visuals(visuals)
 
 				async with ui.group(), collapsing_header.show():
-					await show_children(capture.child_lists, capture.child_captures)
+					await show_children(capture.children)
 
 
 	async def render(self, ui, ui_wrapper):
