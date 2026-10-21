@@ -136,6 +136,7 @@ class ExpansionTreeRenderer:
 		self._set_root_to_child_callback = set_root_to_child_callback
 		self._update_tree_callback = update_tree_callback
 		self._set_root_to_parent_callback = set_root_to_parent_callback
+		
 
 	async def render_expansion_tree(self, ui, ui_wrapper, tree):
 		self._encountered_this_render.clear() 
@@ -180,16 +181,15 @@ class ExpansionTreeRenderer:
 		for c in children.captures:
 			await self.render_capture_card(ui, ui_wrapper, c)
 
-	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str]):
+	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_showing_new_tree: bool):
 		async with ui.horizontal_wrapped():
 			ui.strong("Spoken form to expand:")
 			old_root = root.get()
 			response = ui.add(egui.TextEdit.singleline(root))
 			if old_root != root.get():
 				self._update_tree_callback()
-			if self.new_showing:
+			if is_showing_new_tree:
 				response.request_focus()
-				self.new_showing = False
 			if history and ui_wrapper.button(f"expansion return: {history[-1]}"):
 				self._set_root_to_parent_callback()
 		if root.get() and tree:
@@ -214,13 +214,14 @@ class ExpansionTreeRenderer:
 class ExpansionTreeManager:
 	def __init__(self):
 		self.root = egui.Mutable("")
-		self.new_showing = False
+		self.is_showing_new_tree = True
 		self.tree = None
 		self.history = []
 		self.tree_renderer = ExpansionTreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent)
 
 	async def render(self, ui, ui_wrapper):
-		await self.tree_renderer.render(ui, ui_wrapper, self.root, self.tree, self.history)
+		await self.tree_renderer.render(ui, ui_wrapper, self.root, self.tree, self.history, self.is_showing_new_tree)
+		self.is_showing_new_tree = False
 
 	def set_root(self, root):
 		self.root.set(root)
