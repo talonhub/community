@@ -178,34 +178,24 @@ class ExpansionTreeRenderer:
 		for c in children.captures:
 			await self.render_capture_card(ui, ui_wrapper, c)
 
-	
-
-class ExpansionTreeManager:
-	def __init__(self):
-		self.root = egui.Mutable("")
-		self.new_showing = False
-		self.tree = None
-		self.history = []
-		self.tree_renderer = ExpansionTreeRenderer(set_root_to_child_callback=self.set_root_to_child)
-
-	async def render(self, ui, ui_wrapper):
+	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str]):
 		async with ui.horizontal_wrapped():
 			ui.strong("Spoken form to expand:")
-			old_root = self.root.get()
-			response = ui.add(egui.TextEdit.singleline(self.root))
-			if old_root != self.root.get():
+			old_root = root.get()
+			response = ui.add(egui.TextEdit.singleline(root))
+			if old_root != root.get():
 				self.update_tree()
 			if self.new_showing:
 				response.request_focus()
 				self.new_showing = False
-			if self.history and ui_wrapper.button(f"expansion return: {self.history[-1]}"):
+			if history and ui_wrapper.button(f"expansion return: {history[-1]}"):
 				self.set_root_to_parent()
-		if self.root.get() and self.tree:
+		if root.get() and tree:
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
 			async with scroll_area.show() as scroll_ui:
 				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
-				await self.tree_renderer.render_expansion_tree(scroll_ui, ui_wrapper, self.tree)
+				await self.render_expansion_tree(scroll_ui, ui_wrapper, tree)
 		
 		async with ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
 			async with ui.horizontal_wrapped():
@@ -216,6 +206,16 @@ class ExpansionTreeManager:
 				if ui_wrapper.button("page up"):
 					actions.key("pageup")
 			ui.separator()
+
+	
+
+class ExpansionTreeManager:
+	def __init__(self):
+		self.root = egui.Mutable("")
+		self.new_showing = False
+		self.tree = None
+		self.history = []
+		self.tree_renderer = ExpansionTreeRenderer(set_root_to_child_callback=self.set_root_to_child)
 
 	def set_root(self, root):
 		self.root.set(root)
