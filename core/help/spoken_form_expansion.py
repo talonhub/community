@@ -23,7 +23,7 @@ class SpokenFormChildren:
     captures: list = field(default_factory=list)
 
     def is_empty(self):
-        return not self.lists or not self.captures
+        return not self.lists and not self.captures
 
 @dataclass
 class TalonCapture:
@@ -132,7 +132,7 @@ class SpokenFormTree:
         return children
 
     def is_empty(self):
-        return not self.children.is_empty()
+        return self.children.is_empty()
 
 class TreeRenderer:
     def __init__(self, set_root_to_child_callback, update_tree_callback, set_root_to_parent_callback):
@@ -194,6 +194,7 @@ class TreeRenderer:
         if not tree or tree.is_empty():
             return 
         async with self._ui.group():
+            print("got here", tree.is_empty())
             await self._render_children(tree.children)
         self._encountered_this_render.clear()
 
