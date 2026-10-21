@@ -144,6 +144,9 @@ class TreeRenderer:
 
 	async def render_capture_ui(self, capture):
 		"""Renders information about the capture"""
+		if capture.description is None and capture.rule is None and capture.children.is_empty():
+			self._ui.label("Could not find information on this capture.")
+			return 
 		description = capture.description
 		if description is not None:
 			if description == "":
