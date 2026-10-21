@@ -34,7 +34,7 @@ class SpokenFormChildren:
 class TalonCapture:
 	"""Information on a Talon capture used to represent it graphically in the expansion"""
 	name: str
-	description: str
+	description: str | None
 	number: int
 	rule: str
 	children: SpokenFormChildren
@@ -60,7 +60,7 @@ def get_capture_description(name):
 	try:
 		return registry.decls.captures[name].desc
 	except KeyError:
-		return "Could not find description"
+		return None
 
 def get_capture_rule(name):
 	try:
@@ -145,7 +145,9 @@ class TreeRenderer:
 	async def render_capture_ui(self, capture):
 		"""Renders information about the capture"""
 		description = capture.description
-		if description:
+		if description is not None:
+			if description == "":
+				description = "Could not find description"
 			self._ui.label(f"Description: {description}")
 		async with self._ui.horizontal_wrapped():
 			self._ui.label(f"Rule: {capture.rule}")
