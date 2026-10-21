@@ -1,7 +1,7 @@
 from talon import Context, Module, actions, registry, cron
 
 import egui
-from ..gui.gui import open_gui
+from ..gui.gui import open_gui, let_user_use_page_keys_to_scroll_scroll_area
 
 from dataclasses import dataclass
 
@@ -155,10 +155,11 @@ class Expansion:
 			encountered.add(capture.name)
 			collapsing_header = egui.CollapsingHeader(title).default_open(show_by_default)
 			async with ui.scope() as scope, scope.style_mut() as style:
-				# make scrollbar always visible when a scroll area is needed
+				# do not show vertical line for the collapsing header
 				visuals = style.visuals()
 				visuals.indent_has_left_vline = False
 				style.set_visuals(visuals)
+
 				async with ui.group(), collapsing_header.show():
 					await show_children(capture.child_lists, capture.child_captures)
 
@@ -178,8 +179,9 @@ class Expansion:
 		if self.root.get():
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
-			async with scroll_area.show():
-				await self.show_expansion(ui) 
+			async with scroll_area.show() as scroll_ui:
+				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
+				await self.show_expansion(scroll_ui) 
 		
 		if ui.button("expansion close").clicked():
 			actions.user.spoken_form_expansion_hide()
