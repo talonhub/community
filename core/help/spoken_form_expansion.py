@@ -62,60 +62,70 @@ def do_delimiters_conflict(text: str):
 	b = text[-1]
 	return (a == "{") != (b == "}")
 
-def create_spoken_form(text, start, i, create_function, forms, encountered_at_this_level, prior_encountered):
-	"""Create the spoken form object at the location. Return the object if a new one is created. Return None if it does not need to be created or the delimiters have nothing in between them. Raises ValueError with invalid delimiters."""
-	form_text = text[start:i+1]
-	name = form_text[1:-1]
-	if do_delimiters_conflict(form_text):
-		raise ValueError(f"Delimiters did not match for {form_text}")
-	# avoid redundancy at the current level. There is no point in listing a list or capture as the child of a spoken form multiple times just because it uses them multiple times. 
-	if form_text in encountered_at_this_level or i - start < 2:
-		return None
-	# reuse values when possible to improve time and memory efficiency
-	# this avoids having to recompute the children of a capture every time it is encountered
-	# nonetheless, if something encountered before is a child of a spoken form, it needs to be shown as one of its children, so still add it to the list of forms encountered at this level
-	if form_text in prior_encountered:
-		form = prior_encountered[form_text]
-		result = None
-	else:
-		form = create_function(name, len(prior_encountered) + 1)
-		prior_encountered[form_text] = form
-		result = form
-	forms.append(form)
-	encountered_at_this_level.add(form_text)
-	return result
+def compute_number_to_spoken_form_dictionary(forms):
+	return {f.number: f for f in forms.values()}
+
+class SpokenFormExpansionTree:
+	def __init__(self, text):
+		self._all_lists = {}
+		self._all_captures = {}
+		self.top_level_lists, self.top_level_captures = self._compute_spoken_forms(text)
+		self.number_to_list = compute_number_to_spoken_form_dictionary(self._all_lists)
+		self.number_to_capture = compute_number_to_spoken_form_dictionary(self._all_captures)
+		del self._all_lists
+		del self._all_captures
+	
+	def _create_spoken_form(self, text, start, i, create_function, forms, encountered_at_this_level, prior_encountered):
+		"""Create the spoken form object at the location. Return the object if a new one is created. Return None if it does not need to be created or the delimiters have nothing in between them. Raises ValueError with invalid delimiters."""
+		form_text = text[start:i+1]
+		name = form_text[1:-1]
+		if do_delimiters_conflict(form_text):
+			raise ValueError(f"Delimiters did not match for {form_text}")
+		# avoid redundancy at the current level. There is no point in listing a list or capture as the child of a spoken form multiple times just because it uses them multiple times. 
+		if form_text in encountered_at_this_level or i - start < 2:
+			return None
+		# reuse values when possible to improve time and memory efficiency
+		# this avoids having to recompute the children of a capture every time it is encountered
+		# nonetheless, if something encountered before is a child of a spoken form, it needs to be shown as one of its children, so still add it to the list of forms encountered at this level
+		if form_text in prior_encountered:
+			form = prior_encountered[form_text]
+			result = None
+		else:
+			form = create_function(name, len(prior_encountered) + 1)
+			prior_encountered[form_text] = form
+			result = form
+		forms.append(form)
+		encountered_at_this_level.add(form_text)
+		return result
 
 
-def compute_spoken_forms(text, exclude_capture_matching_total=True, prior_encountered_lists=None, prior_encountered_captures=None):
-	"""Identify the lists and captures that are children of the given text. Return the lists and captures encountered at the top level as well as all of the list and captures encountered"""
-	text = text.strip()
-	lists = []
-	captures = []
-	encountered_at_this_level = set()
-	if prior_encountered_lists is None:
-		prior_encountered_lists = {}
-	if prior_encountered_captures is None:
-		prior_encountered_captures = {}
+	def _compute_spoken_forms(self, text, exclude_capture_matching_total=True):
+		"""Identify the lists and captures that are children of the given text. Return the lists and captures encountered at the top level as well as all of the list and captures encountered"""
+		text = text.strip()
+		lists = []
+		captures = []
+		encountered_at_this_level = set()
 
-	start = None
-	for i, c in enumerate(text):
-		if c in ("{", "<"):
-			start = i
-		elif c == "}":
-			create_spoken_form(text, start, i, TalonList, lists, encountered_at_this_level, prior_encountered_lists)
-			start = None
-		elif c == ">":
-			if exclude_capture_matching_total and i == len(text) - 1 and start == 0:
-				return [], [], {}, {}
-			form = create_spoken_form(text, start, i, TalonCapture, captures, encountered_at_this_level, prior_encountered_captures)
-			if form and form.rule:
-				form.child_lists, form.child_captures, _, _ = compute_spoken_forms(
-					form.rule,
-					prior_encountered_lists=prior_encountered_lists,
-					prior_encountered_captures=prior_encountered_captures
-				)
-			start = None
-	return lists, captures, prior_encountered_lists, prior_encountered_captures
+		start = None
+		for i, c in enumerate(text):
+			if c in ("{", "<"):
+				start = i
+			elif c == "}":
+				self._create_spoken_form(text, start, i, TalonList, lists, encountered_at_this_level, self._all_lists)
+				start = None
+			elif c == ">":
+				if exclude_capture_matching_total and i == len(text) - 1 and start == 0:
+					return [], []
+				form = self._create_spoken_form(text, start, i, TalonCapture, captures, encountered_at_this_level, self._all_captures)
+				if form and form.rule:
+					form.child_lists, form.child_captures = self._compute_spoken_forms(
+						form.rule,
+					)
+				start = None
+		return lists, captures
+
+	def is_empty(self):
+		return not self.top_level_lists and not self.top_level_captures
 
 
 
@@ -123,10 +133,7 @@ class Expansion:
 	def __init__(self):
 		self.root = egui.Mutable("")
 		self.new_showing = False
-		self.lists = []
-		self.captures = []
-		self.number_to_list = {}
-		self.number_to_capture = {}
+		self.tree = None
 		self.history = []
 
 	async def show_expansion(self, ui, encountered=None, root=None, capture: TalonCapture | None=None):
@@ -154,10 +161,10 @@ class Expansion:
 				await self.show_expansion(ui, encountered, c.rule, c)
 
 		if capture is None:
-			if not self.lists and not self.captures:
+			if not self.tree or self.tree.is_empty():
 				return 
 			async with ui.group():
-				await show_children(self.lists, self.captures)
+				await show_children(self.tree.top_level_lists, self.tree.top_level_captures)
 		else:
 			title = f"Capture {capture.compute_talon_script_representation()}."
 			show_by_default = capture.name not in encountered
@@ -179,13 +186,13 @@ class Expansion:
 			old_root = self.root.get()
 			response = ui.add(egui.TextEdit.singleline(self.root))
 			if old_root != self.root.get():
-				self.update_expansion()
+				self.update_tree()
 			if self.new_showing:
 				response.request_focus()
 				self.new_showing = False
 			if self.history and ui_wrapper.button(f"expansion return: {self.history[-1]}"):
 				self.set_root_to_parent()
-		if self.root.get():
+		if self.root.get() and self.tree:
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
 			async with scroll_area.show() as scroll_ui:
@@ -204,7 +211,7 @@ class Expansion:
 
 	def set_root(self, root):
 		self.root.set(root)
-		self.update_expansion()
+		self.update_tree()
 
 	def set_root_to_child(self, child):
 		self.history.append(self.root.get())
@@ -214,25 +221,22 @@ class Expansion:
 		root = self.history.pop()
 		self.set_root(root)
 
-	@staticmethod
-	def _compute_number_to_spoken_form_dictionary(forms):
-		return {f.number: f for f in forms.values()}
-
-	def update_expansion(self):
+	def update_tree(self):
 		self.new_showing = True
 		try:
-			self.lists, self.captures, all_lists, all_captures = compute_spoken_forms(self.root.get(), exclude_capture_matching_total=False)
+			self.tree = SpokenFormExpansionTree(self.root.get())
 		except ValueError:
-			self.lists, self.captures, all_lists, all_captures = [], [], {}, {}
-		self.number_to_list = self._compute_number_to_spoken_form_dictionary(all_lists)
-		self.number_to_capture = self._compute_number_to_spoken_form_dictionary(all_captures)
-	
+			self.tree = None
 
 	def get_list(self, number):
-		return self.number_to_list.get(number)
+		if not self.tree:
+			return None
+		return self.tree.number_to_list.get(number)
 			
 	def get_capture(self, number):
-		return self.number_to_capture.get(number)
+		if not self.tree:
+			return None
+		return self.tree.number_to_capture.get(number)
 
 def show_list_help(name):
 	# doing this in the egui thread freezes Talon
