@@ -107,7 +107,6 @@ class SpokenFormExpansionTree:
 
 	def _compute_spoken_forms(self, text):
 		"""Identify the lists and captures that are children of the given text. Return the lists and captures encountered at the top level as well as all of the list and captures encountered"""
-		text = text.strip()
 		children = SpokenFormExpansionChildren()
 		encountered_at_this_level = set()
 
