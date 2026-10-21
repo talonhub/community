@@ -58,15 +58,15 @@ def compute_table_height(row_size, item_spacing, rows_per_page):
 async def let_user_use_page_keys_to_scroll_scroll_area(scroll_ui):
     async with scroll_ui.input() as input_state:
         events = input_state.events()
-        scrolling_delta = None
+        scrolling_delta = 0
         for event in events:
-            if key := event.key():
+            if (key := event.key()) and not event.pressed():
                 key_name = key.name().lower()
                 if key_name == "pagedown":
-                    scrolling_delta = -1
+                    scrolling_delta -= 1
                 elif key_name == "pageup":
-                    scrolling_delta = 1
-        if scrolling_delta is not None:
+                    scrolling_delta += 1
+        if scrolling_delta != 0:
             clip_rect = scroll_ui.clip_rect()
             scroll_ui.scroll_with_delta(
                 egui.Vec2(0, scrolling_delta * abs(clip_rect.height()))
