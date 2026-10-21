@@ -68,7 +68,7 @@ def get_capture_rule(name):
 		rule = capture.rule
 		return rule.rule
 	except Exception:
-		return "Could not find rule"
+		return None
 
 def do_delimiters_conflict(text: str):
 	# the only relevant delimiters are angle brackets and curly braces
@@ -150,6 +150,9 @@ class TreeRenderer:
 				description = "Could not find description"
 			self._ui.label(f"Description: {description}")
 		async with self._ui.horizontal_wrapped():
+			rule = capture.rule
+			if not rule:
+				rule = "Could not find rule"
 			self._ui.label(f"Rule: {capture.rule}")
 			if self._ui_wrapper.button(f"expansion show {capture.number}"):
 				self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
