@@ -153,7 +153,7 @@ class TreeRenderer:
 			rule = capture.rule
 			if not rule:
 				rule = "Could not find rule"
-			self._ui.label(f"Rule: {capture.rule}")
+			self._ui.label(f"Rule: {rule}")
 			if self._ui_wrapper.button(f"expansion show {capture.number}"):
 				self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
 		await self.render_children(capture.children)
