@@ -69,7 +69,7 @@ class SpokenFormExpansionTree:
 	def __init__(self, text):
 		self._all_lists = {}
 		self._all_captures = {}
-		self.top_level_lists, self.top_level_captures = self._compute_spoken_forms(text, exclude_capture_matching_total=False)
+		self.top_level_lists, self.top_level_captures = self._compute_spoken_forms(text)
 		self.number_to_list = compute_number_to_spoken_form_dictionary(self._all_lists)
 		self.number_to_capture = compute_number_to_spoken_form_dictionary(self._all_captures)
 		del self._all_lists
@@ -99,7 +99,7 @@ class SpokenFormExpansionTree:
 		return result
 
 
-	def _compute_spoken_forms(self, text, exclude_capture_matching_total=True):
+	def _compute_spoken_forms(self, text):
 		"""Identify the lists and captures that are children of the given text. Return the lists and captures encountered at the top level as well as all of the list and captures encountered"""
 		text = text.strip()
 		lists = []
@@ -114,8 +114,6 @@ class SpokenFormExpansionTree:
 				self._create_spoken_form(text, start, i, TalonList, lists, encountered_at_this_level, self._all_lists)
 				start = None
 			elif c == ">":
-				if exclude_capture_matching_total and i == len(text) - 1 and start == 0:
-					return [], []
 				form = self._create_spoken_form(text, start, i, TalonCapture, captures, encountered_at_this_level, self._all_captures)
 				if form and form.rule:
 					form.child_lists, form.child_captures = self._compute_spoken_forms(
