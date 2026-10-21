@@ -18,10 +18,12 @@ class TalonList:
 		self.number = number
 
 	def create_children(self, callback):
+		# lists have no children
 		pass
 
 @dataclass
 class SpokenFormChildren:
+	"""The children of a parent spoken form"""
 	lists: list = field(default_factory=list)
 	captures: list = field(default_factory=list)
 
