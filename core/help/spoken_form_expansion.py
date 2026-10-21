@@ -227,7 +227,7 @@ def show_list_help(name):
 	cron.after("0ms", lambda : actions.user.help_list(name))
 
 expansion = None
-@open_gui(width=0.5, height=0.5, always_on_top=False)
+@open_gui(width=0.75, height=0.75, always_on_top=False)
 async def gui_expansion(ui, ui_wrapper):
 	if expansion:
 		await expansion.render(ui, ui_wrapper)
