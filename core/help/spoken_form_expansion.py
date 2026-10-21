@@ -17,6 +17,9 @@ class TalonList:
 		self.description = get_list_description(name)
 		self.number = number
 
+	def create_children(self, callback):
+		pass
+
 @dataclass
 class SpokenFormChildren:
 	lists: list = field(default_factory=list)
@@ -40,6 +43,10 @@ class TalonCapture:
 		self.number = number
 		self.rule = get_capture_rule(name)
 		self.children = SpokenFormChildren()
+
+	def create_children(self, callback):
+		if self.rule:
+			self.children = callback(self.compute_talon_script_representation())
 	
 	def compute_talon_script_representation(self):
 		return f"<{self.name}>"
@@ -82,7 +89,7 @@ class SpokenFormTree:
 		del self._all_captures
 	
 	def _create_spoken_form(self, text, start, i, create_function, forms, encountered_at_this_level, prior_encountered):
-		"""Create the spoken form object at the location. Return the object if a new one is created. Return None if it does not need to be created or the delimiters have nothing in between them. Raises ValueError with invalid delimiters."""
+		"""Create the spoken form object at the location. Raises ValueError with invalid delimiters."""
 		if start is None:
 			raise ValueError(f"Encountered closing delimiter {start[i]} with no opening delimiter in {text}!")
 		form_text = text[start:i+1]
@@ -91,20 +98,17 @@ class SpokenFormTree:
 			raise ValueError(f"Delimiters did not match for {form_text}")
 		# avoid redundancy at the current level. There is no point in listing a list or capture as the child of a spoken form multiple times just because it uses them multiple times. 
 		if form_text in encountered_at_this_level or i - start < 2:
-			return None
+			return
 		# reuse values when possible to improve time and memory efficiency
 		# this avoids having to recompute the children of a capture every time it is encountered
 		# nonetheless, if something encountered before is a child of a spoken form, it needs to be shown as one of its children, so still add it to the list of forms encountered at this level
-		if form_text in prior_encountered:
-			form = prior_encountered[form_text]
-			result = None
-		else:
+		form = prior_encountered.get(form_text)
+		if form is None:
 			form = create_function(name, len(prior_encountered) + 1)
+			form.createChildren(lambda text: self._compute_spoken_forms(text))
 			prior_encountered[form_text] = form
-			result = form
 		forms.append(form)
 		encountered_at_this_level.add(form_text)
-		return result
 
 
 	def _compute_spoken_forms(self, text):
@@ -120,11 +124,7 @@ class SpokenFormTree:
 				self._create_spoken_form(text, start, i, TalonList, children.lists, encountered_at_this_level, self._all_lists)
 				start = None
 			elif c == ">":
-				form = self._create_spoken_form(text, start, i, TalonCapture, children.captures, encountered_at_this_level, self._all_captures)
-				if form and form.rule:
-					form.children = self._compute_spoken_forms(
-						form.rule,
-					)
+				self._create_spoken_form(text, start, i, TalonCapture, children.captures, encountered_at_this_level, self._all_captures)
 				start = None
 		return children
 
