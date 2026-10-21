@@ -204,6 +204,7 @@ class TreeRenderer:
 		self._encountered_this_render.clear()
 
 	async def _renderer_header(self, root, history, is_rendering_new_tree):
+		"""Renders the spoken form inputs"""
 		async with self._ui.horizontal_wrapped():
 			self._ui.strong("Spoken form to expand:")
 			old_root = root.get()
@@ -215,7 +216,8 @@ class TreeRenderer:
 			if history and self._ui_wrapper.button(f"expansion return: {history[-1]}"):
 				self._set_root_to_parent_callback()
 
-	async def _render_bottom_buttons(self):
+	async def _render_bottom_navigation_buttons(self):
+		"""Renders the bottom navigation buttons"""
 		async with self._ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
 			async with self._ui.horizontal_wrapped():
 				if self._ui.button("expansion close").clicked():
@@ -227,7 +229,7 @@ class TreeRenderer:
 			self._ui.separator()
 
 	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_rendering_new_tree: bool):
-		"""Render the ui for and putting a spoken form and seeing the resulting expansion tree"""
+		"""Render the ui for inputting a spoken form and seeing the resulting expansion tree"""
 		self._ui = ui
 		self._ui_wrapper = ui_wrapper
 		await self._renderer_header(root, history, is_rendering_new_tree)
@@ -237,11 +239,12 @@ class TreeRenderer:
 			async with scroll_area.show() as scroll_ui:
 				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
 				await self._render_expansion_tree(tree)
-		await self._render_bottom_buttons()
+		await self._render_bottom_navigation_buttons()
 		self._ui = None
 		self._ui_wrapper = None
 
 class TreeManager:
+	"""Manages tree state"""
 	def __init__(self, refresh_callback):
 		self._root = egui.Mutable("")
 		self._is_rendering_new_tree = True
@@ -251,22 +254,27 @@ class TreeManager:
 		self._refresh_callback = refresh_callback
 
 	async def render(self, ui, ui_wrapper):
+		"""Render the tree ui"""
 		await self._tree_renderer.render(ui, ui_wrapper, self._root, self._tree, self._history, self._is_rendering_new_tree)
 		self._is_rendering_new_tree = False
 
 	def set_root(self, root):
+		"""Update the tree root"""
 		self._root.set(root)
 		self.update_tree()
 
 	def set_root_to_child(self, child):
+		"""Update the tree root to the child and remember the parent node we got there from"""
 		self._history.append(self._root.get())
 		self.set_root(child)
 
 	def set_root_to_parent(self):
+		"""Go back to the parent node we got to the current root from"""
 		root = self._history.pop()
 		self.set_root(root)
 
 	def update_tree(self):
+		"""Update the tree to reflect the new inputted root and refresh the gui"""
 		self._is_rendering_new_tree = True
 		try:
 			self._tree = SpokenFormTree(self._root.get())
@@ -275,11 +283,13 @@ class TreeManager:
 		self._refresh_callback()
 
 	def get_list(self, number):
+		"""Get the list by id number"""
 		if not self._tree:
 			return None
 		return self._tree.number_to_list.get(number)
 			
 	def get_capture(self, number):
+		"""Get the capture by id number"""
 		if not self._tree:
 			return None
 		return self._tree.number_to_capture.get(number)
