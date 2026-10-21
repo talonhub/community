@@ -203,21 +203,6 @@ class TreeRenderer:
 			await self.render_children(tree.children)
 		self._encountered_this_render.clear()
 
-	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_rendering_new_tree: bool):
-		"""Render the ui for and putting a spoken form and seeing the resulting expansion tree"""
-		self._ui = ui
-		self._ui_wrapper = ui_wrapper
-		await self.renderer_header(root, history, is_rendering_new_tree)
-		if root.get() and tree:
-			maximum_height = ui.available_height() - 30
-			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
-			async with scroll_area.show() as scroll_ui:
-				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
-				await self.render_expansion_tree(tree)
-		await self.render_bottom_buttons()
-		self._ui = None
-		self._ui_wrapper = None
-
 	async def renderer_header(self, root, history, is_rendering_new_tree):
 		async with self._ui.horizontal_wrapped():
 			self._ui.strong("Spoken form to expand:")
@@ -240,6 +225,21 @@ class TreeRenderer:
 				if self._ui_wrapper.button("page up"):
 					actions.key("pageup")
 			self._ui.separator()
+
+	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_rendering_new_tree: bool):
+		"""Render the ui for and putting a spoken form and seeing the resulting expansion tree"""
+		self._ui = ui
+		self._ui_wrapper = ui_wrapper
+		await self.renderer_header(root, history, is_rendering_new_tree)
+		if root.get() and tree:
+			maximum_height = ui.available_height() - 30
+			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
+			async with scroll_area.show() as scroll_ui:
+				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
+				await self.render_expansion_tree(tree)
+		await self.render_bottom_buttons()
+		self._ui = None
+		self._ui_wrapper = None
 
 class TreeManager:
 	def __init__(self, refresh_callback):
