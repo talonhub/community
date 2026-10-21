@@ -138,32 +138,39 @@ class Expansion:
 		self.new_showing = False
 		self.tree = None
 		self.history = []
+		self._encountered_this_render = set()
 
-	async def render_expansion(self, ui, encountered=None, root=None, capture: TalonCapture | None=None):
-		if encountered is None:
-			encountered = set()
-		if root is None:
-			root = self.root.get()
+	async def render_expansion_tree(self, ui, root_text=None, capture: TalonCapture | None=None):
+		if root_text is None:
+			# this is the start of the rendering
+			root_text = self.root.get()
+			self._encountered_this_render = set()
 
 		if capture is None:
 			if not self.tree or self.tree.is_empty():
 				return 
 			async with ui.group():
-				await self.render_children(ui, self.tree.children, encountered)
+				await self.render_children(ui, self.tree.children)
 		else:
-			title = f"Capture {capture.compute_talon_script_representation()}."
-			show_by_default = capture.name not in encountered
-			encountered.add(capture.name)
-			collapsing_header = egui.CollapsingHeader(title).default_open(show_by_default)
-			async with ui.scope() as scope, scope.style_mut() as style:
-				# do not show vertical line for the collapsing header
-				visuals = style.visuals()
-				visuals.indent_has_left_vline = False
-				style.set_visuals(visuals)
-				async with ui.group(), collapsing_header.show():
-					await self.render_capture_ui(ui, capture, encountered)
+			await self.render_capture_card(ui, capture)
 
-	async def render_capture_ui(self, ui, capture, encountered):
+
+	async def render_capture_card(self, ui, capture):
+		"""Renders the card around the capture ui"""
+		title = f"Capture {capture.compute_talon_script_representation()}."
+		show_by_default = capture.name not in self._encountered_this_render
+		self._encountered_this_render.add(capture.name)
+		collapsing_header = egui.CollapsingHeader(title).default_open(show_by_default)
+		async with ui.scope() as scope, scope.style_mut() as style:
+			# do not show vertical line for the collapsing header
+			visuals = style.visuals()
+			visuals.indent_has_left_vline = False
+			style.set_visuals(visuals)
+			async with ui.group(), collapsing_header.show():
+				await self.render_capture_ui(ui, capture)
+
+	async def render_capture_ui(self, ui, capture):
+		"""Renders information about the capture"""
 		description = capture.description
 		if description:
 			ui.label(f"Description: {description}")
@@ -171,9 +178,9 @@ class Expansion:
 			ui.label(f"Rule: {capture.rule}")
 			if ui.button(f"expansion show {capture.number}").clicked():
 				self.set_root_to_child(f"{capture.compute_talon_script_representation()}")
-		await self.render_children(ui, capture.children, encountered)
+		await self.render_children(ui, capture.children)
 
-	async def render_children(self, ui, children, encountered):
+	async def render_children(self, ui, children):
 		async with ui.horizontal_wrapped():
 			if children.lists:
 				ui.label("lists: ")
@@ -181,7 +188,7 @@ class Expansion:
 					if ui.button(f"help list {l.number}: {l.name}").clicked():
 						show_list_help(l.name)
 		for c in children.captures:
-			await self.render_expansion(ui, encountered, c.rule, c)
+			await self.render_expansion_tree(ui, c.rule, c)
 
 	async def render(self, ui, ui_wrapper):
 		async with ui.horizontal_wrapped():
@@ -200,7 +207,7 @@ class Expansion:
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
 			async with scroll_area.show() as scroll_ui:
 				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
-				await self.render_expansion(scroll_ui) 
+				await self.render_expansion_tree(scroll_ui) 
 		
 		async with ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
 			async with ui.horizontal_wrapped():
