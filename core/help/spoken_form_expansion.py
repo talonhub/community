@@ -207,20 +207,20 @@ class ExpansionTreeRenderer:
 			async with scroll_area.show() as scroll_ui:
 				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
 				await self.render_expansion_tree(tree)
-		
-		async with ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
-			async with ui.horizontal_wrapped():
-				if ui.button("expansion close").clicked():
-					actions.user.spoken_form_expansion_hide()
-				if ui_wrapper.button("page down"):
-					actions.key("pagedown")
-				if ui_wrapper.button("page up"):
-					actions.key("pageup")
-			ui.separator()
+		await self.render_bottom_buttons()
 		self._ui = None
 		self._ui_wrapper = None
 
-	
+	async def render_bottom_buttons(self):
+		async with self._ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
+			async with self._ui.horizontal_wrapped():
+				if self._ui.button("expansion close").clicked():
+					actions.user.spoken_form_expansion_hide()
+				if self._ui_wrapper.button("page down"):
+					actions.key("pagedown")
+				if self._ui_wrapper.button("page up"):
+					actions.key("pageup")
+			self._ui.separator()
 
 class ExpansionTreeManager:
 	def __init__(self, refresh_callback):
