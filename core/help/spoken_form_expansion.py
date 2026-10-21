@@ -69,7 +69,7 @@ class SpokenFormExpansionTree:
 	def __init__(self, text):
 		self._all_lists = {}
 		self._all_captures = {}
-		self.top_level_lists, self.top_level_captures = self._compute_spoken_forms(text)
+		self.top_level_lists, self.top_level_captures = self._compute_spoken_forms(text, exclude_capture_matching_total=False)
 		self.number_to_list = compute_number_to_spoken_form_dictionary(self._all_lists)
 		self.number_to_capture = compute_number_to_spoken_form_dictionary(self._all_captures)
 		del self._all_lists
