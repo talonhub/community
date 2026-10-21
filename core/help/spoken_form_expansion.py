@@ -150,7 +150,7 @@ class TreeRenderer:
 		self._ui = None
 		self._ui_wrapper = None
 
-	async def render_capture_ui(self, capture):
+	async def _render_capture_ui(self, capture):
 		"""Renders information about the capture"""
 		if capture.description is None and capture.rule is None and capture.children.is_empty():
 			self._ui.label("Could not find information on this capture.")
@@ -164,9 +164,9 @@ class TreeRenderer:
 			self._ui.label(f"Rule: {rule}")
 			if self._ui_wrapper.button(f"expansion show {capture.number}"):
 				self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
-		await self.render_children(capture.children)
+		await self._render_children(capture.children)
 
-	async def render_capture_card(self, capture):
+	async def _render_capture_card(self, capture):
 		"""Renders the card around the capture ui"""
 		title = f"Capture {capture.compute_talon_script_representation()}."
 		expand_by_default = capture.name not in self._encountered_this_render
@@ -178,9 +178,9 @@ class TreeRenderer:
 			visuals.indent_has_left_vline = False
 			style.set_visuals(visuals)
 			async with self._ui.group(), collapsing_header.show():
-				await self.render_capture_ui(capture)
+				await self._render_capture_ui(capture)
 
-	async def render_lists(self, lists):
+	async def _render_lists(self, lists):
 		"""Render a list of Talon lists"""
 		if lists:
 			async with self._ui.horizontal_wrapped():
@@ -189,21 +189,21 @@ class TreeRenderer:
 					if self._ui_wrapper.button(f"help list {l.number}: {l.name}"):
 						open_list_help(l.name)
 
-	async def render_children(self, children):
+	async def _render_children(self, children):
 		"""Render the children of a current spoken"""
-		await self.render_lists(children.lists)
+		await self._render_lists(children.lists)
 		for c in children.captures:
-			await self.render_capture_card(c)
+			await self._render_capture_card(c)
 
-	async def render_expansion_tree(self, tree):
+	async def _render_expansion_tree(self, tree):
 		"""Render a spoken form expansion tree"""
 		if not tree or tree.is_empty():
 			return 
 		async with self._ui.group():
-			await self.render_children(tree.children)
+			await self._render_children(tree.children)
 		self._encountered_this_render.clear()
 
-	async def renderer_header(self, root, history, is_rendering_new_tree):
+	async def _renderer_header(self, root, history, is_rendering_new_tree):
 		async with self._ui.horizontal_wrapped():
 			self._ui.strong("Spoken form to expand:")
 			old_root = root.get()
@@ -215,7 +215,7 @@ class TreeRenderer:
 			if history and self._ui_wrapper.button(f"expansion return: {history[-1]}"):
 				self._set_root_to_parent_callback()
 
-	async def render_bottom_buttons(self):
+	async def _render_bottom_buttons(self):
 		async with self._ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
 			async with self._ui.horizontal_wrapped():
 				if self._ui.button("expansion close").clicked():
@@ -230,14 +230,14 @@ class TreeRenderer:
 		"""Render the ui for and putting a spoken form and seeing the resulting expansion tree"""
 		self._ui = ui
 		self._ui_wrapper = ui_wrapper
-		await self.renderer_header(root, history, is_rendering_new_tree)
+		await self._renderer_header(root, history, is_rendering_new_tree)
 		if root.get() and tree:
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
 			async with scroll_area.show() as scroll_ui:
 				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
-				await self.render_expansion_tree(tree)
-		await self.render_bottom_buttons()
+				await self._render_expansion_tree(tree)
+		await self._render_bottom_buttons()
 		self._ui = None
 		self._ui_wrapper = None
 
