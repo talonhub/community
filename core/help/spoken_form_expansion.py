@@ -9,11 +9,11 @@ from dataclasses import dataclass, field
 class TalonList:
 	"""Information on a Talon list used to represent it graphically in the expansion"""
 	name: str
-	number: int
+	id_number: int
 
 	def __init__(self, name: str, number: int):
 		self.name = name
-		self.number = number
+		self.id_number = number
 
 	def create_children(self, callback):
 		# lists have no children
@@ -33,14 +33,14 @@ class TalonCapture:
 	"""Information on a Talon capture used to represent it graphically in the expansion"""
 	name: str
 	description: str | None
-	number: int
+	id_number: int
 	rule: str
 	children: SpokenFormChildren
 
 	def __init__(self, name: str, number: int):
 		self.name = name
 		self.description = get_capture_description(name)
-		self.number = number
+		self.id_number = number
 		self.rule = get_capture_rule(name)
 		self.children = SpokenFormChildren()
 
@@ -86,12 +86,14 @@ def get_rule_or_default(rule):
 	return rule
 
 class SpokenFormTree:
+	"""Represents the spoken form tree starting with the child spoken forms in the given text"""
 	def __init__(self, text):
 		self._all_lists = {}
 		self._all_captures = {}
 		self.children = self._compute_spoken_forms(text)
 		self.number_to_list = compute_number_to_spoken_form_dictionary(self._all_lists)
 		self.number_to_capture = compute_number_to_spoken_form_dictionary(self._all_captures)
+		# these were used for the calculations but are not needed after construction
 		del self._all_lists
 		del self._all_captures
 	
@@ -119,7 +121,7 @@ class SpokenFormTree:
 
 
 	def _compute_spoken_forms(self, text):
-		"""Identify the lists and captures that are children of the given text. Return the lists and captures encountered at the top level as well as all of the list and captures encountered"""
+		"""Identify the lists and captures that are children of the given text."""
 		children = SpokenFormChildren()
 		encountered_at_this_level = set()
 
@@ -140,6 +142,7 @@ class SpokenFormTree:
 
 class TreeRenderer:
 	def __init__(self, set_root_to_child_callback, update_tree_callback, set_root_to_parent_callback):
+		"""Used to let the user input a spoken form and render its tree"""
 		self._encountered_this_render = set()
 		self._set_root_to_child_callback = set_root_to_child_callback
 		self._update_tree_callback = update_tree_callback
@@ -166,11 +169,11 @@ class TreeRenderer:
 	async def render_capture_card(self, capture):
 		"""Renders the card around the capture ui"""
 		title = f"Capture {capture.compute_talon_script_representation()}."
-		show_by_default = capture.name not in self._encountered_this_render
+		expand_by_default = capture.name not in self._encountered_this_render
 		self._encountered_this_render.add(capture.name)
-		collapsing_header = egui.CollapsingHeader(title).default_open(show_by_default)
+		collapsing_header = egui.CollapsingHeader(title).default_open(expand_by_default)
 		async with self._ui.scope() as scope, scope.style_mut() as style:
-			# do not show vertical line for the collapsing header
+			# do not render vertical line for the collapsing header
 			visuals = style.visuals()
 			visuals.indent_has_left_vline = False
 			style.set_visuals(visuals)
@@ -184,7 +187,7 @@ class TreeRenderer:
 				self._ui.label("lists: ")
 				for l in lists:
 					if self._ui_wrapper.button(f"help list {l.number}: {l.name}"):
-						show_list_help(l.name)
+						open_list_help(l.name)
 
 	async def render_children(self, children):
 		"""Render the children of a current spoken"""
@@ -200,11 +203,11 @@ class TreeRenderer:
 			await self.render_children(tree.children)
 		self._encountered_this_render.clear()
 
-	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_showing_new_tree: bool):
+	async def render(self, ui, ui_wrapper, root: egui.Mutable[str], tree, history: list[str], is_rendering_new_tree: bool):
 		"""Render the ui for and putting a spoken form and seeing the resulting expansion tree"""
 		self._ui = ui
 		self._ui_wrapper = ui_wrapper
-		await self.renderer_header(root, history, is_showing_new_tree)
+		await self.renderer_header(root, history, is_rendering_new_tree)
 		if root.get() and tree:
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
@@ -215,14 +218,14 @@ class TreeRenderer:
 		self._ui = None
 		self._ui_wrapper = None
 
-	async def renderer_header(self, root, history, is_showing_new_tree):
+	async def renderer_header(self, root, history, is_rendering_new_tree):
 		async with self._ui.horizontal_wrapped():
 			self._ui.strong("Spoken form to expand:")
 			old_root = root.get()
 			response = self._ui.add(egui.TextEdit.singleline(root))
 			if old_root != root.get():
 				self._update_tree_callback()
-			if is_showing_new_tree:
+			if is_rendering_new_tree:
 				response.request_focus()
 			if history and self._ui_wrapper.button(f"expansion return: {history[-1]}"):
 				self._set_root_to_parent_callback()
@@ -241,15 +244,15 @@ class TreeRenderer:
 class TreeManager:
 	def __init__(self, refresh_callback):
 		self._root = egui.Mutable("")
-		self._is_showing_new_tree = True
+		self._is_rendering_new_tree = True
 		self._tree = None
 		self._history = []
 		self._tree_renderer = TreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent)
 		self._refresh_callback = refresh_callback
 
 	async def render(self, ui, ui_wrapper):
-		await self._tree_renderer.render(ui, ui_wrapper, self._root, self._tree, self._history, self._is_showing_new_tree)
-		self._is_showing_new_tree = False
+		await self._tree_renderer.render(ui, ui_wrapper, self._root, self._tree, self._history, self._is_rendering_new_tree)
+		self._is_rendering_new_tree = False
 
 	def set_root(self, root):
 		self._root.set(root)
@@ -264,7 +267,7 @@ class TreeManager:
 		self.set_root(root)
 
 	def update_tree(self):
-		self._is_showing_new_tree = True
+		self._is_rendering_new_tree = True
 		try:
 			self._tree = SpokenFormTree(self._root.get())
 		except ValueError:
@@ -281,7 +284,7 @@ class TreeManager:
 			return None
 		return self._tree.number_to_capture.get(number)
 
-def show_list_help(name):
+def open_list_help(name):
 	# doing this in the egui thread freezes Talon
 	cron.after("0ms", lambda : actions.user.help_list(name))
 
