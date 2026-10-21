@@ -75,7 +75,7 @@ class SpokenFormExpansionTree:
 	def __init__(self, text):
 		self._all_lists = {}
 		self._all_captures = {}
-		self.node = self._compute_spoken_forms(text)
+		self.children = self._compute_spoken_forms(text)
 		self.number_to_list = compute_number_to_spoken_form_dictionary(self._all_lists)
 		self.number_to_capture = compute_number_to_spoken_form_dictionary(self._all_captures)
 		del self._all_lists
@@ -128,7 +128,7 @@ class SpokenFormExpansionTree:
 		return children
 
 	def is_empty(self):
-		return not self.node.is_empty()
+		return not self.children.is_empty()
 
 
 
@@ -139,27 +139,17 @@ class Expansion:
 		self.tree = None
 		self.history = []
 
-	async def show_expansion(self, ui, encountered=None, root=None, capture: TalonCapture | None=None):
+	async def render_expansion(self, ui, encountered=None, root=None, capture: TalonCapture | None=None):
 		if encountered is None:
 			encountered = set()
 		if root is None:
 			root = self.root.get()
 
-		async def show_children(children):
-			async with ui.horizontal_wrapped():
-				if children.lists:
-					ui.label("lists: ")
-					for l in children.lists:
-						if ui.button(f"help list {l.number}: {l.name}").clicked():
-							show_list_help(l.name)
-			for c in children.captures:
-				await self.show_expansion(ui, encountered, c.rule, c)
-
 		if capture is None:
 			if not self.tree or self.tree.is_empty():
 				return 
 			async with ui.group():
-				await show_children(self.tree.node)
+				await self.render_children(ui, self.tree.children, encountered)
 		else:
 			title = f"Capture {capture.compute_talon_script_representation()}."
 			show_by_default = capture.name not in encountered
@@ -170,18 +160,28 @@ class Expansion:
 				visuals = style.visuals()
 				visuals.indent_has_left_vline = False
 				style.set_visuals(visuals)
-
 				async with ui.group(), collapsing_header.show():
-					if capture:
-						description = capture.description
-						if description:
-							ui.label(f"Description: {description}")
-						async with ui.horizontal_wrapped():
-							ui.label(f"Rule: {capture.rule}")
-							if ui.button(f"expansion show {capture.number}").clicked():
-								self.set_root_to_child(f"{capture.compute_talon_script_representation()}")
-					await show_children(capture.children)
+					await self.render_capture_ui(ui, capture, encountered)
 
+	async def render_capture_ui(self, ui, capture, encountered):
+		description = capture.description
+		if description:
+			ui.label(f"Description: {description}")
+		async with ui.horizontal_wrapped():
+			ui.label(f"Rule: {capture.rule}")
+			if ui.button(f"expansion show {capture.number}").clicked():
+				self.set_root_to_child(f"{capture.compute_talon_script_representation()}")
+		await self.render_children(ui, capture.children, encountered)
+
+	async def render_children(self, ui, children, encountered):
+		async with ui.horizontal_wrapped():
+			if children.lists:
+				ui.label("lists: ")
+				for l in children.lists:
+					if ui.button(f"help list {l.number}: {l.name}").clicked():
+						show_list_help(l.name)
+		for c in children.captures:
+			await self.render_expansion(ui, encountered, c.rule, c)
 
 	async def render(self, ui, ui_wrapper):
 		async with ui.horizontal_wrapped():
@@ -200,7 +200,7 @@ class Expansion:
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
 			async with scroll_area.show() as scroll_ui:
 				await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
-				await self.show_expansion(scroll_ui) 
+				await self.render_expansion(scroll_ui) 
 		
 		async with ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
 			async with ui.horizontal_wrapped():
