@@ -213,46 +213,46 @@ class ExpansionTreeRenderer:
 
 class ExpansionTreeManager:
 	def __init__(self, refresh_callback):
-		self.root = egui.Mutable("")
-		self.is_showing_new_tree = True
-		self.tree = None
-		self.history = []
-		self.tree_renderer = ExpansionTreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent)
-		self.refresh_callback = refresh_callback
+		self._root = egui.Mutable("")
+		self._is_showing_new_tree = True
+		self._tree = None
+		self._history = []
+		self._tree_renderer = ExpansionTreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent)
+		self._refresh_callback = refresh_callback
 
 	async def render(self, ui, ui_wrapper):
-		await self.tree_renderer.render(ui, ui_wrapper, self.root, self.tree, self.history, self.is_showing_new_tree)
-		self.is_showing_new_tree = False
+		await self._tree_renderer.render(ui, ui_wrapper, self._root, self._tree, self._history, self._is_showing_new_tree)
+		self._is_showing_new_tree = False
 
 	def set_root(self, root):
-		self.root.set(root)
+		self._root.set(root)
 		self.update_tree()
 
 	def set_root_to_child(self, child):
-		self.history.append(self.root.get())
+		self._history.append(self._root.get())
 		self.set_root(child)
 
 	def set_root_to_parent(self):
-		root = self.history.pop()
+		root = self._history.pop()
 		self.set_root(root)
 
 	def update_tree(self):
-		self.is_showing_new_tree = True
+		self._is_showing_new_tree = True
 		try:
-			self.tree = SpokenFormExpansionTree(self.root.get())
+			self._tree = SpokenFormExpansionTree(self._root.get())
 		except ValueError:
-			self.tree = None
-		self.refresh_callback()
+			self._tree = None
+		self._refresh_callback()
 
 	def get_list(self, number):
-		if not self.tree:
+		if not self._tree:
 			return None
-		return self.tree.number_to_list.get(number)
+		return self._tree.number_to_list.get(number)
 			
 	def get_capture(self, number):
-		if not self.tree:
+		if not self._tree:
 			return None
-		return self.tree.number_to_capture.get(number)
+		return self._tree.number_to_capture.get(number)
 
 def show_list_help(name):
 	# doing this in the egui thread freezes Talon
