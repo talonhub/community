@@ -131,12 +131,11 @@ class SpokenFormExpansionTree:
 		return not self.children.is_empty()
 
 class ExpansionTreeRenderer:
-	def __init__(self, set_root_to_child_callback, update_tree_callback, set_root_to_parent_callback, refresh_callback):
+	def __init__(self, set_root_to_child_callback, update_tree_callback, set_root_to_parent_callback):
 		self._encountered_this_render = set()
 		self._set_root_to_child_callback = set_root_to_child_callback
 		self._update_tree_callback = update_tree_callback
 		self._set_root_to_parent_callback = set_root_to_parent_callback
-		self._refresh_callback = refresh_callback
 		
 
 	async def render_expansion_tree(self, ui, ui_wrapper, tree):
@@ -170,7 +169,6 @@ class ExpansionTreeRenderer:
 			ui.label(f"Rule: {capture.rule}")
 			if ui_wrapper.button(f"expansion show {capture.number}"):
 				self._set_root_to_child_callback(f"{capture.compute_talon_script_representation()}")
-				self._refresh_callback()
 		await self.render_children(ui, ui_wrapper, capture.children)
 
 	async def render_children(self, ui, ui_wrapper, children):
@@ -190,12 +188,10 @@ class ExpansionTreeRenderer:
 			response = ui.add(egui.TextEdit.singleline(root))
 			if old_root != root.get():
 				self._update_tree_callback()
-				self._refresh_callback()
 			if is_showing_new_tree:
 				response.request_focus()
 			if history and ui_wrapper.button(f"expansion return: {history[-1]}"):
 				self._set_root_to_parent_callback()
-				self._refresh_callback()
 		if root.get() and tree:
 			maximum_height = ui.available_height() - 30
 			scroll_area = egui.ScrollArea.vertical().max_height(maximum_height)
@@ -216,12 +212,13 @@ class ExpansionTreeRenderer:
 	
 
 class ExpansionTreeManager:
-	def __init__(self):
+	def __init__(self, refresh_callback):
 		self.root = egui.Mutable("")
 		self.is_showing_new_tree = True
 		self.tree = None
 		self.history = []
-		self.tree_renderer = ExpansionTreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent, refresh_callback=lambda : gui_expansion.refresh())
+		self.tree_renderer = ExpansionTreeRenderer(self.set_root_to_child, self.update_tree, self.set_root_to_parent)
+		self.refresh_callback = refresh_callback
 
 	async def render(self, ui, ui_wrapper):
 		await self.tree_renderer.render(ui, ui_wrapper, self.root, self.tree, self.history, self.is_showing_new_tree)
@@ -245,6 +242,7 @@ class ExpansionTreeManager:
 			self.tree = SpokenFormExpansionTree(self.root.get())
 		except ValueError:
 			self.tree = None
+		self.refresh_callback()
 
 	def get_list(self, number):
 		if not self.tree:
@@ -276,7 +274,7 @@ class Actions:
 		"""Show the spoken form expansion window"""
 		global expansion
 		actions.user.spoken_form_expansion_hide()
-		expansion = ExpansionTreeManager()
+		expansion = ExpansionTreeManager(gui_expansion.refresh)
 		expansion.set_root(text)
 		gui_expansion.show()
 		ctx.tags = ["user.spoken_form_expansion_showing"]
