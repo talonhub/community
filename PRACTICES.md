@@ -140,3 +140,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
 - Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
+
+### Naming Practices
+- Use singular form instead of plural form for a Talon list or Capture name. Example: Our code keywords list is called `user.code_keyword` and not `user.code_keywords`.
+- The name of a capture returning number a converted to a string should end with `_string`. If the capture converts the result of another capture to a string, the name should start with the name of the input capture.
