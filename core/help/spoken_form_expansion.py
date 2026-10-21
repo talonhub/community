@@ -18,7 +18,7 @@ class TalonList:
 		self.number = number
 
 @dataclass
-class SpokenFormExpansionChildren:
+class SpokenFormChildren:
 	lists: list = field(default_factory=list)
 	captures: list = field(default_factory=list)
 
@@ -32,14 +32,14 @@ class TalonCapture:
 	description: str
 	number: int
 	rule: str
-	children: SpokenFormExpansionChildren
+	children: SpokenFormChildren
 
 	def __init__(self, name: str, number: int):
 		self.name = name
 		self.description = get_capture_description(name)
 		self.number = number
 		self.rule = get_capture_rule(name)
-		self.children = SpokenFormExpansionChildren()
+		self.children = SpokenFormChildren()
 	
 	def compute_talon_script_representation(self):
 		return f"<{self.name}>"
@@ -109,7 +109,7 @@ class SpokenFormExpansionTree:
 
 	def _compute_spoken_forms(self, text):
 		"""Identify the lists and captures that are children of the given text. Return the lists and captures encountered at the top level as well as all of the list and captures encountered"""
-		children = SpokenFormExpansionChildren()
+		children = SpokenFormChildren()
 		encountered_at_this_level = set()
 
 		start = None
