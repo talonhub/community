@@ -246,7 +246,9 @@ class TreeRenderer:
                     if i > 0:
                         self._ui.separator()
                     if l.is_in_registry:
-                        if self._ui_wrapper.button(f"help list {l.id_number}: {l.name}"):
+                        if self._ui_wrapper.button(
+                            f"help list {l.id_number}: {l.name}"
+                        ):
                             open_list_help(l.name)
                     else:
                         self._ui.weak(f"{l.name} (list could not be found)")
