@@ -16,7 +16,7 @@ id
 name
 placeholder
 read only: readonly
-rel: rel
+rel
 required
 role
 row span: rowspan
