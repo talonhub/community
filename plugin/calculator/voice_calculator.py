@@ -1,6 +1,7 @@
-from talon import Module, actions
+from talon import Module
 
 mod = Module()
+
 
 @mod.action_class
 class Actions:
@@ -20,11 +21,10 @@ class Actions:
         """Calculate Result"""
         # Convert to integer
         newValue = int(value) * int(multiply)
-        return str(newValue)    
-        
+        return str(newValue)
+
     def calculate_divide(value: str, divide: str) -> str:
         """Calculate Result"""
         # Convert to integer
         newValue = int(value) / int(divide)
         return str(newValue)
-
