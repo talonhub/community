@@ -25,7 +25,6 @@ formatted <user.format_text>: user.dictation_insert_raw(format_text)
 
 (nope | scratch) selection: edit.delete()
 
-
 #################
 # Dictation mode uses some commands from command mode
 # These are indicated with `# from <original_file>`
