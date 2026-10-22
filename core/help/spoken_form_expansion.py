@@ -122,7 +122,7 @@ class SpokenFormTree:
         """Create the spoken form object at the location. Raises ValueError with invalid delimiters."""
         if start is None:
             raise ValueError(
-                f"Encountered closing delimiter {start[i]} with no opening delimiter in {text}!"
+                f"Encountered closing delimiter {text[i]} with no opening delimiter in {text}!"
             )
         form_text = text[start : i + 1]
         name = form_text[1:-1]
