@@ -251,7 +251,7 @@ class TreeRenderer:
                         ):
                             open_list_help(l.name)
                     else:
-                        self._ui.weak(f"{l.name} (list could not be found)")
+                        self._ui.weak(f"{l.name} (list not found)")
 
     async def _render_children(self, children):
         """Render the children of the current spoken"""
