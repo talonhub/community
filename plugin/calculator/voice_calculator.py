@@ -25,6 +25,17 @@ class Actions:
 
     def calculate_divide(value: str, divide: str) -> str:
         """Calculate Result"""
+        number = int(value)
+        divisor = int(divide)
+
+        if divisor == 0:
+            print("Division by zero attempted")
+            return "0"
+
+        if abs(number) > 1_000_000 or abs(divisor) > 1_000_000:
+            print("Number or divisor too large")
+            return "0"
+
         # Convert to integer
-        newValue = int(value) / int(divide)
+        newValue = number / divisor
         return str(newValue)
