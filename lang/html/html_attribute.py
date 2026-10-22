@@ -2,7 +2,7 @@ from talon import Module, actions
 
 mod = Module()
 
-mod.list("html_attribute", "This is a list of common HTML attributes")
+mod.list("html_attribute", "List of common HTML attributes")
 
 
 @mod.action_class
