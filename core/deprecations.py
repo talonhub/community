@@ -69,7 +69,7 @@ mod.setting(
     "strict_command_deprecation",
     type=bool,
     default=False,
-    desc="Decides if deprecated commands should throw an exception. Setting this to true can help you learn the new replacement commands faster.",
+    desc="Decides if deprecated commands should throw an exception, which stops the commands from running. You might find this helps you learn the new replacement commands faster.",
 )
 
 # Tells us the last time a notification was shown so we can
