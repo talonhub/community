@@ -1,5 +1,6 @@
-tag: user.ruby
+code.language: ruby
 -
+
 tag(): user.code_imperative
 tag(): user.code_object_oriented
 

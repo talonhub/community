@@ -1,13 +1,13 @@
-from talon import Context, Module, actions, app
+from talon import Context, Module, actions
 
 ctx = Context()
 mod = Module()
 
 mod.apps.brave = "app.name: Brave Browser"
 mod.apps.brave = "app.name: Brave-browser"
-mod.apps.brave = """
+mod.apps.brave = r"""
 os: windows
-and app.exe: brave.exe
+and app.exe: /^brave\.exe$/i
 os: linux
 and app.exe: brave
 os: mac

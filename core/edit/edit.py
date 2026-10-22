@@ -1,7 +1,14 @@
-from talon import Context, Module, actions, clip
+from talon import Context, Module, actions, clip, settings
 
 ctx = Context()
 mod = Module()
+
+mod.setting(
+    "selected_text_timeout",
+    type=float,
+    default=0.25,
+    desc="Time in seconds to wait for the clipboard to change when trying to get selected text",
+)
 
 END_OF_WORD_SYMBOLS = ".!?;:—_/\\|@#$%^&*()[]{}<>=+-~`"
 
@@ -9,7 +16,8 @@ END_OF_WORD_SYMBOLS = ".!?;:—_/\\|@#$%^&*()[]{}<>=+-~`"
 @ctx.action_class("edit")
 class EditActions:
     def selected_text() -> str:
-        with clip.capture() as s:
+        timeout = settings.get("user.selected_text_timeout")
+        with clip.capture(timeout) as s:
             actions.edit.copy()
         try:
             return s.text()
@@ -35,7 +43,7 @@ class EditActions:
         actions.edit.paste()
 
     # # This simpler implementation of select_word mostly works, but in some apps it doesn't.
-    # # See https://github.com/knausj85/knausj_talon/issues/1084.
+    # # See https://github.com/talonhub/community/issues/1084.
     # def select_word():
     #     actions.edit.right()
     #     actions.edit.word_left()
@@ -79,6 +87,15 @@ class Actions:
             # sleep here so that clip.revert doesn't revert the clipboard too soon
             actions.sleep("150ms")
 
+    def delete_right():
+        """Delete character to the right"""
+        actions.key("delete")
+
+    def delete_all():
+        """Delete all text in the current document"""
+        actions.edit.select_all()
+        actions.edit.delete()
+
     def words_left(n: int):
         """Moves left by n words."""
         for _ in range(n):
@@ -99,11 +116,6 @@ class Actions:
         actions.edit.extend_word_right()
         actions.edit.cut()
 
-    def cut_line():
-        """Cuts the current line."""
-        actions.edit.select_line()
-        actions.edit.cut()
-
     def copy_word_left():
         """Copies the word to the left."""
         actions.edit.extend_word_left()
@@ -113,3 +125,35 @@ class Actions:
         """Copies the word to the right."""
         actions.edit.extend_word_right()
         actions.edit.copy()
+
+    # ----- Start / End of line -----
+    def select_line_start():
+        """Select to start of current line"""
+        if actions.edit.selected_text():
+            actions.edit.left()
+        actions.edit.extend_line_start()
+
+    def select_line_end():
+        """Select to end of current line"""
+        if actions.edit.selected_text():
+            actions.edit.right()
+        actions.edit.extend_line_end()
+
+    def line_middle():
+        """Go to the middle of the line"""
+        actions.edit.select_line()
+        half_line_length = int(len(actions.edit.selected_text()) / 2)
+        actions.edit.left()
+        for _ in range(0, half_line_length):
+            actions.edit.right()
+
+    def cut_line():
+        """Cut current line"""
+        actions.edit.select_line()
+        actions.edit.cut()
+
+    def end_line_with_symbol_and_start_line(symbol: str):
+        """Add <symbol> at end of line and then insert line below"""
+        actions.edit.line_end()
+        actions.key(symbol)
+        actions.edit.line_insert_down()

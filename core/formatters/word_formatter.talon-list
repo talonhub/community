@@ -1,0 +1,7 @@
+list: user.word_formatter
+-
+
+word: NOOP
+trot: TRAILING_SPACE
+proud: CAPITALIZE_FIRST_WORD
+leap: TRAILING_SPACE,CAPITALIZE_FIRST_WORD

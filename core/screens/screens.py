@@ -8,7 +8,7 @@ mod = Module()
 class Actions:
     def screens_show_numbering():
         """Show screen number on each screen"""
-        screens = get_sorted_screens()
+        screens = ui.screens()
         number = 1
         for screen in screens:
             show_screen_number(screen, number)
@@ -16,7 +16,7 @@ class Actions:
 
     def screens_get_by_number(screen_number: int) -> ui.Screen:
         """Get screen by number"""
-        screens = get_sorted_screens()
+        screens = ui.screens()
         length = len(screens)
         if screen_number < 1 or screen_number > length:
             raise Exception(
@@ -34,19 +34,9 @@ class Actions:
 
 
 def get_screen_by_offset(screen: ui.Screen, offset: int) -> ui.Screen:
-    screens = get_sorted_screens()
+    screens = ui.screens()
     index = (screens.index(screen) + offset) % len(screens)
     return screens[index]
-
-
-def get_sorted_screens():
-    """Return screens sorted by their topmost, then leftmost, edge.
-    Screens will be sorted leftto-right, then top-to-bottom as a tiebreak.
-    """
-    return sorted(
-        ui.screens(),
-        key=lambda screen: screen.visible_rect.left,
-    )
 
 
 def show_screen_number(screen: ui.Screen, number: int):

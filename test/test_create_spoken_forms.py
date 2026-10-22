@@ -4,9 +4,39 @@ if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
 
     import itertools
+    from collections.abc import Callable
 
-    import knausj_talon_pkg.core.create_spoken_forms
     from talon import actions
+
+    import core.abbreviate
+    import core.user_settings
+
+    # we need to replace the track_csv_list decorator for unit tests.
+    CallbackT = Callable[[dict[str, str]], None]
+    DecoratorT = Callable[[CallbackT], CallbackT]
+
+    def track_csv_list_test(
+        filename: str,
+        headers: tuple[str, str],
+        default: dict[str, str] = None,
+        is_spoken_form_first: bool = False,
+    ) -> DecoratorT:
+        def decorator(fn: CallbackT) -> CallbackT:
+            extensions = {
+                "dot see sharp": ".cs",
+            }
+            abbreviations = {"source": "src", "whats app": "WhatsApp"}
+            if filename == "abbreviations.csv":
+                fn(abbreviations)
+            elif filename == "file_extensions.csv":
+                fn(extensions)
+
+        return decorator
+
+    # replace track_csv_list before importing create_spoken_forms
+    core.user_settings.track_csv_list = track_csv_list_test
+
+    import core.create_spoken_forms
 
     def test_excludes_words():
         result = actions.user.create_spoken_forms("hi world", ["world"], 0, True)
@@ -34,12 +64,59 @@ if hasattr(talon, "test_mode"):
     def test_expands_special_chars():
         result = actions.user.create_spoken_forms("hi $world", None, 0, True)
 
-        assert "hi dollar sign world" in result
+        assert "hi world" in result
 
     def test_expands_file_extensions():
         result = actions.user.create_spoken_forms("hi .cs", None, 0, True)
 
         assert "hi dot see sharp" in result
+
+    def test_expands_abbreviations():
+
+        result = actions.user.create_spoken_forms("src", None, 0, True)
+
+        assert "source" in result
+        assert "src" in result
+
+        result = actions.user.create_spoken_forms("WhatsApp", None, 0, True)
+
+        assert "whats app" in result
+
+    def test_expand_upper_case():
+        result = actions.user.create_spoken_forms("LICENSE", None, 0, True)
+
+        assert "license" in result
+        assert "L I C E N S E" in result
+
+    def test_small_word_to_upper_case():
+        result = actions.user.create_spoken_forms("vm", None, 0, True)
+
+        assert "V M" in result
+
+    def test_explode_packed_words():
+        result = actions.user.create_spoken_forms("README", None, 0, True)
+
+        assert "read me" in result
+
+    def test_email():
+        result = actions.user.create_spoken_forms("stupid@test.com", None, 0, True)
+        assert "stupid at test dot com" in result
+
+    def test_symbol_removal():
+        result = actions.user.create_spoken_forms("$ this_is_a-'test'", None, 0, True)
+
+        assert "this is a test" in result
+
+    def test_and_symbol():
+        result = actions.user.create_spoken_forms("movies & tv", None, 0, True)
+
+        assert "movies tv" in result
+        assert "movies and tv" in result
+
+    def test_apostrophe_stripping():
+        result = actions.user.create_spoken_forms("Sam's club", None, 0, True)
+
+        assert "sams club" in result
 
     def test_properties():
         """
@@ -47,7 +124,7 @@ if hasattr(talon, "test_mode"):
         """
 
         def _example_generator():
-            pieces = ["hi", "world", "$", ".cs", "1900"]
+            pieces = ["hi", "world", "dollar", ".cs", "1900"]
             params = list(
                 itertools.product(
                     [None, ["world"], ["dot"]],  # Dot is from the expanded ".cs"

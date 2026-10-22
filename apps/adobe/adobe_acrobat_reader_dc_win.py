@@ -22,10 +22,10 @@ class AppActions:
 @ctx.action_class("edit")
 class EditActions:
     def zoom_in():
-        actions.key("ctrl-0")  # in german version
+        actions.key("ctrl-0")
 
     def zoom_out():
-        actions.key("ctrl-1")  # in german version TODO: differentiate languages
+        actions.key("ctrl-1")
 
     def zoom_reset():
         actions.key("ctrl-2")
@@ -53,3 +53,9 @@ class UserActions:
 
     def page_final():
         actions.key("end")
+
+    def page_rotate_right():
+        actions.key("shift-ctrl-0")
+
+    def page_rotate_left():
+        actions.key("shift-ctrl-1")

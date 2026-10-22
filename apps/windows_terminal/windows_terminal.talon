@@ -1,5 +1,6 @@
 app: windows_terminal
 -
+
 # makes the commands in terminal.talon available
 tag(): terminal
 
@@ -13,7 +14,6 @@ tag(): user.anaconda
 # tag(): user.kubectl
 
 tag(): user.tabs
-# TODO: file_manager
 tag(): user.splits
 
 # Uncomment the following line to enable common unix utilities from unix_utilities.py

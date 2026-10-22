@@ -1,0 +1,16 @@
+name: functionCall
+phrase: call
+insertionScope: statement
+
+$0.wrapperPhrase: call
+---
+
+language: c | cpp | csharp | python | talon | java | javascript | typescript | javascriptreact | typescriptreact | css | scss | sql | r | go | php
+-
+$1($0)
+---
+
+language: stata
+-
+$1 $0
+---

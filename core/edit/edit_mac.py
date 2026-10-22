@@ -1,4 +1,4 @@
-from talon import Context, actions
+from talon import Context, actions, clip
 
 ctx = Context()
 ctx.matches = r"""
@@ -89,9 +89,10 @@ class EditActions:
     def file_start():
         actions.key("cmd-up")
 
-    def find(text: str = None):
+    def find(text=None):
+        if text is not None:
+            clip.set_text(text, mode="find")
         actions.key("cmd-f")
-        # actions.insert(text)
 
     def find_next():
         actions.key("cmd-g")
@@ -155,12 +156,12 @@ class EditActions:
         actions.key("cmd-s")
 
     def save_all():
-        actions.key("cmd-shift-s")
+        actions.key("cmd-alt-s")
 
     def select_all():
         actions.key("cmd-a")
 
-    def select_line(n: int = None):
+    def select_line(n=None):
         if n is not None:
             actions.edit.jump_line(n)
         actions.key("cmd-right cmd-shift-left")

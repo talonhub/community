@@ -2,11 +2,11 @@ from talon import Context, Module, actions
 
 # --- App definition ---
 mod = Module()
-mod.apps.sumatrapdf = """
+mod.apps.sumatrapdf = r"""
 os: windows
 and app.name: SumatraPDF
 os: windows
-and app.exe: SumatraPDF.exe
+and app.exe: /^sumatrapdf\.exe$/i
 """
 
 # Context matching
@@ -55,6 +55,12 @@ class UserActions:
 
     def page_final():
         actions.key("end")
+
+    def page_rotate_right():
+        actions.key("shift-ctrl-keypad_plus")
+
+    def page_rotate_left():
+        actions.key("shift-ctrl-keypad_minus")
 
     # user.tabs
     def tab_jump(number: int):

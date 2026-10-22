@@ -19,7 +19,7 @@ class Actions:
         actions.edit.extend_line_end()
 
         number_of_lines = line_end - line_start
-        for i in range(0, number_of_lines):
+        for _ in range(0, number_of_lines):
             actions.edit.extend_line_down()
         actions.edit.extend_line_end()
 

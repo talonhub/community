@@ -1,9 +1,12 @@
-from talon import Module, actions, imgui, scope, ui
+from typing import Optional
 
+from talon import Context, Module, actions, imgui, scope, settings, ui
+
+ctx = Context()
 mod = Module()
-mod.mode("help_scope", "Mode for showing the scope help gui")
+mod.tag("help_scope_open", "tag for showing the scope help gui")
 
-setting_max_length = mod.setting(
+mod.setting(
     "help_scope_max_length",
     type=int,
     default=50,
@@ -34,12 +37,14 @@ def gui(gui: imgui.GUI):
             value = scope.get(key)
             print_value(gui, key, value, ignore)
     gui.spacer()
-    if gui.button("Hide"):
+    if gui.button("scope close"):
         actions.user.help_scope_toggle()
 
 
-def print_value(gui: imgui.GUI, path: str, value, ignore: set[str] = {}):
+def print_value(gui: imgui.GUI, path: str, value, ignore: Optional[set[str]] = None):
     if isinstance(value, dict):
+        if not ignore:
+            ignore = set()
         for key in value:
             if key not in ignore:
                 p = f"{path}.{key}" if path else key
@@ -51,8 +56,9 @@ def print_value(gui: imgui.GUI, path: str, value, ignore: set[str] = {}):
 def format_value(value):
     if isinstance(value, (list, set)):
         value = ", ".join(sorted(value))
-    if isinstance(value, str) and len(value) > setting_max_length.get() + 4:
-        return f"{value[:setting_max_length.get()]} ..."
+    setting_max_length = settings.get("user.help_scope_max_length")
+    if isinstance(value, str) and len(value) > setting_max_length + 4:
+        return f"{value[:setting_max_length]} ..."
     return value
 
 
@@ -61,8 +67,8 @@ class Actions:
     def help_scope_toggle():
         """Toggle help scope gui"""
         if gui.showing:
-            actions.mode.disable("user.help_scope")
+            ctx.tags = []
             gui.hide()
         else:
-            actions.mode.enable("user.help_scope")
+            ctx.tags = ["user.help_scope_open"]
             gui.show()

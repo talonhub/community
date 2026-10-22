@@ -2,11 +2,11 @@ from talon import Context, Module, actions
 
 # --- App definition ---
 mod = Module()
-mod.apps.nitro_reader_five = """
+mod.apps.nitro_reader_five = r"""
 os: windows
 and app.name: Nitro Reader 5
 os: windows
-and app.exe: NitroPDFReader.exe
+and app.exe: /^nitropdfreader\.exe$/i
 """
 
 # Context matching

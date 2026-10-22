@@ -1,10 +1,10 @@
-from talon import Module, actions, app
+from talon import Module, actions
 
 mod = Module()
 
 
 @mod.action_class
-class tab_actions:
+class TabActions:
     def tab_jump(number: int):
         """Jumps to the specified tab"""
 
@@ -18,4 +18,4 @@ class tab_actions:
         actions.app.tab_close()
 
     def tab_duplicate():
-        """Duplicates the current tab."""
+        """Duplicates the current tab"""

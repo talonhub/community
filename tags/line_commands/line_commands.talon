@@ -1,8 +1,7 @@
 tag: user.line_commands
 -
+
 #this defines some common line commands. More may be defined that are ide-specific.
-lend: edit.line_end()
-bend: edit.line_start()
 go <number>: edit.jump_line(number)
 go <number> end:
     edit.jump_line(number)
@@ -14,7 +13,6 @@ comment <number> until <number>:
     user.select_range(number_1, number_2)
     code.toggle_comment()
 clear [line] <number>:
-    edit.jump_line(number)
     user.select_range(number, number)
     edit.delete()
 clear <number> until <number>:

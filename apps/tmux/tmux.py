@@ -1,34 +1,31 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
-ctx = Context()
 mod = Module()
 
-ctx.matches = r"""
-tag: user.tmux
+mod.apps.tmux = """
+tag: terminal
+and tag: user.tmux
 """
 
-setting_tmux_prefix_key = mod.setting(
+mod.setting(
     "tmux_prefix_key",
     type=str,
-    default="b",
+    default="ctrl-b",
     desc="The key used to prefix all tmux commands",
 )
 
 
 @mod.action_class
 class TmuxActions:
-    def tmux_prefix():
-        """press control and the configured tmux prefix key"""
-        actions.key(f"ctrl-{setting_tmux_prefix_key.get()}")
-
     def tmux_keybind(key: str):
         """press tmux prefix followed by a key bind"""
-        actions.user.tmux_prefix()
+        actions.key(settings.get("user.tmux_prefix_key"))
         actions.key(key)
 
     def tmux_enter_command(command: str = ""):
         """Enter tmux command mode and optionally insert a command without executing it."""
         actions.user.tmux_keybind(":")
+        actions.sleep("20ms")
         actions.insert(command)
 
     def tmux_execute_command(command: str):
@@ -45,6 +42,10 @@ class TmuxActions:
         actions.key("\n")
 
 
+ctx = Context()
+ctx.matches = "app: tmux"
+
+
 @ctx.action_class("app")
 class AppActions:
     def tab_open():
@@ -56,39 +57,45 @@ class AppActions:
     def tab_previous():
         actions.user.tmux_execute_command("select-window -p")
 
-
-@ctx.action_class("user")
-class UserActions:
-    def tab_jump(number: int):
-        actions.user.tmux_execute_command(f"select-window -t {number}")
-
-    def tab_close_wrapper():
+    def tab_close():
         actions.user.tmux_execute_command_with_confirmation(
             "kill-window", "kill-window #W?"
         )
 
-    def split_window_right():
-        actions.user.split_window_horizontally()
-        actions.user.tmux_execute_command("swap-pane -U -s #P")
 
-    def split_window_left():
-        actions.user.split_window_horizontally()
-
-    def split_window_down():
-        actions.user.split_window_vertically()
-        actions.user.tmux_execute_command("swap-pane -U -s #P")
+@ctx.action_class("user")
+class UserActions:
+    def tab_jump(number: int):
+        if number < 10:
+            actions.user.tmux_keybind(f"{number}")
+        else:
+            actions.user.tmux_execute_command(f"select-window -t {number}")
 
     def split_window_up():
+        actions.user.split_window_horizontally()
+        actions.user.tmux_execute_command("swap-pane -U")
+
+    def split_window_down():
+        actions.user.split_window_horizontally()
+
+    def split_window_left():
+        actions.user.split_window_vertically()
+        actions.user.tmux_execute_command("swap-pane -U")
+
+    def split_window_right():
         actions.user.split_window_vertically()
 
     def split_flip():
         actions.user.tmux_execute_command("next-layout")
 
+    # Tmux uses -h to create a left/right split. Applications such as VSCode and
+    # Obsidian call this a vertical split. By passing the -h flag, we keep the
+    # voice commands consistent with those used in those other applications.
     def split_window_vertically():
-        actions.user.tmux_execute_command("split-pane")
+        actions.user.tmux_execute_command("split-pane -h")
 
     def split_window_horizontally():
-        actions.user.tmux_execute_command("split-pane -h")
+        actions.user.tmux_execute_command("split-pane")
 
     def split_maximize():
         # toggle the maximization because zooming when already zoomed is pointless

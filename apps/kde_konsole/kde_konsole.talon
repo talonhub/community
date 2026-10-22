@@ -1,6 +1,7 @@
 os: linux
 and app.name: konsole
 -
+
 # makes the commands in terminal.talon available
 tag(): terminal
 
@@ -14,4 +15,3 @@ tag(): user.anaconda
 # tag(): user.kubectl
 
 tag(): user.tabs
-# TODO: add file_manager support

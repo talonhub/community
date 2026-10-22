@@ -1,0 +1,20 @@
+language: c | cpp
+---
+
+name: typedefStructDeclaration
+phrase: typedef struct
+insertionScope: statement
+
+$0.insertionFormatter: PUBLIC_CAMEL_CASE
+-
+typedef struct {
+    $1
+} $0
+---
+
+name: preprocessorPragmaStatement
+phrase: pre pragma | pragma
+insertionScope: statement
+-
+#pragma $0
+---

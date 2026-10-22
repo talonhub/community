@@ -1,5 +1,6 @@
-tag: user.scala
+code.language: scala
 -
+
 tag(): user.code_imperative
 tag(): user.code_object_oriented
 
@@ -31,8 +32,6 @@ op right arrow: " -> "
 op left arrow: " <- "
 op plus plus: " ++ "
 op subtype: " <: "
-
-state match: user.code_state_switch()
 
 block string:
     insert('""""""')
