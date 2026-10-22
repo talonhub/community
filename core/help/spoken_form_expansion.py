@@ -12,11 +12,17 @@ class TalonList:
 
     name: str
     id_number: int
+    is_in_registry: bool
 
     def __init__(self, name: str, number: int, create_children_callback):
         # lists have no children
         self.name = name
         self.id_number = number
+        self.is_in_registry = is_list_defined(self.name)
+
+
+def is_list_defined(name: str):
+    return name in registry.lists
 
 
 @dataclass
@@ -236,9 +242,14 @@ class TreeRenderer:
         if lists:
             async with self._ui.horizontal_wrapped():
                 self._ui.label("lists: ")
-                for l in lists:
-                    if self._ui_wrapper.button(f"help list {l.id_number}: {l.name}"):
-                        open_list_help(l.name)
+                for i, l in enumerate(lists):
+                    if i > 0:
+                        self._ui.separator()
+                    if l.is_in_registry:
+                        if self._ui_wrapper.button(f"help list {l.id_number}: {l.name}"):
+                            open_list_help(l.name)
+                    else:
+                        self._ui.weak(f"{l.name} (list could not be found)")
 
     async def _render_children(self, children):
         """Render the children of the current spoken"""
