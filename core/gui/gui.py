@@ -466,7 +466,7 @@ class GUI:
         self._last_height_taken = (
             available_height - ui.available_height() + INNER_MARGIN
         )
-        if (self._offscreen_render_frame is not None):
+        if self._offscreen_render_frame is not None:
             self._handle_offscreen_render()
 
     def _handle_offscreen_render(self):
