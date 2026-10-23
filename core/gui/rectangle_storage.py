@@ -31,12 +31,22 @@ class RelativeRectangle:
         return Rect(x, y, width, height)
 
 
+def report_error(exception, context):
+    message = f"Something went wrong {context}: {exception}"
+    actions.app.notify(message)
+    print(repr(exception))
+
+
 def get_relative_rectangle(id: str) -> RelativeRectangle | None:
     if not id:
         return None
     if not actions.user.stored_state_does_file_exist(DIRECTORY_NAME, id):
         return None
-    text = actions.user.stored_state_get_text(DIRECTORY_NAME, id)
+    try:
+        text = actions.user.stored_state_get_text(DIRECTORY_NAME, id)
+    except OSError as ex:
+        report_error(ex, f"trying to load the relative rectangle for {id}")
+        return None
     x, y, width, height = [float(v) for v in text.split(",")]
     return RelativeRectangle(x, y, width, height)
 
@@ -47,4 +57,7 @@ def store_relative_rectangle(id: str, rectangle: RelativeRectangle | None):
     text = ",".join(
         [str(v) for v in (rectangle.x, rectangle.y, rectangle.width, rectangle.height)]
     )
-    actions.user.stored_state_set_value(DIRECTORY_NAME, id, text)
+    try:
+        actions.user.stored_state_set_value(DIRECTORY_NAME, id, text)
+    except OSError as ex:
+        report_error(ex, f"trying to store the relative rectangle for {id}")
