@@ -392,8 +392,13 @@ class GUI:
             self._window.show()
         else:
             screen = self._get_screen()
-            
-            self._window.rect = Rect(10000, self._window.rect.y, self._window.rect.width, self._window.rect.height)
+
+            self._window.rect = Rect(
+                10000,
+                self._window.rect.y,
+                self._window.rect.width,
+                self._window.rect.height,
+            )
             self._window.show()
             self.refresh()
             actions.sleep(0.5)
