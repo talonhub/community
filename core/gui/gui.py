@@ -15,7 +15,7 @@ from talon import cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
-from .rectangle_storage import get_rectangle, store_rectangle
+from .rectangle_storage import get_relative_rectangle, store_relative_rectangle
 
 # This code currently does not support changing the scale with imgui.scale.
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
@@ -387,10 +387,10 @@ class GUI:
         self._window = self._props.create_window(self._render)
 
         if self._stored_rect is None:
-            self._stored_rect = get_rectangle(self._props.id)
+            self._stored_rect = get_relative_rectangle(self._props.id)
 
         if self._stored_rect is not None and not self._props.will_auto_size():
-            self._window.rect = self._stored_rect
+            self._window.rect = self._compute_absolute_stored_rectangle()
             self._window.show()
         else:
             self._move_window_far_offscreen()
@@ -399,6 +399,10 @@ class GUI:
 
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
+
+    def _compute_absolute_stored_rectangle(self):
+        screen = self._get_screen()
+        self._stored_rect = self._stored_rect.compute_absolute_rectangle(screen)
 
     def _move_window_far_offscreen(self):
         self._window.rect = Rect(
@@ -414,8 +418,9 @@ class GUI:
             screen.rect, self._window.rect
         )
         if self._stored_rect is not None and self._props.will_auto_size():
-            rectangle.x = self._stored_rect.x
-            rectangle.y = self._stored_rect.y
+            absolute_stored_rectangle = self._compute_absolute_stored_rectangle()
+            rectangle.x = absolute_stored_rectangle.x
+            rectangle.y = absolute_stored_rectangle.y
         self._window.rect = rectangle
 
     def _cancel_refresh_job(self):
@@ -442,7 +447,7 @@ class GUI:
 
     def _update_stored_rectangle(self):
         self._stored_rect = self._window.rect
-        store_rectangle(self._props.id, self._stored_rect)
+        store_relative_rectangle(self._props.id, self._stored_rect)
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
@@ -461,7 +466,7 @@ class GUI:
         self._last_height_taken = (
             available_height - ui.available_height() + INNER_MARGIN
         )
-        if self._offscreen_render_frame is not None:
+        if (self._offscreen_render_frame is not None):
             self._handle_offscreen_render()
 
     def _handle_offscreen_render(self):
