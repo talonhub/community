@@ -394,7 +394,7 @@ class GUI:
             screen = self._get_screen()
 
             self._window.rect = Rect(
-                10000,
+                10000000,
                 self._window.rect.y,
                 self._window.rect.width,
                 self._window.rect.height,
