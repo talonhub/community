@@ -338,7 +338,7 @@ class GUI:
     _refresh_period: str | None
     _last_height_taken: float | None
     _previous_height_taken: float | None
-    _move_window_back_on_screen_after_render: bool
+    _offscreen_render_frame: int | None
 
     def __init__(
         self,
@@ -371,7 +371,7 @@ class GUI:
         self._refresh_job = None
         self._last_height_taken = None
         self._previous_height_taken = None
-        self._move_window_back_on_screen_after_render = False
+        self._offscreen_render_frame = None
 
     @property
     def showing(self) -> bool:
@@ -394,9 +394,8 @@ class GUI:
             self._window.show()
         else:
             self._move_window_far_offscreen()
+            self._offscreen_render_frame = 0
             self._window.show()
-            self._move_window_back_on_screen_after_render = True
-            self.refresh()
 
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
@@ -462,13 +461,16 @@ class GUI:
         self._last_height_taken = (
             available_height - ui.available_height() + INNER_MARGIN
         )
-        if self._move_window_back_on_screen_after_render:
-            self._move_window_back_on_screen_after_render = False
+        if self._offscreen_render_frame is not None and self._offscreen_render_frame < 3:
+            # do this in another thread to avoid freezing Talon
+            cron.after("0ms", self.refresh)
+            self._offscreen_render_frame += 1
+        elif self._offscreen_render_frame is not None:
+            self._offscreen_render_frame = None
             # do this in another thread to avoid freezing Talon
             cron.after("0ms", self._move_window_back_on_screen)
 
     def _move_window_back_on_screen(self):
-        self.refresh()
         self._make_window_relative_to_screen()
         self.refresh()
 
