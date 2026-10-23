@@ -15,7 +15,11 @@ from talon import cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
-from .rectangle_storage import get_relative_rectangle, store_relative_rectangle, RelativeRectangle
+from .rectangle_storage import (
+    RelativeRectangle,
+    get_relative_rectangle,
+    store_relative_rectangle,
+)
 
 # This code currently does not support changing the scale with imgui.scale.
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
@@ -446,7 +450,7 @@ class GUI:
             self._window = None
 
     def _update_stored_rectangle(self):
-        self._stored_rect =  RelativeRectangle(self._get_screen(), self._window.rect)
+        self._stored_rect = RelativeRectangle(self._get_screen(), self._window.rect)
         store_relative_rectangle(self._props.id, self._stored_rect)
 
     async def _render(self, ui: egui.Ui) -> None:
