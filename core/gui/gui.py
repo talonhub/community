@@ -392,8 +392,12 @@ class GUI:
             self._window.show()
         else:
             screen = self._get_screen()
+            
+            self._window.rect = Rect(10000, self._window.rect.y, self._window.rect.width, self._window.rect.height)
             self._window.show()
+            self.refresh()
             actions.sleep(0.5)
+            self.refresh()
             rectangle = self._compute_rect_relative_to_screen(
                 screen.rect, self._window.rect
             )
