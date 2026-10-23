@@ -338,6 +338,7 @@ class GUI:
     _refresh_period: str | None
     _last_height_taken: float | None
     _previous_height_taken: float | None
+    _move_window_back_on_screen_after_render: bool
 
     def __init__(
         self,
@@ -370,6 +371,7 @@ class GUI:
         self._refresh_job = None
         self._last_height_taken = None
         self._previous_height_taken = None
+        self._move_window_back_on_screen_after_render = False
 
     @property
     def showing(self) -> bool:
@@ -393,10 +395,8 @@ class GUI:
         else:
             self._move_window_far_offscreen()
             self._window.show()
+            self._move_window_back_on_screen_after_render = True
             self.refresh()
-            actions.sleep(0.1)
-            self.refresh()
-            self._make_window_relative_to_screen()
 
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
@@ -462,6 +462,14 @@ class GUI:
         self._last_height_taken = (
             available_height - ui.available_height() + INNER_MARGIN
         )
+        if self._move_window_back_on_screen_after_render:
+            self._move_window_back_on_screen_after_render = False
+            cron.after("0ms", self._move_window_back_on_screen)
+
+    def _move_window_back_on_screen(self):
+        self.refresh()
+        self._make_window_relative_to_screen()
+        self.refresh()
 
     def _apply_theme(self, ui: egui.Ui) -> None:
         style = ui.style()
