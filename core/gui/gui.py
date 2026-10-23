@@ -401,7 +401,7 @@ class GUI:
             )
             self._window.show()
             self.refresh()
-            actions.sleep(0.5)
+            actions.sleep(0.1)
             self.refresh()
             rectangle = self._compute_rect_relative_to_screen(
                 screen.rect, self._window.rect
