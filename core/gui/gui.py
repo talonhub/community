@@ -406,7 +406,6 @@ class GUI:
 
     def _compute_absolute_stored_rectangle(self):
         screen = self._get_screen()
-        print("screen", screen)
         return self._stored_rect.compute_absolute_rectangle(screen)
 
     def _move_window_far_offscreen(self):
@@ -419,7 +418,6 @@ class GUI:
 
     def _make_window_relative_to_screen(self):
         screen = self._get_screen()
-        print("screen", screen)
         rectangle = self._compute_rect_relative_to_screen(
             screen.rect, self._window.rect
         )
