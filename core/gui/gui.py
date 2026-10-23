@@ -391,28 +391,33 @@ class GUI:
             self._window.rect = self._stored_rect
             self._window.show()
         else:
-            screen = self._get_screen()
+            self._move_window_far_offscreen()
+            self._window.show()
+            self.refresh()
+            actions.sleep(0.1)
+            self.refresh()
+            self._make_window_relative_to_screen()
 
-            self._window.rect = Rect(
+        if self._refresh_period:
+            self._refresh_job = cron.interval(self._refresh_period, self.refresh)
+
+    def _move_window_far_offscreen(self):
+        self._window.rect = Rect(
                 10000000,
                 self._window.rect.y,
                 self._window.rect.width,
                 self._window.rect.height,
             )
-            self._window.show()
-            self.refresh()
-            actions.sleep(0.1)
-            self.refresh()
-            rectangle = self._compute_rect_relative_to_screen(
+
+    def _make_window_relative_to_screen(self):
+        screen = self._get_screen()
+        rectangle = self._compute_rect_relative_to_screen(
                 screen.rect, self._window.rect
             )
-            if self._stored_rect is not None and self._props.will_auto_size():
-                rectangle.x = self._stored_rect.x
-                rectangle.y = self._stored_rect.y
-            self._window.rect = rectangle
-
-        if self._refresh_period:
-            self._refresh_job = cron.interval(self._refresh_period, self.refresh)
+        if self._stored_rect is not None and self._props.will_auto_size():
+            rectangle.x = self._stored_rect.x
+            rectangle.y = self._stored_rect.y
+        self._window.rect = rectangle
 
     def _cancel_refresh_job(self):
         if self._refresh_job:
