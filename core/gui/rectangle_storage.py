@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from skia import Rect
-from talon import actions
+from talon import actions, screen
 
 DIRECTORY_NAME = "gui_rectangles"
 
@@ -13,11 +13,15 @@ class RelativeRectangle:
     width: float
     height: float
 
-    def __init__(self, screen: Rect, rect: Rect):
-        self.width = rect.width / screen.width
-        self.height = rect.height / screen.height
-        self.x = (rect.x - screen.x) / screen.width
-        self.y = (rect.y - screen.y) / screen.height
+    @staticmethod
+    def from_rectangle(rect: Rect, input_screen: Rect | None=None):
+        if not input_screen:
+            input_screen = screen.containing(rect.x, rect.y).rect
+        width = rect.width / input_screen.width
+        height = rect.height / input_screen.height
+        x = (rect.x - input_screen.x) / input_screen.width
+        y = (rect.y - input_screen.y) / input_screen.height
+        return RelativeRectangle(x, y, width, height)
 
     def compute_absolute_rectangle(self, screen: Rect) -> Rect:
         x = screen.x + screen.width * self.x
