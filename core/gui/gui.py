@@ -461,7 +461,10 @@ class GUI:
         self._last_height_taken = (
             available_height - ui.available_height() + INNER_MARGIN
         )
-        if self._offscreen_render_frame is not None and self._offscreen_render_frame < 3:
+        if (
+            self._offscreen_render_frame is not None
+            and self._offscreen_render_frame < 3
+        ):
             # do this in another thread to avoid freezing Talon
             cron.after("0ms", self.refresh)
             self._offscreen_render_frame += 1
