@@ -465,9 +465,9 @@ class GUI:
             self._offscreen_render_frame is not None
             and self._offscreen_render_frame < 3
         ):
+            self._offscreen_render_frame += 1
             # do this in another thread to avoid freezing Talon
             cron.after("0ms", self.refresh)
-            self._offscreen_render_frame += 1
         elif self._offscreen_render_frame is not None:
             self._offscreen_render_frame = None
             # do this in another thread to avoid freezing Talon
