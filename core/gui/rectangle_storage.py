@@ -14,7 +14,7 @@ class RelativeRectangle:
     height: float
 
     @staticmethod
-    def from_rectangle(rect: Rect, input_screen: Rect | None=None):
+    def from_rectangle(rect: Rect, input_screen: Rect | None = None):
         if not input_screen:
             input_screen = screen.containing(rect.x, rect.y).rect
         width = rect.width / input_screen.width
