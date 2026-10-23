@@ -464,6 +464,7 @@ class GUI:
         )
         if self._move_window_back_on_screen_after_render:
             self._move_window_back_on_screen_after_render = False
+            # do this in another thread to avoid freezing Talon
             cron.after("0ms", self._move_window_back_on_screen)
 
     def _move_window_back_on_screen(self):
