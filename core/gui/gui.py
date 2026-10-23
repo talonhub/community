@@ -403,17 +403,17 @@ class GUI:
 
     def _move_window_far_offscreen(self):
         self._window.rect = Rect(
-                10000000,
-                self._window.rect.y,
-                self._window.rect.width,
-                self._window.rect.height,
-            )
+            10000000,
+            self._window.rect.y,
+            self._window.rect.width,
+            self._window.rect.height,
+        )
 
     def _make_window_relative_to_screen(self):
         screen = self._get_screen()
         rectangle = self._compute_rect_relative_to_screen(
-                screen.rect, self._window.rect
-            )
+            screen.rect, self._window.rect
+        )
         if self._stored_rect is not None and self._props.will_auto_size():
             rectangle.x = self._stored_rect.x
             rectangle.y = self._stored_rect.y
