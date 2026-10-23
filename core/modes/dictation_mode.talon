@@ -25,22 +25,80 @@ formatted <user.format_text>: user.dictation_insert_raw(format_text)
 
 (nope | scratch) selection: edit.delete()
 
-#################
-# Dictation mode uses some commands from command mode
-# These are indicated with `# from <original_file>`
-
-# from core/keys/keys.talon
+############################
+# Copied from command mode
 ^press <user.modifiers>$: key(modifiers)
 ^press <user.keys>$: key(keys)
-
-# from core/edit/edit.talon
-<user.edit_action> <user.edit_modifier>: user.edit_command(edit_action, edit_modifier)
-# Navigation
+<user.edit_action> <usertedit_modifier>: user.edit_command(edit_action, edit_modifier)
 go <user.navigation_step>+: user.perform_navigation_steps(navigation_step_list)
 go line start: edit.line_start()
 go line end: edit.line_end()
-
 # Corrections
-# from core/text/text.talon
 nope that | scratch that: user.clear_last_phrase()
 select that: user.select_last_phrase()
+
+####################
+# DEPRECATED BEGIN #
+# Navigation
+go up <number_small> (line | lines):
+    user.deprecate_command("2026-10-23", "go up <number_small> (line | lines)", "go <number_small> up")
+    edit.up()
+    repeat(number_small - 1)
+go down <number_small> (line | lines):
+    user.deprecate_command("2026-10-23", "go down <number_small> (line | lines)", "go <number_small> down")
+    edit.down()
+    repeat(number_small - 1)
+go left <number_small> (word | words):
+    user.deprecate_command("2026-10-23", "go left <number_small> (word | words)", "go <number_small> word left")
+    edit.word_left()
+    repeat(number_small - 1)
+go right <number_small> (word | words):
+    user.deprecate_command("2026-10-23", "go right <number_small> (line | lines)", "go <number_small> word right")
+    edit.word_right()
+    repeat(number_small - 1)
+go left <number_small> (character | characters):
+    user.deprecate_command("2026-10-23", "go left <number_small> (character | characters)", "go <number_small> left")
+    edit.left()
+    repeat(number_small - 1)
+go right <number_small> (character | characters):
+    user.deprecate_command("2026-10-23", "go right <number_small> (character | characters)", "go <number_small> right")
+    edit.right()
+    repeat(number_small - 1)
+select left <number_small> (word | words):
+    user.deprecate_command("2026-10-23", "select left <number_small> (word | words)", "select <number_small> word left")
+    edit.extend_word_left()
+    repeat(number_small - 1)
+select right <number_small> (word | words):
+    user.deprecate_command("2026-10-23", "select right <number_small> (line | lines)", "select <number_small> word right")
+    edit.extend_word_right()
+    repeat(number_small - 1)
+select left <number_small> (character | characters):
+    user.deprecate_command("2026-10-23", "select left <number_small> (character | characters)", "select <number_small> left")
+    edit.extend_left()
+    repeat(number_small - 1)
+select right <number_small> (character | characters):
+    user.deprecate_command("2026-10-23", "select right <number_small> (character | characters)", "select <number_small> right")
+    edit.extend_right()
+    repeat(number_small - 1)
+clear left <number_small> (word | words):
+    user.deprecate_command("2026-10-23", "clear left <number_small> (word | words)", "clear <number_small> word left")
+    edit.extend_word_left()
+    repeat(number_small - 1)
+    edit.delete()
+clear right <number_small> (word | words):
+    user.deprecate_command("2026-10-23", "clear right <number_small> (line | lines)", "clear <number_small> word right")
+    edit.extend_word_right()
+    repeat(number_small - 1)
+    edit.delete()
+clear left <number_small> (character | characters):
+    user.deprecate_command("2026-10-23", "clear left <number_small> (character | characters)", "clear <number_small> left")
+    edit.extend_left()
+    repeat(number_small - 1)
+    edit.delete()
+clear right <number_small> (character | characters):
+    user.deprecate_command("2026-10-23", "clear right <number_small> (character | characters)", "clear <number_small> right")
+    edit.extend_right()
+    repeat(number_small - 1)
+    edit.delete()
+# DEPRECATED END #
+##################
