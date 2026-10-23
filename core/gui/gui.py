@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 import egui
 from skia import Rect
-from talon import actions, cron, settings, ui
+from talon import cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
