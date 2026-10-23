@@ -20,19 +20,19 @@ mod.setting(
     "help_max_contexts_per_page",
     type=int,
     default=20,
-    desc="Max contexts to display per page in help",
+    desc="The maximum number of contexts to display per page in help",
 )
 mod.setting(
     "help_max_command_lines_per_page",
     type=int,
     default=50,
-    desc="Max lines of command to display per page in help",
+    desc="The maximum number of lines of commands to display per page in help",
 )
 mod.setting(
     "help_sort_contexts_by_specificity",
     type=bool,
     default=True,
-    desc="If true contexts are sorted by specificity before alphabetically. If false, contexts are just sorted alphabetically.",
+    desc="Sort contexts by specificity before sorting alphabetically. Otherwise, contexts are just sorted alphabetically.",
 )
 
 ctx = Context()
@@ -716,7 +716,7 @@ class Actions:
         """Provides the symbol dictionary"""
         # what you say is stored as a trigger
         global selected_list, current_gui, page_scroller
-        gui_list_help.hide()
+        hide_all_help_guis()
         reset()
         current_gui = gui_list_help
         selected_list = ab
