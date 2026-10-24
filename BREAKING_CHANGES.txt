@@ -7,6 +7,7 @@ and when the change was applied given the delay between changes being
 submitted and the time they were reviewed and merged.
 
 ---
+* 2026-10-23 Rust macros are no longer part of list `user.code_common_function` due to further generalization of macro-like syntax.
 * 2026-10-19 Deprecate macro actions and commands in Rust support files in favor of the new macro-like implementation in `macro_like.py` and `macro_like.talon`; see those files and PR #2381 for more info.
 * 2026-10-08 Deprecate r programming language command `^function define <user.text>$` in favor of the `funky <user.text>` command associated with the `user.code_functions` tag.
 * 2026-08-20 `snip block comment` now inserts a multiline comment. Use `snip inline comment` for the old behavior of inserting an inline comment.

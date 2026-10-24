@@ -1,3 +1,4 @@
+import csv
 from talon import Context, Module, actions
 
 ctx = Context()
@@ -8,32 +9,16 @@ mod.tag(
     desc="Enables macro-like language functionality",
 )
 
-# Java Annotations are grouped in w/ macros, even though they are fairly different functionality-wise
-mod.list(
-    "code_basic_macro_like",
-    desc="A list of single-line macro-likes without any parameters (ex: Swift's `@Observable`; Java's `@FunctionalInterface`)",
-)
-mod.list(
-    "code_function_macro_like",
-    desc="A list of macro-likes which take parameters as if they were functions (ex: Rust's `print!`)",
-)
-mod.list(
-    "code_array_macro_like",
-    desc="A list of macro-likes which take parameters as if they were arrays/lists (ex: Rust's `vec!`)",
-)
-mod.list(
-    "code_block_macro_like",
-    desc="A list of macro-likes which take a code block as their (usually sole) parameter(s) (ex: Rust's `macro_rules!`)",
-)
+mod.list("code_macro_like", desc="""
+A list binding macro-like definition strings to their spoken forms, eg. `"spoken form": "macroName,(,)"`.
+A macro-like definition string is defined as one or three values in the format `MACRO_LIKE_NAME,LEFT_DELIMITER,RIGHT_DELIMITER`,
+    where both `LEFT_DELIMITER` and `RIGHT_DELIMITER` are optional, but must both be defined simultaneously.
+See the documentation on module action `code_insert_macro_like` for more info.
+""")
 
 ctx.matches = r"""
 tag: user.code_macro_like
 """
-
-ctx.lists["user.code_basic_macro_like"] = {}
-ctx.lists["user.code_function_macro_like"] = {}
-ctx.lists["user.code_array_macro_like"] = {}
-ctx.lists["user.code_block_macro_like"] = {}
 
 
 # Direct clone of code_insert_function_or_macro formally implemented in rust.py
@@ -45,53 +30,47 @@ def do_macro_like_insert(text: str, selection: str, left_delim: str, right_delim
     actions.user.paste(out_text)
     actions.edit.left()
 
-
-def do_macro_like_meta(text: str, selection: str):
-    basic = set(
-        actions.user.talon_get_active_registry_list(
-            "user.code_basic_macro_like"
-        ).values()
-    )
-    func = set(
-        actions.user.talon_get_active_registry_list(
-            "user.code_function_macro_like"
-        ).values()
-    )
-    array = set(
-        actions.user.talon_get_active_registry_list(
-            "user.code_array_macro_like"
-        ).values()
-    )
-    block = set(
-        actions.user.talon_get_active_registry_list(
-            "user.code_block_macro_like"
-        ).values()
-    )
-    if text in basic:
-        actions.user.paste(text)
-    elif text in func:
-        do_macro_like_insert(text, selection, "(", ")")
-    elif text in array:
-        do_macro_like_insert(text, selection, "[", "]")
-    elif text in block:
-        do_macro_like_insert(text, selection, "{", "}")
-    else:
-        actions.app.notify(
-            f"Macro-like {text} is in the all macro-likes capture, but is not in a macro-like variant list! Falling back on basic variant behavior...",
-            "Macro-Like warning",
-        )
-        actions.user.paste(text)
-
-
 @mod.capture(
-    rule="{user.code_basic_macro_like} | {user.code_function_macro_like} | {user.code_array_macro_like} | {user.code_block_macro_like}"
+    rule="{user.code_macro_like}"
 )
-def code_all_macro_like(m) -> str:
-    return m[0]
+def code_macro_like(m) -> str:
+    return m.code_macro_like
 
 
 @mod.action_class
 class Actions:
     def code_insert_macro_like(text: str, selection: str):
-        """Inserts a macro-like, positioning the cursor appropriately"""
-        do_macro_like_meta(text, selection)
+        """
+        Inserts a macro-like derived from the value portion of a spoken form-value pair in the capture <user.code_macro_like>. 
+        This is achieved by parsing the value into a name and two delimiters, or into either a basic form macro-like or a snippet insertion.
+            The spoken form-value pair `"example macro": "example_macro"` either resolves to a snippet insertion
+            if `example_macro` exactly matches a snippet name, or to a basic (one-to-one) insertion otherwise.
+        
+            The spoken form-value `"other example macro": "other_example,<,>"` resolves to an insertion of `other_example<>`
+            with the cursor positioned between the two delimiters (`<` and `>`) if selection is nil or empty, or with
+            the delimiters wrapping selection if selection has a coherent value.
+        Raises an exception when passed an empty value for text, or if passed a value for text which only contains one delimiter. 
+        Issues a warning via actions.app.notify if passed a value for text which contains more than two delimiters 
+        """
+        text_reader = csv.reader([text], doublequote = True, escapechar = "\\")
+        values = next(text_reader)
+        if len(values) == 0:
+            raise Exception("Missing macro-like definition for given spoken form")
+        elif len(values) == 1:
+            # no delimiters defined
+            if values[0] in actions.users.get_snippet_names():
+                actions.user.insert_snippet_by_name(values[0])
+            else:
+                # macro uses a basic insertion
+                actions.user.paste(values[0])    
+        elif len(values) == 2:
+            # missing right delimiter
+            raise Exception(f"Macro-like {values[0]} has left delimiter {values[1]} but no right delimiter")
+        else:
+            if len(values) > 3:
+                actions.app.notify(
+                    f"Macro-like {values[0]} has more than two defined delimiters, ignoring extraneous values...",
+                    "Macro-Like warning",
+                )
+        do_macro_like_insert(values[0], selection, values[1], values[2])    
+

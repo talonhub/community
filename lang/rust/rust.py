@@ -106,66 +106,6 @@ all_types = {
     **standard_sync_types,
 }
 
-standard_function_macros = {
-    "panic": "panic!",
-    "format": "format!",
-    "concatenate": "concat!",
-    "print": "print!",
-    "print line": "println!",
-    "error print line": "eprintln!",
-    "to do": "todo!",
-}
-
-standard_array_macros = {
-    "vector": "vec!",
-}
-
-standard_block_macros = {
-    "macro rules": "macro_rules!",
-}
-
-logging_macros = {
-    "debug": "debug!",
-    "info": "info!",
-    "warning": "warn!",
-    "error": "error!",
-}
-
-testing_macros = {
-    "assert": "assert!",
-    "assert equal": "assert_eq!",
-    "assert not equal": "assert_ne!",
-}
-
-all_function_macros = {
-    **standard_function_macros,
-    **logging_macros,
-    **testing_macros,
-}
-
-all_array_macros = {
-    **standard_array_macros,
-}
-
-all_block_macros = {
-    **standard_block_macros,
-}
-
-ctx.lists["user.code_function_macro_like"] = all_function_macros
-ctx.lists["user.code_array_macro_like"] = all_array_macros
-ctx.lists["user.code_block_macro_like"] = all_block_macros
-
-all_macros = {
-    **all_function_macros,
-    **all_array_macros,
-    **all_block_macros,
-}
-
-# DEPRECATED: Derive this yourself from the lists in macro_like.py
-# all_function_macro_values = set(all_function_macros.values())
-# all_array_macro_values = set(all_array_macros.values())
-# all_block_macro_values = set(all_block_macros.values())
-
 closure_traits = {
     "closure": "Fn",
     "closure once": "FnOnce",
@@ -203,7 +143,26 @@ ctx.lists["user.code_common_function"] = {
     "iterator": "iter",
     "into iterator": "into_iter",
     "from iterator": "from_iter",
-    **all_macros,
+}
+
+# tag: code_macro_like
+ctx.lists["user.code_macro_like"] = {
+    "panic": "panic!,(,)",
+    "format": "format!,(,)",
+    "concatenate": "concat!,(,)",
+    "print": "print!,(,)",
+    "print line": "println!,(,)",
+    "error print line": "eprintln!,(,)",
+    "to do": "todo!,(,)",
+    "vector": "vec!,[,]",
+    "macro rules": "macro_rules!,{,}",
+    "debug": "debug!,(,)",
+    "info": "info!,(,)",
+    "warning": "warn!,(,)",
+    "error": "error!,(,)",
+    "assert": "assert!,(,)",
+    "assert equal": "assert_eq!,(,)",
+    "assert not equal": "assert_ne!,(,)",
 }
 
 # tag: functions
@@ -219,7 +178,6 @@ ctx.lists["user.code_type_modifier"] = {
     "mutable borrowed": "&mut ",
     "mute borrowed": "&mut ",
 }
-
 
 @ctx.capture(
     "user.code_type",
