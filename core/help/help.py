@@ -12,7 +12,7 @@ from ...core.gui.gui import (
     TextRow,
     compute_table_height,
     create_bold_text,
-    create_italics_text,
+    create_italic_text,
     open_gui,
     pad_title_for_two_column_rows,
 )
@@ -118,7 +118,7 @@ def _add_rows_for_operator(table, prefix, operator_name, description):
         columns.append(description)
         rich_text_functions = None
     else:
-        rich_text_functions = (create_italics_text,)
+        rich_text_functions = (create_italic_text,)
     table.add_row(TextRow(columns, rich_text_functions=rich_text_functions))
 
 
