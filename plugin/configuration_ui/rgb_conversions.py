@@ -19,12 +19,11 @@ def convert_rgb_to_string(rgb):
 
 
 def is_valid_hexadecimal_digit(c):
-    if c.isdigit():
+    try:
+        int(c, base=16)
         return True
-    if not c.isalpha():
+    except ValueError:
         return False
-    character_number = ord(c.lower())
-    return character_number >= ord("a") and character_number <= ord("f")
 
 
 def is_valid_hexadecimal_rgb(text):
