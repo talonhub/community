@@ -62,10 +62,10 @@ async def let_user_use_page_keys_to_scroll_scroll_area(scroll_ui: egui.Ui):
         scrolling_delta = None
         for event in events:
             if key := event.key():
-                key_name = key.name().lower()
-                if key_name == "pagedown":
+                key_name = key.name()
+                if key_name == "PageDown":
                     scrolling_delta = -1
-                elif key_name == "pageup":
+                elif key_name == "PageUp":
                     scrolling_delta = 1
         if scrolling_delta is not None:
             clip_rect = scroll_ui.clip_rect()
