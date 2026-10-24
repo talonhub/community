@@ -56,6 +56,7 @@ def compute_table_height(row_size, item_spacing, rows_per_page):
 
 
 async def let_user_use_page_keys_to_scroll_scroll_area(scroll_ui: egui.Ui):
+    """Let the user use page up and down keys to scroll in the scroll area"""
     async with scroll_ui.input() as input_state:
         events = input_state.events()
         scrolling_delta = None
