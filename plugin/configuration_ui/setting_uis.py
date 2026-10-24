@@ -88,10 +88,11 @@ async def draw_numeric_input(setting: Setting, ui, minimum, maximum, is_setting_
     make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
     response = ui.add(egui.DragValue(setting.value))
     value = setting.value.get()
-    if minimum is not None and value < minimum:
-        setting.value.set(minimum)
-    if maximum is not None and value > maximum:
-        setting.value.set(maximum)
+    if minimum is not None:
+        value = max(value, minimum)
+    if maximum is not None:
+        value = min(value, maximum)
+    setting.value.set(value)
     if is_setting_chosen:
         focus_widget(response)
 
