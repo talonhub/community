@@ -136,7 +136,14 @@ def create_text_setting(name, is_multiline=False):
     )
 
 
-COLOR_NAMES = [
+def compute_hexadecimal_from_color_name(name):
+    function = getattr(egui.Color32, name)
+    color = function()
+    return color.to_hex()[1:-2]
+
+COLOR_TO_NAME = {
+    compute_hexadecimal_from_color_name(name): name
+    for name in [
     "black",
     "blue",
     "gold",
@@ -149,13 +156,7 @@ COLOR_NAMES = [
     "red",
     "white",
 ]
-
-
-def compute_hexadecimal_from_color_name(name):
-    function = getattr(egui.Color32, name)
-    color = function()
-    return color.to_hex()[1:-2]
-
+}
 
 async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
     value = setting.value.get()
@@ -176,10 +177,8 @@ async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
             ui.label("Not valid color.")
 
         color_name = egui.Mutable("")
-        for name in COLOR_NAMES:
-            if compute_hexadecimal_from_color_name(name) == value:
-                color_name.set(name)
-                break
+        if value in COLOR_TO_NAME:
+            color_name.set(COLOR_TO_NAME[value])
         async with (
             egui.ComboBox(setting.name, "pick by name")
             .selected_text(color_name.get())
@@ -187,7 +186,7 @@ async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
         ) as combo_box:
             if combo_box.shown:
                 combo_ui = combo_box.ui
-                for name in COLOR_NAMES:
+                for name in COLOR_TO_NAME.values():
                     combo_ui.selectable_value(color_name, name, name)
         name = color_name.get()
         if name != "":
