@@ -38,9 +38,7 @@ def report_error(exception, context):
 
 
 def get_relative_rectangle(id: str) -> RelativeRectangle | None:
-    if not id:
-        return None
-    if not actions.user.stored_state_does_file_exist(DIRECTORY_NAME, id):
+    if not id or not actions.user.stored_state_does_file_exist(DIRECTORY_NAME, id):
         return None
     try:
         text = actions.user.stored_state_get_text(DIRECTORY_NAME, id)
