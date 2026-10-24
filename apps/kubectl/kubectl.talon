@@ -69,7 +69,7 @@ cube {user.kubectl_action} [{user.kubectl_object}]:
 # for get commands
 output [{user.kubectl_output_format_object}]:
     insert("-o ")
-    insert(kubectl_output_format_object)
+    insert(kubectl_output_format_object or "")
 
 cube detach:
     key("ctrl-p")
