@@ -55,7 +55,7 @@ def compute_table_height(row_size, item_spacing, rows_per_page):
     return (row_size + item_spacing) * rows_per_page + item_spacing
 
 
-async def let_user_use_page_keys_to_scroll_scroll_area(scroll_ui):
+async def let_user_use_page_keys_to_scroll_scroll_area(scroll_ui: egui.Ui):
     async with scroll_ui.input() as input_state:
         events = input_state.events()
         scrolling_delta = None
