@@ -11,7 +11,7 @@ mod.setting(
     "hiss_scroll_debounce_time",
     type=int,
     default=100,
-    desc="How much time a hiss must last for to be considered a hiss rather than part of speech, in ms",
+    desc="How much time a hiss must last for to be considered a hiss rather than part of speech, in milliseconds",
 )
 
 

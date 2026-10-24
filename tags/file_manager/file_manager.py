@@ -39,7 +39,7 @@ mod.setting(
     "file_manager_auto_show_pickers",
     type=bool,
     default=False,
-    desc="Enable to show the file/directories pickers automatically",
+    desc="Show the file/directories pickers automatically when you use a supported file manager program",
 )
 mod.setting(
     "file_manager_folder_limit",

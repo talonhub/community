@@ -17,8 +17,8 @@ from talon import cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
-# This code currently does not support changing the scale with imgui.scale.
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
+OUTLINE_COLOR_DARK_MODE = "#" + "88" * 3
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
@@ -578,6 +578,11 @@ class GUI:
         # Default dark mode text is too dark.
         if visuals.dark_mode:
             visuals.override_text_color = egui.Color32.from_hex(TEXT_COLOR_DARK_MODE)
+            bg_stroke_width = visuals.widgets.noninteractive.bg_stroke.width
+            bg_stroke_color = egui.Color32.from_hex(OUTLINE_COLOR_DARK_MODE)
+            visuals.widgets.noninteractive.bg_stroke = egui.Stroke(
+                bg_stroke_width, bg_stroke_color
+            )
             style.set_visuals(visuals)
 
         style.set_text_style(
