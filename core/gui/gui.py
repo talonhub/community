@@ -386,10 +386,9 @@ class UIWrapper:
                 body_top = min(body_rect.top(), body_rect.bottom())
                 async for row in body.rows(row_height, len(rows)):
                     # render lines above each row with a value for the first column
-                    if rows[row.index()].should_render_overline() and settings.get(
+                    row.set_overline(rows[row.index()].should_render_overline() and settings.get(
                         "user.community_ui_render_table_lines"
-                    ):
-                        row.set_overline(True)
+                    ))
                     # let the call back decide how to render the row
                     await render_row(row, rows, len(headers))
                     # if this is the first visible row, update current_row_index
