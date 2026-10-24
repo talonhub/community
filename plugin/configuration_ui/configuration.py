@@ -9,7 +9,7 @@ from .setting_uis import (
     Setting,
     create_boolean_setting,
     create_color_picker_setting,
-    create_discreet_choices_setting,
+    create_discrete_choices_setting,
     create_numeric_setting,
     create_tag_setting,
     create_text_setting,
@@ -90,7 +90,7 @@ class Manager:
                 "",
                 [
                     create_numeric_setting("speech.timeout", 0.0),
-                    create_discreet_choices_setting(
+                    create_discrete_choices_setting(
                         "user.initial_mode",
                         [
                             (mode, f"{mode} mode")
@@ -143,7 +143,7 @@ class Manager:
                     create_tag_setting("user.pop_twice_to_wake"),
                     create_numeric_setting("user.double_pop_speed_minimum", 0.0),
                     create_numeric_setting("user.double_pop_speed_maximum", 0.0),
-                    create_discreet_choices_setting(
+                    create_discrete_choices_setting(
                         "user.mouse_enable_pop_click",
                         [
                             (0, "off"),
@@ -169,7 +169,7 @@ class Manager:
                 "Window Management",
                 "",
                 [
-                    create_discreet_choices_setting(
+                    create_discrete_choices_setting(
                         "user.window_snap_screen",
                         [(option, option) for option in ("proportional", "size aware")],
                     ),
@@ -226,7 +226,7 @@ class Manager:
                 "Configuration for Community's subtitles (not the Talon builtin subtitles)",
                 [
                     create_boolean_setting("user.subtitles_show"),
-                    create_discreet_choices_setting(
+                    create_discrete_choices_setting(
                         "user.subtitles_screens",
                         choices=[
                             ("all", "all screens"),

@@ -207,7 +207,7 @@ def create_color_picker_setting(name):
     )
 
 
-async def draw_discreet_choices_input(
+async def draw_discrete_choices_input(
     setting: Setting, ui, choices, is_chosen, is_numeric
 ):
     async with ui.horizontal():
@@ -229,11 +229,11 @@ async def draw_discreet_choices_input(
             actions.key("shift-tab")
 
 
-def create_discreet_choices_setting(name, choices, is_numeric=False):
+def create_discrete_choices_setting(name, choices, is_numeric=False):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
     return Setting(
         name,
-        lambda setting, ui, is_chosen: draw_discreet_choices_input(
+        lambda setting, ui, is_chosen: draw_discrete_choices_input(
             setting, ui, choices, is_chosen, is_numeric
         ),
         post_chosen_action=lambda: actions.key("enter"),
