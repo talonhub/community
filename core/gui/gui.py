@@ -121,7 +121,7 @@ def create_bold_text(text):
     return egui.RichText(text).strong()
 
 
-def create_italics_text(text):
+def create_italic_text(text):
     return egui.RichText(text).italics()
 
 
