@@ -8,7 +8,7 @@ def parse_rgb_from_string(color):
 def convert_number_to_two_digit_hexadecimal_string(number: int) -> str:
     if number == 0:
         return "00"
-    return hex(number)[2:]
+    return f"{number:x}"
 
 
 def convert_rgb_to_string(rgb):
