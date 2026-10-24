@@ -141,22 +141,24 @@ def compute_hexadecimal_from_color_name(name):
     # only get the RGB values ignoring the alpha and hexadecimal string prefix
     return color.to_hex()[1:-2]
 
+
 COLOR_TO_NAME = {
     compute_hexadecimal_from_color_name(name): name
     for name in [
-    "black",
-    "blue",
-    "gold",
-    "gray",
-    "green",
-    "light_blue",
-    "light_green",
-    "light_red",
-    "magenta",
-    "red",
-    "white",
-]
+        "black",
+        "blue",
+        "gold",
+        "gray",
+        "green",
+        "light_blue",
+        "light_green",
+        "light_red",
+        "magenta",
+        "red",
+        "white",
+    ]
 }
+
 
 async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
     value = setting.value.get()
