@@ -179,6 +179,7 @@ ctx.lists["user.code_type_modifier"] = {
     "mute borrowed": "&mut ",
 }
 
+
 @ctx.capture(
     "user.code_type",
     rule="[{user.code_type_modifier}] {user.code_type}",
