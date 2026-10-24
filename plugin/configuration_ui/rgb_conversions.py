@@ -1,3 +1,5 @@
+import itertools
+
 ACCEPTED_RGB_STRING_LENGTH = 6
 
 
