@@ -11,13 +11,13 @@ mod.setting(
     "command_history_size",
     type=int,
     default=50,
-    desc="The default number of command history lines to display",
+    desc="The total number of command history lines to display",
 )
 mod.setting(
     "command_history_display",
     type=int,
     default=10,
-    desc="The total number of command history lines to display",
+    desc="The default number of command history lines to display",
 )
 
 hist_more: bool = False
