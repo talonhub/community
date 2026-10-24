@@ -137,8 +137,8 @@ def create_text_setting(name, is_multiline=False):
 
 
 def compute_hexadecimal_from_color_name(name):
-    function = getattr(egui.Color32, name)
-    color = function()
+    color = getattr(egui.Color32, name)()
+    # only get the RGB values ignoring the alpha and hexadecimal string prefix
     return color.to_hex()[1:-2]
 
 COLOR_TO_NAME = {
