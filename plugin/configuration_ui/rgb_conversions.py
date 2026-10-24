@@ -6,10 +6,7 @@ def parse_rgb_from_string(color):
         raise ValueError(
             f"RGB string {color} was not length {ACCEPTED_RGB_STRING_LENGTH}"
         )
-    return [
-        int(color[i : i + 2], base=16)
-        for i in range(0, len(color), 2)
-    ]
+    return [int(color[i : i + 2], base=16) for i in range(0, len(color), 2)]
 
 
 def convert_number_to_two_digit_hexadecimal_string(number: int) -> str:
