@@ -131,12 +131,10 @@ class Row(ABC):
     @abstractmethod
     async def render(self, ui, column_number):
         """Render the column on the ui"""
-        pass
 
     @abstractmethod
     def wrap(self, max_column_length) -> list:
         """Returns a list of Rows after wrapping with the given maximum length"""
-        pass
 
     @abstractmethod
     def split_lines(self) -> list:
@@ -145,12 +143,10 @@ class Row(ABC):
     @abstractmethod
     def should_render_overline(self) -> bool:
         """Decides if there should be an overline above the row"""
-        pass
 
     @abstractmethod
     def get_num_columns(self) -> int:
         """Returns the number of columns"""
-        pass
 
 
 class TextRow(Row):
