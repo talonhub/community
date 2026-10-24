@@ -13,7 +13,7 @@ from textwrap import wrap
 
 import egui
 from skia import Rect
-from talon import cron, settings, ui, Module
+from talon import Module, cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
@@ -23,7 +23,7 @@ mod.setting(
     "community_ui_render_table_lines",
     type=bool,
     default=True,
-    desc="Community UI tables have lines in between the entries"
+    desc="Community UI tables have lines in between the entries",
 )
 
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
@@ -386,7 +386,9 @@ class UIWrapper:
                 body_top = min(body_rect.top(), body_rect.bottom())
                 async for row in body.rows(row_height, len(rows)):
                     # render lines above each row with a value for the first column
-                    if rows[row.index()].should_render_overline() and settings.get("user.community_ui_render_table_lines"):
+                    if rows[row.index()].should_render_overline() and settings.get(
+                        "user.community_ui_render_table_lines"
+                    ):
                         row.set_overline(True)
                     # let the call back decide how to render the row
                     await render_row(row, rows, len(headers))
