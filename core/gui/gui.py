@@ -15,6 +15,12 @@ from talon import cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
+from .rectangle_storage import (
+    RelativeRectangle,
+    get_relative_rectangle,
+    store_relative_rectangle,
+)
+
 # This code currently does not support changing the scale with imgui.scale.
 TEXT_COLOR_DARK_MODE = "#D0D0D0"
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
@@ -271,6 +277,7 @@ def open_gui(
     refresh_period: str | None = None,
     always_on_top: bool = True,
     decorated: bool = False,
+    id: str = "",
 ):
     """Decorator for for an egui callback drawing function.
     screen: the screen to show the gui on.
@@ -291,6 +298,7 @@ def open_gui(
             refresh_period=refresh_period,
             always_on_top=always_on_top,
             decorated=decorated,
+            id=id,
         )
 
     return open_inner
@@ -308,6 +316,7 @@ class Props:
     height: float | None
     always_on_top: bool
     decorated: bool
+    id: str
 
     def will_auto_size(self):
         return self.width is None or self.height is None
@@ -329,10 +338,11 @@ class GUI:
     _props: Props
     _window: Window | None
     _egui: egui.Ui | None
-    _stored_rect: Rect | None
+    _stored_rect: RelativeRectangle | None
     _refresh_period: str | None
     _last_height_taken: float | None
     _previous_height_taken: float | None
+    _offscreen_render_frame: int | None
 
     def __init__(
         self,
@@ -345,6 +355,7 @@ class GUI:
         refresh_period: str | None,
         always_on_top: bool,
         decorated: bool,
+        id: str,
     ):
         self._props = Props(
             draw=draw,
@@ -355,6 +366,7 @@ class GUI:
             height=height,
             always_on_top=always_on_top,
             decorated=decorated,
+            id=id,
         )
         self._window = None
         self._egui = None
@@ -363,6 +375,7 @@ class GUI:
         self._refresh_job = None
         self._last_height_taken = None
         self._previous_height_taken = None
+        self._offscreen_render_frame = None
 
     @property
     def showing(self) -> bool:
@@ -377,20 +390,42 @@ class GUI:
 
         self._window = self._props.create_window(self._render)
 
+        if self._stored_rect is None:
+            self._stored_rect = get_relative_rectangle(self._props.id)
+
         if self._stored_rect is not None and not self._props.will_auto_size():
+            self._window.rect = self._compute_absolute_stored_rectangle()
             self._window.show()
-            self._window.rect = self._stored_rect
         else:
-            screen = self._get_screen()
+            self._move_window_far_offscreen()
+            self._offscreen_render_frame = 0
             self._window.show()
-            rectangle = self._compute_rect_relative_to_screen(screen.rect)
-            if self._stored_rect is not None and self._props.will_auto_size():
-                rectangle.x = self._stored_rect.x
-                rectangle.y = self._stored_rect.y
-            self._window.rect = rectangle
 
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
+
+    def _compute_absolute_stored_rectangle(self):
+        screen = self._get_screen()
+        return self._stored_rect.compute_absolute_rectangle(screen)
+
+    def _move_window_far_offscreen(self):
+        self._window.rect = Rect(
+            10000000,
+            self._window.rect.y,
+            self._window.rect.width,
+            self._window.rect.height,
+        )
+
+    def _make_window_relative_to_screen(self):
+        screen = self._get_screen()
+        rectangle = self._compute_rect_relative_to_screen(
+            screen.rect, self._window.rect
+        )
+        if self._stored_rect is not None and self._props.will_auto_size():
+            absolute_stored_rectangle = self._compute_absolute_stored_rectangle()
+            rectangle.x = absolute_stored_rectangle.x
+            rectangle.y = absolute_stored_rectangle.y
+        self._window.rect = rectangle
 
     def _cancel_refresh_job(self):
         if self._refresh_job:
@@ -409,10 +444,14 @@ class GUI:
             return
 
         try:
-            self._stored_rect = self._window.rect
+            self._update_stored_rectangle()
             self._window.close()
         finally:
             self._window = None
+
+    def _update_stored_rectangle(self):
+        self._stored_rect = RelativeRectangle.from_rectangle(self._window.rect)
+        store_relative_rectangle(self._props.id, self._stored_rect)
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
@@ -431,6 +470,22 @@ class GUI:
         self._last_height_taken = (
             available_height - ui.available_height() + INNER_MARGIN
         )
+        if self._offscreen_render_frame is not None:
+            self._handle_offscreen_render()
+
+    def _handle_offscreen_render(self):
+        if self._offscreen_render_frame < 3:
+            self._offscreen_render_frame += 1
+            # do this in another thread to avoid freezing Talon
+            cron.after("0ms", self.refresh)
+        else:
+            self._offscreen_render_frame = None
+            # do this in another thread to avoid freezing Talon
+            cron.after("0ms", self._move_window_back_on_screen)
+
+    def _move_window_back_on_screen(self):
+        self._make_window_relative_to_screen()
+        self.refresh()
 
     def _apply_theme(self, ui: egui.Ui) -> None:
         style = ui.style()
@@ -457,13 +512,10 @@ class GUI:
 
         ui.set_style(style)
 
-    def _compute_rect_relative_to_screen(self, screen: Rect) -> Rect:
+    def _compute_rect_relative_to_screen(self, screen: Rect, window: Rect) -> Rect:
         """Compute the rectangle for the window relative to the screen location and dimensions."""
-        if self._window is None:
-            raise RuntimeError("Window is not initialized")
 
         props = self._props
-        window = self._window.rect
 
         width = window.width if props.width is None else screen.width * props.width
         height = window.height if props.height is None else screen.height * props.height

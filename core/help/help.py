@@ -650,7 +650,7 @@ def hide_all_help_guis():
     gui_operators.hide()
 
 
-@open_gui(y=0, refresh_period="500ms")
+@open_gui(y=0, refresh_period="500ms", id="help")
 async def gui_list_help(ui, ui_wrapper):
     global selected_list
     global page_scroller
