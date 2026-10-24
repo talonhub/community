@@ -50,7 +50,7 @@ async def draw_toggle(setting: Setting, ui, is_setting_chosen):
     response = ui.checkbox(setting.value, setting.get_description())
     if is_setting_chosen:
         setting.value.set(not setting.value.get())
-        focus_widget(response, True)
+        focus_widget(response)
 
 
 def create_tag_setting(name):
@@ -79,10 +79,9 @@ def make_value_float_if_there_is_a_float_bound(value, minimum, maximum):
         value.set(float(value.get()))
 
 
-def focus_widget(response, is_setting_chosen):
-    if is_setting_chosen:
-        response.request_focus()
-        response.scroll_to_me(None)
+def focus_widget(response):
+    response.request_focus()
+    response.scroll_to_me(None)
 
 
 async def draw_numeric_input(setting: Setting, ui, minimum, maximum, is_setting_chosen):
@@ -93,24 +92,28 @@ async def draw_numeric_input(setting: Setting, ui, minimum, maximum, is_setting_
         setting.value.set(minimum)
     if maximum is not None and value > maximum:
         setting.value.set(maximum)
-    focus_widget(response, is_setting_chosen)
+    if is_setting_chosen:
+        focus_widget(response)
 
 
 async def draw_slider_input(setting: Setting, ui, minimum, maximum, is_setting_chosen):
     make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
     slider = egui.Slider(setting.value, minimum, maximum)
     response = ui.add(slider)
-    focus_widget(response, is_setting_chosen)
+    if is_setting_chosen:
+        focus_widget(response)
 
 
 async def draw_single_line_text_input(setting: Setting, ui, is_setting_chosen):
     response = ui.add(egui.TextEdit.singleline(setting.value))
-    focus_widget(response, is_setting_chosen)
+    if is_setting_chosen:
+        focus_widget(response)
 
 
 async def draw_multiline_text_input(setting: Setting, ui, is_setting_chosen):
     response = ui.add(egui.TextEdit.multiline(setting.value))
-    focus_widget(response, is_setting_chosen)
+    if is_setting_chosen:
+        focus_widget(response)
 
 
 def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
@@ -194,7 +197,7 @@ async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
             setting.value.set(new_value)
         text_response = ui.add(egui.TextEdit.singleline(setting.value))
         if is_setting_chosen:
-            focus_widget(text_response, True)
+            focus_widget(text_response)
             actions.key("shift-tab")
 
 
@@ -222,7 +225,7 @@ async def draw_discreet_choices_input(
         else:
             response = ui.add(egui.TextEdit.singleline(setting.value))
         if is_chosen:
-            focus_widget(response, True)
+            focus_widget(response)
             actions.key("shift-tab")
 
 
