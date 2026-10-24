@@ -18,13 +18,11 @@ def convert_rgb_to_string(rgb):
     return "".join(hexadecimal_digits)
 
 
-def is_valid_hexadecimal_digit(c):
+def is_valid_hexadecimal_rgb(text):
+    if len(text) != 6:
+        return False
     try:
-        int(c, base=16)
+        int(text, base=16)
         return True
     except ValueError:
         return False
-
-
-def is_valid_hexadecimal_rgb(text):
-    return len(text) == 6 and all(is_valid_hexadecimal_digit(c) for c in text)
