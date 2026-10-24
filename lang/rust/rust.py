@@ -353,9 +353,8 @@ def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
 # Deprecated Macro Functionality
 mod.list(
     "code_macros",
-    desc="DEPRECATED as of 2026-10-19, use `macro_like.py` lists insted! Original description: List of macros for active language",
+    desc="DEPRECATED as of 2026-10-19, use the `macro_like.py` list with the new format instead! Original description: List of macros for active language",
 )
-ctx.lists["user.code_macros"] = all_macros
 
 
 # Deprecated: use do_macro_like_insert in macro_like.py or implement in your own code
