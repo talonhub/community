@@ -9,7 +9,6 @@ from talon import actions, registry
 
 from .rgb_conversions import (
     convert_rgb_to_string,
-    is_valid_hexadecimal_rgb,
     parse_rgb_from_string,
 )
 from .setting_file_paths import SETTINGS_PATH
@@ -158,10 +157,13 @@ def compute_hexadecimal_from_color_name(name):
 async def draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
     value = setting.value.get()
     new_value = value
-    is_valid_rgb = is_valid_hexadecimal_rgb(value)
     async with ui.horizontal_wrapped():
-        if is_valid_rgb:
-            red, green, blue = parse_rgb_from_string(value)
+        try:
+            parsed_rgb = parse_rgb_from_string(value)
+        except ValueError:
+            parsed_rgb = None
+        if parsed_rgb is not None:
+            red, green, blue = parsed_rgb
             rgba = egui.Rgba.from_srgba_unmultiplied(red, green, blue, 255)
             rgb = egui.Mutable([rgba.r, rgba.g, rgba.b])
             egui.color_edit_button_rgb(ui, rgb)

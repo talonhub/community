@@ -1,4 +1,8 @@
+ACCEPTED_RGB_STRING_LENGTH = 6
+
 def parse_rgb_from_string(color):
+    if len(color) != ACCEPTED_RGB_STRING_LENGTH:
+        raise ValueError(f"RGB string {color} was not length {ACCEPTED_RGB_STRING_LENGTH}")
     result = []
     for i in range(0, len(color), 2):
         result.append(int(color[i : i + 2], base=16))
@@ -16,13 +20,3 @@ def convert_rgb_to_string(rgb):
         convert_number_to_two_digit_hexadecimal_string(round(n)) for n in rgb
     ]
     return "".join(hexadecimal_digits)
-
-
-def is_valid_hexadecimal_rgb(text):
-    if len(text) != 6:
-        return False
-    try:
-        int(text, base=16)
-        return True
-    except ValueError:
-        return False
