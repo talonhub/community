@@ -23,4 +23,13 @@ ctx.lists["user.kubectl_object"] = (
     "deployments",
     "replicasets",
     "daemonsets",
+    "configmaps",
+    "secrets",
+    "endpoints",
+    "ingress",
+    "persistentvolumes",
+    "persistentvolumeclaims",
 )
+
+mod.list("kubectl_output_format_object", desc="-o parameters, so output formatters")
+ctx.lists["user.kubectl_output_format_object"] = ("yaml", "wide")
