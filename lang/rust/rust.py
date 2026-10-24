@@ -9,7 +9,6 @@ from ..tags.operators import Operators
 mod = Module()
 # rust specific grammar
 mod.list("code_type_modifier", desc="List of type modifiers for active language")
-mod.list("code_macros", desc="List of macros for active language")
 mod.list("code_trait", desc="List of traits for active language")
 
 
@@ -17,15 +16,6 @@ mod.list("code_trait", desc="List of traits for active language")
 class Actions:
     def code_state_implements():
         """Inserts implements block, positioning the cursor appropriately"""
-
-    def code_insert_macro(text: str, selection: str):
-        """Inserts a macro and positions the cursor appropriately"""
-
-    def code_insert_macro_array(text: str, selection: str):
-        """Inserts a macro array and positions the cursor appropriately"""
-
-    def code_insert_macro_block(text: str, selection: str):
-        """Inserts a macro block and positions the cursor appropriately"""
 
     def code_state_unsafe():
         """Inserts an unsafe block and positions the cursor appropriately"""
@@ -38,6 +28,17 @@ class Actions:
 
     def code_comment_documentation_block_inner():
         """Inserts an inner block document comment and positions the cursor appropriately"""
+
+    # DEPRECATED
+
+    def code_insert_macro(text: str, selection: str):
+        """DEPRECATED: Inserts a macro and positions the cursor appropriately"""
+
+    def code_insert_macro_array(text: str, selection: str):
+        """DEPRECATED: Inserts a macro array and positions the cursor appropriately"""
+
+    def code_insert_macro_block(text: str, selection: str):
+        """DEPRECATED: Inserts a macro block and positions the cursor appropriately"""
 
 
 ctx = Context()
@@ -105,61 +106,6 @@ all_types = {
     **standard_sync_types,
 }
 
-standard_function_macros = {
-    "panic": "panic!",
-    "format": "format!",
-    "concatenate": "concat!",
-    "print": "print!",
-    "print line": "println!",
-    "error print line": "eprintln!",
-    "to do": "todo!",
-}
-
-standard_array_macros = {
-    "vector": "vec!",
-}
-
-standard_block_macros = {
-    "macro rules": "macro_rules!",
-}
-
-logging_macros = {
-    "debug": "debug!",
-    "info": "info!",
-    "warning": "warn!",
-    "error": "error!",
-}
-
-testing_macros = {
-    "assert": "assert!",
-    "assert equal": "assert_eq!",
-    "assert not equal": "assert_ne!",
-}
-
-all_function_macros = {
-    **standard_function_macros,
-    **logging_macros,
-    **testing_macros,
-}
-
-all_array_macros = {
-    **standard_array_macros,
-}
-
-all_block_macros = {
-    **standard_block_macros,
-}
-
-all_macros = {
-    **all_function_macros,
-    **all_array_macros,
-    **all_block_macros,
-}
-
-all_function_macro_values = set(all_function_macros.values())
-all_array_macro_values = set(all_array_macros.values())
-all_block_macro_values = set(all_block_macros.values())
-
 closure_traits = {
     "closure": "Fn",
     "closure once": "FnOnce",
@@ -197,7 +143,26 @@ ctx.lists["user.code_common_function"] = {
     "iterator": "iter",
     "into iterator": "into_iter",
     "from iterator": "from_iter",
-    **all_macros,
+}
+
+# tag: code_macro_like
+ctx.lists["user.code_macro_like"] = {
+    "panic": "panic!,(,)",
+    "format": "format!,(,)",
+    "concatenate": "concat!,(,)",
+    "print": "print!,(,)",
+    "print line": "println!,(,)",
+    "error print line": "eprintln!,(,)",
+    "to do": "todo!,(,)",
+    "vector": "vec!,[,]",
+    "macro rules": "macro_rules!,{,}",
+    "debug": "debug!,(,)",
+    "info": "info!,(,)",
+    "warning": "warn!,(,)",
+    "error": "error!,(,)",
+    "assert": "assert!,(,)",
+    "assert equal": "assert_eq!,(,)",
+    "assert not equal": "assert_ne!,(,)",
 }
 
 # tag: functions
@@ -220,11 +185,9 @@ ctx.lists["user.code_type_modifier"] = {
     rule="[{user.code_type_modifier}] {user.code_type}",
 )
 def code_type(m) -> str:
-    """Returns a macro name"""
+    """Returns a type name"""
     return "".join(m)
 
-
-ctx.lists["user.code_macros"] = all_macros
 
 ctx.lists["user.code_trait"] = all_traits
 
@@ -340,7 +303,12 @@ class UserActions:
     # tag: functions_gui
 
     def code_insert_function(text: str, selection: str):
-        code_insert_function_or_macro(text, selection, "(", ")")
+        if selection:
+            out_text = text + f"({selection})"
+        else:
+            out_text = text + "()"
+        actions.user.paste(out_text)
+        actions.edit.left()
 
     # tag: libraries
 
@@ -351,14 +319,6 @@ class UserActions:
 
     def code_state_implements():
         actions.user.insert_snippet_by_name("implementsStruct")
-
-    def code_insert_macro(text: str, selection: str):
-        if text in all_array_macro_values:
-            code_insert_function_or_macro(text, selection, "[", "]")
-        elif text in all_block_macro_values:
-            code_insert_function_or_macro(text, selection, "{", "}")
-        else:
-            code_insert_function_or_macro(text, selection, "(", ")")
 
     def code_state_unsafe():
         actions.user.insert_snippet_by_name("unsafeBlock")
@@ -374,7 +334,30 @@ class UserActions:
         actions.user.insert_between("/*!", "*/")
         actions.key("enter")
 
+    # DEPRECATED
+    def code_insert_macro(text: str, selection: str):
+        actions.user.deprecate_action(
+            "2026-10-19", "user.code_insert_macro", "user.code_insert_macro_like"
+        )
+        actions.user.code_insert_macro_like(text, selection)
 
+
+RT = TypeVar("RT")  # return type
+
+
+def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
+    for _ in range(n):
+        f(*args, **kwargs)
+
+
+# Deprecated Macro Functionality
+mod.list(
+    "code_macros",
+    desc="DEPRECATED as of 2026-10-19, use the `macro_like.py` list with the new format instead! Original description: List of macros for active language",
+)
+
+
+# Deprecated: use do_macro_like_insert in macro_like.py or implement in your own code
 def code_insert_function_or_macro(
     text: str,
     selection: str,
@@ -387,11 +370,3 @@ def code_insert_function_or_macro(
         out_text = text + f"{left_delim}{right_delim}"
     actions.user.paste(out_text)
     actions.edit.left()
-
-
-RT = TypeVar("RT")  # return type
-
-
-def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
-    for _ in range(n):
-        f(*args, **kwargs)
