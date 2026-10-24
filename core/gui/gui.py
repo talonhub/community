@@ -54,6 +54,24 @@ def compute_table_height(row_size, item_spacing, rows_per_page):
     return (row_size + item_spacing) * rows_per_page + item_spacing
 
 
+async def let_user_use_page_keys_to_scroll_scroll_area(scroll_ui):
+    async with scroll_ui.input() as input_state:
+        events = input_state.events()
+        scrolling_delta = 0
+        for event in events:
+            if (key := event.key()) and not event.pressed():
+                key_name = key.name().lower()
+                if key_name == "pagedown":
+                    scrolling_delta -= 1
+                elif key_name == "pageup":
+                    scrolling_delta += 1
+        if scrolling_delta != 0:
+            clip_rect = scroll_ui.clip_rect()
+            scroll_ui.scroll_with_delta(
+                egui.Vec2(0, scrolling_delta * abs(clip_rect.height()))
+            )
+
+
 class PageScroller:
     """Helps with programmatic scrolling by tracking pagination, determining how far to scroll to reach a target page, and determining when the target page has been reached.
     There should be 2 clients for this class: (1) the part of the code responsible for initiating programmatic scrolling and (2) the part of the code providing the target scroll area.
