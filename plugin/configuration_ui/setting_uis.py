@@ -82,7 +82,9 @@ def _focus_widget(response):
     response.scroll_to_me(None)
 
 
-async def _draw_numeric_input(setting: Setting, ui, minimum, maximum, is_setting_chosen):
+async def _draw_numeric_input(
+    setting: Setting, ui, minimum, maximum, is_setting_chosen
+):
     _make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
     response = ui.add(egui.DragValue(setting.value))
     value = setting.value.get()
