@@ -103,6 +103,8 @@ async def _draw_slider_input(setting: Setting, ui, minimum, maximum, is_setting_
     response = ui.add(slider)
     if is_setting_chosen:
         _focus_widget(response)
+        # focus the numeric input instead of the slider part 
+        actions.key("tab")
 
 
 async def _draw_multiline_text_input(setting: Setting, ui, is_setting_chosen):
