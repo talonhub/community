@@ -162,17 +162,25 @@ async def _draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
             parsed_rgb = None
         if parsed_rgb is not None:
             red, green, blue = parsed_rgb
+            # I could not figure out what magic constant to multiply the numbers by for the color picker to show the values correctly, so I am using this function call to do that
+            # it needs an alpha value, so I chose the maximum to keep it fully opaque
             rgba = egui.Rgba.from_srgba_unmultiplied(red, green, blue, 255)
+            # put the rgb values in the format that the color picker widget is expecting
             rgb = egui.Mutable([rgba.r, rgba.g, rgba.b])
             egui.color_edit_button_rgb(ui, rgb)
+            # create an Rgba so I can unmultiply the values by whatever the magic constant is
             out_rgba = egui.Rgba.from_rgb(*rgb.get())
+            # leave out the alpha value and convert back to a string
             new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
         else:
             ui.label("Not valid color.")
 
+        # allow picking color by name
         color_name = egui.Mutable("")
+        # render the name of the current color if it is named
         if value in COLOR_TO_NAME:
             color_name.set(COLOR_TO_NAME[value])
+        # show dropdown for picking a color name
         async with (
             egui.ComboBox(setting.name, "pick by name")
             .selected_text(color_name.get())
@@ -182,13 +190,19 @@ async def _draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
                 combo_ui = combo_box.ui
                 for name in COLOR_TO_NAME.values():
                     combo_ui.selectable_value(color_name, name, name)
+        # if a color name is chosen, update the actual color
         name = color_name.get()
         if name != "":
             new_value = _compute_hexadecimal_from_color_name(name)
 
-        if new_value != setting.value.get().lower():
+        # only bother updating the setting value in response to color picker and name picker inputs if the colors are actually different
+        if new_value.lower() != setting.value.get().lower():
             setting.value.set(new_value)
+
+        # allow using a text field to set the value directly
         text_response = ui.add(egui.TextEdit.singleline(setting.value))
+
+        # allow focusing, but focus the name picker with shift tab as a temporary workaround for not being able to focus the combo box directly
         if is_setting_chosen:
             _focus_widget(text_response)
             actions.key("shift-tab")
