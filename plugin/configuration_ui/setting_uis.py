@@ -73,9 +73,7 @@ def create_boolean_setting(name):
 
 
 def make_value_float_if_there_is_a_float_bound(value, minimum, maximum):
-    if (isinstance(minimum, float) or isinstance(maximum, float)) and isinstance(
-        value.get(), int
-    ):
+    if (isinstance(minimum, float) or isinstance(maximum, float)):
         value.set(float(value.get()))
 
 
