@@ -145,26 +145,6 @@ ctx.lists["user.code_common_function"] = {
     "from iterator": "from_iter",
 }
 
-# tag: code_macro_like
-ctx.lists["user.code_macro_like"] = {
-    "panic": "panic!,(,)",
-    "format": "format!,(,)",
-    "concatenate": "concat!,(,)",
-    "print": "print!,(,)",
-    "print line": "println!,(,)",
-    "error print line": "eprintln!,(,)",
-    "to do": "todo!,(,)",
-    "vector": "vec!,[,]",
-    "macro rules": "macro_rules!,{,}",
-    "debug": "debug!,(,)",
-    "info": "info!,(,)",
-    "warning": "warn!,(,)",
-    "error": "error!,(,)",
-    "assert": "assert!,(,)",
-    "assert equal": "assert_eq!,(,)",
-    "assert not equal": "assert_ne!,(,)",
-}
-
 # tag: functions
 ctx.lists["user.code_type"] = all_types
 

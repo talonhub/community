@@ -1,0 +1,20 @@
+list: user.code_macro_like
+code.language: rust
+-
+
+panic: panic!,(,)
+format: format!,(,)
+concatenate: concat!,(,)
+print: print!,(,)
+print line: println!,(,)
+error print line: eprintln!,(,)
+to do: todo!,(,)
+vector: vec!,[,]
+macro rules: "macro_rules!,{,}"
+debug: debug!,(,)
+info: info!,(,)
+warning: warn!,(,)
+error: error!,(,)
+assert: assert!,(,)
+assert equal: assert_eq!,(,)
+assert not equal: assert_ne!,(,)
