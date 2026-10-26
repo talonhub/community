@@ -55,6 +55,7 @@ def _update_setting_information(
     setting.value = egui.Mutable(file_setting_information.value)
     setting.is_activated = file_setting_information.is_activated
 
+
 def _update_setting_information_based_on_file_update(setting: Setting, tags, settings):
     """Update the setting information in response to its containing file updating. tags and settings are from the parsed file"""
     name = setting.name
@@ -310,8 +311,12 @@ class Manager:
         }
 
     def _get_settings_at_path(self, path):
-        return (setting for page in self.pages.values()
-            for setting in page.settings if setting.path == path)
+        return (
+            setting
+            for page in self.pages.values()
+            for setting in page.settings
+            if setting.path == path
+        )
 
     def on_file_change(self, path):
         tags, settings = parse_settings(path)
