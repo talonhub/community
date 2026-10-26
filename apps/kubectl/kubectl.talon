@@ -5,6 +5,7 @@ and tag: user.kubectl
 cube [control]: "kubectl "
 
 cube create: "kubectl create "
+cube create [from] file: "kubectl create -f "
 cube expose: "kubectl expose "
 cube run: "kubectl run "
 cube set: "kubectl set "
@@ -22,6 +23,8 @@ cube auto scale: "kubectl autoscale "
 
 cube certificate: "kubectl certificate "
 cube top: "kubectl top "
+cube top node: "kubectl top node "
+cube top pod: "kubectl top pod "
 cube drain: "kubectl drain "
 cube taint: "kubectl taint "
 cube (cord | cordon): "kubectl cordon "
@@ -31,7 +34,8 @@ cube cluster (info | information): "kubectl cluster-info "
 cube describe: "kubectl describe "
 cube logs: "kubectl logs "
 cube attach: "kubectl attach "
-cube exec: "kubectl exec "
+cube exec: user.insert_between("kubectl exec ", " -- ")
+
 cube port forward: "kubectl port-forward "
 cube proxy: "kubectl proxy "
 cube copy: "kubectl cp "
@@ -60,8 +64,17 @@ cube version: "kubectl version "
 cube {user.kubectl_action} [{user.kubectl_object}]:
     insert("kubectl {kubectl_action} ")
     insert(kubectl_object or "")
+    insert(" ")
+
+# for get commands
+output [{user.kubectl_output_format_object}]:
+    insert("-o ")
+    insert(kubectl_output_format_object or "")
 
 cube detach:
     key("ctrl-p")
     key("ctrl-q")
-cube shell: user.insert_between("kubectl exec -it ", " -- /bin/bash")
+
+cube shell: user.insert_between("kubectl exec -it ", " -- /bin/sh")
+
+cube bash: user.insert_between("kubectl exec -it ", " -- /bin/bash")
