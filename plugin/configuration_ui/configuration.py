@@ -320,7 +320,7 @@ class Manager:
         for setting in self._get_settings_at_path(path):
             _update_setting_information_based_on_file_update(setting, tags, settings)
 
-    async def render(self, ui, ui_wrapper):
+    async def render_settings_configuration_gui(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
         post_action = self.post_action
         chosen_setting = self.chosen_setting
@@ -562,7 +562,7 @@ manager = None
     tag="user.community_settings_window",
 )
 async def settings_gui(ui, ui_wrapper):
-    await manager.render(ui, ui_wrapper)
+    await manager.render_settings_configuration_gui(ui, ui_wrapper)
 
 
 def handle_file_update(path, flags):
