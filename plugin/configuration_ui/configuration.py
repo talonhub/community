@@ -256,7 +256,7 @@ class Manager:
                 "",
                 [
                     create_numeric_setting("user.snippet_raw_text_spaces_per_tab", -1),
-                    create_text_setting("user.snippets_dir", is_multiline=True),
+                    create_text_setting("user.snippets_dir"),
                 ],
             ),
             Page(

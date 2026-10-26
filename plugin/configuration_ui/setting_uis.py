@@ -103,12 +103,6 @@ async def draw_slider_input(setting: Setting, ui, minimum, maximum, is_setting_c
         focus_widget(response)
 
 
-async def draw_single_line_text_input(setting: Setting, ui, is_setting_chosen):
-    response = ui.add(egui.TextEdit.singleline(setting.value))
-    if is_setting_chosen:
-        focus_widget(response)
-
-
 async def draw_multiline_text_input(setting: Setting, ui, is_setting_chosen):
     response = ui.add(egui.TextEdit.multiline(setting.value))
     if is_setting_chosen:
@@ -125,13 +119,10 @@ def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
     )
 
 
-def create_text_setting(name, is_multiline=False):
-    ui_function = (
-        draw_multiline_text_input if is_multiline else draw_single_line_text_input
-    )
+def create_text_setting(name):
     return Setting(
         name,
-        ui_function,
+        draw_multiline_text_input,
     )
 
 
