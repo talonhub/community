@@ -59,18 +59,12 @@ def _update_setting_information(
 def _update_setting_information_based_on_file_update(setting: Setting, tags, settings):
     """Update the setting information in response to its containing file updating. tags and settings are from the parsed file"""
     name = setting.name
-    if setting.is_tag:
-        if name in tags:
-            tag = tags[name]
-            _update_setting_information(setting, tag)
-        else:
-            setting.value.set(VALUE_UNAVAILABLE)
+    source = tags if setting.is_tag else settings
+    if name in source:
+        updated_information = source[name]
+        _update_setting_information(setting, updated_information)
     else:
-        if name in settings:
-            setting_information = settings[name]
-            _update_setting_information(setting, setting_information)
-        else:
-            setting.value.set(VALUE_UNAVAILABLE)
+        setting.value.set(VALUE_UNAVAILABLE)
 
 
 def compute_readable_name(setting_name, page_prefix: str):
