@@ -20,7 +20,7 @@ from talon.screen import Screen
 mod = Module()
 
 mod.setting(
-    "community_ui_render_table_lines",
+    "community_ui_table_borders",
     type=bool,
     default=True,
     desc="Community UI tables have lines in between the entries",
@@ -388,7 +388,7 @@ class UIWrapper:
                     # render lines above each row with a value for the first column
                     row.set_overline(
                         rows[row.index()].should_render_overline()
-                        and settings.get("user.community_ui_render_table_lines")
+                        and settings.get("user.community_ui_table_borders")
                     )
                     # let the call back decide how to render the row
                     await render_row(row, rows, len(headers))
