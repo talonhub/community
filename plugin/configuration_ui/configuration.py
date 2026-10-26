@@ -26,7 +26,7 @@ ctx = Context()
 
 mod.tag(
     "community_settings_window",
-    desc="Community settings configuration window is showing",
+    desc="Community settings configuration window is open. (When possible, this tag will be limited to when the window is focused)",
 )
 mod.list(
     "community_settings_window_page",
