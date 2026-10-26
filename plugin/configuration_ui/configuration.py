@@ -49,11 +49,25 @@ class Page:
                 setting.path = path
 
 
-def update_setting_information(
+def _update_setting_information(
     setting: Setting, file_setting_information: SettingFileSettingInformation
 ):
     setting.value = egui.Mutable(file_setting_information.value)
     setting.is_activated = file_setting_information.is_activated
+
+def _update_setting_information_based_on_file_update(setting: Setting, tags, settings):
+    """Update the setting information in response to its containing file updating. tags and settings are from the parsed file"""
+    name = setting.name
+    if setting.is_tag:
+        if name in tags:
+            tag = tags[name]
+            _update_setting_information(setting, tag)
+    else:
+        if name in settings:
+            setting_information = settings[name]
+            _update_setting_information(setting, setting_information)
+        else:
+            setting.value.set(VALUE_UNAVAILABLE)
 
 
 def compute_readable_name(setting_name, page_prefix: str):
@@ -295,23 +309,14 @@ class Manager:
             for setting in page.settings
         }
 
+    def _get_settings_at_path(self, path):
+        return (setting for page in self.pages.values()
+            for setting in page.settings if setting.path == path)
+
     def on_file_change(self, path):
         tags, settings = parse_settings(path)
-        for page in self.pages.values():
-            for setting in page.settings:
-                if setting.path != path:
-                    continue
-                name = setting.name
-                if setting.is_tag:
-                    if name in tags:
-                        tag = tags[name]
-                        update_setting_information(setting, tag)
-                else:
-                    if name in settings:
-                        setting_information = settings[name]
-                        update_setting_information(setting, setting_information)
-                    else:
-                        setting.value.set(VALUE_UNAVAILABLE)
+        for setting in self._get_settings_at_path(path):
+            _update_setting_information_based_on_file_update(setting, tags, settings)
 
     async def draw(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
