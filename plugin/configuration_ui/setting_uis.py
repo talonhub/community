@@ -161,17 +161,10 @@ async def _draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
         except ValueError:
             parsed_rgb = None
         if parsed_rgb is not None:
-            red, green, blue = parsed_rgb
-            # I could not figure out what magic constant to multiply the numbers by for the color picker to show the values correctly, so I am using this function call to do that
-            # it needs an alpha value, so I chose the maximum to keep it fully opaque
-            rgba = egui.Rgba.from_srgba_unmultiplied(red, green, blue, 255)
-            # put the rgb values in the format that the color picker widget is expecting
-            rgb = egui.Mutable([rgba.r, rgba.g, rgba.b])
-            egui.color_edit_button_rgb(ui, rgb)
-            # create an Rgba so I can unmultiply the values by whatever the magic constant is
-            out_rgba = egui.Rgba.from_rgb(*rgb.get())
-            # leave out the alpha value and convert back to a string
-            new_value = convert_rgb_to_hex_string(out_rgba.to_srgba_unmultiplied()[:3])
+            # provide color picker input option
+            rgb = egui.Mutable(parsed_rgb)
+            egui.color_edit_button_srgb(ui, rgb)
+            new_value = convert_rgb_to_hex_string(rgb.get())
         else:
             ui.label("Not valid color.")
 
