@@ -1,6 +1,7 @@
 from ast import literal_eval
 from dataclasses import dataclass
 from typing import Any
+import re
 
 SPACES_PER_INDENT = 4
 STANDARD_COMMENT_SIZE = SPACES_PER_INDENT + 2
@@ -13,17 +14,14 @@ class SettingFileSettingInformation:
     line_index: int
     is_activated: bool = True
 
-
-COMMENTED_TAG_PREFIX = "# tag(): "
-TAG_PREFIX = "tag(): "
-
+TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
 
 def _compute_tag(line):
     """Returns the name of the tag and if it is active"""
-    if line.startswith(COMMENTED_TAG_PREFIX):
-        return line.removeprefix(COMMENTED_TAG_PREFIX).strip(), False
-    if line.startswith(TAG_PREFIX):
-        return line.removeprefix(TAG_PREFIX).strip(), True
+    if match := TAG_PREFIX_PATTERN.search(line):
+        name = match.group("name").strip()
+        is_active = not line.startswith("#")
+        return name, is_active
     return None
 
 
@@ -251,7 +249,7 @@ def toggle_setting_activation(setting):
             make_comment=setting.is_activated,
         )
     except Exception as ex:
-        return f"Something went wrong trying to toggle a setting activation: {ex}"
+        return f"Something went lwrong trying to toggle a setting activation: {ex}"
 
 
 def update_tag(path, name, should_be_active):
