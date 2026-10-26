@@ -274,7 +274,7 @@ class Manager:
         self.pages = {page.title: page for page in pages}
         self.page = MAIN_PAGE_NAME
         for path in RELEVANT_PATHS:
-            self.on_change(path)
+            self.on_file_change(path)
         self.error_message = ""
         self.error_setting = None
         ctx.lists["user.community_settings_window_page"] = {
@@ -295,7 +295,7 @@ class Manager:
             for setting in page.settings
         }
 
-    def on_change(self, path):
+    def on_file_change(self, path):
         tags, settings = parse_settings(path)
         for page in self.pages.values():
             for setting in page.settings:
@@ -557,7 +557,7 @@ async def settings_gui(ui, ui_wrapper):
 
 def handle_file_update(path, flags):
     if manager:
-        manager.on_change(Path(path))
+        manager.on_file_change(Path(path))
         settings_gui.refresh()
 
 
