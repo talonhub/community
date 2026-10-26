@@ -8,8 +8,8 @@ import egui
 from talon import actions, registry
 
 from .rgb_conversions import (
-    convert_rgb_to_string,
-    parse_rgb_from_string,
+    convert_rgb_to_hex_string,
+    parse_rgb_from_hex_string,
 )
 from .setting_file_paths import SETTINGS_PATH
 from .talon_file_handling import (
@@ -157,7 +157,7 @@ async def _draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
     new_value = value
     async with ui.horizontal_wrapped():
         try:
-            parsed_rgb = parse_rgb_from_string(value)
+            parsed_rgb = parse_rgb_from_hex_string(value)
         except ValueError:
             parsed_rgb = None
         if parsed_rgb is not None:
@@ -171,7 +171,7 @@ async def _draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
             # create an Rgba so I can unmultiply the values by whatever the magic constant is
             out_rgba = egui.Rgba.from_rgb(*rgb.get())
             # leave out the alpha value and convert back to a string
-            new_value = convert_rgb_to_string(out_rgba.to_srgba_unmultiplied()[:3])
+            new_value = convert_rgb_to_hex_string(out_rgba.to_srgba_unmultiplied()[:3])
         else:
             ui.label("Not valid color.")
 
