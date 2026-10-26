@@ -18,7 +18,7 @@ COMMENTED_TAG_PREFIX = "# tag(): "
 TAG_PREFIX = "tag(): "
 
 
-def compute_tag(line):
+def _compute_tag(line):
     if line.startswith(COMMENTED_TAG_PREFIX):
         return line[len(COMMENTED_TAG_PREFIX) :].strip(), False
     if line.startswith(TAG_PREFIX):
@@ -30,11 +30,11 @@ INDENTED_COMMENT_PREFIX = "    # "
 INDENTED_COMMENT_PREFIX_WITHOUT_SPACE = "    #"
 
 
-def is_start_of_multiline_string(line):
+def _is_start_of_multiline_string(line):
     return line.endswith('"""') or line.endswith("'''")
 
 
-def compute_setting(line: str, prefix: str):
+def _compute_setting(line: str, prefix: str):
     # we are checking for the pattern:
     # prefix at least one letter = something
     if not line.startswith(prefix):
@@ -45,18 +45,18 @@ def compute_setting(line: str, prefix: str):
     # give up if the separator is not found, there is no righthand side, or there is no valid name
     if not righthand_side or not name or not name[0].isalpha():
         return None
-    is_multiline_string = is_start_of_multiline_string(righthand_side.lstrip())
+    is_multiline_string = _is_start_of_multiline_string(righthand_side.lstrip())
     if is_multiline_string:
         value = righthand_side.lstrip()
     else:
-        value = parse_value(righthand_side.strip())
+        value = _parse_value(righthand_side.strip())
     return name, value, is_multiline_string
 
 
 VALUE_UNAVAILABLE = ...
 
 
-def parse_value(value):
+def _parse_value(value):
     if value == "true":
         return True
     if value == "false":
@@ -67,7 +67,7 @@ def parse_value(value):
         return VALUE_UNAVAILABLE
 
 
-def remove_starting_single_indent(line: str, is_commented: bool):
+def _remove_starting_single_indent(line: str, is_commented: bool):
     if is_commented and line.startswith(INDENTED_COMMENT_PREFIX):
         return line[STANDARD_COMMENT_SIZE:]
     if is_commented and line.startswith(INDENTED_COMMENT_PREFIX_WITHOUT_SPACE):
@@ -75,16 +75,16 @@ def remove_starting_single_indent(line: str, is_commented: bool):
     return line[SPACES_PER_INDENT:]
 
 
-def parse_multiline_string(lines, is_commented):
+def _parse_multiline_string(lines, is_commented):
     return "\n".join(
-        [remove_starting_single_indent(l, is_commented) for l in lines[1:]]
+        [_remove_starting_single_indent(l, is_commented) for l in lines[1:]]
     )[:-3]
 
 
-def compute_commented_or_not_commented_setting(line):
-    if setting := compute_setting(line, INDENTED_COMMENT_PREFIX):
+def _compute_commented_or_not_commented_setting(line):
+    if setting := _compute_setting(line, INDENTED_COMMENT_PREFIX):
         return *setting, False
-    if setting := compute_setting(line, INDENTATION):
+    if setting := _compute_setting(line, INDENTATION):
         return *setting, True
     return None
 
@@ -144,7 +144,7 @@ class SettingsParser:
                 self._finalize_multiline(line_index)
 
     def _finalize_multiline(self, line_index) -> None:
-        value = parse_multiline_string(
+        value = _parse_multiline_string(
             self._multiline_string_lines, not self._is_activated
         )
         self._add_setting(
@@ -162,10 +162,10 @@ class SettingsParser:
         ) = None
 
     def _process_simple_line(self, line, line_index) -> None:
-        if tag := compute_tag(line):
+        if tag := _compute_tag(line):
             name, is_active = tag
             self._add_tag(name, is_active, line_index)
-        elif setting := compute_commented_or_not_commented_setting(line):
+        elif setting := _compute_commented_or_not_commented_setting(line):
             name, value, is_multiline_start, activated = setting
             if is_multiline_start:
                 self._current_name = name
@@ -195,7 +195,7 @@ def parse_settings(path):
     return parser.tags, parser.settings
 
 
-def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
+def _convert_value_to_talon_script_literal(value, is_comment=False) -> str:
     if isinstance(value, bool):
         return str(value).lower()
     if isinstance(value, (int, float)):
@@ -211,7 +211,7 @@ def convert_value_to_talon_script_literal(value, is_comment=False) -> str:
     raise ValueError(f"Could not convert value {value} to Talonscript")
 
 
-def replace_setting_assignment(path, setting_name, new_text):
+def _replace_setting_assignment(path, setting_name, new_text):
     parser = SettingsParser(path)
     if setting_name in parser.duplicate_settings:
         raise OSError(
@@ -233,12 +233,12 @@ def replace_setting_assignment(path, setting_name, new_text):
 
 
 def update_setting(path, setting_name, new_value, make_comment=False):
-    converted_value = convert_value_to_talon_script_literal(
+    converted_value = _convert_value_to_talon_script_literal(
         new_value, is_comment=make_comment
     )
     prefix = INDENTED_COMMENT_PREFIX if make_comment else INDENTATION
     new_setting_text = f"{prefix}{setting_name} = {converted_value}"
-    replace_setting_assignment(path, setting_name, new_setting_text)
+    _replace_setting_assignment(path, setting_name, new_setting_text)
 
 
 def toggle_setting_activation(setting):
