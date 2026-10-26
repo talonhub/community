@@ -20,7 +20,7 @@ TAG_PREFIX = "tag(): "
 
 def _compute_tag(line):
     if line.startswith(COMMENTED_TAG_PREFIX):
-        return line[len(COMMENTED_TAG_PREFIX) :].strip(), False
+        return line.removeprefix(COMMENTED_TAG_PREFIX).strip(), False
     if line.startswith(TAG_PREFIX):
         return line[len(TAG_PREFIX) :].strip(), True
     return None
