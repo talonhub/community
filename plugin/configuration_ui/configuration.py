@@ -511,7 +511,9 @@ class Manager:
     async def _render_error_message(self, ui, ui_wrapper, error_message, error_setting):
         async with ui.horizontal_wrapped():
             ui.strong(error_message)
-            await self._render_error_copy_buttons(ui_wrapper, error_message, error_setting)
+            await self._render_error_copy_buttons(
+                ui_wrapper, error_message, error_setting
+            )
 
     async def _render_main_page(self, ui, total_available_height):
         """Render introductory page"""

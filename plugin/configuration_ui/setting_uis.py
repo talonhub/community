@@ -97,7 +97,9 @@ async def _render_numeric_input(
         _focus_widget(response)
 
 
-async def _render_slider_input(setting: Setting, ui, minimum, maximum, is_setting_chosen):
+async def _render_slider_input(
+    setting: Setting, ui, minimum, maximum, is_setting_chosen
+):
     _make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
     slider = egui.Slider(setting.value, minimum, maximum)
     response = ui.add(slider)
@@ -205,7 +207,9 @@ async def _render_color_picker_input(setting: Setting, ui, is_setting_chosen):
 
 def create_color_picker_setting(name):
     return Setting(
-        name, _render_color_picker_input, post_chosen_action=lambda: actions.key("enter")
+        name,
+        _render_color_picker_input,
+        post_chosen_action=lambda: actions.key("enter"),
     )
 
 
