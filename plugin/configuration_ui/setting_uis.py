@@ -24,13 +24,13 @@ DEFAULT_DESCRIPTION = "Something went wrong. Could not find the setting descript
 @dataclass
 class Setting:
     name: str
-    draw: Callable
+    render: Callable
     update_function: Callable = update_setting
     path: Path = SETTINGS_PATH
     is_tag: bool = False
     is_activated: bool = True
     value: egui.Mutable = egui.Mutable(VALUE_UNAVAILABLE)
-    draws_description: bool = False
+    renders_description: bool = False
     post_chosen_action: Callable | None = None
 
     def get_description(self):
@@ -46,7 +46,7 @@ class Setting:
             return DEFAULT_DESCRIPTION
 
 
-async def _draw_toggle(setting: Setting, ui, is_setting_chosen):
+async def _render_toggle(setting: Setting, ui, is_setting_chosen):
     response = ui.checkbox(setting.value, setting.get_description())
     if is_setting_chosen:
         setting.value.set(not setting.value.get())
@@ -56,19 +56,19 @@ async def _draw_toggle(setting: Setting, ui, is_setting_chosen):
 def create_tag_setting(name):
     return Setting(
         name,
-        _draw_toggle,
+        _render_toggle,
         update_tag,
         is_tag=True,
-        draws_description=True,
+        renders_description=True,
     )
 
 
 def create_boolean_setting(name):
     return Setting(
         name,
-        _draw_toggle,
+        _render_toggle,
         update_setting,
-        draws_description=True,
+        renders_description=True,
     )
 
 
@@ -82,7 +82,7 @@ def _focus_widget(response):
     response.scroll_to_me(None)
 
 
-async def _draw_numeric_input(
+async def _render_numeric_input(
     setting: Setting, ui, minimum, maximum, is_setting_chosen
 ):
     _make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
@@ -97,7 +97,7 @@ async def _draw_numeric_input(
         _focus_widget(response)
 
 
-async def _draw_slider_input(setting: Setting, ui, minimum, maximum, is_setting_chosen):
+async def _render_slider_input(setting: Setting, ui, minimum, maximum, is_setting_chosen):
     _make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
     slider = egui.Slider(setting.value, minimum, maximum)
     response = ui.add(slider)
@@ -107,14 +107,14 @@ async def _draw_slider_input(setting: Setting, ui, minimum, maximum, is_setting_
         actions.key("tab")
 
 
-async def _draw_multiline_text_input(setting: Setting, ui, is_setting_chosen):
+async def _render_multiline_text_input(setting: Setting, ui, is_setting_chosen):
     response = ui.add(egui.TextEdit.multiline(setting.value))
     if is_setting_chosen:
         _focus_widget(response)
 
 
 def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
-    ui_function = _draw_slider_input if use_slider else _draw_numeric_input
+    ui_function = _render_slider_input if use_slider else _render_numeric_input
     return Setting(
         name,
         lambda setting, ui, is_setting_chosen: ui_function(
@@ -126,7 +126,7 @@ def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
 def create_text_setting(name):
     return Setting(
         name,
-        _draw_multiline_text_input,
+        _render_multiline_text_input,
     )
 
 
@@ -154,7 +154,7 @@ COLOR_TO_NAME = {
 }
 
 
-async def _draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
+async def _render_color_picker_input(setting: Setting, ui, is_setting_chosen):
     value = setting.value.get()
     new_value = value
     async with ui.horizontal_wrapped():
@@ -205,11 +205,11 @@ async def _draw_color_picker_input(setting: Setting, ui, is_setting_chosen):
 
 def create_color_picker_setting(name):
     return Setting(
-        name, _draw_color_picker_input, post_chosen_action=lambda: actions.key("enter")
+        name, _render_color_picker_input, post_chosen_action=lambda: actions.key("enter")
     )
 
 
-async def _draw_discrete_choices_input(
+async def _render_discrete_choices_input(
     setting: Setting, ui, choices, is_chosen, is_numeric
 ):
     async with ui.horizontal():
@@ -235,7 +235,7 @@ def create_discrete_choices_setting(name, choices, is_numeric=False):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
     return Setting(
         name,
-        lambda setting, ui, is_chosen: _draw_discrete_choices_input(
+        lambda setting, ui, is_chosen: _render_discrete_choices_input(
             setting, ui, choices, is_chosen, is_numeric
         ),
         post_chosen_action=lambda: actions.key("enter"),

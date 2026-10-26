@@ -323,7 +323,7 @@ class Manager:
         for setting in self._get_settings_at_path(path):
             _update_setting_information_based_on_file_update(setting, tags, settings)
 
-    async def draw(self, ui, ui_wrapper):
+    async def render(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
         post_action = self.post_action
         chosen_setting = self.chosen_setting
@@ -332,7 +332,7 @@ class Manager:
 
         total_available_height = ui.available_height()
         async with ui.horizontal():
-            await self.draw_page_navigation(ui, total_available_height)
+            await self._render_page_navigation(ui, total_available_height)
 
             # put the page on the space to the right of the page navigation
             available_width = ui.available_width()
@@ -344,7 +344,7 @@ class Manager:
                 ui.allocate_ui(interaction_region_space) as interaction_ui,
                 ui.vertical(),
             ):
-                await self.draw_current_page(
+                await self._render_current_page(
                     interaction_ui,
                     ui_wrapper,
                     total_available_height,
@@ -366,7 +366,7 @@ class Manager:
         if old_error_message != self.error_message:
             settings_gui.refresh()
 
-    async def draw_page_navigation(self, ui, total_available_height):
+    async def _render_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
             for page in self.pages:
                 if ui.selectable_label(page == self.page, f"Page {page}").clicked():
@@ -374,7 +374,7 @@ class Manager:
             ui.add_space(total_available_height - ui.min_size().y)
         ui.separator()
 
-    async def draw_current_page(
+    async def _render_current_page(
         self,
         ui,
         ui_wrapper,
@@ -383,15 +383,15 @@ class Manager:
         comment_toggle_setting,
     ):
         if self.page == MAIN_PAGE_NAME:
-            await self.draw_main_page(ui, total_available_height)
+            await self._render_main_page(ui, total_available_height)
             return
 
         if self.error_message:
-            await self.draw_error_message(
+            await self._render_error_message(
                 ui, ui_wrapper, self.error_message, self.error_setting
             )
         ui.add_space(10)
-        await self.draw_configuration_page(
+        await self._render_configuration_page(
             ui,
             ui_wrapper,
             total_available_height,
@@ -399,7 +399,7 @@ class Manager:
             comment_toggle_setting,
         )
 
-    async def draw_configuration_page(
+    async def _render_configuration_page(
         self,
         ui,
         ui_wrapper,
@@ -424,7 +424,7 @@ class Manager:
             ui.separator()
             for setting in page.settings:
                 is_setting_chosen = setting.name == chosen_setting
-                await self.draw_setting_row(
+                await self._render_setting_row(
                     ui,
                     ui_wrapper,
                     setting,
@@ -436,14 +436,14 @@ class Manager:
                 if is_setting_chosen:
                     self.post_action = setting.post_chosen_action
 
-    async def draw_setting_row(
+    async def _render_setting_row(
         self, ui, ui_wrapper, setting, page, is_setting_chosen, comment_toggle_setting
     ):
-        """Draw the row for a setting"""
+        """Render the row for a setting"""
         readable_name = compute_readable_name(setting.name, page.prefix)
         error_representation_of_name = f"{readable_name} ({setting.name})"
         async with ui.horizontal():
-            await self.draw_toggle_commenting_setting_column(
+            await self._render_toggle_commenting_setting_column(
                 ui,
                 ui_wrapper,
                 setting,
@@ -455,27 +455,27 @@ class Manager:
                     ui.strong(readable_name)
                     ui.weak(setting.name)
                     ui.add_space(5)
-                    if not setting.draws_description:
+                    if not setting.renders_description:
                         ui.label(setting.get_description())
                     if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
                         error_message = f"Something went wrong. The setting {error_representation_of_name} could not be found or could not be parsed."
-                        await self.draw_error_message(
+                        await self._render_error_message(
                             ui, ui_wrapper, error_message, setting
                         )
                     else:
-                        await self.draw_settings_ui(
+                        await self._render_settings_ui(
                             ui, setting, is_setting_chosen, error_representation_of_name
                         )
                 ui.separator()
 
-    async def draw_settings_ui(
+    async def _render_settings_ui(
         self, ui, setting, is_setting_chosen, error_representation_of_name
     ):
-        """Draw the ui for changing the setting"""
+        """Render the ui for changing the setting"""
         old_value = setting.value.get()
         try:
             async with ui.add_enabled_ui(setting.is_activated or setting.is_tag):
-                await setting.draw(setting, ui, is_setting_chosen)
+                await setting.render(setting, ui, is_setting_chosen)
             value = setting.value.get()
             if old_value != value:
                 setting.update_function(setting.path, setting.name, value)
@@ -483,7 +483,7 @@ class Manager:
             self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
             self.error_setting = setting
 
-    async def draw_toggle_commenting_setting_column(
+    async def _render_toggle_commenting_setting_column(
         self,
         ui,
         ui_wrapper,
@@ -491,7 +491,7 @@ class Manager:
         comment_toggle_setting,
         error_representation_of_name,
     ):
-        """Draw the column for the checkbox for toggling commenting a setting"""
+        """Render the column for the checkbox for toggling commenting a setting"""
         checkbox_size = ui.spacing().icon_width
         if setting.is_tag:
             spacing_size = ui.spacing().icon_spacing + ui.spacing().item_spacing.x
@@ -508,13 +508,13 @@ class Manager:
                     self.error_setting = setting
         ui.add_space(checkbox_size)
 
-    async def draw_error_message(self, ui, ui_wrapper, error_message, error_setting):
+    async def _render_error_message(self, ui, ui_wrapper, error_message, error_setting):
         async with ui.horizontal_wrapped():
             ui.strong(error_message)
-            await self.draw_error_copy_buttons(ui_wrapper, error_message, error_setting)
+            await self._render_error_copy_buttons(ui_wrapper, error_message, error_setting)
 
-    async def draw_main_page(self, ui, total_available_height):
-        """Draw introductory page"""
+    async def _render_main_page(self, ui, total_available_height):
+        """Render introductory page"""
         async with (
             egui.ScrollArea.vertical()
             .max_height(total_available_height)
@@ -534,8 +534,8 @@ class Manager:
                     "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting name. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the name of a setting."
                 )
 
-    async def draw_error_copy_buttons(self, ui_wrapper, error_message, setting):
-        """Draw buttons for copying an error message including one that copies the relevant file for added context"""
+    async def _render_error_copy_buttons(self, ui_wrapper, error_message, setting):
+        """Render buttons for copying an error message including one that copies the relevant file for added context"""
         if ui_wrapper.button("copy"):
             clip.set_text(error_message)
         if ui_wrapper.button("copy with setting file"):
@@ -562,7 +562,7 @@ manager = None
     tag="user.community_settings_window",
 )
 async def settings_gui(ui, ui_wrapper):
-    await manager.draw(ui, ui_wrapper)
+    await manager.render(ui, ui_wrapper)
 
 
 def handle_file_update(path, flags):
