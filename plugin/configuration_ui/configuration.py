@@ -63,6 +63,8 @@ def _update_setting_information_based_on_file_update(setting: Setting, tags, set
         if name in tags:
             tag = tags[name]
             _update_setting_information(setting, tag)
+        else:
+            setting.value.set(VALUE_UNAVAILABLE)
     else:
         if name in settings:
             setting_information = settings[name]
@@ -457,8 +459,9 @@ class Manager:
                     ui.add_space(5)
                     if not setting.renders_description:
                         ui.label(setting.get_description())
-                    if not setting.is_tag and setting.value.get() == VALUE_UNAVAILABLE:
-                        error_message = f"Something went wrong. The setting {error_representation_of_name} could not be found or could not be parsed."
+                    if setting.value.get() == VALUE_UNAVAILABLE:
+                        type_used = "tag" if setting.is_tag else "setting"
+                        error_message = f"Something went wrong. The {type_used} {error_representation_of_name} could not be found or could not be parsed."
                         await self._render_error_message(
                             ui, ui_wrapper, error_message, setting
                         )
