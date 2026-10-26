@@ -1,7 +1,7 @@
+import re
 from ast import literal_eval
 from dataclasses import dataclass
 from typing import Any
-import re
 
 SPACES_PER_INDENT = 4
 STANDARD_COMMENT_SIZE = SPACES_PER_INDENT + 2
@@ -14,7 +14,9 @@ class SettingFileSettingInformation:
     line_index: int
     is_activated: bool = True
 
+
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
+
 
 def _compute_tag(line):
     """Returns the name of the tag and if it is active"""
