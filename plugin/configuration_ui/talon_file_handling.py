@@ -19,10 +19,11 @@ TAG_PREFIX = "tag(): "
 
 
 def _compute_tag(line):
+    """Returns the name of the tag and if it is active"""
     if line.startswith(COMMENTED_TAG_PREFIX):
         return line.removeprefix(COMMENTED_TAG_PREFIX).strip(), False
     if line.startswith(TAG_PREFIX):
-        return line[len(TAG_PREFIX) :].strip(), True
+        return line.removeprefix(TAG_PREFIX).strip(), True
     return None
 
 
