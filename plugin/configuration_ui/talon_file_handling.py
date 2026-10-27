@@ -1,8 +1,8 @@
 import re
 from ast import literal_eval
 from dataclasses import dataclass
-from typing import Any
 from pathlib import Path
+from typing import Any
 
 SPACES_PER_INDENT = 4
 STANDARD_COMMENT_SIZE = SPACES_PER_INDENT + 2
