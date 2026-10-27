@@ -175,7 +175,7 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
     new_setting_text = f"{indentation}{name} = {converted_value}"
 
     lines = parser.lines
-    lines[info.line_after_index] = new_setting_text
+    lines[info.line_start_index] = new_setting_text
     # remove original multiline value after the first line
     if info.line_after_index - info.line_start_index > 1:
         lines = lines[: info.line_start_index + 1] + lines[info.line_after_index :]
