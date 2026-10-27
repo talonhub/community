@@ -12,13 +12,14 @@ class SettingFileSettingInformation:
     start_line_index: int
     line_after_index: int
     is_activated: bool = True
-    indentation: str = ""
+    # indentation before the assignment including the # if it is commented
+    assignment_prefix: str = ""
 
 
 VALUE_UNAVAILABLE = ...
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
 SETTING_ASSIGNMENT_PATTERN = re.compile(
-    r"^(?P<indentation>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)"
+    r"^(?P<assignment_prefix>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)"
 )
 
 
@@ -39,21 +40,21 @@ def _parse_value(value):
         return VALUE_UNAVAILABLE
 
 
-def _remove_starting_single_indent(line: str, indentation):
-    """Remove the indentation at the start of a line"""
-    if not line.startswith(indentation):
+def _remove_prefix(line: str, prefix):
+    """Remove the prefix at the start of a line"""
+    if not line.startswith(prefix):
         raise ValueError(
-            f"line ({line}) did not start with indentation ({indentation})"
+            f"line ({line}) did not start with prefix ({prefix})"
         )
-    if len(line) == indentation:
+    if len(line) == prefix:
         return ""
-    return line.removeprefix(indentation)
+    return line.removeprefix(prefix)
 
 
-def _parse_multiline_string(lines, indentation):
-    """Convert TalonScript multiline string lines to a Python string. Assumes that the indentation is the same for every line, which may not be the case if the string is commented"""
+def _parse_multiline_string(lines, assignment_prefix):
+    """Convert TalonScript multiline string lines to a Python string. Assumes that every line starts with the assignment prefix, which may not be the case if the string is commented"""
     return "\n".join(
-        [_remove_starting_single_indent(l, indentation) for l in lines[1:]]
+        [_remove_prefix(l, assignment_prefix) for l in lines[1:]]
     )[:-3]
 
 
@@ -84,8 +85,8 @@ class SettingsParser:
             duplicates.add(name)
             dictionary.pop(name)
 
-    def _parse_multiline_string(self, value_text, indentation, i):
-        """Parses the multiline string starting at line with index i with value_text containing the starting characters. Assume that each line of the string starts with indentation and give up otherwise. Return the multiline string and its last line index"""
+    def _parse_multiline_string(self, value_text, assignment_prefix, i):
+        """Parses the multiline string starting at line with index i with value_text containing the starting characters. Assume that each line of the string starts with assignment prefix and give up otherwise. Return the multiline string and its last line index"""
         multiline_string_lines = [value_text]
         multiline_string_starting_characters = value_text[:3]
         value = VALUE_UNAVAILABLE
@@ -97,7 +98,7 @@ class SettingsParser:
                 with suppress(ValueError):
                     value = _parse_multiline_string(
                         multiline_string_lines,
-                        indentation,
+                        assignment_prefix,
                     )
                 break
             i += 1
@@ -115,15 +116,15 @@ class SettingsParser:
                 information = SettingFileSettingInformation(is_active, i, i + 1)
                 self._add_information(name, information, self.tags, self.duplicate_tags)
             elif match := SETTING_ASSIGNMENT_PATTERN.search(line):
-                indentation, name, value_text = match.groups()
-                is_active = "#" not in indentation
+                assignment_prefix, name, value_text = match.groups()
+                is_active = "#" not in assignment_prefix
                 starting_index = i
                 if _is_start_of_multiline_string(value_text):
-                    value, i = self._parse_multiline_string(value_text, indentation, i)
+                    value, i = self._parse_multiline_string(value_text, assignment_prefix, i)
                 else:
                     value = _parse_value(value_text.strip())
                 information = SettingFileSettingInformation(
-                    value, starting_index, i + 1, is_active, indentation
+                    value, starting_index, i + 1, is_active, assignment_prefix
                 )
                 self._add_information(
                     name, information, self.settings, self.duplicate_settings

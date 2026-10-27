@@ -32,14 +32,14 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
         raise OSError(f"Could not find {name} inside file {path}")
 
     info = parser.settings[name]
-    indentation = info.indentation
-    if not indentation.isspace():
-        num_leading_spaces = len(indentation) - len(indentation.lstrip())
-        indentation = indentation[:num_leading_spaces]
+    assignment_prefix = info.assignment_prefix
+    if not assignment_prefix.isspace():
+        num_leading_spaces = len(assignment_prefix) - len(assignment_prefix.lstrip())
+        assignment_prefix = assignment_prefix[:num_leading_spaces]
     if make_comment:
-        indentation += "# "
-    converted_value = _convert_value_to_talon_script_literal(value, indentation)
-    new_setting_text = f"{indentation}{name} = {converted_value}"
+        assignment_prefix += "# "
+    converted_value = _convert_value_to_talon_script_literal(value, assignment_prefix)
+    new_setting_text = f"{assignment_prefix}{name} = {converted_value}"
 
     lines = parser.lines
     lines[info.start_line_index] = new_setting_text
