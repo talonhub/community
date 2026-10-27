@@ -59,6 +59,7 @@ def _parse_multiline_string(lines, indentation):
 
 class SettingsParser:
     """Identifies the settings and tags in .talon file"""
+
     __slots__ = (
         "settings",
         "duplicate_tags",
