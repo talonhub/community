@@ -77,12 +77,13 @@ class SettingsParser:
             duplicates.add(name)
             dictionary.pop(name)
 
-    def _parse_multiline_string(self, line, value_text, indentation, i):
+    def _parse_multiline_string(self, value_text, indentation, i):
         multiline_string_lines = [value_text]
         multiline_string_starting_characters = value_text[:3]
         value = VALUE_UNAVAILABLE
         i += 1
         while i < len(self.lines):
+            line = self.lines[i]
             multiline_string_lines.append(line)
             if line.strip().endswith(multiline_string_starting_characters):
                 with suppress(ValueError):
@@ -110,7 +111,7 @@ class SettingsParser:
                 starting_index = i
                 if _is_start_of_multiline_string(value_text):
                     value, i = self._parse_multiline_string(
-                        self, line, value_text, indentation, i
+                        value_text, indentation, i
                     )
                 else:
                     value = _parse_value(value_text.strip())
