@@ -18,27 +18,10 @@ class SettingFileSettingInformation:
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
 INDENTED_COMMENT_PREFIX = "    # "
 INDENTED_COMMENT_PREFIX_WITHOUT_SPACE = "    #"
-SETTING_PATTERN = re.compile(
-    r"^(?P<indentation>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)"
-)
-
+SETTING_PATTERN = re.compile(r"^(?P<indentation>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)")
 
 def _is_start_of_multiline_string(line):
     return line.endswith('"""') or line.endswith("'''")
-
-
-def _compute_setting(line: str):
-    if match := SETTING_PATTERN.search(line):
-        indentation = match.group("indentation")
-        name = match.group("name")
-        value_text = match.group("value")
-        is_multiline_string = _is_start_of_multiline_string(value_text)
-        if is_multiline_string:
-            value = value_text
-        else:
-            value = _parse_value(value_text.strip())
-        is_active = "#" not in indentation
-        return name, value, is_multiline_string, is_active
 
 
 VALUE_UNAVAILABLE = ...
@@ -76,6 +59,7 @@ class SettingsParser:
     __slots__ = (
         "_is_activated",
         "_multiline_string_lines",
+        "_current_indentation",
         "settings",
         "duplicate_tags",
         "duplicate_settings",
@@ -95,6 +79,7 @@ class SettingsParser:
         self._current_name = None
         self._multiline_string_lines = []
         self._is_activated = None
+        self._current_indentation = None
         self._multiline_string_starting_characters = None
         self._parse_file(path)
 
@@ -137,7 +122,7 @@ class SettingsParser:
 
     def _reset_multiline_state(self) -> None:
         self._multiline_string_lines = []
-        self._current_name = self._is_activated = (
+        self._current_indentation = self._current_name = self._is_activated = (
             self._multiline_string_starting_characters
         ) = None
 
@@ -146,18 +131,22 @@ class SettingsParser:
             name = match.group("name").strip()
             is_active = not line.startswith("#")
             self._add_tag(name, is_active, line_index)
-        elif setting := _compute_setting(line):
-            name, value, is_multiline_start, activated = setting
+        elif match := SETTING_PATTERN.search(line):
+            indentation, name, value_text = match.groups()
+            is_multiline_start = _is_start_of_multiline_string(value_text)
+            is_active = "#" not in indentation
             if is_multiline_start:
                 self._current_name = name
-                self._multiline_string_lines = [value]
-                self._multiline_string_starting_characters = value[:3]
-                self._is_activated = activated
+                self._multiline_string_lines = [value_text]
+                self._multiline_string_starting_characters = value_text[:3]
+                self._is_activated = is_active
+                self._current_indentation = indentation
             else:
+                value = _parse_value(value_text.strip())
                 self._add_setting(
                     name,
                     SettingFileSettingInformation(
-                        value, line_index, is_activated=activated
+                        value, line_index, is_activated=is_active
                     ),
                 )
 
