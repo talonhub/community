@@ -1,8 +1,11 @@
 import talon
 
 if hasattr(talon, "test_mode"):
-    from plugin.configuration_ui.talon_file_parsing import SettingsParser, SettingFileSettingInformation
-    
+    from plugin.configuration_ui.talon_file_parsing import (
+        SettingFileSettingInformation,
+        SettingsParser,
+    )
+
     class MockPath:
         def __init__(self, text):
             self.text = text
@@ -10,7 +13,9 @@ if hasattr(talon, "test_mode"):
         def read_text(self):
             return self.text
 
-    def _parser_matches_expected(input_text, settings, duplicate_tags, duplicate_settings, tags):
+    def _parser_matches_expected(
+        input_text, settings, duplicate_tags, duplicate_settings, tags
+    ):
         path = MockPath(input_text)
         parser = SettingsParser(path)
         print(parser.settings)
@@ -28,7 +33,7 @@ if hasattr(talon, "test_mode"):
     # Uncomment to set the speech timeout. This is the amount of time after you stop
     # speaking until Talon starts processing the spoken audio. Default is 0.3s.
   # speech.timeout = 0.3
-    
+
     user.snippets_dir = """
     multiline string
     multiple lines"""
@@ -42,14 +47,29 @@ if hasattr(talon, "test_mode"):
 tag(): user.pop_to_repeat
 '''
         settings = {
-            "imgui.scale": SettingFileSettingInformation(1.3, 2, 3, assignment_prefix="    "),
-            "user.snippets_dir": SettingFileSettingInformation("multiline string\nmultiple lines", 8, 11, True, assignment_prefix="    "),
-            "speech.timeout": SettingFileSettingInformation(0.3, 6, 7, is_activated=False, assignment_prefix="  # "),
-            "user.commented_multiline": SettingFileSettingInformation("multiline string\nmultiple lines\n", 12, 16, is_activated=False, assignment_prefix="    # "),
+            "imgui.scale": SettingFileSettingInformation(
+                1.3, 2, 3, assignment_prefix="    "
+            ),
+            "user.snippets_dir": SettingFileSettingInformation(
+                "multiline string\nmultiple lines",
+                8,
+                11,
+                True,
+                assignment_prefix="    ",
+            ),
+            "speech.timeout": SettingFileSettingInformation(
+                0.3, 6, 7, is_activated=False, assignment_prefix="  # "
+            ),
+            "user.commented_multiline": SettingFileSettingInformation(
+                "multiline string\nmultiple lines\n",
+                12,
+                16,
+                is_activated=False,
+                assignment_prefix="    # ",
+            ),
         }
         tags = {
             "user.unprefixed_numbers": SettingFileSettingInformation(False, 17, 18),
             "user.pop_to_repeat": SettingFileSettingInformation(True, 18, 19),
         }
         _parser_matches_expected(test_case, settings, set(), set(), tags)
-
