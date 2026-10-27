@@ -137,11 +137,12 @@ class SettingsParser:
                 self._current_indentation = indentation
             else:
                 value = _parse_value(value_text.strip())
+                information = SettingFileSettingInformation(
+                        value, line_index, is_active
+                    )
                 self._add_setting(
                     name,
-                    SettingFileSettingInformation(
-                        value, line_index, is_activated=is_active
-                    ),
+                    information
                 )
 
     def _parse_file(self, path: Path):
