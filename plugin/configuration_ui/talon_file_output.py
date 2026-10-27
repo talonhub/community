@@ -18,7 +18,7 @@ def _convert_value_to_talon_script_literal(value, indentation) -> str:
 
 
 def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
-    """Update the setting assignment of the setting with the given name at the specified path with the new value optionally making it commented"""
+    """Update the setting with the new value and comment status. If not given a new value, use the current one"""
     name = setting.name
     path = setting.path
     value = setting.value.get() if new_value == VALUE_UNAVAILABLE else new_value
@@ -48,10 +48,10 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
         f.write("\n".join(lines))
 
 
-def update_tag(setting, should_be_active):
-    """Update the status of the tag with given name in the file at the path"""
-    name = setting.name
-    path = setting.path
+def update_tag(tag, should_be_active):
+    """Update the status of the tag"""
+    name = tag.name
+    path = tag.path
     parser = SettingsParser(path)
     if name in parser.duplicate_tags:
         raise OSError(
