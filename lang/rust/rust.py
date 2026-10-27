@@ -1,6 +1,3 @@
-from collections.abc import Callable
-from typing import Any, TypeVar
-
 from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
@@ -320,33 +317,3 @@ class UserActions:
             "2026-10-19", "user.code_insert_macro", "user.code_insert_macro_like"
         )
         actions.user.code_insert_macro_like(text, selection)
-
-
-RT = TypeVar("RT")  # return type
-
-
-def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
-    for _ in range(n):
-        f(*args, **kwargs)
-
-
-# Deprecated Macro Functionality
-mod.list(
-    "code_macros",
-    desc="DEPRECATED as of 2026-10-19, use the `macro_like.py` list with the new format instead! Original description: List of macros for active language",
-)
-
-
-# Deprecated: use do_macro_like_insert in macro_like.py or implement in your own code
-def code_insert_function_or_macro(
-    text: str,
-    selection: str,
-    left_delim: str,
-    right_delim: str,
-):
-    if selection:
-        out_text = text + f"{left_delim}{selection}{right_delim}"
-    else:
-        out_text = text + f"{left_delim}{right_delim}"
-    actions.user.paste(out_text)
-    actions.edit.left()

@@ -25,12 +25,9 @@ tag: user.code_macro_like
 """
 
 
-# Direct clone of code_insert_function_or_macro formally implemented in rust.py
 def do_macro_like_insert(text: str, selection: str, left_delim: str, right_delim: str):
     if selection:
-        out_text = text + f"{left_delim}{selection}{right_delim}"
-    else:
-        out_text = text + f"{left_delim}{right_delim}"
+        out_text = f"{text}{left_delim}{selection}{right_delim}"
     actions.user.paste(out_text)
     actions.edit.left()
 
@@ -52,13 +49,13 @@ class Actions:
             The spoken form-value `"other example macro": "other_example,<,>"` resolves to an insertion of `other_example<>`
             with the cursor positioned between the two delimiters (`<` and `>`) if selection is nil or empty, or with
             the delimiters wrapping selection if selection has a coherent value.
-        Raises an exception when passed an empty value for text, or if passed a value for text which only contains one delimiter.
+        Raises an exception of type `ValueError` when passed an empty value for text, or if passed a value for text which only contains one delimiter.
         Issues a warning via actions.app.notify if passed a value for text which contains more than two delimiters
         """
         text_reader = csv.reader([text], doublequote=True, escapechar="\\")
         values = next(text_reader)
         if len(values) == 0:
-            raise Exception("Missing macro-like definition for given spoken form")
+            raise ValueError("Missing macro-like definition for given spoken form")
         if len(values) == 1:
             # no delimiters defined
             if values[0] in actions.users.get_snippet_names():
@@ -68,7 +65,7 @@ class Actions:
                 actions.user.paste(values[0])
         elif len(values) == 2:
             # missing right delimiter
-            raise Exception(
+            raise ValueError(
                 f"Macro-like {values[0]} has left delimiter {values[1]} but no right delimiter"
             )
         else:

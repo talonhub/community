@@ -2,19 +2,23 @@ list: user.code_macro_like
 code.language: rust
 -
 
-panic: panic!,(,)
-format: format!,(,)
-concatenate: concat!,(,)
-print: print!,(,)
-print line: println!,(,)
-error print line: eprintln!,(,)
-to do: todo!,(,)
-vector: vec!,[,]
-macro rules: "macro_rules!,{,}"
-debug: debug!,(,)
-info: info!,(,)
-warning: warn!,(,)
-error: error!,(,)
-assert: assert!,(,)
+# Format: `spoken form: macro_name!,L,R` where L and R are the left and right delimiter for the macro respectively.
+# Block macros (ex: macro rules) must have their written forms enclosed within dub quotes,
+#   as that escapes standard curly brace functionality.
+
 assert equal: assert_eq!,(,)
 assert not equal: assert_ne!,(,)
+assert: assert!,(,)
+concatenate: concat!,(,)
+debug: debug!,(,)
+error print line: eprintln!,(,)
+error: error!,(,)
+format: format!,(,)
+info: info!,(,)
+macro rules: "macro_rules!,{,}"
+panic: panic!,(,)
+print line: println!,(,)
+print: print!,(,)
+to do: todo!,(,)
+vector: vec!,[,]
+warning: warn!,(,)
