@@ -12,7 +12,8 @@ class SettingFileSettingInformation:
     is_activated: bool = True
 
 
-INDENTATION = "    "
+VALUE_UNAVAILABLE = ...
+OUTPUT_INDENTATION = "    "
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
 INDENTED_COMMENT_PREFIX = "    # "
 SETTING_PATTERN = re.compile(
@@ -22,9 +23,6 @@ SETTING_PATTERN = re.compile(
 
 def _is_start_of_multiline_string(line):
     return line.endswith('"""') or line.endswith("'''")
-
-
-VALUE_UNAVAILABLE = ...
 
 
 def _parse_value(value):
@@ -82,24 +80,15 @@ class SettingsParser:
         self._multiline_string_starting_characters = None
         self._parse_file(path)
 
-    def _is_duplicate(self, name, dictionary, duplicates):
-        if name in duplicates:
-            return True
-        if name in dictionary:
+    def _add_information(self, name, information, dictionary, duplicates):
+        if name not in duplicates and name not in dictionary:
+            dictionary[name] = information
+        elif name in dictionary:
             duplicates.add(name)
             dictionary.pop(name)
-            return True
-        return False
 
     def _add_setting(self, name, information):
-        if self._is_duplicate(name, self.settings, self.duplicate_settings):
-            return
-        self.settings[name] = information
-
-    def _add_tag(self, tag, is_active, line_index):
-        if self._is_duplicate(tag, self.tags, self.duplicate_tags):
-            return
-        self.tags[tag] = SettingFileSettingInformation(is_active, line_index)
+        self._add_information(name, information, self.settings, self.duplicate_settings)
 
     def _add_to_multiline_string(self, line, line_index) -> None:
         self._multiline_string_lines.append(line)
@@ -134,7 +123,8 @@ class SettingsParser:
         if match := TAG_PREFIX_PATTERN.search(line):
             name = match.group("name").strip()
             is_active = not line.startswith("#")
-            self._add_tag(name, is_active, line_index)
+            information = SettingFileSettingInformation(is_active, line_index)
+            self._add_information(name, information, self.tags, self.duplicate_tags)
         elif match := SETTING_PATTERN.search(line):
             indentation, name, value_text = match.groups()
             is_multiline_start = _is_start_of_multiline_string(value_text)
@@ -177,7 +167,7 @@ def _convert_value_to_talon_script_literal(value, is_comment=False) -> str:
         value = value.replace('"', '\\"')
         if "\n" in value:
             lines = value.split("\n")
-            prefix = INDENTED_COMMENT_PREFIX if is_comment else INDENTATION
+            prefix = INDENTED_COMMENT_PREFIX if is_comment else OUTPUT_INDENTATION
             indented_lines = "\n".join([f"{prefix}{l}" for l in lines])
             return f'"""\n{indented_lines}"""'
         return f'"{value}"'
@@ -209,7 +199,7 @@ def update_setting(path, setting_name, new_value, make_comment=False):
     converted_value = _convert_value_to_talon_script_literal(
         new_value, is_comment=make_comment
     )
-    prefix = INDENTED_COMMENT_PREFIX if make_comment else INDENTATION
+    prefix = INDENTED_COMMENT_PREFIX if make_comment else OUTPUT_INDENTATION
     new_setting_text = f"{prefix}{setting_name} = {converted_value}"
     _replace_setting_assignment(path, setting_name, new_setting_text)
 
