@@ -3,6 +3,7 @@ from ast import literal_eval
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from contextlib import suppress
 
 
 @dataclass
@@ -54,15 +55,10 @@ def _parse_multiline_string(lines, indentation):
 
 class SettingsParser:
     __slots__ = (
-        "_is_activated",
-        "_multiline_string_lines",
-        "_current_indentation",
         "settings",
         "duplicate_tags",
         "duplicate_settings",
-        "_multiline_string_starting_characters",
         "tags",
-        "_current_name",
         "lines",
     )
 
@@ -72,12 +68,6 @@ class SettingsParser:
         self.duplicate_tags = set()
         self.duplicate_settings = set()
         self.lines = []
-
-        self._current_name = None
-        self._multiline_string_lines = []
-        self._is_activated = None
-        self._current_indentation = None
-        self._multiline_string_starting_characters = None
         self._parse_file(path)
 
     def _add_information(self, name, information, dictionary, duplicates):
@@ -87,68 +77,47 @@ class SettingsParser:
             duplicates.add(name)
             dictionary.pop(name)
 
-    def _add_setting(self, name, information):
-        self._add_information(name, information, self.settings, self.duplicate_settings)
-
-    def _add_to_multiline_string(self, line, line_index) -> None:
-        self._multiline_string_lines.append(line)
-        if line.strip().endswith(self._multiline_string_starting_characters):
-            self._finalize_multiline(line_index)
-
-    def _finalize_multiline(self, line_index) -> None:
-        try:
-            value = _parse_multiline_string(
-                self._multiline_string_lines,
-                self._current_indentation,
-            )
-        except ValueError:
-            value = VALUE_UNAVAILABLE
-        self._add_setting(
-            self._current_name,
-            SettingFileSettingInformation(
-                value,
-                line_index - len(self._multiline_string_lines) + 1,
-                self._is_activated,
-            ),
-        )
-        self._reset_multiline_state()
-
-    def _reset_multiline_state(self) -> None:
-        self._multiline_string_lines = []
-        self._current_indentation = self._current_name = self._is_activated = (
-            self._multiline_string_starting_characters
-        ) = None
-
-    def _process_simple_line(self, line, line_index) -> None:
-        if match := TAG_PREFIX_PATTERN.search(line):
-            name = match.group("name").strip()
-            is_active = not line.startswith("#")
-            information = SettingFileSettingInformation(is_active, line_index)
-            self._add_information(name, information, self.tags, self.duplicate_tags)
-        elif match := SETTING_PATTERN.search(line):
-            indentation, name, value_text = match.groups()
-            is_multiline_start = _is_start_of_multiline_string(value_text)
-            is_active = "#" not in indentation
-            if is_multiline_start:
-                self._current_name = name
-                self._multiline_string_lines = [value_text]
-                self._multiline_string_starting_characters = value_text[:3]
-                self._is_activated = is_active
-                self._current_indentation = indentation
-            else:
-                value = _parse_value(value_text.strip())
-                information = SettingFileSettingInformation(
-                    value, line_index, is_active
-                )
-                self._add_setting(name, information)
+    def _parse_multiline_string(self, line, value_text, indentation, i):
+        multiline_string_lines = [value_text]
+        multiline_string_starting_characters = value_text[:3]
+        value = VALUE_UNAVAILABLE
+        i += 1
+        while i < len(self.lines):
+            multiline_string_lines.append(line)
+            if line.strip().endswith(multiline_string_starting_characters):
+                with suppress(ValueError):
+                    value = _parse_multiline_string(
+                        multiline_string_lines,
+                        indentation,
+                    )
+                break
+            i += 1
+        return value, i
 
     def _parse_file(self, path: Path):
         self.lines = path.read_text().splitlines()
-        for i, line in enumerate(self.lines):
-            if self._multiline_string_starting_characters is not None:
-                self._add_to_multiline_string(line, i)
-            else:
-                self._process_simple_line(line, i)
+        i = 0
+        while i < len(self.lines):
+            line = self.lines[i]
+            if match := TAG_PREFIX_PATTERN.search(line):
+                name = match.group("name").strip()
+                is_active = not line.startswith("#")
+                information = SettingFileSettingInformation(is_active, i)
+                self._add_information(name, information, self.tags, self.duplicate_tags)
+            elif match := SETTING_PATTERN.search(line):
+                indentation, name, value_text = match.groups()
+                is_active = "#" not in indentation
+                starting_index = i
+                if _is_start_of_multiline_string(value_text):
+                    value, i = self._parse_multiline_string(self, line, value_text, indentation, i)
+                else:
+                    value = _parse_value(value_text.strip())
+                information = SettingFileSettingInformation(
+                    value, starting_index, is_active
+                )
+                self._add_information(name, information, self.settings, self.duplicate_settings)
+            i += 1
+            
 
 
 def parse_settings(path):
