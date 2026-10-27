@@ -102,10 +102,9 @@ class SettingsParser:
         self.tags[tag] = SettingFileSettingInformation(is_active, line_index)
 
     def _add_to_multiline_string(self, line, line_index) -> None:
-        if self._multiline_string_starting_characters is not None:
-            self._multiline_string_lines.append(line)
-            if line.strip().endswith(self._multiline_string_starting_characters):
-                self._finalize_multiline(line_index)
+        self._multiline_string_lines.append(line)
+        if line.strip().endswith(self._multiline_string_starting_characters):
+            self._finalize_multiline(line_index)
 
     def _finalize_multiline(self, line_index) -> None:
         try:
