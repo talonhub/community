@@ -1,9 +1,9 @@
 import re
 from ast import literal_eval
+from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from contextlib import suppress
 
 
 @dataclass
@@ -109,15 +109,18 @@ class SettingsParser:
                 is_active = "#" not in indentation
                 starting_index = i
                 if _is_start_of_multiline_string(value_text):
-                    value, i = self._parse_multiline_string(self, line, value_text, indentation, i)
+                    value, i = self._parse_multiline_string(
+                        self, line, value_text, indentation, i
+                    )
                 else:
                     value = _parse_value(value_text.strip())
                 information = SettingFileSettingInformation(
                     value, starting_index, is_active
                 )
-                self._add_information(name, information, self.settings, self.duplicate_settings)
+                self._add_information(
+                    name, information, self.settings, self.duplicate_settings
+                )
             i += 1
-            
 
 
 def parse_settings(path):
