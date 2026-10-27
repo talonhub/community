@@ -17,16 +17,18 @@ VALUE_UNAVAILABLE = ...
 OUTPUT_INDENTATION = "    "
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
 INDENTED_COMMENT_PREFIX = "    # "
-SETTING_PATTERN = re.compile(
+SETTING_ASSIGNMENT_PATTERN = re.compile(
     r"^(?P<indentation>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)"
 )
 
 
 def _is_start_of_multiline_string(line):
+    """Determines if the line contains the start of a multiline string"""
     return line.endswith('"""') or line.endswith("'''")
 
 
 def _parse_value(value):
+    """Convert a TalonScript value to a Python value"""
     if value == "true":
         return True
     if value == "false":
@@ -38,9 +40,10 @@ def _parse_value(value):
 
 
 def _remove_starting_single_indent(line: str, indentation):
-    if len(line) < indentation:
+    """Remove the indentation at the start of a line"""
+    if not line.startswith(indentation):
         raise ValueError(
-            f"Could not parse multiline string at line {line}, which did not have the expected indentation of size {len(indentation)}!"
+            f"line ({line}) did not start with indentation ({indentation})"
         )
     if len(line) == indentation:
         return ""
@@ -48,12 +51,14 @@ def _remove_starting_single_indent(line: str, indentation):
 
 
 def _parse_multiline_string(lines, indentation):
+    """Convert TalonScript multiline string lines to a Python string. Assumes that the indentation is the same for every line, which may not be the case if the string is commented"""
     return "\n".join(
         [_remove_starting_single_indent(l, indentation) for l in lines[1:]]
     )[:-3]
 
 
 class SettingsParser:
+    """Identifies the settings and tags in .talon file"""
     __slots__ = (
         "settings",
         "duplicate_tags",
@@ -71,6 +76,7 @@ class SettingsParser:
         self._parse_file(path)
 
     def _add_information(self, name, information, dictionary, duplicates):
+        """Handle the information on the tag or setting. Keep the information if it is new and remember that it is a duplicate otherwise"""
         if name not in duplicates and name not in dictionary:
             dictionary[name] = information
         elif name in dictionary:
@@ -78,6 +84,7 @@ class SettingsParser:
             dictionary.pop(name)
 
     def _parse_multiline_string(self, value_text, indentation, i):
+        """Parses the multiline string starting at line with index i with value_text containing the starting characters. Assume that each line of the string starts with indentation and give up otherwise. Return the multiline string and its last line index"""
         multiline_string_lines = [value_text]
         multiline_string_starting_characters = value_text[:3]
         value = VALUE_UNAVAILABLE
@@ -96,6 +103,7 @@ class SettingsParser:
         return value, i
 
     def _parse_file(self, path: Path):
+        """Parse the .talon file at path for relevant information"""
         self.lines = path.read_text().splitlines()
         i = 0
         while i < len(self.lines):
@@ -105,7 +113,7 @@ class SettingsParser:
                 is_active = not line.startswith("#")
                 information = SettingFileSettingInformation(is_active, i)
                 self._add_information(name, information, self.tags, self.duplicate_tags)
-            elif match := SETTING_PATTERN.search(line):
+            elif match := SETTING_ASSIGNMENT_PATTERN.search(line):
                 indentation, name, value_text = match.groups()
                 is_active = "#" not in indentation
                 starting_index = i
@@ -122,12 +130,14 @@ class SettingsParser:
             i += 1
 
 
-def parse_settings(path):
+def parse_settings(path: Path):
+    """Compute the tags and settings at the path"""
     parser = SettingsParser(path)
     return parser.tags, parser.settings
 
 
 def _convert_value_to_talon_script_literal(value, is_comment=False) -> str:
+    """Convert the Python value to TalonScript"""
     if isinstance(value, bool):
         return str(value).lower()
     if isinstance(value, (int, float)):
@@ -144,6 +154,7 @@ def _convert_value_to_talon_script_literal(value, is_comment=False) -> str:
 
 
 def _replace_setting_assignment(path, setting_name, new_text):
+    """Update the setting assignment of the setting with given name at the specified path with the new text"""
     parser = SettingsParser(path)
     if setting_name in parser.duplicate_settings:
         raise OSError(
@@ -165,6 +176,7 @@ def _replace_setting_assignment(path, setting_name, new_text):
 
 
 def update_setting(path, setting_name, new_value, make_comment=False):
+    """Update the setting assignment of the setting with the given name at the specified path with the new value optionally making it commented"""
     converted_value = _convert_value_to_talon_script_literal(
         new_value, is_comment=make_comment
     )
@@ -174,6 +186,7 @@ def update_setting(path, setting_name, new_value, make_comment=False):
 
 
 def toggle_setting_activation(setting):
+    """Toggle if the setting is commented"""
     try:
         update_setting(
             setting.path,
@@ -186,6 +199,7 @@ def toggle_setting_activation(setting):
 
 
 def update_tag(path, name, should_be_active):
+    """Update the status of the tag with given name in the file at the path"""
     parser = SettingsParser(path)
     if name in parser.duplicate_tags:
         raise OSError(
