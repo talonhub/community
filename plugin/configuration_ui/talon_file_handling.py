@@ -18,29 +18,24 @@ class SettingFileSettingInformation:
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
 INDENTED_COMMENT_PREFIX = "    # "
 INDENTED_COMMENT_PREFIX_WITHOUT_SPACE = "    #"
-
+SETTING_PATTERN = re.compile(r"^(?P<indentation>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)")
 
 def _is_start_of_multiline_string(line):
     return line.endswith('"""') or line.endswith("'''")
 
 
-def _compute_setting(line: str, prefix: str):
-    # we are checking for the pattern:
-    # prefix at least one letter = something
-    if not line.startswith(prefix):
-        return None
-    lefthand_side, separator, righthand_side = line.partition(" = ")
-    name = lefthand_side[len(prefix) :]
-
-    # give up if the separator is not found, there is no righthand side, or there is no valid name
-    if not righthand_side or not name or not name[0].isalpha():
-        return None
-    is_multiline_string = _is_start_of_multiline_string(righthand_side.lstrip())
-    if is_multiline_string:
-        value = righthand_side.lstrip()
-    else:
-        value = _parse_value(righthand_side.strip())
-    return name, value, is_multiline_string
+def _compute_setting(line: str):
+    if match := SETTING_PATTERN.search(line):
+        indentation = match.group("indentation")
+        name = match.group("name")
+        value_text = match.group("value")
+        is_multiline_string = _is_start_of_multiline_string(value_text)
+        if is_multiline_string:
+            value = value_text
+        else:
+            value = _parse_value(value_text.strip())
+        is_active = "#" not in indentation
+        return name, value, is_multiline_string, is_active
 
 
 VALUE_UNAVAILABLE = ...
@@ -69,14 +64,6 @@ def _parse_multiline_string(lines, is_commented):
     return "\n".join(
         [_remove_starting_single_indent(l, is_commented) for l in lines[1:]]
     )[:-3]
-
-
-def _compute_commented_or_not_commented_setting(line):
-    if setting := _compute_setting(line, INDENTED_COMMENT_PREFIX):
-        return *setting, False
-    if setting := _compute_setting(line, INDENTATION):
-        return *setting, True
-    return None
 
 
 INDENTATION = "    "
@@ -156,7 +143,7 @@ class SettingsParser:
             name = match.group("name").strip()
             is_active = not line.startswith("#")
             self._add_tag(name, is_active, line_index)
-        elif setting := _compute_commented_or_not_commented_setting(line):
+        elif setting := _compute_setting(line):
             name, value, is_multiline_start, activated = setting
             if is_multiline_start:
                 self._current_name = name
