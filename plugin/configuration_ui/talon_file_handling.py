@@ -9,14 +9,14 @@ from typing import Any
 @dataclass
 class SettingFileSettingInformation:
     value: Any
-    line_index: int
+    start_line_index: int
+    line_after_index: int
     is_activated: bool = True
+    indentation: str = ""
 
 
 VALUE_UNAVAILABLE = ...
-OUTPUT_INDENTATION = "    "
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
-INDENTED_COMMENT_PREFIX = "    # "
 SETTING_ASSIGNMENT_PATTERN = re.compile(
     r"^(?P<indentation>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)"
 )
@@ -112,7 +112,7 @@ class SettingsParser:
             if match := TAG_PREFIX_PATTERN.search(line):
                 name = match.group("name").strip()
                 is_active = not line.startswith("#")
-                information = SettingFileSettingInformation(is_active, i)
+                information = SettingFileSettingInformation(is_active, i, i+1)
                 self._add_information(name, information, self.tags, self.duplicate_tags)
             elif match := SETTING_ASSIGNMENT_PATTERN.search(line):
                 indentation, name, value_text = match.groups()
@@ -123,7 +123,7 @@ class SettingsParser:
                 else:
                     value = _parse_value(value_text.strip())
                 information = SettingFileSettingInformation(
-                    value, starting_index, is_active
+                    value, starting_index, i+1, is_active, indentation
                 )
                 self._add_information(
                     name, information, self.settings, self.duplicate_settings
@@ -137,7 +137,7 @@ def parse_settings(path: Path):
     return parser.tags, parser.settings
 
 
-def _convert_value_to_talon_script_literal(value, is_comment=False) -> str:
+def _convert_value_to_talon_script_literal(value, indentation) -> str:
     """Convert the Python value to TalonScript"""
     if isinstance(value, bool):
         return str(value).lower()
@@ -147,15 +147,14 @@ def _convert_value_to_talon_script_literal(value, is_comment=False) -> str:
         value = value.replace('"', '\\"')
         if "\n" in value:
             lines = value.split("\n")
-            prefix = INDENTED_COMMENT_PREFIX if is_comment else OUTPUT_INDENTATION
-            indented_lines = "\n".join([f"{prefix}{l}" for l in lines])
+            indented_lines = "\n".join([f"{indentation}{l}" for l in lines])
             return f'"""\n{indented_lines}"""'
         return f'"{value}"'
     raise ValueError(f"Could not convert value {value} to Talonscript")
 
 
-def _replace_setting_assignment(path, setting_name, new_text):
-    """Update the setting assignment of the setting with given name at the specified path with the new text"""
+def update_setting(path, setting_name, new_value, make_comment=False):
+    """Update the setting assignment of the setting with the given name at the specified path with the new value optionally making it commented"""
     parser = SettingsParser(path)
     if setting_name in parser.duplicate_settings:
         raise OSError(
@@ -163,27 +162,24 @@ def _replace_setting_assignment(path, setting_name, new_text):
         )
     if setting_name not in parser.settings:
         raise OSError(f"Could not find {setting_name} inside file {path}")
-    lines = parser.lines
+
     info = parser.settings[setting_name]
-    lines[info.line_index] = new_text
-    # remove original multiline string text after the line
-    value = info.value
-    if isinstance(value, str) and "\n" in value:
-        line_after_multiline_string = info.line_index + value.count("\n") + 2
-        lines = lines[: info.line_index + 1] + lines[line_after_multiline_string:]
+    indentation = info.indentation
+    if make_comment:
+        indentation += "# "
+    converted_value = _convert_value_to_talon_script_literal(
+        new_value, indentation
+    )
+    new_setting_text = f"{indentation}{setting_name} = {converted_value}"
+
+    lines = parser.lines
+    lines[info.line_after_index] = new_setting_text
+    # remove original multiline value after the first line
+    if info.line_after_index - info.line_start_index > 1:
+        lines = lines[: info.line_start_index + 1] + lines[info.line_after_index:]
 
     with open(path, "w") as f:
         f.write("\n".join(lines))
-
-
-def update_setting(path, setting_name, new_value, make_comment=False):
-    """Update the setting assignment of the setting with the given name at the specified path with the new value optionally making it commented"""
-    converted_value = _convert_value_to_talon_script_literal(
-        new_value, is_comment=make_comment
-    )
-    prefix = INDENTED_COMMENT_PREFIX if make_comment else OUTPUT_INDENTATION
-    new_setting_text = f"{prefix}{setting_name} = {converted_value}"
-    _replace_setting_assignment(path, setting_name, new_setting_text)
 
 
 def toggle_setting_activation(setting):
