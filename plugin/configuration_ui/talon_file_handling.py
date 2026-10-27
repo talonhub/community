@@ -2,6 +2,7 @@ import re
 from ast import literal_eval
 from dataclasses import dataclass
 from typing import Any
+from pathlib import Path
 
 SPACES_PER_INDENT = 4
 STANDARD_COMMENT_SIZE = SPACES_PER_INDENT + 2
@@ -153,9 +154,8 @@ class SettingsParser:
                     ),
                 )
 
-    def _parse_file(self, path):
-        with open(path, encoding="utf-8") as f:
-            self.lines = f.read().splitlines()
+    def _parse_file(self, path: Path):
+        self.lines = path.read_text().splitlines()
         for i, line in enumerate(self.lines):
             if self._multiline_string_starting_characters is not None:
                 self._add_to_multiline_string(line, i)
