@@ -33,6 +33,9 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
 
     info = parser.settings[name]
     indentation = info.indentation
+    if not indentation.isspace():
+        num_leading_spaces = len(indentation) - len(indentation.lstrip())
+        indentation = indentation[:num_leading_spaces]
     if make_comment:
         indentation += "# "
     converted_value = _convert_value_to_talon_script_literal(value, indentation)
