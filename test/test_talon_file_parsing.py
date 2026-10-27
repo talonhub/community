@@ -74,7 +74,6 @@ tag(): user.pop_to_repeat
         }
         _assert_parser_matches_expected(test_case, settings, set(), set(), tags)
 
-
     def test_handles_more_kinds_of_values():
         test_case = r"""settings()
     user.a="test"
@@ -85,12 +84,20 @@ tag(): user.pop_to_repeat
     a
     '''
 """
-        prefix = " "*4
+        prefix = " " * 4
         settings = {
-            "user.a": SettingFileSettingInformation("test", 1, 2, assignment_prefix=prefix),
+            "user.a": SettingFileSettingInformation(
+                "test", 1, 2, assignment_prefix=prefix
+            ),
             "user.b": SettingFileSettingInformation(12, 2, 3, assignment_prefix=prefix),
-            "user.c": SettingFileSettingInformation(False, 3, 4, assignment_prefix=prefix),
-            "user.d": SettingFileSettingInformation(True, 4, 5, assignment_prefix=prefix),
-            "user.e": SettingFileSettingInformation("a\n", 5, 6, assignment_prefix=prefix)
+            "user.c": SettingFileSettingInformation(
+                False, 3, 4, assignment_prefix=prefix
+            ),
+            "user.d": SettingFileSettingInformation(
+                True, 4, 5, assignment_prefix=prefix
+            ),
+            "user.e": SettingFileSettingInformation(
+                "a\n", 5, 6, assignment_prefix=prefix
+            ),
         }
         _assert_parser_matches_expected(test_case, settings, set(), set(), {})
