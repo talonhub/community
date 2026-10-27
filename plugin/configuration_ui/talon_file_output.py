@@ -39,10 +39,10 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
     new_setting_text = f"{indentation}{name} = {converted_value}"
 
     lines = parser.lines
-    lines[info.line_start_index] = new_setting_text
+    lines[info.start_line_index] = new_setting_text
     # remove original multiline value after the first line
-    if info.line_after_index - info.line_start_index > 1:
-        lines = lines[: info.line_start_index + 1] + lines[info.line_after_index :]
+    if info.line_after_index - info.start_line_index > 1:
+        lines = lines[: info.start_line_index + 1] + lines[info.line_after_index :]
 
     with open(path, "w") as f:
         f.write("\n".join(lines))
@@ -66,7 +66,7 @@ def update_tag(tag, should_be_active):
 
     if name in parser.tags:
         info = parser.tags[name]
-        lines[info.line_start_index] = new_string
+        lines[info.start_line_index] = new_string
     else:
         lines.append("\n")
         lines.append(new_string)
