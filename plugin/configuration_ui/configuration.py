@@ -151,8 +151,8 @@ class Manager:
             settings_gui.refresh()
         if post_action:
             post_action()
-            settings_gui.refresh()
             self.post_action = None
+            settings_gui.refresh()
         if old_error_message != self.error_message:
             settings_gui.refresh()
 
