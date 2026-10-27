@@ -110,5 +110,5 @@ tag(): user.b
 tag(): user.c
 """
         tags = {"user.c": SettingFileSettingInformation(True, 4, 5)}
-        duplicate_tags = set(["user.a", "user.b"])
+        duplicate_tags = {"user.a", "user.b"}
         _assert_parser_matches_expected(test_case, {}, duplicate_tags, set(), tags)
