@@ -13,7 +13,7 @@ if hasattr(talon, "test_mode"):
         def read_text(self):
             return self.text
 
-    def _parser_matches_expected(
+    def _assert_parser_matches_expected(
         input_text, settings, duplicate_tags, duplicate_settings, tags
     ):
         path = MockPath(input_text)
@@ -72,4 +72,25 @@ tag(): user.pop_to_repeat
             "user.unprefixed_numbers": SettingFileSettingInformation(False, 17, 18),
             "user.pop_to_repeat": SettingFileSettingInformation(True, 18, 19),
         }
-        _parser_matches_expected(test_case, settings, set(), set(), tags)
+        _assert_parser_matches_expected(test_case, settings, set(), set(), tags)
+
+
+    def test_handles_more_kinds_of_values():
+        test_case = r"""settings()
+    user.a="test"
+    user.b=12
+    user.c=false
+    user.d=true
+    user.e = '''
+    a
+    '''
+"""
+        prefix = " "*4
+        settings = {
+            "user.a": SettingFileSettingInformation("test", 1, 2, assignment_prefix=prefix),
+            "user.b": SettingFileSettingInformation(12, 2, 3, assignment_prefix=prefix),
+            "user.c": SettingFileSettingInformation(False, 3, 4, assignment_prefix=prefix),
+            "user.d": SettingFileSettingInformation(True, 4, 5, assignment_prefix=prefix),
+            "user.e": SettingFileSettingInformation("a\n", 5, 6, assignment_prefix=prefix)
+        }
+        _assert_parser_matches_expected(test_case, settings, set(), set(), {})
