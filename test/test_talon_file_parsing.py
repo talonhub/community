@@ -97,7 +97,7 @@ tag(): user.pop_to_repeat
                 True, 4, 5, assignment_prefix=prefix
             ),
             "user.e": SettingFileSettingInformation(
-                "a\n", 5, 6, assignment_prefix=prefix
+                "a\n", 5, 8, assignment_prefix=prefix
             ),
         }
         _assert_parser_matches_expected(test_case, settings, set(), set(), {})
