@@ -4,11 +4,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-SPACES_PER_INDENT = 4
-STANDARD_COMMENT_SIZE = SPACES_PER_INDENT + 2
-MINIMAL_COMMENT_SIZE = SPACES_PER_INDENT + 1
-
-
 @dataclass
 class SettingFileSettingInformation:
     value: Any
@@ -16,9 +11,9 @@ class SettingFileSettingInformation:
     is_activated: bool = True
 
 
+INDENTATION = "    "
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
 INDENTED_COMMENT_PREFIX = "    # "
-INDENTED_COMMENT_PREFIX_WITHOUT_SPACE = "    #"
 SETTING_PATTERN = re.compile(
     r"^(?P<indentation>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)"
 )
@@ -42,21 +37,25 @@ def _parse_value(value):
         return VALUE_UNAVAILABLE
 
 
-def _remove_starting_single_indent(line: str, is_commented: bool):
-    if is_commented and line.startswith(INDENTED_COMMENT_PREFIX):
-        return line[STANDARD_COMMENT_SIZE:]
-    if is_commented and line.startswith(INDENTED_COMMENT_PREFIX_WITHOUT_SPACE):
-        return line[MINIMAL_COMMENT_SIZE:]
-    return line[SPACES_PER_INDENT:]
+def _remove_starting_single_indent(line: str, is_commented: bool, indentation):
+    if is_commented:
+        indentation += "#"
+    if len(line) < indentation:
+        raise ValueError(f"Could not parse multiline string at line {line}, which did not have the expected indentation of size {len(indentation)}!")
+    if len(line) == indentation:
+        return ""
+    return line.removeprefix(indentation)
 
 
-def _parse_multiline_string(lines, is_commented):
+def _parse_multiline_string(lines, is_commented, indentation):
     return "\n".join(
-        [_remove_starting_single_indent(l, is_commented) for l in lines[1:]]
+        [_remove_starting_single_indent(l, is_commented, indentation) for l in lines[1:]]
     )[:-3]
 
 
-INDENTATION = "    "
+def _parse_indentation_spaces(indentation):
+    number_of_leading_spaces = len(indentation) - len(indentation.lstrip())
+    return indentation[:number_of_leading_spaces]
 
 
 class SettingsParser:
@@ -114,7 +113,7 @@ class SettingsParser:
 
     def _finalize_multiline(self, line_index) -> None:
         value = _parse_multiline_string(
-            self._multiline_string_lines, not self._is_activated
+            self._multiline_string_lines, not self._is_activated, self._current_indentation
         )
         self._add_setting(
             self._current_name,
@@ -144,7 +143,7 @@ class SettingsParser:
                 self._multiline_string_lines = [value_text]
                 self._multiline_string_starting_characters = value_text[:3]
                 self._is_activated = is_active
-                self._current_indentation = indentation
+                self._current_indentation = _parse_indentation_spaces(indentation)
             else:
                 value = _parse_value(value_text.strip())
                 self._add_setting(
