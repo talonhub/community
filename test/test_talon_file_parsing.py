@@ -26,7 +26,7 @@ if hasattr(talon, "test_mode"):
         assert input_text.splitlines() == parser.lines
 
     def test_handles_no_duplicates():
-        test_case = rf'''settings():
+        test_case = r'''settings():
     # Adjust the scale of the imgui
     imgui.scale = 1.3
 
@@ -38,10 +38,10 @@ if hasattr(talon, "test_mode"):
     multiline string
     multiple lines"""
 
-    # user.commented_multiline = {"'''"}
+    # user.commented_multiline = """
     # multiline string
     # multiple lines
-    # {"'''"}
+    # """
 
 # tag(): user.unprefixed_numbers
 tag(): user.pop_to_repeat
