@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+
 @dataclass
 class SettingFileSettingInformation:
     value: Any
@@ -41,7 +42,9 @@ def _remove_starting_single_indent(line: str, is_commented: bool, indentation):
     if is_commented:
         indentation += "#"
     if len(line) < indentation:
-        raise ValueError(f"Could not parse multiline string at line {line}, which did not have the expected indentation of size {len(indentation)}!")
+        raise ValueError(
+            f"Could not parse multiline string at line {line}, which did not have the expected indentation of size {len(indentation)}!"
+        )
     if len(line) == indentation:
         return ""
     return line.removeprefix(indentation)
@@ -49,7 +52,10 @@ def _remove_starting_single_indent(line: str, is_commented: bool, indentation):
 
 def _parse_multiline_string(lines, is_commented, indentation):
     return "\n".join(
-        [_remove_starting_single_indent(l, is_commented, indentation) for l in lines[1:]]
+        [
+            _remove_starting_single_indent(l, is_commented, indentation)
+            for l in lines[1:]
+        ]
     )[:-3]
 
 
@@ -113,7 +119,9 @@ class SettingsParser:
 
     def _finalize_multiline(self, line_index) -> None:
         value = _parse_multiline_string(
-            self._multiline_string_lines, not self._is_activated, self._current_indentation
+            self._multiline_string_lines,
+            not self._is_activated,
+            self._current_indentation,
         )
         self._add_setting(
             self._current_name,
