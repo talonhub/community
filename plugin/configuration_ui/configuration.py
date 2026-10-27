@@ -477,12 +477,12 @@ class Manager:
                         )
                 ui.separator()
 
-    async def _render_setting_revert_button(self, ui, ui_wrapper, setting, button_text, revert_value):
+    async def _render_setting_revert_button(
+        self, ui, ui_wrapper, setting, button_text, revert_value
+    ):
         async with ui.group(), ui.horizontal_wrapped():
             if ui_wrapper.button(button_text):
-                setting.update_function(
-                    setting.path, setting.name, setting.first_value
-                )
+                setting.update_function(setting.path, setting.name, setting.first_value)
             ui.label(str(revert_value))
 
     async def _render_settings_ui(
@@ -497,13 +497,17 @@ class Manager:
             if old_value != value:
                 setting.update_function(setting.path, setting.name, value)
             if setting.first_value != setting.value.get():
-                await self._render_setting_revert_button(ui, ui_wrapper, setting, "restore old value", setting.first_value)
+                await self._render_setting_revert_button(
+                    ui, ui_wrapper, setting, "restore old value", setting.first_value
+                )
             if (
                 setting.default_value != VALUE_UNAVAILABLE
                 and setting.default_value != setting.value.get()
                 and setting.default_value != setting.first_value
             ):
-                await self._render_setting_revert_button(ui, ui_wrapper, setting, "set to default", setting.default_value)
+                await self._render_setting_revert_button(
+                    ui, ui_wrapper, setting, "set to default", setting.default_value
+                )
         except Exception as ex:
             self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
             self.error_setting = setting
