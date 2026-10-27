@@ -1,0 +1,54 @@
+import talon
+
+if hasattr(talon, "test_mode"):
+    from plugin.configuration_ui.talon_file_parsing import SettingsParser, SettingFileSettingInformation
+    
+    class MockPath:
+        def __init__(self, text):
+            self.text = text
+
+        def read_text(self):
+            return self.text
+        
+    def _parser_matches_expected(input_text, settings, duplicate_tags, duplicate_settings, tags):
+        path = MockPath(input_text)
+        parser = SettingsParser(path)
+        print('settings', settings)
+        print(parser.settings)
+        for k in settings:
+            if settings[k] != parser.settings[k]:
+                print(k, settings[k], parser.settings[k])
+        assert settings == parser.settings
+        assert duplicate_tags == parser.duplicate_tags
+        assert duplicate_settings == parser.duplicate_settings
+        assert tags == parser.tags
+        assert input_text.splitlines() == parser.lines
+
+    def test_handles_no_duplicates():
+        test_case = r'''settings():
+    # Adjust the scale of the imgui
+    imgui.scale = 1.3
+
+    # Uncomment to set the speech timeout. This is the amount of time after you stop
+    # speaking until Talon starts processing the spoken audio. Default is 0.3s.
+  # speech.timeout = 0.3
+    
+    user.snippets_dir = """
+    multiline string
+    multiple lines"""
+
+# tag(): user.unprefixed_numbers
+tag(): user.pop_to_repeat
+'''
+        settings = {
+            "imgui.scale": SettingFileSettingInformation(1.3, 2, 3, assignment_prefix="    "),
+            "user.snippets_dir": SettingFileSettingInformation("multiline string\nmultiple lines", 8, 11, True, assignment_prefix="    "),
+            "speech.timeout": SettingFileSettingInformation(0.3, 6, 7, is_activated=False, assignment_prefix="  # ")
+        }
+        tags = {
+            "user.unprefixed_numbers": SettingFileSettingInformation(False, 12, 13),
+            "user.pop_to_repeat": SettingFileSettingInformation(True, 13, 14),
+        }
+        _parser_matches_expected(test_case, settings, set(), set(), tags)
+    test_handles_no_duplicates()
+
