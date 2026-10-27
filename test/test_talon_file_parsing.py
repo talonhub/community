@@ -102,7 +102,7 @@ tag(): user.pop_to_repeat
         }
         _assert_parser_matches_expected(test_case, settings, set(), set(), {})
 
-    def test_handled_duplicate_tags():
+    def test_handles_duplicate_tags():
         test_case = r"""tag(): user.a
 tag(): user.a
 tag(): user.b
