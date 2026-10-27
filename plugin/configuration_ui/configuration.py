@@ -498,7 +498,11 @@ class Manager:
                     setting.update_function(setting.path, setting.name, value)
                 if setting.first_value != setting.value.get():
                     await self._render_setting_revert_button(
-                        ui, ui_wrapper, setting, "restore old value", setting.first_value
+                        ui,
+                        ui_wrapper,
+                        setting,
+                        "restore old value",
+                        setting.first_value,
                     )
                 if (
                     setting.default_value != VALUE_UNAVAILABLE
