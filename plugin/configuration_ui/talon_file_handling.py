@@ -112,7 +112,7 @@ class SettingsParser:
             if match := TAG_PREFIX_PATTERN.search(line):
                 name = match.group("name").strip()
                 is_active = not line.startswith("#")
-                information = SettingFileSettingInformation(is_active, i, i+1)
+                information = SettingFileSettingInformation(is_active, i, i + 1)
                 self._add_information(name, information, self.tags, self.duplicate_tags)
             elif match := SETTING_ASSIGNMENT_PATTERN.search(line):
                 indentation, name, value_text = match.groups()
@@ -123,7 +123,7 @@ class SettingsParser:
                 else:
                     value = _parse_value(value_text.strip())
                 information = SettingFileSettingInformation(
-                    value, starting_index, i+1, is_active, indentation
+                    value, starting_index, i + 1, is_active, indentation
                 )
                 self._add_information(
                     name, information, self.settings, self.duplicate_settings
@@ -167,16 +167,14 @@ def update_setting(path, setting_name, new_value, make_comment=False):
     indentation = info.indentation
     if make_comment:
         indentation += "# "
-    converted_value = _convert_value_to_talon_script_literal(
-        new_value, indentation
-    )
+    converted_value = _convert_value_to_talon_script_literal(new_value, indentation)
     new_setting_text = f"{indentation}{setting_name} = {converted_value}"
 
     lines = parser.lines
     lines[info.line_after_index] = new_setting_text
     # remove original multiline value after the first line
     if info.line_after_index - info.line_start_index > 1:
-        lines = lines[: info.line_start_index + 1] + lines[info.line_after_index:]
+        lines = lines[: info.line_start_index + 1] + lines[info.line_after_index :]
 
     with open(path, "w") as f:
         f.write("\n".join(lines))
