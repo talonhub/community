@@ -54,6 +54,8 @@ def _update_setting_information(
 ):
     setting.value = egui.Mutable(file_setting_information.value)
     setting.is_activated = file_setting_information.is_activated
+    if setting.first_value == VALUE_UNAVAILABLE:
+        setting.first_value = file_setting_information.value
 
 
 def _update_setting_information_based_on_file_update(setting: Setting, tags, settings):
@@ -462,12 +464,12 @@ class Manager:
                         )
                     else:
                         await self._render_settings_ui(
-                            ui, setting, is_setting_chosen, error_representation_of_name
+                            ui, ui_wrapper, setting, is_setting_chosen, error_representation_of_name
                         )
                 ui.separator()
 
     async def _render_settings_ui(
-        self, ui, setting, is_setting_chosen, error_representation_of_name
+        self, ui, ui_wrapper, setting, is_setting_chosen, error_representation_of_name
     ):
         """Render the ui for changing the setting"""
         old_value = setting.value.get()
@@ -477,6 +479,11 @@ class Manager:
             value = setting.value.get()
             if old_value != value:
                 setting.update_function(setting.path, setting.name, value)
+            if setting.first_value != setting.value.get():
+                async with ui.group(), ui.horizontal_wrapped():
+                    if ui_wrapper.button("revert to old"):
+                        setting.update_function(setting.path, setting.name, setting.first_value)
+                    ui.weak(str(setting.first_value))
         except Exception as ex:
             self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
             self.error_setting = setting

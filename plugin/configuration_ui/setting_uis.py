@@ -32,6 +32,7 @@ class Setting:
     value: egui.Mutable = egui.Mutable(VALUE_UNAVAILABLE)
     renders_description: bool = False
     post_chosen_action: Callable | None = None
+    first_value = VALUE_UNAVAILABLE
 
     def get_description(self):
         try:
