@@ -18,7 +18,10 @@ class SettingFileSettingInformation:
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
 INDENTED_COMMENT_PREFIX = "    # "
 INDENTED_COMMENT_PREFIX_WITHOUT_SPACE = "    #"
-SETTING_PATTERN = re.compile(r"^(?P<indentation>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)")
+SETTING_PATTERN = re.compile(
+    r"^(?P<indentation>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)"
+)
+
 
 def _is_start_of_multiline_string(line):
     return line.endswith('"""') or line.endswith("'''")
