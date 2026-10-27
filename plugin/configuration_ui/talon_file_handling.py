@@ -16,17 +16,6 @@ class SettingFileSettingInformation:
 
 
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
-
-
-def _compute_tag(line):
-    """Returns the name of the tag and if it is active"""
-    if match := TAG_PREFIX_PATTERN.search(line):
-        name = match.group("name").strip()
-        is_active = not line.startswith("#")
-        return name, is_active
-    return None
-
-
 INDENTED_COMMENT_PREFIX = "    # "
 INDENTED_COMMENT_PREFIX_WITHOUT_SPACE = "    #"
 
@@ -163,8 +152,9 @@ class SettingsParser:
         ) = None
 
     def _process_simple_line(self, line, line_index) -> None:
-        if tag := _compute_tag(line):
-            name, is_active = tag
+        if match := TAG_PREFIX_PATTERN.search(line):
+            name = match.group("name").strip()
+            is_active = not line.startswith("#")
             self._add_tag(name, is_active, line_index)
         elif setting := _compute_commented_or_not_commented_setting(line):
             name, value, is_multiline_start, activated = setting
