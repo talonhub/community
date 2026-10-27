@@ -153,22 +153,26 @@ def _convert_value_to_talon_script_literal(value, indentation) -> str:
     raise ValueError(f"Could not convert value {value} to Talonscript")
 
 
-def update_setting(path, setting_name, new_value, make_comment=False):
+def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
     """Update the setting assignment of the setting with the given name at the specified path with the new value optionally making it commented"""
-    parser = SettingsParser(path)
-    if setting_name in parser.duplicate_settings:
-        raise OSError(
-            f"Found duplicate setting assignment for {setting_name} inside file {path}"
-        )
-    if setting_name not in parser.settings:
-        raise OSError(f"Could not find {setting_name} inside file {path}")
+    name = setting.name
+    path = setting.path
+    value = setting.value.get() if VALUE_UNAVAILABLE else new_value
 
-    info = parser.settings[setting_name]
+    parser = SettingsParser(path)
+    if name in parser.duplicate_settings:
+        raise OSError(
+            f"Found duplicate setting assignment for {name} inside file {path}"
+        )
+    if name not in parser.settings:
+        raise OSError(f"Could not find {name} inside file {path}")
+
+    info = parser.settings[name]
     indentation = info.indentation
     if make_comment:
         indentation += "# "
-    converted_value = _convert_value_to_talon_script_literal(new_value, indentation)
-    new_setting_text = f"{indentation}{setting_name} = {converted_value}"
+    converted_value = _convert_value_to_talon_script_literal(value, indentation)
+    new_setting_text = f"{indentation}{name} = {converted_value}"
 
     lines = parser.lines
     lines[info.line_after_index] = new_setting_text
@@ -178,19 +182,6 @@ def update_setting(path, setting_name, new_value, make_comment=False):
 
     with open(path, "w") as f:
         f.write("\n".join(lines))
-
-
-def toggle_setting_activation(setting):
-    """Toggle if the setting is commented"""
-    try:
-        update_setting(
-            setting.path,
-            setting.name,
-            setting.value.get(),
-            make_comment=setting.is_activated,
-        )
-    except Exception as ex:
-        return f"Something went wrong trying to toggle a setting activation: {ex}"
 
 
 def update_tag(path, name, should_be_active):

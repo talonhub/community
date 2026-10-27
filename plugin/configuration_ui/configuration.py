@@ -16,9 +16,9 @@ from .setting_uis import (
 )
 from .talon_file_handling import (
     VALUE_UNAVAILABLE,
+    update_setting,
     SettingFileSettingInformation,
     parse_settings,
-    toggle_setting_activation,
 )
 
 mod = Module()
@@ -535,9 +535,10 @@ class Manager:
                 ui.checkbox(egui.Mutable(setting.is_activated), "*").clicked()
                 or comment_toggle_setting == setting.name
             ):
-                error_message = toggle_setting_activation(setting)
-                if error_message is not None:
-                    self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: {error_message}"
+                try:
+                    update_setting(setting, make_comment=not setting.is_activated)
+                except Exception as ex:
+                    self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: {ex}"
                     self.error_setting = setting
         ui.add_space(checkbox_size)
 
