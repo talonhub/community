@@ -586,11 +586,8 @@ class GUI:
             cron.after("1ms", self.hide)
             return
 
-        try:
-            self._stored_rect = self._window.rect
-            self._window.close()
-        finally:
-            self._on_hide_cleanup()
+        self._stored_rect = self._window.rect
+        self._window.close()
 
     def _on_hide_cleanup(self):
         if self.tag:
