@@ -184,8 +184,10 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
         f.write("\n".join(lines))
 
 
-def update_tag(path, name, should_be_active):
+def update_tag(setting, should_be_active):
     """Update the status of the tag with given name in the file at the path"""
+    name = setting.name
+    path = setting.path
     parser = SettingsParser(path)
     if name in parser.duplicate_tags:
         raise OSError(

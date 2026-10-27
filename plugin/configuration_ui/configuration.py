@@ -482,7 +482,7 @@ class Manager:
     ):
         async with ui.group(), ui.horizontal_wrapped():
             if ui_wrapper.button(button_text):
-                setting.update_function(setting.path, setting.name, setting.first_value)
+                setting.update_function(setting, setting.first_value)
             ui.label(str(revert_value))
 
     async def _render_settings_ui(
@@ -495,7 +495,7 @@ class Manager:
                 await setting.render(setting, ui, is_setting_chosen)
                 value = setting.value.get()
                 if old_value != value:
-                    setting.update_function(setting.path, setting.name, value)
+                    setting.update_function(setting, value)
                 if setting.first_value != setting.value.get():
                     await self._render_setting_revert_button(
                         ui,
