@@ -138,12 +138,9 @@ class SettingsParser:
             else:
                 value = _parse_value(value_text.strip())
                 information = SettingFileSettingInformation(
-                        value, line_index, is_active
-                    )
-                self._add_setting(
-                    name,
-                    information
+                    value, line_index, is_active
                 )
+                self._add_setting(name, information)
 
     def _parse_file(self, path: Path):
         self.lines = path.read_text().splitlines()
