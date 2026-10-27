@@ -12,10 +12,10 @@ from .rgb_conversions import (
     parse_rgb_from_hex_string,
 )
 from .setting_file_paths import SETTINGS_PATH
+from .talon_file_output import update_setting, update_tag
 from .talon_file_parsing import (
     VALUE_UNAVAILABLE,
 )
-from .talon_file_output import update_setting, update_tag
 
 DEFAULT_DESCRIPTION = "Something went wrong. Could not find the setting description."
 

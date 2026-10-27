@@ -1,4 +1,5 @@
-from .talon_file_parsing import SettingsParser, VALUE_UNAVAILABLE
+from .talon_file_parsing import VALUE_UNAVAILABLE, SettingsParser
+
 
 def _convert_value_to_talon_script_literal(value, indentation) -> str:
     """Convert the Python value to TalonScript"""
