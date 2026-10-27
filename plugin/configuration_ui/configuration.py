@@ -14,12 +14,12 @@ from .setting_uis import (
     create_tag_setting,
     create_text_setting,
 )
-from .talon_file_handling import (
+from .talon_file_parsing import (
     VALUE_UNAVAILABLE,
     SettingFileSettingInformation,
     parse_settings,
-    update_setting,
 )
+from .talon_file_output import update_setting
 
 mod = Module()
 ctx = Context()
