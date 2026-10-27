@@ -495,7 +495,11 @@ class Manager:
                             setting.path, setting.name, setting.first_value
                         )
                     ui.label(str(setting.first_value))
-            if setting.default_value != VALUE_UNAVAILABLE and setting.default_value != setting.value.get() and setting.default_value != setting.first_value:
+            if (
+                setting.default_value != VALUE_UNAVAILABLE
+                and setting.default_value != setting.value.get()
+                and setting.default_value != setting.first_value
+            ):
                 async with ui.group(), ui.horizontal_wrapped():
                     if ui_wrapper.button("set to default"):
                         setting.update_function(
