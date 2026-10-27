@@ -155,7 +155,7 @@ class SettingsParser:
 
     def _parse_file(self, path):
         with open(path, encoding="utf-8") as f:
-            self.lines = [l.rstrip("\n\r") for l in f]
+            self.lines = f.read().splitlines()
         for i, line in enumerate(self.lines):
             if self._multiline_string_starting_characters is not None:
                 self._add_to_multiline_string(line, i)
