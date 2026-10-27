@@ -50,10 +50,7 @@ def _remove_starting_single_indent(line: str, indentation):
 
 def _parse_multiline_string(lines, indentation):
     return "\n".join(
-        [
-            _remove_starting_single_indent(l, indentation)
-            for l in lines[1:]
-        ]
+        [_remove_starting_single_indent(l, indentation) for l in lines[1:]]
     )[:-3]
 
 
@@ -121,7 +118,9 @@ class SettingsParser:
         self._add_setting(
             self._current_name,
             SettingFileSettingInformation(
-                value, line_index - len(self._multiline_string_lines) + 1, self._is_activated
+                value,
+                line_index - len(self._multiline_string_lines) + 1,
+                self._is_activated,
             ),
         )
         self._reset_multiline_state()
