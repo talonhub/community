@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import egui
-from talon import Context, Module, clip, fs
+from talon import Context, Module, clip, fs, registry
 
 from ...core.gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui
 from .setting_file_paths import MODE_INDICATOR_PATH, RELEVANT_PATHS, SUBTITLES_PATH
@@ -56,6 +56,11 @@ def _update_setting_information(
     setting.is_activated = file_setting_information.is_activated
     if setting.first_value == VALUE_UNAVAILABLE:
         setting.first_value = file_setting_information.value
+    if not setting.is_tag and setting.default_value == VALUE_UNAVAILABLE:
+        declaration = registry.decls.settings[setting.name]
+        default = declaration.default
+        if isinstance(default, declaration.type):
+            setting.default_value = default
 
 
 def _update_setting_information_based_on_file_update(setting: Setting, tags, settings):
@@ -490,6 +495,13 @@ class Manager:
                             setting.path, setting.name, setting.first_value
                         )
                     ui.label(str(setting.first_value))
+            if setting.default_value != VALUE_UNAVAILABLE and setting.default_value != setting.value.get() and setting.default_value != setting.first_value:
+                async with ui.group(), ui.horizontal_wrapped():
+                    if ui_wrapper.button("set to default"):
+                        setting.update_function(
+                            setting.path, setting.name, setting.default_value
+                        )
+                    ui.label(str(setting.default_value))
         except Exception as ex:
             self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
             self.error_setting = setting
