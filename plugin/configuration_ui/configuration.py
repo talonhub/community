@@ -60,10 +60,10 @@ def _update_setting_information_based_on_file_update(setting: Setting, tags, set
         setting.value.set(VALUE_UNAVAILABLE)
 
 
-def compute_readable_name(setting_name, page_prefix: str):
+def compute_readable_name(setting_name: str, page_prefix: str):
     words = []
-    if page_prefix and page_prefix in setting_name:
-        name = setting_name[len(page_prefix) :]
+    if page_prefix and setting_name.startswith(page_prefix):
+        name = setting_name.removeprefix(page_prefix)
     else:
         prefix, name = setting_name.split(".")
         if prefix != "user":
