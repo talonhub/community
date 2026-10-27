@@ -322,7 +322,7 @@ class Manager:
                 or comment_toggle_setting == setting.name
             ):
                 try:
-                    update_setting(setting, make_comment=not setting.is_activated)
+                    update_setting(setting, make_comment=setting.is_activated)
                 except Exception as ex:
                     self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: {ex}"
                     self.error_setting = setting
