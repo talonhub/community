@@ -16,9 +16,9 @@ from .setting_uis import (
 )
 from .talon_file_handling import (
     VALUE_UNAVAILABLE,
-    update_setting,
     SettingFileSettingInformation,
     parse_settings,
+    update_setting,
 )
 
 mod = Module()
