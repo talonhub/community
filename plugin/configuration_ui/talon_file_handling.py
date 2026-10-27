@@ -202,7 +202,7 @@ def update_tag(setting, should_be_active):
 
     if name in parser.tags:
         info = parser.tags[name]
-        lines[info.line_index] = new_string
+        lines[info.line_start_index] = new_string
     else:
         lines.append("\n")
         lines.append(new_string)
