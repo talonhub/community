@@ -43,9 +43,7 @@ def _parse_value(value):
 def _remove_prefix(line: str, prefix):
     """Remove the prefix at the start of a line"""
     if not line.startswith(prefix):
-        raise ValueError(
-            f"line ({line}) did not start with prefix ({prefix})"
-        )
+        raise ValueError(f"line ({line}) did not start with prefix ({prefix})")
     if len(line) == prefix:
         return ""
     return line.removeprefix(prefix)
@@ -53,9 +51,7 @@ def _remove_prefix(line: str, prefix):
 
 def _parse_multiline_string(lines, assignment_prefix):
     """Convert TalonScript multiline string lines to a Python string. Assumes that every line starts with the assignment prefix, which may not be the case if the string is commented"""
-    return "\n".join(
-        [_remove_prefix(l, assignment_prefix) for l in lines[1:]]
-    )[:-3]
+    return "\n".join([_remove_prefix(l, assignment_prefix) for l in lines[1:]])[:-3]
 
 
 class SettingsParser:
@@ -120,7 +116,9 @@ class SettingsParser:
                 is_active = "#" not in assignment_prefix
                 starting_index = i
                 if _is_start_of_multiline_string(value_text):
-                    value, i = self._parse_multiline_string(value_text, assignment_prefix, i)
+                    value, i = self._parse_multiline_string(
+                        value_text, assignment_prefix, i
+                    )
                 else:
                     value = _parse_value(value_text.strip())
                 information = SettingFileSettingInformation(
