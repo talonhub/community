@@ -38,9 +38,7 @@ def _parse_value(value):
         return VALUE_UNAVAILABLE
 
 
-def _remove_starting_single_indent(line: str, is_commented: bool, indentation):
-    if is_commented:
-        indentation += "#"
+def _remove_starting_single_indent(line: str, indentation):
     if len(line) < indentation:
         raise ValueError(
             f"Could not parse multiline string at line {line}, which did not have the expected indentation of size {len(indentation)}!"
@@ -50,18 +48,13 @@ def _remove_starting_single_indent(line: str, is_commented: bool, indentation):
     return line.removeprefix(indentation)
 
 
-def _parse_multiline_string(lines, is_commented, indentation):
+def _parse_multiline_string(lines, indentation):
     return "\n".join(
         [
-            _remove_starting_single_indent(l, is_commented, indentation)
+            _remove_starting_single_indent(l, indentation)
             for l in lines[1:]
         ]
     )[:-3]
-
-
-def _parse_indentation_spaces(indentation):
-    number_of_leading_spaces = len(indentation) - len(indentation.lstrip())
-    return indentation[:number_of_leading_spaces]
 
 
 class SettingsParser:
@@ -118,15 +111,17 @@ class SettingsParser:
                 self._finalize_multiline(line_index)
 
     def _finalize_multiline(self, line_index) -> None:
-        value = _parse_multiline_string(
-            self._multiline_string_lines,
-            not self._is_activated,
-            self._current_indentation,
-        )
+        try:
+            value = _parse_multiline_string(
+                self._multiline_string_lines,
+                self._current_indentation,
+            )
+        except ValueError:
+            value = VALUE_UNAVAILABLE
         self._add_setting(
             self._current_name,
             SettingFileSettingInformation(
-                value, line_index - value.count("\n") - 1, self._is_activated
+                value, line_index - len(self._multiline_string_lines) + 1, self._is_activated
             ),
         )
         self._reset_multiline_state()
@@ -151,7 +146,7 @@ class SettingsParser:
                 self._multiline_string_lines = [value_text]
                 self._multiline_string_starting_characters = value_text[:3]
                 self._is_activated = is_active
-                self._current_indentation = _parse_indentation_spaces(indentation)
+                self._current_indentation = indentation
             else:
                 value = _parse_value(value_text.strip())
                 self._add_setting(
