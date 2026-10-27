@@ -110,9 +110,7 @@ class SettingsParser:
                 is_active = "#" not in indentation
                 starting_index = i
                 if _is_start_of_multiline_string(value_text):
-                    value, i = self._parse_multiline_string(
-                        value_text, indentation, i
-                    )
+                    value, i = self._parse_multiline_string(value_text, indentation, i)
                 else:
                     value = _parse_value(value_text.strip())
                 information = SettingFileSettingInformation(
