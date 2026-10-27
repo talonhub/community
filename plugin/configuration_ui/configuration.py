@@ -464,7 +464,11 @@ class Manager:
                         )
                     else:
                         await self._render_settings_ui(
-                            ui, ui_wrapper, setting, is_setting_chosen, error_representation_of_name
+                            ui,
+                            ui_wrapper,
+                            setting,
+                            is_setting_chosen,
+                            error_representation_of_name,
                         )
                 ui.separator()
 
@@ -482,7 +486,9 @@ class Manager:
             if setting.first_value != setting.value.get():
                 async with ui.group(), ui.horizontal_wrapped():
                     if ui_wrapper.button("revert to old"):
-                        setting.update_function(setting.path, setting.name, setting.first_value)
+                        setting.update_function(
+                            setting.path, setting.name, setting.first_value
+                        )
                     ui.weak(str(setting.first_value))
         except Exception as ex:
             self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
