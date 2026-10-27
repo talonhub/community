@@ -50,5 +50,5 @@ tag(): user.pop_to_repeat
             "user.pop_to_repeat": SettingFileSettingInformation(True, 13, 14),
         }
         _parser_matches_expected(test_case, settings, set(), set(), tags)
-    test_handles_no_duplicates()
+    
 
