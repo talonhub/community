@@ -3,7 +3,11 @@ from pathlib import Path
 import egui
 from talon import Context, Module, clip, fs, registry
 
-from ...core.gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui, UIWrapper
+from ...core.gui.gui import (
+    UIWrapper,
+    let_user_use_page_keys_to_scroll_scroll_area,
+    open_gui,
+)
 from .pages import create_pages
 from .setting_file_paths import RELEVANT_PATHS
 from .setting_uis import Setting
@@ -178,9 +182,7 @@ class Manager:
             return
 
         if self.error_message:
-            await self._render_error_message(
-                self.error_message, self.error_setting
-            )
+            await self._render_error_message(self.error_message, self.error_setting)
         self._ui.add_space(10)
         await self._render_configuration_page(
             total_available_height,
@@ -243,9 +245,7 @@ class Manager:
                     if setting.value.get() == VALUE_UNAVAILABLE:
                         type_used = "tag" if setting.is_tag else "setting"
                         error_message = f"Something went wrong. The {type_used} {error_representation_of_name} could not be found or could not be parsed."
-                        await self._render_error_message(
-                            error_message, setting
-                        )
+                        await self._render_error_message(error_message, setting)
                     else:
                         await self._render_settings_ui(
                             setting,
@@ -254,9 +254,7 @@ class Manager:
                         )
                 self._ui.separator()
 
-    async def _render_setting_revert_button(
-        self, setting, button_text, revert_value
-    ):
+    async def _render_setting_revert_button(self, setting, button_text, revert_value):
         async with self._ui.group(), self._ui.horizontal_wrapped():
             if self._ui_wrapper.button(button_text):
                 setting.update_function(setting, setting.first_value)
@@ -300,7 +298,9 @@ class Manager:
         """Render the column for the checkbox for toggling commenting a setting"""
         checkbox_size = self._ui.spacing().icon_width
         if setting.is_tag:
-            spacing_size = self._ui.spacing().icon_spacing + self._ui.spacing().item_spacing.x
+            spacing_size = (
+                self._ui.spacing().icon_spacing + self._ui.spacing().item_spacing.x
+            )
             star_width = self._ui_wrapper.compute_text_width("*")
             self._ui.add_space(checkbox_size + spacing_size + star_width)
         else:
@@ -318,9 +318,7 @@ class Manager:
     async def _render_error_message(self, error_message, error_setting):
         async with self._ui.horizontal_wrapped():
             self._ui.strong(error_message)
-            await self._render_error_copy_buttons(
-                error_message, error_setting
-            )
+            await self._render_error_copy_buttons(error_message, error_setting)
 
     async def _render_main_page(self, total_available_height):
         """Render introductory page"""
@@ -332,7 +330,9 @@ class Manager:
             await let_user_use_page_keys_to_scroll_scroll_area(scroll_ui)
             self._ui.add_space(total_available_height / 4)
             async with self._ui.with_layout(egui.Layout.top_down(egui.Align.Center)):
-                self._ui.heading("Welcome to the Community Setting Configuration Window")
+                self._ui.heading(
+                    "Welcome to the Community Setting Configuration Window"
+                )
                 self._ui.add_space(total_available_height / 8)
                 self._ui.label(
                     "Community provides several .talon files for configuring settings. You can use this graphical interface to edit those files without needing to learn TalonScript.\nYou may encounter unexpected behavior if you have chosen to set those settings in your own .talon files.\n\n\nThis graphical interface may not always work as intended if you have manually edited those files yourself.\nIf you run into issues with that, feel free to ask for help on the slack!"
