@@ -32,6 +32,8 @@ class SettingRenderer(ABC):
     def focus(self):
         self.should_focus = True
 
+    def renders_description(self) -> bool:
+        return False
 
 @dataclass
 class Setting:
@@ -42,7 +44,6 @@ class Setting:
     is_tag: bool = False
     is_activated: bool = True
     value: egui.Mutable = egui.Mutable(VALUE_UNAVAILABLE)
-    renders_description: bool = False
     first_value = VALUE_UNAVAILABLE
     default_value = VALUE_UNAVAILABLE
 
@@ -67,6 +68,9 @@ class ToggleSettingRenderer(SettingRenderer):
             _focus_widget(response)
             self.should_focus = False
 
+    def renders_description(self) -> bool:
+        return True
+
 
 def create_tag_setting(name):
     return Setting(
@@ -74,7 +78,6 @@ def create_tag_setting(name):
         ToggleSettingRenderer(),
         update_tag,
         is_tag=True,
-        renders_description=True,
     )
 
 
@@ -83,7 +86,6 @@ def create_boolean_setting(name):
         name,
         ToggleSettingRenderer(),
         update_setting,
-        renders_description=True,
     )
 
 

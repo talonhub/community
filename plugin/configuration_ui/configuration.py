@@ -204,7 +204,9 @@ class Manager:
                 )
                 self._ui.separator()
 
-    async def _render_setting_row(self, setting, page, setting_number):
+    async def _render_setting_row(
+        self, setting, page, setting_number
+    ):
         """Render the row for a setting"""
         readable_name = compute_readable_name(setting.name, page.prefix)
         error_representation_of_name = f"{readable_name} ({setting.name})"
@@ -218,7 +220,7 @@ class Manager:
                     self._ui.strong(f"{setting_number}: {readable_name}")
                     self._ui.weak(setting.name)
                     self._ui.add_space(5)
-                    if not setting.renders_description:
+                    if not setting.renderer.renders_description():
                         self._ui.label(setting.get_description())
                     if setting.value.get() == VALUE_UNAVAILABLE:
                         type_used = "tag" if setting.is_tag else "setting"
@@ -237,7 +239,9 @@ class Manager:
                 setting.update_function(setting, setting.first_value)
             self._ui.label(str(revert_value))
 
-    async def _render_settings_ui(self, setting, error_representation_of_name):
+    async def _render_settings_ui(
+        self, setting, error_representation_of_name
+    ):
         """Render the ui for changing the setting"""
         old_value = setting.value.get()
         try:
@@ -340,6 +344,7 @@ class Manager:
             return False
         page = self.pages[self.page]
         return len(page.settings) >= number
+            
 
 
 manager = None
