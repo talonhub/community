@@ -88,7 +88,7 @@ class Manager:
         ctx.lists["user.community_settings_window_page"] = {
             page.title: page.title for page in pages
         }
-        self.chosen_setting = ""
+        self.chosen_setting = None
         self.comment_toggle_setting = ""
         self.post_action = None
         self._ui: egui.Ui
@@ -150,8 +150,8 @@ class Manager:
                 )
 
         # cleanup state and handle post action
-        if chosen_setting:
-            self.chosen_setting = ""
+        if chosen_setting is not None:
+            self.chosen_setting = None
             settings_gui.refresh()
         if comment_toggle_setting:
             self.comment_toggle_setting = ""
@@ -211,20 +211,22 @@ class Manager:
             self._ui.add_space(5)
             self._ui.label("* toggle setting that setting in a Community .talon file")
             self._ui.separator()
-            for setting in page.settings:
-                is_setting_chosen = setting.name == chosen_setting
+            
+            for i, setting in enumerate(page.settings):
+                is_setting_chosen = i+1 == chosen_setting
                 await self._render_setting_row(
                     setting,
                     page,
                     is_setting_chosen,
                     comment_toggle_setting,
+                    i+1,
                 )
                 self._ui.separator()
                 if is_setting_chosen:
                     self.post_action = setting.post_chosen_action
 
     async def _render_setting_row(
-        self, setting, page, is_setting_chosen, comment_toggle_setting
+        self, setting, page, is_setting_chosen, comment_toggle_setting, setting_number
     ):
         """Render the row for a setting"""
         readable_name = compute_readable_name(setting.name, page.prefix)
@@ -237,7 +239,7 @@ class Manager:
             )
             async with self._ui.with_layout(egui.Layout.right_to_left(egui.Align.TOP)):
                 async with self._ui.vertical():
-                    self._ui.strong(readable_name)
+                    self._ui.strong(f"{setting_number}: {readable_name}")
                     self._ui.weak(setting.name)
                     self._ui.add_space(5)
                     if not setting.renders_description:
@@ -340,7 +342,7 @@ class Manager:
                 self._ui.add_space(total_available_height / 8)
                 self._ui.heading("Navigation Commands")
                 self._ui.label(
-                    "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting name. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the name of a setting."
+                    "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting number. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the name of a setting."
                 )
 
     async def _render_error_copy_buttons(self, error_message, setting):
@@ -408,11 +410,11 @@ class Actions:
         manager.update_page(name)
         settings_gui.refresh()
 
-    def settings_window_choose_setting_ui(name: str):
-        """Focus or toggle the setting"""
+    def settings_window_choose_setting_ui(number: int):
+        """Focus or toggle the setting by number"""
         if manager is None:
             return
-        manager.chosen_setting = name
+        manager.chosen_setting = number
         settings_gui.refresh()
 
     def settings_window_toggle_commenting_setting(name: str):
