@@ -185,21 +185,21 @@ class SpokenFormTree:
     def is_empty(self):
         return self.children.is_empty()
 
+
 def _find_curly_bracing_enclosed_pairs(text):
     """Return the start, end index pairs for text enclosed in curly braces including the braces"""
     result = []
     start = 0
     while True:
-        brace_start = text.find('{', start)
+        brace_start = text.find("{", start)
         if brace_start == -1:
             break
-        brace_end = text.find('}', brace_start + 1)
+        brace_end = text.find("}", brace_start + 1)
         if brace_end == -1:
             break
         result.append((brace_start, brace_end + 1))
         start = brace_end + 1
     return result
-
 
 
 class TreeRenderer:
@@ -234,16 +234,14 @@ class TreeRenderer:
                 list_index += 1
                 index = b
 
-                l = name_to_list.get(rule_text[a+1:b-1])
+                l = name_to_list.get(rule_text[a + 1 : b - 1])
                 if l is None:
                     self._ui.label(rule_text[a:b])
                     continue
                 if not l.is_in_registry:
                     self._ui.weak(f"{l.name} (list not found)")
                     continue
-                if self._ui_wrapper.button(
-                    f"help list {l.id_number}: {l.name}"
-                ):
+                if self._ui_wrapper.button(f"help list {l.id_number}: {l.name}"):
                     open_list_help(l.name)
 
     async def _render_capture_ui(self, capture):
@@ -285,7 +283,6 @@ class TreeRenderer:
                             open_list_help(l.name)
                     else:
                         self._ui.weak(f"{l.name} (list not found)")
-                
 
     async def _render_capture_card(self, capture):
         """Renders the card around the capture ui"""
@@ -303,7 +300,7 @@ class TreeRenderer:
 
     async def _render_children(self, children):
         """Render the children of the current spoken"""
-        #await self._render_lists(children.lists)
+        # await self._render_lists(children.lists)
         for c in children.captures:
             await self._render_capture_card(c)
 
