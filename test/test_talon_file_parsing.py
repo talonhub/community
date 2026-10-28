@@ -10,7 +10,7 @@ if hasattr(talon, "test_mode"):
         def __init__(self, text):
             self.text = text
 
-        def read_text(self):
+        def read_text(self, *args):
             return self.text
 
     def _assert_parser_matches_expected(
