@@ -81,9 +81,13 @@ class Manager:
             self.on_file_change(path)
         self.error_message = ""
         self.error_setting = None
-        ctx.lists["user.community_settings_window_page"] = {
+        
+        page_talon_list = {
             page.title: page.title for page in pages
         }
+        page_talon_list[MAIN_PAGE_NAME] = MAIN_PAGE_NAME
+        ctx.lists["user.community_settings_window_page"] = page_talon_list
+        
         self.chosen_setting = None
         self._ui: egui.Ui
         self._ui_wrapper: UIWrapper
