@@ -192,7 +192,9 @@ class Manager:
                 self._ui.label(page.description)
             self._ui.add_space(5)
             self._ui.strong("Commands")
-            self._ui.label("You can use the input for editing a setting by saying \"setting\" and then the setting number, such as by saying \"setting one\".\nYou can toggle if a setting is set in a Community .talon file by saying \"comment toggle\" and then the number of the setting, such as by saying \"comment toggle one\".\n")
+            self._ui.label(
+                'You can use the input for editing a setting by saying "setting" and then the setting number, such as by saying "setting one".\nYou can toggle if a setting is set in a Community .talon file by saying "comment toggle" and then the number of the setting, such as by saying "comment toggle one".\n'
+            )
             self._ui.label("* toggle setting that setting in a Community .talon file")
             self._ui.separator()
 
