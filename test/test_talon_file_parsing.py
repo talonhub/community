@@ -121,6 +121,8 @@ tag(): user.c
     # user.b = 5
     user.c = 1
 """
-        settings = {"user.c": SettingFileSettingInformation(1, 5, 6, assignment_prefix=" "*4)}
+        settings = {
+            "user.c": SettingFileSettingInformation(1, 5, 6, assignment_prefix=" " * 4)
+        }
         duplicate_settings = {"user.a", "user.b"}
         _assert_parser_matches_expected(test_case, settings, {}, duplicate_settings, {})
