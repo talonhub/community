@@ -1,0 +1,7 @@
+list: user.kubectl_action
+-
+
+delete
+describe
+get
+label
