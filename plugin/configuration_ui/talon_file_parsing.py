@@ -9,6 +9,7 @@ from typing import Any
 @dataclass
 class SettingFileSettingInformation:
     """Information on a setting assignment in a .talon file"""
+
     value: Any
     start_line_index: int
     line_after_index: int
