@@ -193,10 +193,11 @@ class Manager:
             self._ui.separator()
             self._ui.add_space(5)
             async with self._ui.group():
-                self._ui.strong("Input Commands")
+                self._ui.label(egui.RichText("Input Commands").italics().into_widget_text())
                 self._ui.label(
-                    'You can use the input for editing a setting by saying "setting" and then the setting number, such as by saying "setting one".\nYou can toggle if a setting is set in a Community .talon file by saying "comment toggle" and then the number of the setting, such as by saying "comment toggle one".\n'
+                    'You can use the input for editing a setting by saying "setting" and then the setting number, such as by saying "setting one".\nYou can toggle if a setting is set in a Community .talon file by saying "comment toggle" and then the number of the setting, such as by saying "comment toggle one".'
                 )
+            self._ui_wrapper.spacing()
             self._ui.label("* toggle setting that setting in a Community .talon file")
             self._ui.separator()
 
