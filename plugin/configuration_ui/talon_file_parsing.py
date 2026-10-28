@@ -18,6 +18,7 @@ class SettingFileSettingInformation:
     assignment_prefix: str = ""
 
 
+# used for no value available. None is valid in TalonScript, so use this instead
 VALUE_UNAVAILABLE = ...
 # matches commented and uncommented tag activations. Parses the name of the tag.
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
@@ -110,12 +111,12 @@ class SettingsParser:
         i = 0
         while i < len(self.lines):
             line = self.lines[i]
-            if match := TAG_PREFIX_PATTERN.search(line):
+            if match := TAG_PREFIX_PATTERN.fullmatch(line):
                 name = match.group("name").strip()
                 is_active = not line.startswith("#")
                 information = SettingFileSettingInformation(is_active, i, i + 1)
                 self._add_information(name, information, self.tags, self.duplicate_tags)
-            elif match := SETTING_ASSIGNMENT_PATTERN.search(line):
+            elif match := SETTING_ASSIGNMENT_PATTERN.fullmatch(line):
                 assignment_prefix, name, value_text = match.groups()
                 is_active = "#" not in assignment_prefix
                 starting_index = i
