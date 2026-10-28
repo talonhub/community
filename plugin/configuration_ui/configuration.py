@@ -316,7 +316,7 @@ class Manager:
                 self._ui.add_space(total_available_height / 8)
                 self._ui.heading("Navigation")
                 self._ui.label(
-                    "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page."
+                    'You can open a page by saying "page" and then the page name, such a saying "page text insertion" to open the text insertion settings page.'
                 )
 
     async def _render_error_copy_buttons(self, error_message, setting):
