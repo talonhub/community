@@ -89,7 +89,6 @@ class Manager:
             page.title: page.title for page in pages
         }
         self.chosen_setting = None
-        self.comment_toggle_setting = None
         self.post_action = None
         self._ui: egui.Ui
         self._ui_wrapper: UIWrapper
@@ -123,7 +122,6 @@ class Manager:
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
         post_action = self.post_action
         chosen_setting = self.chosen_setting
-        comment_toggle_setting = self.comment_toggle_setting
         old_error_message = self.error_message
 
         self._ui = ui
@@ -146,15 +144,11 @@ class Manager:
                 await self._render_current_page(
                     total_available_height,
                     chosen_setting,
-                    comment_toggle_setting,
                 )
 
         # cleanup state and handle post action
         if chosen_setting is not None:
             self.chosen_setting = None
-            settings_gui.refresh()
-        if comment_toggle_setting is not None:
-            self.comment_toggle_setting = None
             settings_gui.refresh()
         if post_action:
             post_action()
@@ -175,7 +169,6 @@ class Manager:
         self,
         total_available_height,
         chosen_setting,
-        comment_toggle_setting,
     ):
         if self.page == MAIN_PAGE_NAME:
             await self._render_main_page(total_available_height)
@@ -187,14 +180,12 @@ class Manager:
         await self._render_configuration_page(
             total_available_height,
             chosen_setting,
-            comment_toggle_setting,
         )
 
     async def _render_configuration_page(
         self,
         total_available_height,
         chosen_setting,
-        comment_toggle_setting,
     ):
         page = self.pages[self.page]
 
@@ -218,7 +209,6 @@ class Manager:
                     setting,
                     page,
                     is_setting_chosen,
-                    comment_toggle_setting,
                     i + 1,
                 )
                 self._ui.separator()
@@ -226,7 +216,7 @@ class Manager:
                     self.post_action = setting.post_chosen_action
 
     async def _render_setting_row(
-        self, setting, page, is_setting_chosen, comment_toggle_setting, setting_number
+        self, setting, page, is_setting_chosen, setting_number
     ):
         """Render the row for a setting"""
         readable_name = compute_readable_name(setting.name, page.prefix)
@@ -234,7 +224,6 @@ class Manager:
         async with self._ui.horizontal():
             await self._render_toggle_commenting_setting_column(
                 setting,
-                comment_toggle_setting == setting_number,
                 error_representation_of_name,
             )
             async with self._ui.with_layout(egui.Layout.right_to_left(egui.Align.TOP)):
@@ -294,7 +283,6 @@ class Manager:
     async def _render_toggle_commenting_setting_column(
         self,
         setting,
-        comment_toggle_setting,
         error_representation_of_name,
     ):
         """Render the column for the checkbox for toggling commenting a setting"""
@@ -308,7 +296,6 @@ class Manager:
         else:
             if (
                 self._ui.checkbox(egui.Mutable(setting.is_activated), "*").clicked()
-                or comment_toggle_setting
             ):
                 try:
                     update_setting(setting, make_comment=setting.is_activated)
@@ -358,7 +345,17 @@ class Manager:
             text = f"{error_message}\n\n{path.stem + path.suffix}\n\n{file_text}"
             clip.set_text(text)
 
-
+    def toggle_commenting_setting_by_number(self, number: int):
+        """Toggle commenting a setting on the current page by its number"""
+        if self.page == MAIN_PAGE_NAME:
+            return
+        page = self.pages[self.page]
+        settings = page.settings
+        if len(settings) < number:
+            return 
+        setting = page.settings[number - 1]
+        update_setting(setting, make_comment=setting.is_activated)
+            
 manager = None
 
 
@@ -421,5 +418,5 @@ class Actions:
         """Toggle commenting the setting by number"""
         if manager is None:
             return
-        manager.comment_toggle_setting = number
+        manager.toggle_commenting_setting_by_number(number)
         settings_gui.refresh()
