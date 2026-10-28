@@ -1,4 +1,4 @@
-list: user.kubectl
+list: user.kubectl_output_format_object
 tag: user.kubectl
 -
 
