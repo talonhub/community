@@ -57,7 +57,9 @@ class Setting:
             if not description:
                 return DEFAULT_DESCRIPTION
             return description
-        except Exception:
+        except KeyError:
+            return DEFAULT_DESCRIPTION
+        except AttributeError:
             return DEFAULT_DESCRIPTION
 
 
