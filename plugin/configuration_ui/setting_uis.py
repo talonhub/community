@@ -50,7 +50,7 @@ class Setting:
     default_value = VALUE_UNAVAILABLE
 
     def get_description(self):
-        with suppress(KeyError, AttributeError):
+        with suppress(KeyError):
             if self.is_tag:
                 description = registry.decls.tags[self.name].desc
             else:
