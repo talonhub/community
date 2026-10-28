@@ -8,6 +8,7 @@ from typing import Any
 
 @dataclass
 class SettingFileSettingInformation:
+    """Information on a setting assignment in a .talon file"""
     value: Any
     start_line_index: int
     line_after_index: int
@@ -17,7 +18,9 @@ class SettingFileSettingInformation:
 
 
 VALUE_UNAVAILABLE = ...
+# matches commented and uncommented tag activations. Parses the name of the tag.
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
+# matches commented and uncommented setting assignments. Parses the prefix before the assignment including spaces and hash signs, the setting name, and the value assigned to the setting.
 SETTING_ASSIGNMENT_PATTERN = re.compile(
     r"^(?P<assignment_prefix>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)"
 )
