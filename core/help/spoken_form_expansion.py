@@ -185,6 +185,22 @@ class SpokenFormTree:
     def is_empty(self):
         return self.children.is_empty()
 
+def _find_curly_bracing_enclosed_pairs(text):
+    """Return the start, end index pairs for text enclosed in curly braces including the braces"""
+    result = []
+    start = 0
+    while True:
+        brace_start = text.find('{', start)
+        if brace_start == -1:
+            break
+        brace_end = text.find('}', brace_start + 1)
+        if brace_end == -1:
+            break
+        result.append((brace_start, brace_end + 1))
+        start = brace_end + 1
+    return result
+
+
 
 class TreeRenderer:
     def __init__(
@@ -201,6 +217,35 @@ class TreeRenderer:
         self._ui = None
         self._ui_wrapper = None
 
+    async def _render_rule(self, lists, rule_text: str):
+        list_positions = _find_curly_bracing_enclosed_pairs(rule_text)
+        list_index = 0
+        index = 0
+        name_to_list = {l.name: l for l in lists}
+        while index < len(rule_text):
+            if list_index >= len(list_positions):
+                self._ui.label(rule_text[index:])
+                break
+            a, b = list_positions[list_index]
+            if index < a:
+                self._ui.label(rule_text[index:a])
+                index = a
+            else:
+                list_index += 1
+                index = b
+
+                l = name_to_list.get(rule_text[a+1:b-1])
+                if l is None:
+                    self._ui.label(rule_text[a:b])
+                    continue
+                if not l.is_in_registry:
+                    self._ui.weak(f"{l.name} (list not found)")
+                    continue
+                if self._ui_wrapper.button(
+                    f"help list {l.id_number}: {l.name}"
+                ):
+                    open_list_help(l.name)
+
     async def _render_capture_ui(self, capture):
         """Renders information about the capture"""
         if (
@@ -216,26 +261,14 @@ class TreeRenderer:
             self._ui.label(f"Description: {description}")
         async with self._ui.horizontal_wrapped():
             rule = get_rule_or_default(capture.rule)
-            self._ui.label(f"Rule: {rule}")
+            rule_text = f"Rule: {rule}"
+            await self._render_rule(capture.children.lists, rule_text)
+
             if self._ui_wrapper.button(f"expansion show {capture.id_number}"):
                 self._set_root_to_child_callback(
                     capture.compute_talon_script_representation()
                 )
         await self._render_children(capture.children)
-
-    async def _render_capture_card(self, capture):
-        """Renders the card around the capture ui"""
-        title = f"Capture {capture.compute_talon_script_representation()}."
-        expand_by_default = capture.name not in self._encountered_this_render
-        self._encountered_this_render.add(capture.name)
-        collapsing_header = egui.CollapsingHeader(title).default_open(expand_by_default)
-        async with self._ui.scope() as scope, scope.style_mut() as style:
-            # do not render vertical line for the collapsing header
-            visuals = style.visuals()
-            visuals.indent_has_left_vline = False
-            style.set_visuals(visuals)
-            async with self._ui.group(), collapsing_header.show():
-                await self._render_capture_ui(capture)
 
     async def _render_lists(self, lists):
         """Render a list of Talon lists"""
@@ -252,10 +285,25 @@ class TreeRenderer:
                             open_list_help(l.name)
                     else:
                         self._ui.weak(f"{l.name} (list not found)")
+                
+
+    async def _render_capture_card(self, capture):
+        """Renders the card around the capture ui"""
+        title = f"Capture {capture.compute_talon_script_representation()}."
+        expand_by_default = capture.name not in self._encountered_this_render
+        self._encountered_this_render.add(capture.name)
+        collapsing_header = egui.CollapsingHeader(title).default_open(expand_by_default)
+        async with self._ui.scope() as scope, scope.style_mut() as style:
+            # do not render vertical line for the collapsing header
+            visuals = style.visuals()
+            visuals.indent_has_left_vline = False
+            style.set_visuals(visuals)
+            async with self._ui.group(), collapsing_header.show():
+                await self._render_capture_ui(capture)
 
     async def _render_children(self, children):
         """Render the children of the current spoken"""
-        await self._render_lists(children.lists)
+        #await self._render_lists(children.lists)
         for c in children.captures:
             await self._render_capture_card(c)
 
