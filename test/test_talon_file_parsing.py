@@ -112,3 +112,15 @@ tag(): user.c
         tags = {"user.c": SettingFileSettingInformation(True, 4, 5)}
         duplicate_tags = {"user.a", "user.b"}
         _assert_parser_matches_expected(test_case, {}, duplicate_tags, set(), tags)
+
+    def test_handles_duplicate_settings():
+        test_case = r"""settings():
+    user.a = 6
+    user.a = 7
+    user.b = 5
+    # user.b = 5
+    user.c = 1
+"""
+        settings = {"user.c": SettingFileSettingInformation(1, 5, 6, assignment_prefix=" "*4)}
+        duplicate_settings = {"user.a", "user.b"}
+        _assert_parser_matches_expected(test_case, settings, {}, duplicate_settings, {})
