@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+import re
 
 import egui
 from talon import Context, Module, actions, cron, registry
@@ -188,18 +189,8 @@ class SpokenFormTree:
 
 def _find_curly_bracing_enclosed_pairs(text):
     """Return the start, end index pairs for text enclosed in curly braces including the braces"""
-    result = []
-    start = 0
-    while True:
-        brace_start = text.find("{", start)
-        if brace_start == -1:
-            break
-        brace_end = text.find("}", brace_start + 1)
-        if brace_end == -1:
-            break
-        result.append((brace_start, brace_end + 1))
-        start = brace_end + 1
-    return result
+    pattern = r"\{([^{}]*)\}"
+    return [(match.start(), match.end()) for match in  re.finditer(pattern, text)]
 
 
 class TreeRenderer:
