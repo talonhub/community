@@ -47,8 +47,7 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
     if info.line_after_index - info.start_line_index > 1:
         lines = lines[: info.start_line_index + 1] + lines[info.line_after_index :]
 
-    with open(path, "w") as f:
-        f.write("\n".join(lines))
+    path.write_text("\n".join(lines), encoding="utf-8")
 
 
 def update_tag(tag, should_be_active):
@@ -74,5 +73,4 @@ def update_tag(tag, should_be_active):
         lines.append("\n")
         lines.append(new_string)
 
-    with open(path, "w") as f:
-        f.write("\n".join(lines))
+    path.write_text("\n".join(lines), encoding="utf-8")
