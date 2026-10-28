@@ -117,22 +117,25 @@ class Manager:
         chosen_setting = self.chosen_setting
         old_error_message = self.error_message
 
+        # if the user chose a valid setting to focus, focus it
         if chosen_setting is not None and self._is_setting_number_valid(chosen_setting):
             self.pages[self.page].settings[chosen_setting - 1].renderer.focus()
 
         self._ui = ui
         self._ui_wrapper = ui_wrapper
 
+        # put the page navigation on the left and the actual page on the right
         total_available_height = ui.available_height()
         async with self._ui.horizontal():
             await self._render_page_navigation(self._ui, total_available_height)
 
-            # put the page on the space to the right of the page navigation
+            # compute the space for the page
             available_width = self._ui.available_width()
             interaction_region_space = egui.Vec2(
                 available_width, total_available_height
             )
 
+            # render the page
             async with (
                 self._ui.allocate_ui(interaction_region_space),
                 self._ui.ui.vertical(),
@@ -229,7 +232,7 @@ class Manager:
     async def _render_setting_revert_button(self, setting, button_text, revert_value):
         async with self._ui.group(), self._ui.horizontal_wrapped():
             if self._ui_wrapper.button(button_text):
-                setting.update_function(setting, setting.first_value)
+                setting.update_function(setting, revert_value)
             self._ui.label(str(revert_value))
 
     async def _render_settings_ui(self, setting, error_representation_of_name):
@@ -237,10 +240,13 @@ class Manager:
         old_value = setting.value.get()
         try:
             async with self._ui.add_enabled_ui(setting.is_activated or setting.is_tag):
+                # render the main input for updating the setting
                 await setting.renderer.render(setting, self._ui)
                 value = setting.value.get()
                 if old_value != value:
                     setting.update_function(setting, value)
+
+                # let the user revert the setting to the old or default value
                 if setting.first_value != setting.value.get():
                     await self._render_setting_revert_button(
                         setting,
@@ -331,9 +337,9 @@ class Manager:
         update_setting(setting, make_comment=setting.is_activated)
 
     def _is_setting_number_valid(self, number: int) -> bool:
-        if self.page == MAIN_PAGE_NAME:
+        page = self.pages.get(self.page)
+        if not page:
             return False
-        page = self.pages[self.page]
         return len(page.settings) >= number
 
 
