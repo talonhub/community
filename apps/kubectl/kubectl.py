@@ -32,4 +32,3 @@ ctx.lists["user.kubectl_object"] = (
 )
 
 mod.list("kubectl_output_format_object", desc="-o parameters, so output formatters")
-ctx.lists["user.kubectl_output_format_object"] = ("yaml", "wide")
