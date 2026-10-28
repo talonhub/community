@@ -322,7 +322,7 @@ class Manager:
         if self._ui_wrapper.button("copy with setting file"):
             path: Path = setting.path
             try:
-                file_text = path.read_text()
+                file_text = path.read_text(encoding="utf-8")
             except OSError as ex:
                 file_text = f"Error occurred trying to open the file {ex}"
             text = f"{error_message}\n\n{path.stem + path.suffix}\n\n{file_text}"
