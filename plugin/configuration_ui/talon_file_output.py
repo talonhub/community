@@ -42,7 +42,7 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
     new_setting_text = f"{assignment_prefix}{name} = {converted_value}"
 
     lines = parser.lines
-    lines[info.start_line_index:info.line_after_index] = [new_setting_text]
+    lines[info.start_line_index : info.line_after_index] = [new_setting_text]
 
     path.write_text("\n".join(lines), encoding="utf-8")
 
