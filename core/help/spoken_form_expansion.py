@@ -189,7 +189,7 @@ class SpokenFormTree:
 
 def _find_curly_bracing_enclosed_pairs(text):
     """Return the start, end index pairs for text enclosed in curly braces including the braces"""
-    pattern = r"\{([^{}]*)\}"
+    pattern = r"\{([^}]*)\}"
     return [(match.start(), match.end()) for match in re.finditer(pattern, text)]
 
 
