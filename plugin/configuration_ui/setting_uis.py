@@ -3,6 +3,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
+from abc import abstractmethod, ABC
 
 import egui
 from talon import actions, registry
@@ -19,11 +20,22 @@ from .talon_file_parsing import (
 
 DEFAULT_DESCRIPTION = "Something went wrong. Could not find the setting description."
 
+class SettingRenderer(ABC):
+    def __init__(self):
+        self.should_focus = False
+
+    @abstractmethod
+    async def render(self, setting, ui):
+        pass
+
+    def focus(self):
+        self.should_focus = True
+
 
 @dataclass
 class Setting:
     name: str
-    render: Callable
+    renderer: SettingRenderer
     update_function: Callable = update_setting
     path: Path = SETTINGS_PATH
     is_tag: bool = False
@@ -47,17 +59,19 @@ class Setting:
             return DEFAULT_DESCRIPTION
 
 
-async def _render_toggle(setting: Setting, ui, is_setting_chosen):
-    response = ui.checkbox(setting.value, setting.get_description())
-    if is_setting_chosen:
-        setting.value.set(not setting.value.get())
-        _focus_widget(response)
+class ToggleSettingRenderer(SettingRenderer):
+    async def render(self, setting: Setting, ui):
+        response = ui.checkbox(setting.value, setting.get_description())
+        if self.should_focus:
+            setting.value.set(not setting.value.get())
+            _focus_widget(response)
+            self.should_focus = False
 
 
 def create_tag_setting(name):
     return Setting(
         name,
-        _render_toggle,
+        ToggleSettingRenderer(),
         update_tag,
         is_tag=True,
         renders_description=True,
@@ -67,7 +81,7 @@ def create_tag_setting(name):
 def create_boolean_setting(name):
     return Setting(
         name,
-        _render_toggle,
+        ToggleSettingRenderer(),
         update_setting,
         renders_description=True,
     )
@@ -83,53 +97,65 @@ def _focus_widget(response):
     response.scroll_to_me(None)
 
 
-async def _render_numeric_input(
-    setting: Setting, ui, minimum, maximum, is_setting_chosen
-):
-    _make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
-    response = ui.add(egui.DragValue(setting.value))
-    value = setting.value.get()
-    if minimum is not None:
-        value = max(value, minimum)
-    if maximum is not None:
-        value = min(value, maximum)
-    setting.value.set(value)
-    if is_setting_chosen:
-        _focus_widget(response)
+class NumericSettingRenderer(SettingRenderer):
+    def __init__(self, minimum, maximum, use_slider):
+        self.minimum = minimum
+        self.maximum = maximum
+        self.use_slider = use_slider
+
+    async def render(self, setting: Setting, ui):
+        if self.use_slider:
+            await self._render_slider_input(setting, ui)
+        else:
+            await self._render_slider_input(setting, ui)
+
+    async def _render_numeric_input(
+        self, setting: Setting, ui
+    ):
+        _make_value_float_if_there_is_a_float_bound(setting.value, self.minimum, self.maximum)
+        response = ui.add(egui.DragValue(setting.value))
+        value = setting.value.get()
+        if self.minimum is not None:
+            value = max(value, self.minimum)
+        if self.maximum is not None:
+            value = min(value, self.maximum)
+        setting.value.set(value)
+        if self.should_focus:
+            _focus_widget(response)
+            self.should_focus = False
 
 
-async def _render_slider_input(
-    setting: Setting, ui, minimum, maximum, is_setting_chosen
-):
-    _make_value_float_if_there_is_a_float_bound(setting.value, minimum, maximum)
-    slider = egui.Slider(setting.value, minimum, maximum)
-    response = ui.add(slider)
-    if is_setting_chosen:
-        _focus_widget(response)
-        # focus the numeric input instead of the slider part
-        actions.key("tab")
-
-
-async def _render_multiline_text_input(setting: Setting, ui, is_setting_chosen):
-    response = ui.add(egui.TextEdit.multiline(setting.value))
-    if is_setting_chosen:
-        _focus_widget(response)
+    async def _render_slider_input(
+        self, setting: Setting, ui
+    ):
+        _make_value_float_if_there_is_a_float_bound(setting.value, self.minimum, self.maximum)
+        slider = egui.Slider(setting.value, self.minimum, self.maximum)
+        response = ui.add(slider)
+        if self.should_focus:
+            _focus_widget(response)
+            # focus the numeric input instead of the slider part
+            actions.key("tab")
+            self.should_focus = False
 
 
 def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
-    ui_function = _render_slider_input if use_slider else _render_numeric_input
     return Setting(
         name,
-        lambda setting, ui, is_setting_chosen: ui_function(
-            setting, ui, minimum, maximum, is_setting_chosen
-        ),
+        NumericSettingRenderer(minimum, maximum, use_slider),
     )
 
+
+class TextSettingRenderer(SettingRenderer):
+    async def render(self, setting: Setting, ui):
+        response = ui.add(egui.TextEdit.multiline(setting.value))
+        if self.should_focus:
+            _focus_widget(response)
+            self.should_focus = False
 
 def create_text_setting(name):
     return Setting(
         name,
-        _render_multiline_text_input,
+        TextSettingRenderer(),
     )
 
 
