@@ -29,10 +29,6 @@ mod.list(
     "community_settings_window_page",
     desc="The name of a page in the Community settings window",
 )
-mod.list(
-    "community_settings_window_setting",
-    desc="The name of a setting on the current Community settings window page",
-)
 
 
 def _update_setting_information(
@@ -94,14 +90,6 @@ class Manager:
 
     def update_page(self, page_name):
         self.page = page_name
-        if self.page == MAIN_PAGE_NAME:
-            ctx.lists["user.community_settings_window_setting"] = {}
-            return
-        page = self.pages[self.page]
-        ctx.lists["user.community_settings_window_setting"] = {
-            compute_readable_name(setting.name, page.prefix): setting.name
-            for setting in page.settings
-        }
 
     def _get_settings_at_path(self, path):
         return (
