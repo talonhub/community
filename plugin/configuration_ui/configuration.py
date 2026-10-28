@@ -77,6 +77,7 @@ MAIN_PAGE_NAME = "Main"
 
 class Manager:
     """Responsible for the configuration UI. Organizes settings into pages, updates settings in response to user input, and updates the rendered state in response to the underlying files changing."""
+
     def __init__(self):
         pages = create_pages()
         self.pages = {page.title: page for page in pages}
