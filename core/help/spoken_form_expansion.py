@@ -253,7 +253,7 @@ class TreeRenderer:
             rule_text = f"Rule: {rule}"
             await self._render_rule(capture.children.lists, rule_text)
 
-            if self._ui_wrapper.button(f"expansion show {capture.id_number}"):
+            if self._ui_wrapper.button(f"hoist {capture.id_number}"):
                 self._set_root_to_child_callback(
                     capture.compute_talon_script_representation()
                 )
