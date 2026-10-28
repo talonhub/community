@@ -122,6 +122,9 @@ class Manager:
         chosen_setting = self.chosen_setting
         old_error_message = self.error_message
 
+        if chosen_setting is not None and self._is_setting_number_valid(chosen_setting):
+            self.pages[self.page].settings[chosen_setting - 1].renderer.focus()
+
         self._ui = ui
         self._ui_wrapper = ui_wrapper
 
@@ -141,10 +144,9 @@ class Manager:
             ):
                 await self._render_current_page(
                     total_available_height,
-                    chosen_setting,
                 )
 
-        # cleanup state and handle post action
+        # cleanup state
         if chosen_setting is not None:
             self.chosen_setting = None
             settings_gui.refresh()
@@ -162,7 +164,6 @@ class Manager:
     async def _render_current_page(
         self,
         total_available_height,
-        chosen_setting,
     ):
         if self.page == MAIN_PAGE_NAME:
             await self._render_main_page(total_available_height)
@@ -173,13 +174,11 @@ class Manager:
         self._ui.add_space(10)
         await self._render_configuration_page(
             total_available_height,
-            chosen_setting,
         )
 
     async def _render_configuration_page(
         self,
         total_available_height,
-        chosen_setting,
     ):
         page = self.pages[self.page]
 
@@ -198,17 +197,15 @@ class Manager:
             self._ui.separator()
 
             for i, setting in enumerate(page.settings):
-                is_setting_chosen = i + 1 == chosen_setting
                 await self._render_setting_row(
                     setting,
                     page,
-                    is_setting_chosen,
                     i + 1,
                 )
                 self._ui.separator()
 
     async def _render_setting_row(
-        self, setting, page, is_setting_chosen, setting_number
+        self, setting, page, setting_number
     ):
         """Render the row for a setting"""
         readable_name = compute_readable_name(setting.name, page.prefix)
@@ -232,7 +229,6 @@ class Manager:
                     else:
                         await self._render_settings_ui(
                             setting,
-                            is_setting_chosen,
                             error_representation_of_name,
                         )
                 self._ui.separator()
@@ -244,14 +240,12 @@ class Manager:
             self._ui.label(str(revert_value))
 
     async def _render_settings_ui(
-        self, setting, is_setting_chosen, error_representation_of_name
+        self, setting, error_representation_of_name
     ):
         """Render the ui for changing the setting"""
         old_value = setting.value.get()
         try:
             async with self._ui.add_enabled_ui(setting.is_activated or setting.is_tag):
-                if is_setting_chosen:
-                    setting.renderer.focus()
                 await setting.renderer.render(setting, self._ui)
                 value = setting.value.get()
                 if old_value != value:
@@ -339,14 +333,18 @@ class Manager:
 
     def toggle_commenting_setting_by_number(self, number: int):
         """Toggle commenting a setting on the current page by its number"""
-        if self.page == MAIN_PAGE_NAME:
+        if not self._is_setting_number_valid(number):
             return
         page = self.pages[self.page]
-        settings = page.settings
-        if len(settings) < number:
-            return
         setting = page.settings[number - 1]
         update_setting(setting, make_comment=setting.is_activated)
+
+    def _is_setting_number_valid(self, number: int) -> bool:
+        if self.page == MAIN_PAGE_NAME:
+            return False
+        page = self.pages[self.page]
+        return len(page.settings) >= number
+            
 
 
 manager = None
