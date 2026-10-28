@@ -1,0 +1,18 @@
+list: user.kubectl_object
+-
+
+configmaps
+daemonsets
+deployments
+endpoints
+events
+ingress
+jobs
+namespaces
+nodes
+persistentvolumeclaims
+persistentvolumes
+pods
+replicasets
+secrets
+services
