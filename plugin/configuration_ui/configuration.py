@@ -197,7 +197,7 @@ class Manager:
                     egui.RichText("Input Commands").italics().into_widget_text()
                 )
                 self._ui.label(
-                    'You can use the input for editing a setting by saying "setting" and then the setting number, such as by saying "setting one".\nYou can toggle if a setting is set in a Community .talon file by saying "comment toggle" and then the number of the setting, such as by saying "comment toggle one".'
+                    'You can use the input for editing a setting by saying "setting" and then the setting number, such as by saying "setting one".\nYou can toggle if a setting is set in a Community .talon file by saying "comment toggle" and then the number of the setting, such as by saying "comment toggle one".\nYou can use the "page up" and "page down" commands as well as the pageup/pagedown keys to scroll in this window.'
                 )
             self._ui_wrapper.spacing()
             self._ui.label("* toggle setting that setting in a Community .talon file")
