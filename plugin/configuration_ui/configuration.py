@@ -89,7 +89,6 @@ class Manager:
             page.title: page.title for page in pages
         }
         self.chosen_setting = None
-        self.post_action = None
         self._ui: egui.Ui
         self._ui_wrapper: UIWrapper
 
@@ -120,7 +119,6 @@ class Manager:
 
     async def render_settings_configuration_gui(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
-        post_action = self.post_action
         chosen_setting = self.chosen_setting
         old_error_message = self.error_message
 
@@ -149,10 +147,6 @@ class Manager:
         # cleanup state and handle post action
         if chosen_setting is not None:
             self.chosen_setting = None
-            settings_gui.refresh()
-        if post_action:
-            post_action()
-            self.post_action = None
             settings_gui.refresh()
         if old_error_message != self.error_message:
             settings_gui.refresh()
@@ -212,8 +206,6 @@ class Manager:
                     i + 1,
                 )
                 self._ui.separator()
-                if is_setting_chosen:
-                    self.post_action = setting.post_chosen_action
 
     async def _render_setting_row(
         self, setting, page, is_setting_chosen, setting_number
