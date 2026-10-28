@@ -1,9 +1,9 @@
 """This module provides UIs for configuring different kinds of settings"""
 
+from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from abc import abstractmethod, ABC
 
 import egui
 from talon import actions, registry
@@ -19,6 +19,7 @@ from .talon_file_parsing import (
 )
 
 DEFAULT_DESCRIPTION = "Something went wrong. Could not find the setting description."
+
 
 class SettingRenderer(ABC):
     def __init__(self):
@@ -109,10 +110,10 @@ class NumericSettingRenderer(SettingRenderer):
         else:
             await self._render_slider_input(setting, ui)
 
-    async def _render_numeric_input(
-        self, setting: Setting, ui
-    ):
-        _make_value_float_if_there_is_a_float_bound(setting.value, self.minimum, self.maximum)
+    async def _render_numeric_input(self, setting: Setting, ui):
+        _make_value_float_if_there_is_a_float_bound(
+            setting.value, self.minimum, self.maximum
+        )
         response = ui.add(egui.DragValue(setting.value))
         value = setting.value.get()
         if self.minimum is not None:
@@ -124,11 +125,10 @@ class NumericSettingRenderer(SettingRenderer):
             _focus_widget(response)
             self.should_focus = False
 
-
-    async def _render_slider_input(
-        self, setting: Setting, ui
-    ):
-        _make_value_float_if_there_is_a_float_bound(setting.value, self.minimum, self.maximum)
+    async def _render_slider_input(self, setting: Setting, ui):
+        _make_value_float_if_there_is_a_float_bound(
+            setting.value, self.minimum, self.maximum
+        )
         slider = egui.Slider(setting.value, self.minimum, self.maximum)
         response = ui.add(slider)
         if self.should_focus:
@@ -151,6 +151,7 @@ class TextSettingRenderer(SettingRenderer):
         if self.should_focus:
             _focus_widget(response)
             self.should_focus = False
+
 
 def create_text_setting(name):
     return Setting(
