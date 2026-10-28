@@ -41,6 +41,7 @@ def _parse_value(value):
         return False
     try:
         return literal_eval(value)
+    # literal_eval can throw many kinds of exceptions, so this is simpler than handling them explicitly
     except Exception:
         return VALUE_UNAVAILABLE
 
