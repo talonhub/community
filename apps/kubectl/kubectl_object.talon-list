@@ -1,8 +1,8 @@
 list: user.kubectl_object
 -
 
-configmaps
-daemonsets
+config maps: configmaps
+daemon sets: daemonsets
 deployments
 endpoints
 events
@@ -10,9 +10,9 @@ ingress
 jobs
 namespaces
 nodes
-persistentvolumeclaims
-persistentvolumes
+persistent volume claims: persistentvolumeclaims
+persistent volumes: persistentvolumes
 pods
-replicasets
+replica sets: replicasets
 secrets
 services
