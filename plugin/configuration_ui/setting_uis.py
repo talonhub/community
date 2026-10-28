@@ -115,13 +115,6 @@ class NumericSettingRenderer(SettingRenderer):
         if isinstance(self.maximum, float) or isinstance(self.minimum, float):
             value.set(float(value.get()))
 
-    async def render(self, setting: Setting, ui):
-        self._make_value_float_if_there_is_a_float_bound(setting.value)
-        if self.use_slider:
-            await self._render_slider_input(setting, ui)
-        else:
-            await self._render_numeric_input(setting, ui)
-
     async def _render_numeric_input(self, setting: Setting, ui):
         response = ui.add(egui.DragValue(setting.value))
         value = setting.value.get()
@@ -142,6 +135,13 @@ class NumericSettingRenderer(SettingRenderer):
             self.should_focus = False
             # focus the numeric input instead of the slider part
             actions.key("tab")
+
+    async def render(self, setting: Setting, ui):
+        self._make_value_float_if_there_is_a_float_bound(setting.value)
+        if self.use_slider:
+            await self._render_slider_input(setting, ui)
+        else:
+            await self._render_numeric_input(setting, ui)
 
 
 def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
