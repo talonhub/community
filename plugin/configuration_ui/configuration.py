@@ -31,13 +31,16 @@ mod.list(
 )
 
 
-def _update_setting_information(
+def _update_internal_setting_information(
     setting: Setting, file_setting_information: SettingFileSettingInformation
 ):
+    """Update internal setting state using information from the containing file"""
     setting.value.set(file_setting_information.value)
     setting.is_activated = file_setting_information.is_activated
+
     if setting.first_value == VALUE_UNAVAILABLE:
         setting.first_value = file_setting_information.value
+
     if not setting.is_tag and setting.default_value == VALUE_UNAVAILABLE:
         declaration = registry.decls.settings[setting.name]
         default = declaration.default
@@ -51,7 +54,7 @@ def _update_setting_information_based_on_file_update(setting: Setting, tags, set
     source = tags if setting.is_tag else settings
     if name in source:
         updated_information = source[name]
-        _update_setting_information(setting, updated_information)
+        _update_internal_setting_information(setting, updated_information)
     else:
         setting.value.set(VALUE_UNAVAILABLE)
 
@@ -73,10 +76,12 @@ MAIN_PAGE_NAME = "Main"
 
 
 class Manager:
+    """Responsible for the configuration UI. Organizes settings into pages, updates settings in response to user input, and updates the rendered state in response to the underlying files changing."""
     def __init__(self):
         pages = create_pages()
         self.pages = {page.title: page for page in pages}
         self.page = MAIN_PAGE_NAME
+        # use the change handling logic for handling the initial file states
         for path in RELEVANT_PATHS:
             self.on_file_change(path)
         self.error_message = ""
