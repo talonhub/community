@@ -14,7 +14,7 @@ if hasattr(talon, "test_mode"):
             return self.text
 
     def _assert_parser_matches_expected(
-        input_text, settings, duplicate_tags, duplicate_settings, tags
+        input_text, settings, tags, duplicate_settings, duplicate_tags
     ):
         path = MockPath(input_text)
         parser = SettingsParser(path)
@@ -72,7 +72,7 @@ tag(): user.pop_to_repeat
             "user.unprefixed_numbers": SettingFileSettingInformation(False, 17, 18),
             "user.pop_to_repeat": SettingFileSettingInformation(True, 18, 19),
         }
-        _assert_parser_matches_expected(test_case, settings, set(), set(), tags)
+        _assert_parser_matches_expected(test_case, settings, tags, set(), set())
 
     def test_handles_more_kinds_of_values():
         test_case = r"""settings()
@@ -100,7 +100,7 @@ tag(): user.pop_to_repeat
                 "a\n", 5, 8, assignment_prefix=prefix
             ),
         }
-        _assert_parser_matches_expected(test_case, settings, set(), set(), {})
+        _assert_parser_matches_expected(test_case, settings, {}, set(), set())
 
     def test_handles_duplicate_tags():
         test_case = r"""tag(): user.a
@@ -111,7 +111,7 @@ tag(): user.c
 """
         tags = {"user.c": SettingFileSettingInformation(True, 4, 5)}
         duplicate_tags = {"user.a", "user.b"}
-        _assert_parser_matches_expected(test_case, {}, duplicate_tags, set(), tags)
+        _assert_parser_matches_expected(test_case, {}, tags, set(), duplicate_tags)
 
     def test_handles_duplicate_settings():
         test_case = r"""settings():
@@ -126,5 +126,5 @@ tag(): user.c
         }
         duplicate_settings = {"user.a", "user.b"}
         _assert_parser_matches_expected(
-            test_case, settings, set(), duplicate_settings, {}
+            test_case, settings, {}, duplicate_settings, set()
         )
