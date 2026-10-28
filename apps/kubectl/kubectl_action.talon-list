@@ -1,4 +1,5 @@
 list: user.kubectl_action
+tag: user.kubectl
 -
 
 delete
