@@ -258,7 +258,9 @@ class Manager:
         old_value = setting.value.get()
         try:
             async with self._ui.add_enabled_ui(setting.is_activated or setting.is_tag):
-                await setting.render(setting, self._ui, is_setting_chosen)
+                if is_setting_chosen:
+                    setting.renderer.focus()
+                await setting.renderer.render(setting, self._ui)
                 value = setting.value.get()
                 if old_value != value:
                     setting.update_function(setting, value)

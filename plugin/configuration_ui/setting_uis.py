@@ -100,6 +100,7 @@ def _focus_widget(response):
 
 class NumericSettingRenderer(SettingRenderer):
     def __init__(self, minimum, maximum, use_slider):
+        super().__init__()
         self.minimum = minimum
         self.maximum = maximum
         self.use_slider = use_slider
@@ -108,7 +109,7 @@ class NumericSettingRenderer(SettingRenderer):
         if self.use_slider:
             await self._render_slider_input(setting, ui)
         else:
-            await self._render_slider_input(setting, ui)
+            await self._render_numeric_input(setting, ui)
 
     async def _render_numeric_input(self, setting: Setting, ui):
         _make_value_float_if_there_is_a_float_bound(
@@ -184,91 +185,119 @@ COLOR_TO_NAME = {
 }
 
 
-async def _render_color_picker_input(setting: Setting, ui, is_setting_chosen):
-    value = setting.value.get()
-    new_value = value
-    async with ui.horizontal_wrapped():
-        try:
-            parsed_rgb = parse_rgb_from_hex_string(value)
-        except ValueError:
-            parsed_rgb = None
-        if parsed_rgb is not None:
-            # provide color picker input option
-            rgb = egui.Mutable(parsed_rgb)
-            egui.color_edit_button_srgb(ui, rgb)
-            new_value = convert_rgb_to_hex_string(rgb.get())
-        else:
-            ui.label("Not valid color.")
+class ColorSettingRenderer(SettingRenderer):
+    def __init__(self):
+        super().__init__()
+        self.focusing_frame = 0
 
-        # allow picking color by name
-        color_name = egui.Mutable("")
-        # render the name of the current color if it is named
-        if value in COLOR_TO_NAME:
-            color_name.set(COLOR_TO_NAME[value])
-        # show dropdown for picking a color name
-        async with (
-            egui.ComboBox(setting.name, "pick by name")
-            .selected_text(color_name.get())
-            .show()
-        ) as combo_box:
-            if combo_box.shown:
-                combo_ui = combo_box.ui
-                for name in COLOR_TO_NAME.values():
-                    combo_ui.selectable_value(color_name, name, name)
-        # if a color name is chosen, update the actual color
-        name = color_name.get()
-        if name != "":
-            new_value = _compute_hexadecimal_from_color_name(name)
+    def focus(self):
+        self.focusing_frame = 0
+        self.should_focus = True
 
-        # only bother updating the setting value in response to color picker and name picker inputs if the colors are actually different
-        if new_value.lower() != setting.value.get().lower():
-            setting.value.set(new_value)
+    async def render(self, setting: Setting, ui):
+        value = setting.value.get()
+        new_value = value
+        async with ui.horizontal_wrapped():
+            try:
+                parsed_rgb = parse_rgb_from_hex_string(value)
+            except ValueError:
+                parsed_rgb = None
+            if parsed_rgb is not None:
+                # provide color picker input option
+                rgb = egui.Mutable(parsed_rgb)
+                egui.color_edit_button_srgb(ui, rgb)
+                new_value = convert_rgb_to_hex_string(rgb.get())
+            else:
+                ui.label("Not valid color.")
 
-        # allow using a text field to set the value directly
-        text_response = ui.add(egui.TextEdit.singleline(setting.value))
+            # allow picking color by name
+            color_name = egui.Mutable("")
+            # render the name of the current color if it is named
+            if value in COLOR_TO_NAME:
+                color_name.set(COLOR_TO_NAME[value])
+            # show dropdown for picking a color name
+            async with (
+                egui.ComboBox(setting.name, "pick by name")
+                .selected_text(color_name.get())
+                .show()
+            ) as combo_box:
+                if combo_box.shown:
+                    combo_ui = combo_box.ui
+                    for name in COLOR_TO_NAME.values():
+                        combo_ui.selectable_value(color_name, name, name)
+            # if a color name is chosen, update the actual color
+            name = color_name.get()
+            if name != "":
+                new_value = _compute_hexadecimal_from_color_name(name)
 
-        # allow focusing, but focus the name picker with shift tab as a temporary workaround for not being able to focus the combo box directly
-        if is_setting_chosen:
-            _focus_widget(text_response)
-            actions.key("shift-tab")
+            # only bother updating the setting value in response to color picker and name picker inputs if the colors are actually different
+            if new_value.lower() != setting.value.get().lower():
+                setting.value.set(new_value)
+
+            # allow using a text field to set the value directly
+            text_response = ui.add(egui.TextEdit.singleline(setting.value))
+
+            # allow focusing, but focus the name picker with shift tab as a temporary workaround for not being able to focus the combo box directly
+            if self.should_focus:
+                match self.focusing_frame:
+                    case 0:
+                        _focus_widget(text_response)
+                    case 1:
+                        actions.key("shift-tab")
+                    case 2:
+                        actions.key("enter")
+                        self.should_focus = False
+                self.focusing_frame += 1
 
 
 def create_color_picker_setting(name):
     return Setting(
         name,
-        _render_color_picker_input,
-        post_chosen_action=lambda: actions.key("enter"),
+        ColorSettingRenderer(),
     )
 
 
-async def _render_discrete_choices_input(
-    setting: Setting, ui, choices, is_chosen, is_numeric
-):
-    async with ui.horizontal():
-        async with (
-            egui.ComboBox(setting.name, "pick option")
-            .selected_text(str(setting.value.get()))
-            .show()
-        ) as combo_box:
-            if combo_box.shown:
-                combo_ui = combo_box.ui
-                for value, text in choices:
-                    combo_ui.selectable_value(setting.value, value, text)
-        if is_numeric:
-            response = ui.add(egui.DragValue(setting.value))
-        else:
-            response = ui.add(egui.TextEdit.singleline(setting.value))
-        if is_chosen:
-            _focus_widget(response)
-            actions.key("shift-tab")
+class DiscretSettingRenderer(SettingRenderer):
+    def __init__(self, choices, is_numeric):
+        super().__init__()
+        self.focusing_frame = 0
+        self.choices = choices
+        self.is_numeric = is_numeric
 
+    def focus(self):
+        self.focusing_frame = 0
+        self.should_focus = True
+
+    async def render(self, setting: Setting, ui):
+        async with ui.horizontal():
+            async with (
+                egui.ComboBox(setting.name, "pick option")
+                .selected_text(str(setting.value.get()))
+                .show()
+            ) as combo_box:
+                if combo_box.shown:
+                    combo_ui = combo_box.ui
+                    for value, text in self.choices:
+                        combo_ui.selectable_value(setting.value, value, text)
+            if self.is_numeric:
+                response = ui.add(egui.DragValue(setting.value))
+            else:
+                response = ui.add(egui.TextEdit.singleline(setting.value))
+
+            if self.should_focus:
+                match self.focusing_frame:
+                    case 0:
+                        _focus_widget(response)
+                    case 1:
+                        actions.key("shift-tab")
+                    case 2:
+                        actions.key("enter")
+                        self.should_focus = False
+                self.focusing_frame += 1
 
 def create_discrete_choices_setting(name, choices, is_numeric=False):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
     return Setting(
         name,
-        lambda setting, ui, is_chosen: _render_discrete_choices_input(
-            setting, ui, choices, is_chosen, is_numeric
-        ),
-        post_chosen_action=lambda: actions.key("enter"),
+        DiscretSettingRenderer(choices, is_numeric),
     )
