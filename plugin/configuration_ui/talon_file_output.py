@@ -33,6 +33,8 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
 
     info = parser.settings[name]
     assignment_prefix = info.assignment_prefix
+    # the prefix can include #'s, but we only want to add those if we are intentionally making this a comment
+    # the logic was done this way to to avoid depending on knowing exactly what the prefix is
     if not assignment_prefix.isspace():
         num_leading_spaces = len(assignment_prefix) - len(assignment_prefix.lstrip())
         assignment_prefix = assignment_prefix[:num_leading_spaces]
