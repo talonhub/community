@@ -1,4 +1,5 @@
 list: user.kubectl_object
+tag: user.kubectl
 -
 
 config maps: configmaps
