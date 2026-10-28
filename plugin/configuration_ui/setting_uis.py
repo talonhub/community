@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
+from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -49,18 +50,14 @@ class Setting:
     default_value = VALUE_UNAVAILABLE
 
     def get_description(self):
-        try:
+        with suppress(KeyError, AttributeError):
             if self.is_tag:
                 description = registry.decls.tags[self.name].desc
             else:
                 description = registry.decls.settings[self.name].desc
-            if not description:
-                return DEFAULT_DESCRIPTION
-            return description
-        except KeyError:
-            return DEFAULT_DESCRIPTION
-        except AttributeError:
-            return DEFAULT_DESCRIPTION
+            if description:
+                return description
+        return DEFAULT_DESCRIPTION
 
 
 def _focus_widget(response):
