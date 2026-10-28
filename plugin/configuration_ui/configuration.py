@@ -89,7 +89,7 @@ class Manager:
             page.title: page.title for page in pages
         }
         self.chosen_setting = None
-        self.comment_toggle_setting = ""
+        self.comment_toggle_setting = None
         self.post_action = None
         self._ui: egui.Ui
         self._ui_wrapper: UIWrapper
@@ -153,8 +153,8 @@ class Manager:
         if chosen_setting is not None:
             self.chosen_setting = None
             settings_gui.refresh()
-        if comment_toggle_setting:
-            self.comment_toggle_setting = ""
+        if comment_toggle_setting is not None:
+            self.comment_toggle_setting = None
             settings_gui.refresh()
         if post_action:
             post_action()
@@ -234,7 +234,7 @@ class Manager:
         async with self._ui.horizontal():
             await self._render_toggle_commenting_setting_column(
                 setting,
-                comment_toggle_setting,
+                comment_toggle_setting == setting_number,
                 error_representation_of_name,
             )
             async with self._ui.with_layout(egui.Layout.right_to_left(egui.Align.TOP)):
@@ -308,7 +308,7 @@ class Manager:
         else:
             if (
                 self._ui.checkbox(egui.Mutable(setting.is_activated), "*").clicked()
-                or comment_toggle_setting == setting.name
+                or comment_toggle_setting
             ):
                 try:
                     update_setting(setting, make_comment=setting.is_activated)
@@ -342,7 +342,7 @@ class Manager:
                 self._ui.add_space(total_available_height / 8)
                 self._ui.heading("Navigation Commands")
                 self._ui.label(
-                    "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting number. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the name of a setting."
+                    "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting number. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the number of a setting."
                 )
 
     async def _render_error_copy_buttons(self, error_message, setting):
@@ -417,9 +417,9 @@ class Actions:
         manager.chosen_setting = number
         settings_gui.refresh()
 
-    def settings_window_toggle_commenting_setting(name: str):
-        """Toggle commenting the setting"""
+    def settings_window_toggle_commenting_setting(number: int):
+        """Toggle commenting the setting by number"""
         if manager is None:
             return
-        manager.comment_toggle_setting = name
+        manager.comment_toggle_setting = number
         settings_gui.refresh()
