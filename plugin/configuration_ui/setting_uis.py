@@ -39,15 +39,24 @@ class SettingRenderer(ABC):
 
 @dataclass
 class Setting:
+    # the setting name
     name: str
+    # the object used to render the setting customization UI
     renderer: SettingRenderer
+    # the function used to update the setting's value in its .talon file
     update_function: Callable = update_setting
+    # the path of the .talon file
     path: Path = SETTINGS_PATH
+    # is this a tag or a setting
     is_tag: bool = False
+    # false means this is a commented out setting
     is_activated: bool = True
-    value: egui.Mutable = field(default_factory=lambda: egui.Mutable(VALUE_UNAVAILABLE))
+    # the current setting value in the file
     # none is a valid value in TalonScript, so use something else for not available
+    value: egui.Mutable = field(default_factory=lambda: egui.Mutable(VALUE_UNAVAILABLE))
+    # the first value of the setting encountered after opening the configuration UI
     first_value = VALUE_UNAVAILABLE
+    # the default value of the setting if one is available
     default_value = VALUE_UNAVAILABLE
 
     def get_description(self):
