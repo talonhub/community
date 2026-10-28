@@ -34,7 +34,7 @@ mod.list(
 def _update_setting_information(
     setting: Setting, file_setting_information: SettingFileSettingInformation
 ):
-    setting.value = egui.Mutable(file_setting_information.value)
+    setting.value.set(file_setting_information.value)
     setting.is_activated = file_setting_information.is_activated
     if setting.first_value == VALUE_UNAVAILABLE:
         setting.first_value = file_setting_information.value

@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from contextlib import suppress
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import egui
@@ -45,7 +45,7 @@ class Setting:
     path: Path = SETTINGS_PATH
     is_tag: bool = False
     is_activated: bool = True
-    value: egui.Mutable = egui.Mutable(VALUE_UNAVAILABLE)
+    value: egui.Mutable = field(default_factory=lambda: egui.Mutable(VALUE_UNAVAILABLE))
     # none is a valid value in TalonScript, so use something else for not available
     first_value = VALUE_UNAVAILABLE
     default_value = VALUE_UNAVAILABLE
