@@ -35,6 +35,7 @@ class SettingRenderer(ABC):
     def renders_description(self) -> bool:
         return False
 
+
 @dataclass
 class Setting:
     name: str
