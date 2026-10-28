@@ -27,7 +27,7 @@ class SettingRenderer(ABC):
 
     @abstractmethod
     async def render(self, setting, ui):
-        pass
+        """Render widget(s) for changing the setting"""
 
     def focus(self):
         self.should_focus = True
@@ -61,6 +61,11 @@ class Setting:
             return DEFAULT_DESCRIPTION
 
 
+def _focus_widget(response):
+    response.request_focus()
+    response.scroll_to_me(None)
+
+
 class ToggleSettingRenderer(SettingRenderer):
     async def render(self, setting: Setting, ui):
         response = ui.checkbox(setting.value, setting.get_description())
@@ -90,16 +95,6 @@ def create_boolean_setting(name):
     )
 
 
-def _make_value_float_if_there_is_a_float_bound(value, minimum, maximum):
-    if isinstance(minimum, float) or isinstance(maximum, float):
-        value.set(float(value.get()))
-
-
-def _focus_widget(response):
-    response.request_focus()
-    response.scroll_to_me(None)
-
-
 class NumericSettingRenderer(SettingRenderer):
     def __init__(self, minimum, maximum, use_slider):
         super().__init__()
@@ -107,16 +102,18 @@ class NumericSettingRenderer(SettingRenderer):
         self.maximum = maximum
         self.use_slider = use_slider
 
+    def _make_value_float_if_there_is_a_float_bound(self, value):
+        if isinstance(self.maximum, float) or isinstance(self.minimum, float):
+            value.set(float(value.get()))
+
     async def render(self, setting: Setting, ui):
+        self._make_value_float_if_there_is_a_float_bound(setting.value)
         if self.use_slider:
             await self._render_slider_input(setting, ui)
         else:
             await self._render_numeric_input(setting, ui)
 
     async def _render_numeric_input(self, setting: Setting, ui):
-        _make_value_float_if_there_is_a_float_bound(
-            setting.value, self.minimum, self.maximum
-        )
         response = ui.add(egui.DragValue(setting.value))
         value = setting.value.get()
         if self.minimum is not None:
@@ -129,16 +126,13 @@ class NumericSettingRenderer(SettingRenderer):
             self.should_focus = False
 
     async def _render_slider_input(self, setting: Setting, ui):
-        _make_value_float_if_there_is_a_float_bound(
-            setting.value, self.minimum, self.maximum
-        )
         slider = egui.Slider(setting.value, self.minimum, self.maximum)
         response = ui.add(slider)
         if self.should_focus:
             _focus_widget(response)
+            self.should_focus = False
             # focus the numeric input instead of the slider part
             actions.key("tab")
-            self.should_focus = False
 
 
 def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
