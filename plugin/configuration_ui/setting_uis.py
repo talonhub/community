@@ -200,6 +200,7 @@ class ColorSettingRenderer(SettingRenderer):
         self.should_focus = True
 
     async def render(self, setting: Setting, ui):
+        """show a color picker, a drop down with named colors, and a direct text edit for customizing the color"""
         value = setting.value.get()
         new_value = value
         async with ui.horizontal_wrapped():
