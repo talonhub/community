@@ -294,9 +294,7 @@ class Manager:
             star_width = self._ui_wrapper.compute_text_width("*")
             self._ui.add_space(checkbox_size + spacing_size + star_width)
         else:
-            if (
-                self._ui.checkbox(egui.Mutable(setting.is_activated), "*").clicked()
-            ):
+            if self._ui.checkbox(egui.Mutable(setting.is_activated), "*").clicked():
                 try:
                     update_setting(setting, make_comment=setting.is_activated)
                 except Exception as ex:
@@ -352,10 +350,11 @@ class Manager:
         page = self.pages[self.page]
         settings = page.settings
         if len(settings) < number:
-            return 
+            return
         setting = page.settings[number - 1]
         update_setting(setting, make_comment=setting.is_activated)
-            
+
+
 manager = None
 
 
