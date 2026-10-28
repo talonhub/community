@@ -191,6 +191,8 @@ class Manager:
             if page.description:
                 self._ui.label(page.description)
             self._ui.add_space(5)
+            self._ui.strong("Commands")
+            self._ui.label("You can use the input for editing a setting by saying \"setting\" and then the setting number, such as by saying \"setting one\".\nYou can toggle if a setting is set in a Community .talon file by saying \"comment toggle\" and then the number of the setting, such as by saying \"comment toggle one\".\n")
             self._ui.label("* toggle setting that setting in a Community .talon file")
             self._ui.separator()
 
@@ -310,9 +312,9 @@ class Manager:
                     "Community provides several .talon files for configuring settings. You can use this graphical interface to edit those files without needing to learn TalonScript.\nYou may encounter unexpected behavior if you have chosen to set those settings in your own .talon files.\n\n\nThis graphical interface may not always work as intended if you have manually edited those files yourself.\nIf you run into issues with that, feel free to ask for help on the slack!"
                 )
                 self._ui.add_space(total_available_height / 8)
-                self._ui.heading("Navigation Commands")
+                self._ui.heading("Navigation")
                 self._ui.label(
-                    "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page. You can use the ui widget for editing a setting by saying `setting` and then the setting number. You can toggle if a setting is set in a Community .talon file by saying `comment toggle` and then the number of a setting."
+                    "You can open a page by saying `page` and then the page name, such a saying `page popping` to open the popping settings page."
                 )
 
     async def _render_error_copy_buttons(self, error_message, setting):
