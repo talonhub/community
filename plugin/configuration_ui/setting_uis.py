@@ -280,6 +280,7 @@ class DiscretSettingRenderer(SettingRenderer):
             else:
                 response = ui.add(egui.TextEdit.singleline(setting.value))
 
+            # focus the text input first and then shift tab to focus the combo box because we currently cannot focus combo boxes directly
             if self.should_focus:
                 match self.focusing_frame:
                     case 0:
