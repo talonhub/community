@@ -295,6 +295,7 @@ class DiscretSettingRenderer(SettingRenderer):
                         self.should_focus = False
                 self.focusing_frame += 1
 
+
 def create_discrete_choices_setting(name, choices, is_numeric=False):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
     return Setting(
