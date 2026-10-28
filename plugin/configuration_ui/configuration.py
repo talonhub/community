@@ -211,15 +211,15 @@ class Manager:
             self._ui.add_space(5)
             self._ui.label("* toggle setting that setting in a Community .talon file")
             self._ui.separator()
-            
+
             for i, setting in enumerate(page.settings):
-                is_setting_chosen = i+1 == chosen_setting
+                is_setting_chosen = i + 1 == chosen_setting
                 await self._render_setting_row(
                     setting,
                     page,
                     is_setting_chosen,
                     comment_toggle_setting,
-                    i+1,
+                    i + 1,
                 )
                 self._ui.separator()
                 if is_setting_chosen:
