@@ -218,9 +218,9 @@ class TreeRenderer:
         name_to_list = {l.name: l for l in lists}
         while index < len(rule_text):
             if list_index >= len(list_positions):
-                self._ui.label(rule_text[index:])
-                break
-            a, b = list_positions[list_index]
+                a = len(rule_text)
+            else:
+                a, b = list_positions[list_index]
             if index < a:
                 self._ui.label(rule_text[index:a])
                 index = a
