@@ -7,14 +7,10 @@ from talon import Context, Module, actions, cron, registry
 from ..gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui
 
 
-@dataclass
 class TalonList:
     """Information on a Talon list used to represent it graphically in the expansion"""
 
-    name: str
-    id_number: int
-    is_in_registry: bool
-
+    __slots__ = ('name', 'id_number', 'is_in_registry')
     def __init__(self, name: str, number: int):
         self.name = name
         self.id_number = number
@@ -39,16 +35,10 @@ class SpokenFormChildren:
         return not self.lists and not self.captures
 
 
-@dataclass
 class TalonCapture:
     """Information on a Talon capture used to represent it graphically in the expansion"""
 
-    name: str
-    description: str | None
-    id_number: int
-    rule: str | None
-    children: SpokenFormChildren
-
+    __slots__ = ('children', 'description', 'id_number', 'rule', 'name')
     def __init__(self, name: str, number: int):
         self.name = name
         self.description = get_capture_description(name)
