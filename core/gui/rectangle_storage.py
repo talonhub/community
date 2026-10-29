@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import traceback
+from dataclasses import dataclass
 
 from skia import Rect
 from talon import actions, screen
