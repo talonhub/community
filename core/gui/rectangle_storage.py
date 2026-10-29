@@ -9,6 +9,7 @@ DIRECTORY_NAME = "gui_rectangles"
 @dataclass
 class RelativeRectangle:
     """The x and y are relative to an absolute rectangle's x and y. The coordinates and dimensions are fractions of the absolute rectangle's relevant dimension.`"""
+
     x: float
     y: float
     width: float
