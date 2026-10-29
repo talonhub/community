@@ -1,4 +1,4 @@
-, # NOTE: This code is not part of the stable API. It may undergo significant revision as we adopt egui. It is fine to use this code within the project but using it outside the project is not recommended unless you are fine with making significant updates later.
+# NOTE: This code is not part of the stable API. It may undergo significant revision as we adopt egui. It is fine to use this code within the project but using it outside the project is not recommended unless you are fine with making significant updates later.
 
 # This file has code taken from
 # https://github.com/AndreasArvidsson/andreas-talon/tree/main?tab=MIT-1-ov-file
