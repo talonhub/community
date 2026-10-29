@@ -75,6 +75,7 @@ current_gui = None
 
 GUI_ID = "help"
 
+
 def update_title():
     global live_update
     global show_enabled_contexts_only
