@@ -19,11 +19,18 @@ class RelativeRectangle:
     @staticmethod
     def from_rectangle(rect: Rect, input_screen_rect: Rect | None = None):
         if not input_screen_rect:
-            input_screen_rect = screen.containing(rect.x, rect.y).rect
+            input_screen_rect = screen.nearest(*rect.center).rect
         width = rect.width / input_screen_rect.width
         height = rect.height / input_screen_rect.height
         x = (rect.x - input_screen_rect.x) / input_screen_rect.width
         y = (rect.y - input_screen_rect.y) / input_screen_rect.height
+        
+        # clamp rectangle coordinates to the screen
+        x = max(input_screen_rect.x, x)
+        x = min(input_screen_rect.x + input_screen_rect.width, x)
+        y = max(input_screen_rect.y, y)
+        y = min(input_screen_rect.y + input_screen_rect.height, y)
+
         return RelativeRectangle(x, y, width, height)
 
     def compute_absolute_rectangle(self, screen_rect: Rect) -> Rect:
