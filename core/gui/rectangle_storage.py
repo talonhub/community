@@ -50,7 +50,7 @@ def get_relative_rectangle(id: str) -> RelativeRectangle | None:
     except OSError as ex:
         report_error(ex, f"trying to load the relative rectangle for {id}")
         return None
-    values = [float(v) for v in text.split(",")]
+    values = list(map(float, text.split(",")))
     return RelativeRectangle(*values)
 
 
