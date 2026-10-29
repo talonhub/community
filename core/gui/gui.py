@@ -565,7 +565,7 @@ class GUI:
         # Otherwise, use the stored rectangle if present
         elif self._stored_rect:
             self._window.rect = self._compute_absolute_stored_rectangle()
-        # otherwise create the rectangle from props
+        # Otherwise create the rectangle from props
         else:
             screen = self._get_screen()
             self._window.rect = self._props.create_rectangle(screen.rect)
