@@ -554,11 +554,7 @@ class GUI:
             self._window.rect = self._compute_absolute_stored_rectangle()
         else:
             screen = self._get_screen()
-            self._window.rect = (
-                self._props.create_rectangle(
-                    screen.rect
-                )
-            )
+            self._window.rect = self._props.create_rectangle(screen.rect)
         self._window.show()
 
         if self._refresh_period:
