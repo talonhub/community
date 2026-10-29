@@ -469,10 +469,18 @@ class Props:
         return window
 
     def _compute_coordinate(
-        self, coordinate, dimension, screen_dimension=1, screen_center=0.5
+        self, coordinate, rect_dimension, screen_dimension=1, screen_center=0.5
     ):
+        """Position the coordinate on the screen.
+        coordinate: the relevant prop coordinate
+        rect_dimension: the relevant dimension of the rectangle
+        screen_dimension: the relevant dimension of the screen
+        screen_center: the center coordinate of the screen along the dimension
+        """
+        # if no coordinate, center the rectangle along the dimension
         if coordinate is None:
-            result = screen_center - dimension / 2
+            result = screen_center - rect_dimension / 2
+        # otherwise scale the coordinate by the relevant screen dimension
         else:
             result = screen_dimension * coordinate
         return result
@@ -488,6 +496,7 @@ class Props:
         )
 
     def create_rectangle(self, screen_rect):
+        """Create a rectangle on the screen based on the prop coordinates and dimensions"""
         width = 1.0 if self.width is None else self.width
         height = 1.0 if self.height is None else self.height
 
