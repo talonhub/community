@@ -468,7 +468,9 @@ class Props:
         window.set_content(callback)
         return window
 
-    def _compute_coordinate(self, coordinate, dimension, screen_dimension=1, screen_center=0.5):
+    def _compute_coordinate(
+        self, coordinate, dimension, screen_dimension=1, screen_center=0.5
+    ):
         if coordinate is None:
             result = screen_center - dimension / 2
         else:
@@ -476,10 +478,14 @@ class Props:
         return result
 
     def compute_absolute_x(self, screen_rect, width):
-        return self._compute_coordinate(self.x, width, screen_rect.width, screen_rect.center.x)
+        return self._compute_coordinate(
+            self.x, width, screen_rect.width, screen_rect.center.x
+        )
 
     def compute_absolute_y(self, screen_rect, height):
-        return self._compute_coordinate(self.y, height, screen_rect.height, screen_rect.center.y)
+        return self._compute_coordinate(
+            self.y, height, screen_rect.height, screen_rect.center.y
+        )
 
     def create_rectangle(self, screen_rect):
         width = 1.0 if self.width is None else self.width
