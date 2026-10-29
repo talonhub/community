@@ -146,9 +146,7 @@ class SpokenFormTree:
         # nonetheless, if something encountered before is a child of a spoken form, it needs to be shown as one of its children, so still add it to the list of forms encountered at this level
         form = prior_encountered.get(form_text)
         if form is None:
-            form = create_function(
-                name, len(prior_encountered) + 1
-            )
+            form = create_function(name, len(prior_encountered) + 1)
             prior_encountered[form_text] = form
             # do this after updating the prior encounter dictionary so we can compute the numbers correctly for the children
             form.create_children(self._compute_spoken_forms)
