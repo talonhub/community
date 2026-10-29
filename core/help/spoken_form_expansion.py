@@ -65,10 +65,9 @@ class TalonCapture:
 
 
 def get_capture_description(name):
-    try:
-        return registry.decls.captures[name].desc
-    except KeyError:
-        return None
+    if declaration := registry.decls.captures.get(name):
+        return declaration.desc
+    return None
 
 
 def get_capture_rule(name):
