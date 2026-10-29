@@ -468,8 +468,21 @@ class Props:
         window.set_content(callback)
         return window
 
-    def create_relative_rectangle(self):
-        return RelativeRectangle(self.x, self.y, self.width, self.height)
+    def create_rectangle(self, screen_rect):
+        width = 1.0 if self.width is None else self.width
+        height = 1.0 if self.height is None else self.height
+
+        if self.x is None:
+            x = 0.5 - width / 2
+        else:
+            x = self.x
+
+        if self.y is None:
+            y = 0.5 - height / 2
+        else:
+            y = self.y
+        relative_rectangle = RelativeRectangle(x, y, width, height)
+        return relative_rectangle.compute_absolute_rectangle(screen_rect)
 
 
 class GUI:
@@ -542,7 +555,7 @@ class GUI:
         else:
             screen = self._get_screen()
             self._window.rect = (
-                self._props.create_relative_rectangle().compute_absolute_rectangle(
+                self._props.create_rectangle(
                     screen.rect
                 )
             )
