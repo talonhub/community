@@ -42,11 +42,13 @@ Note that it is also possible to install `community` by [downloading and extract
 It is recommended to install `community` using [`git`](https://git-scm.com/).
 
 1. Install [`git`](https://git-scm.com/)
-2. Open a [command prompt](https://www.wikihow.com/Open-the-Command-Prompt-in-Windows)
-3. Paste the following into the command prompt window then press <kbd>Enter</kbd>:
+
+2. Open a [powershell window](https://apps.microsoft.com/detail/9mz1snwt0n5d?hl=en-GB&gl=IN) (install if not already packaged with your windows installation)
+
+3. Paste the following into the Powershell window _one line at a time_:
 
    ```
-   cd %AppData%\Talon\user
+   cd $env:APPDATA/talon/user
    git clone https://github.com/talonhub/community community
    ```
 
