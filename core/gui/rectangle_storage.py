@@ -30,7 +30,9 @@ class RelativeRectangle:
         rect_x = max(input_screen_rect.x, rect_x)
         rect_x = min(input_screen_rect.x + input_screen_rect.width - rect.width, rect_x)
         rect_y = max(input_screen_rect.y, rect_y)
-        rect_y = min(input_screen_rect.y + input_screen_rect.height - rect.height, rect_y)
+        rect_y = min(
+            input_screen_rect.y + input_screen_rect.height - rect.height, rect_y
+        )
 
         x = (rect_x - input_screen_rect.x) / input_screen_rect.width
         y = (rect_y - input_screen_rect.y) / input_screen_rect.height
