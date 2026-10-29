@@ -468,33 +468,26 @@ class Props:
         window.set_content(callback)
         return window
 
-    def compute_absolute_x(self, screen_rect, width):
-        if self.x is None:
-            x = screen_rect.center.x - width / 2
+    def _compute_coordinate(self, coordinate, dimension, screen_dimension=1, screen_center=0.5):
+        if coordinate is None:
+            result = screen_center - dimension / 2
         else:
-            x = screen_rect.width * self.x
-        return x
+            result = screen_dimension * coordinate
+        return result
+
+    def compute_absolute_x(self, screen_rect, width):
+        return self._compute_coordinate(self.x, width, screen_rect.width, screen_rect.center.x)
 
     def compute_absolute_y(self, screen_rect, height):
-        if self.y is None:
-            y = screen_rect.center.y - height / 2
-        else:
-            y = screen_rect.height * self.y
-        return y
+        return self._compute_coordinate(self.y, height, screen_rect.height, screen_rect.center.y)
 
     def create_rectangle(self, screen_rect):
         width = 1.0 if self.width is None else self.width
         height = 1.0 if self.height is None else self.height
 
-        if self.x is None:
-            x = 0.5 - width / 2
-        else:
-            x = self.x
+        x = self._compute_coordinate(self.x, width)
+        y = self._compute_coordinate(self.y, height)
 
-        if self.y is None:
-            y = 0.5 - height / 2
-        else:
-            y = self.y
         relative_rectangle = RelativeRectangle(x, y, width, height)
         return relative_rectangle.compute_absolute_rectangle(screen_rect)
 
