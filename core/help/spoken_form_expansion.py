@@ -211,6 +211,17 @@ class TreeRenderer:
         self._ui = None
         self._ui_wrapper = None
 
+    async def _render_list(self, name_to_list, list_text):
+        l = name_to_list.get(list_text[1:-1])
+        if l is None:
+            self._ui.label(list_text)
+            return
+        if not l.is_in_registry:
+            self._ui.weak(f"{l.name} (list not found)")
+            return
+        if self._ui_wrapper.button(f"help list {l.id_number}: {l.name}"):
+            open_list_help(l.name)
+
     async def _render_rule(self, lists, rule_text: str):
         list_positions = _find_curly_bracing_enclosed_pairs(rule_text)
         list_index = 0
@@ -221,22 +232,14 @@ class TreeRenderer:
                 a = len(rule_text)
             else:
                 a, b = list_positions[list_index]
+
             if index < a:
                 self._ui.label(rule_text[index:a])
                 index = a
             else:
                 list_index += 1
                 index = b
-
-                l = name_to_list.get(rule_text[a + 1 : b - 1])
-                if l is None:
-                    self._ui.label(rule_text[a:b])
-                    continue
-                if not l.is_in_registry:
-                    self._ui.weak(f"{l.name} (list not found)")
-                    continue
-                if self._ui_wrapper.button(f"help list {l.id_number}: {l.name}"):
-                    open_list_help(l.name)
+                await self._render_list(name_to_list, rule_text[a:b])
 
     async def _render_capture_ui(self, capture):
         """Renders information about the capture"""
