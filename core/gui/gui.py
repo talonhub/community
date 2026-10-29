@@ -1,4 +1,4 @@
-# NOTE: This code is not part of the stable API. It may undergo significant revision as we adopt egui. It is fine to use this code within the project but using it outside the project is not recommended unless you are fine with making significant updates later.
+, # NOTE: This code is not part of the stable API. It may undergo significant revision as we adopt egui. It is fine to use this code within the project but using it outside the project is not recommended unless you are fine with making significant updates later.
 
 # This file has code taken from
 # https://github.com/AndreasArvidsson/andreas-talon/tree/main?tab=MIT-1-ov-file
@@ -28,6 +28,8 @@ OUTLINE_COLOR_DARK_MODE = "#" + "88" * 3
 BUTTON_PADDING = egui.Vec2(5.0, 2.5)
 VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
+# large x value for making a window go offscreen
+OFFSCREEN_X = 10000000
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
 
@@ -545,7 +547,7 @@ class GUI:
 
     def _move_window_far_offscreen(self):
         self._window.rect = Rect(
-            10000000,
+            OFFSCREEN_X,
             self._window.rect.y,
             self._window.rect.width,
             self._window.rect.height,
