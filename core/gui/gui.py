@@ -586,7 +586,8 @@ class GUI:
 
     def _update_stored_rectangle(self):
         self._stored_rect = RelativeRectangle.from_rectangle(self._window.rect)
-        store_relative_rectangle(self._props.id, self._stored_rect)
+        if self._props.id and self._stored_rect:
+            store_relative_rectangle(self._props.id, self._stored_rect)
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
