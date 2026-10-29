@@ -530,39 +530,32 @@ class GUI:
         if self._stored_rect is None:
             self._stored_rect = get_relative_rectangle(self._props.id)
 
+        # if not auto sizing and there is a stored rectangle, use it
         if self._stored_rect is not None and not self._props.will_auto_size():
             self._window.rect = self._compute_absolute_stored_rectangle()
             self._window.show()
+        # otherwise do the window sizing offscreen. The rendering logic will move it on screen
+        # and use the stored rectangle if present for the position
         else:
-            self._move_window_far_offscreen()
-            self._offscreen_render_frame = 0
+            self._move_window_offscreen()
             self._window.show()
 
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
 
     def _compute_absolute_stored_rectangle(self):
+        """Convert the stored relative rectangle to an absolute rectangle on the current screen"""
         screen = self._get_screen()
         return self._stored_rect.compute_absolute_rectangle(screen)
 
-    def _move_window_far_offscreen(self):
+    def _move_window_offscreen(self):
+        self._offscreen_render_frame = 0
         self._window.rect = Rect(
             OFFSCREEN_X,
             self._window.rect.y,
             self._window.rect.width,
             self._window.rect.height,
         )
-
-    def _make_window_relative_to_screen(self):
-        screen = self._get_screen()
-        rectangle = self._compute_rect_relative_to_screen(
-            screen.rect, self._window.rect
-        )
-        if self._stored_rect is not None and self._props.will_auto_size():
-            absolute_stored_rectangle = self._compute_absolute_stored_rectangle()
-            rectangle.x = absolute_stored_rectangle.x
-            rectangle.y = absolute_stored_rectangle.y
-        self._window.rect = rectangle
 
     def _cancel_refresh_job(self):
         if self._refresh_job:
@@ -612,6 +605,7 @@ class GUI:
             self._handle_offscreen_render()
 
     def _handle_offscreen_render(self):
+        """The window might get moved offscreen so it can be sized correctly before the user sees it. Make sure the window gets refreshed enough frames for proper auto sizing and then move it onto the screen"""
         if self._offscreen_render_frame < 3:
             self._offscreen_render_frame += 1
             # do this in another thread to avoid freezing Talon
@@ -619,11 +613,24 @@ class GUI:
         else:
             self._offscreen_render_frame = None
             # do this in another thread to avoid freezing Talon
-            cron.after("0ms", self._move_window_back_on_screen)
+            cron.after("0ms", self._move_window_onto_screen)
 
-    def _move_window_back_on_screen(self):
+    def _move_window_onto_screen(self):
         self._make_window_relative_to_screen()
         self.refresh()
+
+    def _make_window_relative_to_screen(self):
+        screen = self._get_screen()
+        rectangle = self._compute_rect_relative_to_screen(
+            screen.rect, self._window.rect
+        )
+        # if auto sizing and there is a stored rectangle, move the rectangle to the stored rectangle position
+        # but do not set the dimensions so they can come from auto sizing
+        if self._stored_rect is not None and self._props.will_auto_size():
+            absolute_stored_rectangle = self._compute_absolute_stored_rectangle()
+            rectangle.x = absolute_stored_rectangle.x
+            rectangle.y = absolute_stored_rectangle.y
+        self._window.rect = rectangle
 
     def _apply_theme(self, ui: egui.Ui) -> None:
         style = ui.style()
