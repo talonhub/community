@@ -223,24 +223,29 @@ class TreeRenderer:
             open_list_help(l.name)
 
     async def _render_rule(self, lists, rule_text: str):
+        """Render the rule showing the lists as buttons that can be clicked to render the full list"""
         list_positions = _find_curly_bracing_enclosed_pairs(rule_text)
         list_index = 0
         index = 0
         name_to_list = {l.name: l for l in lists}
         async with self._ui.horizontal_wrapped():
             while index < len(rule_text):
+                # if no more lists remaining, treat the end as the start of the next list
                 if list_index >= len(list_positions):
-                    a = len(rule_text)
+                    next_list_start = len(rule_text)
+                # otherwise get the list indexes
                 else:
-                    a, b = list_positions[list_index]
+                    next_list_start, next_list_end = list_positions[list_index]
 
-                if index < a:
-                    self._ui.label(rule_text[index:a])
-                    index = a
+                # if before the next label position, render the text with a label
+                if index < next_list_start:
+                    self._ui.label(rule_text[index:next_list_start])
+                    index = next_list_start
+                # if at the next list position, render the list
                 else:
                     list_index += 1
-                    index = b
-                    await self._render_list(name_to_list, rule_text[a:b])
+                    index = next_list_end
+                    await self._render_list(name_to_list, rule_text[next_list_start:next_list_end])
 
     async def _render_capture_ui(self, capture):
         """Renders information about the capture"""
