@@ -227,19 +227,20 @@ class TreeRenderer:
         list_index = 0
         index = 0
         name_to_list = {l.name: l for l in lists}
-        while index < len(rule_text):
-            if list_index >= len(list_positions):
-                a = len(rule_text)
-            else:
-                a, b = list_positions[list_index]
+        async with self._ui.horizontal_wrapped():
+            while index < len(rule_text):
+                if list_index >= len(list_positions):
+                    a = len(rule_text)
+                else:
+                    a, b = list_positions[list_index]
 
-            if index < a:
-                self._ui.label(rule_text[index:a])
-                index = a
-            else:
-                list_index += 1
-                index = b
-                await self._render_list(name_to_list, rule_text[a:b])
+                if index < a:
+                    self._ui.label(rule_text[index:a])
+                    index = a
+                else:
+                    list_index += 1
+                    index = b
+                    await self._render_list(name_to_list, rule_text[a:b])
 
     async def _render_capture_ui(self, capture):
         """Renders information about the capture"""
