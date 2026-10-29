@@ -245,7 +245,9 @@ class TreeRenderer:
                 else:
                     list_index += 1
                     index = next_list_end
-                    await self._render_list(name_to_list, rule_text[next_list_start:next_list_end])
+                    await self._render_list(
+                        name_to_list, rule_text[next_list_start:next_list_end]
+                    )
 
     async def _render_capture_ui(self, capture):
         """Renders information about the capture"""
