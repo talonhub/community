@@ -470,16 +470,16 @@ class Props:
 
     def compute_absolute_x(self, screen_rect, width):
         if self.x is None:
-            x = screen_rect.center.x - width/2
+            x = screen_rect.center.x - width / 2
         else:
-            x = screen_rect.width*self.x
+            x = screen_rect.width * self.x
         return x
 
     def compute_absolute_y(self, screen_rect, height):
         if self.y is None:
-            y = screen_rect.center.y - height/2
+            y = screen_rect.center.y - height / 2
         else:
-            y = screen_rect.height*self.y
+            y = screen_rect.height * self.y
         return y
 
     def create_rectangle(self, screen_rect):
@@ -655,9 +655,11 @@ class GUI:
             screen_rect = self._get_screen().rect
             x = self._props.compute_absolute_x(screen_rect, self._window.rect.width)
             y = self._props.compute_absolute_y(screen_rect, self._window.rect.height)
-        self._window.rect = Rect(x, y, self._window.rect.width, self._window.rect.height)
+        self._window.rect = Rect(
+            x, y, self._window.rect.width, self._window.rect.height
+        )
         self.refresh()
-    
+
     def _apply_theme(self, ui: egui.Ui) -> None:
         style = ui.style()
         visuals = style.visuals()
