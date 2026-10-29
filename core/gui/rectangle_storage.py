@@ -22,7 +22,7 @@ class RelativeRectangle:
             input_screen_rect = screen.nearest(*rect.center).rect
         width = rect.width / input_screen_rect.width
         height = rect.height / input_screen_rect.height
-        
+
         rect_x = rect.x
         rect_y = rect.y
 
