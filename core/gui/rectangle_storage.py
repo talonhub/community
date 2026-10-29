@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import traceback
 
 from skia import Rect
 from talon import actions, screen
@@ -34,11 +35,12 @@ class RelativeRectangle:
         return Rect(x, y, width, height)
 
 
-def report_error(exception, context):
+def report_error(exception: Exception, context: str):
     """Give a simple notification to the user and a more detailed message in the log"""
     message_prefix = f"Something went wrong {context}: "
     actions.app.notify(message_prefix + str(exception))
-    print(message_prefix + repr(exception))
+    print(message_prefix)
+    traceback.print_tb(exception.__traceback__)
 
 
 def get_relative_rectangle(id: str) -> RelativeRectangle | None:
