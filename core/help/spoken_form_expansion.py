@@ -256,19 +256,24 @@ class TreeRenderer:
         ):
             self._ui.label("Could not find information on this capture.")
             return
-        description = capture.description
-        if description is not None:
-            description = get_description_or_default(description)
-            self._ui.label(f"Description: {description}")
-        async with self._ui.horizontal_wrapped():
-            rule = get_rule_or_default(capture.rule)
-            rule_text = f"Rule: {rule}"
-            await self._render_rule(capture.children.lists, rule_text)
 
+        async with self._ui.horizontal_wrapped():
+            # render description
+            description = capture.description
+            if description is not None:
+                description = get_description_or_default(description)
+                self._ui.label(f"Description: {description}")
+            # render button for making this the root
             if self._ui_wrapper.button(f"hoist {capture.id_number}"):
-                self._set_root_to_child_callback(
-                    capture.compute_talon_script_representation()
-                )
+                    self._set_root_to_child_callback(
+                        capture.compute_talon_script_representation()
+                    )
+        # render rule
+        rule = get_rule_or_default(capture.rule)
+        rule_text = f"Rule: {rule}"
+        await self._render_rule(capture.children.lists, rule_text)
+
+        # render child captures
         await self._render_captures(capture.children.captures)
 
     async def _render_lists(self, lists):
