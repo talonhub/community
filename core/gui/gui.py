@@ -468,6 +468,20 @@ class Props:
         window.set_content(callback)
         return window
 
+    def compute_absolute_x(self, screen_rect, width):
+        if self.x is None:
+            x = screen_rect.center.x - width/2
+        else:
+            x = screen_rect.width*self.x
+        return x
+
+    def compute_absolute_y(self, screen_rect, height):
+        if self.y is None:
+            y = screen_rect.center.y - height/2
+        else:
+            y = screen_rect.height*self.y
+        return y
+
     def create_rectangle(self, screen_rect):
         width = 1.0 if self.width is None else self.width
         height = 1.0 if self.height is None else self.height
@@ -633,22 +647,17 @@ class GUI:
             cron.after("0ms", self._move_window_onto_screen)
 
     def _move_window_onto_screen(self):
-        self._make_window_relative_to_screen()
-        self.refresh()
-
-    def _make_window_relative_to_screen(self):
-        screen = self._get_screen()
-        rectangle = RelativeRectangle.from_rectangle(
-            self._window.rect, screen.rect
-        ).compute_absolute_rectangle(screen.rect)
-        # if auto sizing and there is a stored rectangle, move the rectangle to the stored rectangle position
-        # but do not set the dimensions so they can come from auto sizing
-        if self._stored_rect is not None and self._props.will_auto_size():
+        if self._stored_rect is not None:
             absolute_stored_rectangle = self._compute_absolute_stored_rectangle()
-            rectangle.x = absolute_stored_rectangle.x
-            rectangle.y = absolute_stored_rectangle.y
-        self._window.rect = rectangle
-
+            x = absolute_stored_rectangle.x
+            y = absolute_stored_rectangle.y
+        else:
+            screen_rect = self._get_screen().rect
+            x = self._props.compute_absolute_x(screen_rect, self._window.rect.width)
+            y = self._props.compute_absolute_y(screen_rect, self._window.rect.height)
+        self._window.rect = Rect(x, y, self._window.rect.width, self._window.rect.height)
+        self.refresh()
+    
     def _apply_theme(self, ui: egui.Ui) -> None:
         style = ui.style()
         visuals = style.visuals()
