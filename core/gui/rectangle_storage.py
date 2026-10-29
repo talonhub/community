@@ -27,7 +27,7 @@ class RelativeRectangle:
         return RelativeRectangle(x, y, width, height)
 
     def compute_absolute_rectangle(self, screen_rect: Rect) -> Rect:
-        """Create an absolute rectangle from putting it on the screen and scaling it by the screen's dimensions"""
+        """Create an absolute rectangle by putting it on the screen and scaling it by the screen's dimensions"""
         x = screen_rect.x + screen_rect.width * self.x
         y = screen_rect.y + screen_rect.height * self.y
         width = screen_rect.width * self.width
