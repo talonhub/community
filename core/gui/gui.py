@@ -468,6 +468,9 @@ class Props:
         window.set_content(callback)
         return window
 
+    def create_relative_rectangle(self):
+        return RelativeRectangle(self.x, self.y, self.width, self.height)
+
 
 class GUI:
     """Manages an egui window"""
@@ -530,15 +533,16 @@ class GUI:
         if self._stored_rect is None:
             self._stored_rect = get_relative_rectangle(self._props.id)
 
-        # if not auto sizing and there is a stored rectangle, use it
-        if self._stored_rect is not None and not self._props.will_auto_size():
-            self._window.rect = self._compute_absolute_stored_rectangle()
-            self._window.show()
-        # otherwise do the window sizing offscreen. The rendering logic will move it on screen
-        # and use the stored rectangle if present for the position
-        else:
+        # Do auto sizing offscreen. A stored rectangle will be used for the position but not dimensions
+        if self._props.will_auto_size():
             self._move_window_offscreen()
-            self._window.show()
+        # Otherwise, use the stored rectangle if present
+        elif self._stored_rect:
+            self._window.rect = self._compute_absolute_stored_rectangle()
+        else:
+            screen = self._get_screen()
+            self._window.rect = self._props.create_relative_rectangle().compute_absolute_rectangle(screen.rect)
+        self._window.show()
 
         if self._refresh_period:
             self._refresh_job = cron.interval(self._refresh_period, self.refresh)
@@ -621,9 +625,9 @@ class GUI:
 
     def _make_window_relative_to_screen(self):
         screen = self._get_screen()
-        rectangle = self._compute_rect_relative_to_screen(
-            screen.rect, self._window.rect
-        )
+        rectangle = RelativeRectangle.from_rectangle(
+            self._window.rect, screen.rect
+        ).compute_absolute_rectangle(screen.rect)
         # if auto sizing and there is a stored rectangle, move the rectangle to the stored rectangle position
         # but do not set the dimensions so they can come from auto sizing
         if self._stored_rect is not None and self._props.will_auto_size():
@@ -661,26 +665,6 @@ class GUI:
         style.spacing = spacing
 
         ui.set_style(style)
-
-    def _compute_rect_relative_to_screen(self, screen: Rect, window: Rect) -> Rect:
-        """Compute the rectangle for the window relative to the screen location and dimensions."""
-
-        props = self._props
-
-        width = window.width if props.width is None else screen.width * props.width
-        height = window.height if props.height is None else screen.height * props.height
-
-        if props.x is None:
-            x = screen.center.x - width / 2
-        else:
-            x = screen.x + screen.width * props.x
-
-        if props.y is None:
-            y = screen.center.y - height / 2
-        else:
-            y = screen.y + screen.height * props.y
-
-        return Rect(x, y, width, height)
 
     def _get_screen(self):
         if self._props.screen is not None:
