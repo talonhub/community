@@ -78,7 +78,6 @@ def get_capture_rule(name):
     return most_context_specific_implementation.rule.rule
 
 
-
 def do_delimiters_conflict(text: str):
     # the only relevant delimiters are angle brackets and curly braces
     # this checks if the delimiters at the start and end match using that assumption
