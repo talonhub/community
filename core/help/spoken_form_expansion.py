@@ -265,9 +265,9 @@ class TreeRenderer:
                 self._ui.label(f"Description: {description}")
             # render button for making this the root
             if self._ui_wrapper.button(f"hoist {capture.id_number}"):
-                    self._set_root_to_child_callback(
-                        capture.compute_talon_script_representation()
-                    )
+                self._set_root_to_child_callback(
+                    capture.compute_talon_script_representation()
+                )
         # render rule
         rule = get_rule_or_default(capture.rule)
         rule_text = f"Rule: {rule}"
