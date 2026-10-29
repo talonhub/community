@@ -15,11 +15,13 @@ class TalonList:
     id_number: int
     is_in_registry: bool
 
-    def __init__(self, name: str, number: int, create_children_callback):
-        # lists have no children
+    def __init__(self, name: str, number: int):
         self.name = name
         self.id_number = number
         self.is_in_registry = is_list_defined(self.name)
+
+    def create_children(self, create_children_callback):
+        """Lists have no children, so do nothing"""
 
 
 def is_list_defined(name: str):
@@ -47,18 +49,19 @@ class TalonCapture:
     rule: str | None
     children: SpokenFormChildren
 
-    def __init__(self, name: str, number: int, create_children_callback):
+    def __init__(self, name: str, number: int):
         self.name = name
         self.description = get_capture_description(name)
         self.id_number = number
         self.rule = get_capture_rule(name)
-        if self.rule:
-            self.children = create_children_callback(self.rule)
-        else:
-            self.children = SpokenFormChildren()
+        self.children = SpokenFormChildren()
 
     def compute_talon_script_representation(self):
         return f"<{self.name}>"
+
+    def create_children(self, create_children_callback):
+        if self.rule:
+            self.children = create_children_callback(self.rule)
 
 
 def get_capture_description(name):
@@ -144,9 +147,11 @@ class SpokenFormTree:
         form = prior_encountered.get(form_text)
         if form is None:
             form = create_function(
-                name, len(prior_encountered) + 1, self._compute_spoken_forms
+                name, len(prior_encountered) + 1
             )
             prior_encountered[form_text] = form
+            # do this after updating the prior encounter dictionary so we can compute the numbers correctly for the children
+            form.create_children(self._compute_spoken_forms)
         forms.append(form)
         encountered_at_this_level.add(form_text)
 
