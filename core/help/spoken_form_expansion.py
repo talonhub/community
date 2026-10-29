@@ -10,7 +10,8 @@ from ..gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui
 class TalonList:
     """Information on a Talon list used to represent it graphically in the expansion"""
 
-    __slots__ = ('name', 'id_number', 'is_in_registry')
+    __slots__ = ("name", "id_number", "is_in_registry")
+
     def __init__(self, name: str, number: int):
         self.name = name
         self.id_number = number
@@ -38,7 +39,8 @@ class SpokenFormChildren:
 class TalonCapture:
     """Information on a Talon capture used to represent it graphically in the expansion"""
 
-    __slots__ = ('children', 'description', 'id_number', 'rule', 'name')
+    __slots__ = ("children", "description", "id_number", "rule", "name")
+
     def __init__(self, name: str, number: int):
         self.name = name
         self.description = get_capture_description(name)
