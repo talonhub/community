@@ -71,12 +71,12 @@ def get_capture_description(name):
 
 
 def get_capture_rule(name):
-    try:
-        capture = registry.captures[name][-1]
-        rule = capture.rule
-        return rule.rule
-    except Exception:
+    capture_implementations = registry.captures.get(name)
+    if not capture_implementations:
         return None
+    most_context_specific_implementation = capture_implementations[-1]
+    return most_context_specific_implementation.rule.rule
+
 
 
 def do_delimiters_conflict(text: str):
