@@ -711,13 +711,12 @@ def hide_all_help_guis():
     gui_operators.hide()
 
 
-@open_gui(y=0, refresh_period="500ms", id="help")
 MAX_COLUMN_LENGTH_FOR_HELP_LIST = 20
 LIST_KEY_HEADER = "Spoken Form"
 LIST_VALUE_HEADER = "Value"
 
 
-@open_gui(y=0, refresh_period="500ms")
+@open_gui(y=0, refresh_period="500ms", id="help")
 async def gui_list_help(ui, ui_wrapper):
     global selected_list
     global page_scroller
