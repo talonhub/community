@@ -260,7 +260,7 @@ class TreeRenderer:
                 self._set_root_to_child_callback(
                     capture.compute_talon_script_representation()
                 )
-        await self._render_child_captures(capture.children)
+        await self._render_captures(capture.children.captures)
 
     async def _render_lists(self, lists):
         """Render a list of Talon lists"""
@@ -292,10 +292,9 @@ class TreeRenderer:
             async with self._ui.group(), collapsing_header.show():
                 await self._render_capture_ui(capture)
 
-    async def _render_child_captures(self, children):
-        """Render the children of the current spoken"""
-        # await self._render_lists(children.lists)
-        for c in children.captures:
+    async def _render_captures(self, captures):
+        """Render the capture cards for the captures"""
+        for c in captures:
             await self._render_capture_card(c)
 
     async def _render_expansion_tree(self, tree):
@@ -305,7 +304,7 @@ class TreeRenderer:
         async with self._ui.group():
             if tree.children.lists:
                 await self._render_lists(tree.children.lists)
-            await self._render_child_captures(tree.children)
+            await self._render_captures(tree.children.captures)
         self._encountered_this_render.clear()
 
     async def _renderer_header(self, root, history, is_rendering_new_tree):
