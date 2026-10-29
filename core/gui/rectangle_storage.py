@@ -22,14 +22,18 @@ class RelativeRectangle:
             input_screen_rect = screen.nearest(*rect.center).rect
         width = rect.width / input_screen_rect.width
         height = rect.height / input_screen_rect.height
-        x = (rect.x - input_screen_rect.x) / input_screen_rect.width
-        y = (rect.y - input_screen_rect.y) / input_screen_rect.height
         
+        rect_x = rect.x
+        rect_y = rect.y
+
         # clamp rectangle coordinates to the screen
-        x = max(input_screen_rect.x, x)
-        x = min(input_screen_rect.x + input_screen_rect.width, x)
-        y = max(input_screen_rect.y, y)
-        y = min(input_screen_rect.y + input_screen_rect.height, y)
+        rect_x = max(input_screen_rect.x, rect_x)
+        rect_x = min(input_screen_rect.x + input_screen_rect.width, rect_x)
+        rect_y = max(input_screen_rect.y, rect_y)
+        rect_y = min(input_screen_rect.y + input_screen_rect.height, rect_y)
+
+        x = (rect_x - input_screen_rect.x) / input_screen_rect.width
+        y = (rect_y - input_screen_rect.y) / input_screen_rect.height
 
         return RelativeRectangle(x, y, width, height)
 
