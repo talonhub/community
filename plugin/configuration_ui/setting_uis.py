@@ -217,23 +217,21 @@ class ColorSettingRenderer(SettingRenderer):
                 ui.label("Not valid color.")
 
             # allow picking color by name
-            color_name = egui.Mutable("")
             # render the name of the current color if it is named
-            if value in COLOR_TO_NAME:
-                color_name.set(COLOR_TO_NAME[value])
+            current_color_name = COLOR_TO_NAME.get(value, "")
+            color_name_picked_this_frame = egui.Mutable("")
             # show dropdown for picking a color name
             async with (
                 egui.ComboBox(setting.name, "pick by name")
-                .selected_text(color_name.get())
+                .selected_text(current_color_name)
                 .show()
             ) as combo_box:
                 if combo_box.shown:
                     combo_ui = combo_box.ui
                     for name in COLOR_TO_NAME.values():
-                        combo_ui.selectable_value(color_name, name, name)
+                        combo_ui.selectable_value(color_name_picked_this_frame, name, name)
             # if a color name is chosen, update the actual color
-            name = color_name.get()
-            if name != "":
+            if name := color_name_picked_this_frame.get():
                 new_value = _compute_hexadecimal_from_color_name(name)
 
             # only bother updating the setting value in response to color picker and name picker inputs if the colors are actually different
