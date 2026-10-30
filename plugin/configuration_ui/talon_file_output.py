@@ -8,7 +8,7 @@ def _convert_value_to_talon_script_literal(value, indentation) -> str:
     if isinstance(value, (int, float)):
         return str(value)
     if isinstance(value, str):
-        value = value.replace('"', '\\"')
+        value = value.replace("\\", "\\\\").replace('"', '\\"')
         if "\n" in value:
             # this preserves a trailing new line whereas split lines does not
             lines = value.split("\n")
