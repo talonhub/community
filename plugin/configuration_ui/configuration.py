@@ -119,7 +119,9 @@ class Manager:
 
         # if the user chose a valid setting to focus, focus it
         if chosen_setting is not None and self._is_setting_number_valid(chosen_setting):
-            self.pages[self.page].settings[chosen_setting - 1].renderer.focus()
+            setting = self.pages[self.page].settings[chosen_setting - 1]
+            if setting.is_activated:
+                setting.renderer.focus()
 
         self._ui = ui
         self._ui_wrapper = ui_wrapper
