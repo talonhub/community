@@ -51,7 +51,7 @@ def create_pages():
             "Scrolling",
             "",
             [
-                create_numeric_setting("user.mouse_continuous_scroll_amount", 0.0),
+                create_numeric_setting("user.mouse_continuous_scroll_amount", 0),
                 create_numeric_setting("user.mouse_gaze_scroll_speed_multiplier", 0.0),
                 create_numeric_setting(
                     "user.mouse_continuous_scroll_acceleration", 1.0
