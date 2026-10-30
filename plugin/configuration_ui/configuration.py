@@ -350,6 +350,8 @@ class Manager:
         self._toggle_setting_comment(setting, error_representation_of_name)
 
     def _is_setting_number_valid(self, number: int) -> bool:
+        if number < 1:
+            return False
         page = self.pages.get(self.page)
         if not page:
             return False
