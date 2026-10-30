@@ -1,0 +1,12 @@
+list: user.unix_arguments
+-
+
+force
+help
+
+list
+
+set-upstream, set up stream
+
+verbose
+version
