@@ -26,7 +26,7 @@ mod.tag(
     desc="Community settings configuration window is open",
 )
 mod.list(
-    "community_settings_window_open_page",
+    "community_settings_window_page",
     desc="The name of a page in the Community settings window",
 )
 
@@ -87,7 +87,7 @@ class Manager:
             self.on_file_change(path)
         self.error_message = ""
         self.error_setting = None
-        ctx.lists["user.community_settings_window_open_page"] = [
+        ctx.lists["user.community_settings_window_page"] = [
             page.title for page in pages
         ] + [MAIN_PAGE_NAME]
 
