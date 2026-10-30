@@ -29,7 +29,7 @@ def create_pages():
                 create_tag_setting("user.unprefixed_numbers"),
                 create_numeric_setting("user.paste_to_insert_threshold", -1),
                 create_boolean_setting("user.context_sensitive_dictation"),
-                create_numeric_setting("user.insert_between_wait", 0),
+                create_numeric_setting("user.insert_between_wait", 0.0),
             ],
         ),
         Page(
