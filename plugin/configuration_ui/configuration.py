@@ -419,6 +419,7 @@ class Actions:
         """Focus or toggle the setting by number"""
         if manager is None:
             return
+        settings_gui.focus()
         manager.chosen_setting = number
         settings_gui.refresh()
 
