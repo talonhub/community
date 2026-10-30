@@ -13,7 +13,7 @@ from textwrap import wrap
 
 import egui
 from skia import Rect
-from talon import Module, Context, cron, settings, ui
+from talon import Context, Module, cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 

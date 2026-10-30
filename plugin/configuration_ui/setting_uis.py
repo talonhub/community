@@ -229,7 +229,9 @@ class ColorSettingRenderer(SettingRenderer):
                 if combo_box.shown:
                     combo_ui = combo_box.ui
                     for name in COLOR_TO_NAME.values():
-                        combo_ui.selectable_value(color_name_picked_this_frame, name, name)
+                        combo_ui.selectable_value(
+                            color_name_picked_this_frame, name, name
+                        )
             # if a color name is chosen, update the actual color
             if name := color_name_picked_this_frame.get():
                 new_value = _compute_hexadecimal_from_color_name(name)
