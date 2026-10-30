@@ -22,11 +22,11 @@ mod = Module()
 ctx = Context()
 
 mod.tag(
-    "community_settings_window",
-    desc="Community settings configuration window is open. (When possible, this tag will be limited to when the window is focused)",
+    "community_settings_window_open",
+    desc="Community settings configuration window is open",
 )
 mod.list(
-    "community_settings_window_page",
+    "community_settings_window_open_page",
     desc="The name of a page in the Community settings window",
 )
 
@@ -87,7 +87,7 @@ class Manager:
             self.on_file_change(path)
         self.error_message = ""
         self.error_setting = None
-        ctx.lists["user.community_settings_window_page"] = [
+        ctx.lists["user.community_settings_window_open_page"] = [
             page.title for page in pages
         ] + [MAIN_PAGE_NAME]
 
@@ -376,7 +376,7 @@ def on_close_cleanup():
     always_on_top=False,
     decorated=True,
     title="Community Settings",
-    tag="user.community_settings_window",
+    tag="user.community_settings_window_open",
     on_close=on_close_cleanup,
 )
 async def settings_gui(ui, ui_wrapper):
@@ -419,7 +419,6 @@ class Actions:
         """Focus or toggle the setting by number"""
         if manager is None:
             return
-        settings_gui.focus()
         manager.chosen_setting = number
         settings_gui.refresh()
 
