@@ -289,12 +289,15 @@ class Manager:
             self._ui.add_space(checkbox_size + spacing_size + star_width)
         else:
             if self._ui.checkbox(egui.Mutable(setting.is_activated), "*").clicked():
-                try:
-                    update_setting(setting, make_comment=setting.is_activated)
-                except Exception as ex:
-                    self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: {ex}"
-                    self.error_setting = setting
+                self._toggle_setting_comment(setting, error_representation_of_name)
         self._ui.add_space(checkbox_size)
+
+    def _toggle_setting_comment(self, setting, error_representation_of_name):
+        try:
+            update_setting(setting, make_comment=setting.is_activated)
+        except Exception as ex:
+            self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: {ex}"
+            self.error_setting = setting
 
     async def _render_error_message(self, error_message, error_setting):
         async with self._ui.horizontal_wrapped():
@@ -343,6 +346,8 @@ class Manager:
             return
         page = self.pages[self.page]
         setting = page.settings[number - 1]
+        error_representation_of_name = compute_readable_name(setting.name, page.prefix)
+        self._toggle_setting_comment(setting, error_representation_of_name)
         update_setting(setting, make_comment=setting.is_activated)
 
     def _is_setting_number_valid(self, number: int) -> bool:
