@@ -57,7 +57,8 @@ def _remove_prefix(line: str, prefix):
 
 def _parse_multiline_string(lines, assignment_prefix):
     """Convert TalonScript multiline string lines to a Python string. Assumes that every line starts with the assignment prefix, which may not be the case if the string is commented"""
-    return "\n".join([_remove_prefix(l, assignment_prefix) for l in lines[1:]])[:-3]
+    total_text = "\n".join([_remove_prefix(l, assignment_prefix) for l in lines[1:]])[:-3]
+    return _parse_value(f'"""{total_text}"""')
 
 
 class SettingsParser:
