@@ -364,6 +364,9 @@ class Manager:
 
 manager = None
 
+def on_close_cleanup():
+    global manager
+    manager = None
 
 @open_gui(
     x=0.125,
@@ -374,6 +377,7 @@ manager = None
     decorated=True,
     title="Community Settings",
     tag="user.community_settings_window",
+    on_close=on_close_cleanup
 )
 async def settings_gui(ui, ui_wrapper):
     await manager.render_settings_configuration_gui(ui, ui_wrapper)
@@ -402,9 +406,8 @@ class Actions:
 
     def settings_window_hide():
         """Hide the Community settings configuration window"""
-        global manager
         settings_gui.hide()
-        manager = None
+        on_close_cleanup()
 
     def settings_window_open(name: str):
         """Open the page of the Community settings configuration window by name"""

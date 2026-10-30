@@ -447,6 +447,7 @@ def open_gui(
     decorated: bool = False,
     title: str = "",
     tag: str = "",
+    on_close: Callable | None = None,
 ):
     """Decorator for for an egui callback rendering function.
     screen: the screen to render the gui on.
@@ -454,6 +455,9 @@ def open_gui(
     refresh_period: an optional string giving a cron time period for how often to refresh the gui. egui only updates a ui when the user interacts with it, so setting this causes a periodic refresh. If you only need to update the ui under specific conditions, call .refresh() on the GUI instead.
     always_on_top: decides if the ui should be rendered as the top level.
     decorated: decides if the gui should be rendered with window borders.
+    title: the window title
+    tag: an optional tag to activate when the GUI is rendered and deactivate when it is closed
+    on_close: a call back to call when the GUI is closed
     """
 
     def open_inner(render):
@@ -469,6 +473,7 @@ def open_gui(
             decorated=decorated,
             title=title,
             tag=tag,
+            on_close=on_close,
         )
 
     return open_inner
@@ -528,6 +533,7 @@ class GUI:
         decorated: bool,
         title: str,
         tag: str,
+        on_close: Callable | None,
     ):
         self._props = Props(
             render=render,
@@ -550,6 +556,7 @@ class GUI:
         self.tag = tag
         if tag:
             self.context = Context()
+        self._on_close = on_close
 
     @property
     def showing(self) -> bool:
@@ -606,6 +613,8 @@ class GUI:
 
         self._cancel_refresh_job()
         self._window = None
+        if self._on_close:
+            self._on_close()
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
