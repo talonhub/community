@@ -189,7 +189,7 @@ Python, C#, Talon and JavaScript language support is broken up into multiple tag
 
 Language-specific implementations of the above features are in files named `lang/{your-language}/{your-language}.py`.
 
-To add support for a new language, ensure appropriate extension is added/uncommented in the [`language_extensions` dictionary in language_modes.py](core/modes/language_modes.py#L9). Then create the following files:
+To add support for a new language, ensure appropriate extension is added/uncommented in the [`code_languages` list in code_languages.py](core/modes/code_languages.py#L17). Then create the following files:
 
 - `lang/{your-language}/{your-language}.py`
 - `lang/{your-language}/{your-language}.talon`

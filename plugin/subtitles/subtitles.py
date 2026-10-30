@@ -1,10 +1,10 @@
 from collections.abc import Callable, Sequence
 from typing import Any, Optional
 
+from skia import Canvas as SkiaCanvas
+from skia import ImageFilter
 from talon import Module, app, cron, ctrl, settings, ui
 from talon.canvas import Canvas
-from talon.skia.canvas import Canvas as SkiaCanvas
-from talon.skia.imagefilter import ImageFilter
 from talon.types import Rect
 
 mod = Module()
@@ -20,7 +20,7 @@ def setting(
 setting_show = setting(
     "show",
     bool,
-    "If true show (custom) subtitles",
+    "Show (custom) subtitles",
     default=False,
 )
 setting_screens = setting(
@@ -46,17 +46,17 @@ setting_color_outline = setting(
 setting_timeout_per_char = setting(
     "timeout_per_char",
     int,
-    "For each character in the subtitle extend the timeout by this amount in ms",
+    "For each character in the subtitle extend the timeout by this amount in milliseconds",
 )
 setting_timeout_min = setting(
     "timeout_min",
     int,
-    "Minimum time for a subtitle to show in ms",
+    "Minimum time for a subtitle to show in milliseconds",
 )
 setting_timeout_max = setting(
     "timeout_max",
     int,
-    "Maximum time for a subtitle to show in ms",
+    "Maximum time for a subtitle to show in milliseconds",
 )
 setting_y = setting(
     "y",

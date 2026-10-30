@@ -26,7 +26,6 @@ mod.list("talon_lists")
 mod.list("talon_captures")
 mod.list("talon_apps")
 mod.list("talon_tags")
-mod.list("talon_modes")
 mod.list("talon_settings")
 mod.list("talon_scopes")
 mod.list("talon_modes")
@@ -124,6 +123,7 @@ operators = Operators(
     MATH_ADD=" + ",
     MATH_MULTIPLY=" * ",
     MATH_DIVIDE=" / ",
+    MATH_MODULO=" % ",
     ASSIGNMENT=" = ",
 )
 

@@ -29,6 +29,10 @@ and app.name: Code
 os: linux
 and app.name: code
 os: linux
+and app.name: com.microsoft.VSCode
+os: linux
+and app.name: com.microsoft.VSCodeInsiders
+os: linux
 and app.name: code-oss
 os: linux
 and app.name: code-insiders
@@ -40,6 +44,8 @@ os: linux
 and app.name: codium
 os: linux
 and app.name: Cursor
+os: linux
+and app.name: Antigravity IDE
 os: linux
 and app.name: Positron
 """
@@ -66,6 +72,10 @@ os: windows
 and app.exe: positron.exe
 os: windows
 and app.exe: /^cursor\.exe$/i
+os: windows
+and app.name: Antigravity IDE
+os: windows
+and app.exe: /^antigravity\.exe$/i
 os: windows
 and app.exe: /^positron\.exe$/i
 """

@@ -1,11 +1,10 @@
 from typing import Optional
 
-from talon import Module, actions, app, cron, registry, scope, settings, skia, ui
+from skia import Canvas as SkiaCanvas
+from skia import ImageFilter, Point2d, Rect, Shader
+from talon import Module, actions, app, cron, registry, scope, settings, ui
 from talon.canvas import Canvas
 from talon.screen import Screen
-from talon.skia.canvas import Canvas as SkiaCanvas
-from talon.skia.imagefilter import ImageFilter
-from talon.ui import Point2d, Rect
 
 canvas: Canvas = None
 current_mode = ""
@@ -18,13 +17,13 @@ mod.setting(
     "mode_indicator_show",
     type=bool,
     default=False,
-    desc="If true the mode indicator is shown",
+    desc="Show the mode indicator",
 )
 mod.setting(
     "mode_indicator_show_microphone_name",
     type=bool,
     default=False,
-    desc="Show first two letters of microphone name if true",
+    desc="Show the first two letters of the microphone name",
 )
 mod.setting(
     "mode_indicator_size",
@@ -51,14 +50,46 @@ mod.setting(
     type=float,
     desc="Mode indicator gradient brightness in percentages(0-1). 0=darkest, 1=brightest",
 )
-mod.setting("mode_indicator_color_text", type=str)
-mod.setting("mode_indicator_color_mute", type=str)
-mod.setting("mode_indicator_color_sleep", type=str)
-mod.setting("mode_indicator_color_deep_sleep", type=str)
-mod.setting("mode_indicator_color_dictation", type=str)
-mod.setting("mode_indicator_color_mixed", type=str)
-mod.setting("mode_indicator_color_command", type=str)
-mod.setting("mode_indicator_color_other", type=str)
+mod.setting(
+    "mode_indicator_color_text",
+    type=str,
+    desc="The color of the optional mode indicator overlay text",
+)
+mod.setting(
+    "mode_indicator_color_mute",
+    type=str,
+    desc="The color of the mode indicator when the active microphone is None",
+)
+mod.setting(
+    "mode_indicator_color_sleep",
+    type=str,
+    desc="The color of the mode indicator in sleep mode",
+)
+mod.setting(
+    "mode_indicator_color_deep_sleep",
+    type=str,
+    desc="The color of the mode indicator in deep sleep",
+)
+mod.setting(
+    "mode_indicator_color_dictation",
+    type=str,
+    desc="The color of the mode indicator in dictation mode",
+)
+mod.setting(
+    "mode_indicator_color_mixed",
+    type=str,
+    desc="The color of the mode indicator in mixed mode",
+)
+mod.setting(
+    "mode_indicator_color_command",
+    type=str,
+    desc="The color of the mode indicator in command mode",
+)
+mod.setting(
+    "mode_indicator_color_other",
+    type=str,
+    desc="The color of the mode indicator in other modes",
+)
 
 
 setting_values = dict.fromkeys(
@@ -123,7 +154,10 @@ def on_draw(c: SkiaCanvas):
     x, y = c.rect.center.x, c.rect.center.y
     radius = c.rect.height / 2 - 2
 
-    c.paint.shader = skia.Shader.radial_gradient(
+    if radius <= 0:
+        return
+
+    c.paint.shader = Shader.radial_gradient(
         Point2d(x, y), radius, [color_mode, color_gradient]
     )
 
@@ -135,7 +169,7 @@ def on_draw(c: SkiaCanvas):
 
     if settings.get("user.mode_indicator_show_microphone_name"):
         # Remove c.paint.shader gradient before drawing again
-        c.paint.shader = skia.Shader.radial_gradient(
+        c.paint.shader = Shader.radial_gradient(
             Point2d(x, y), radius, [color_text, color_text]
         )
 
@@ -180,6 +214,7 @@ def should_show_indicator():
 def show_indicator():
     global canvas
     canvas = Canvas.from_rect(Rect(0, 0, 0, 0))
+    move_indicator()
     canvas.register("draw", on_draw)
 
 
@@ -194,7 +229,8 @@ def update_indicator():
     if should_show_indicator():
         if not canvas:
             show_indicator()
-        move_indicator()
+        else:
+            move_indicator()
         canvas.freeze()
     elif canvas:
         hide_indicator()
