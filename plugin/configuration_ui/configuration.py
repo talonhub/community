@@ -348,6 +348,8 @@ class Manager:
             return
         page = self.pages[self.page]
         setting = page.settings[number - 1]
+        if setting.is_tag:
+            return 
         error_representation_of_name = compute_readable_name(setting.name, page.prefix)
         self._toggle_setting_comment(setting, error_representation_of_name)
 
