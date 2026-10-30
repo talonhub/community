@@ -371,8 +371,6 @@ def on_close_cleanup():
 
 
 @open_gui(
-    x=0.125,
-    y=0.125,
     width=0.75,
     height=0.75,
     always_on_top=False,
