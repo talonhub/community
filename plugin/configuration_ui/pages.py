@@ -52,7 +52,7 @@ def create_pages():
             "",
             [
                 create_numeric_setting("user.mouse_continuous_scroll_amount", 1),
-                create_numeric_setting("user.mouse_gaze_scroll_speed_multiplier", 1.0),
+                create_numeric_setting("user.mouse_gaze_scroll_speed_multiplier", 0.0),
                 create_numeric_setting("user.mouse_continuous_scroll_acceleration", 1),
                 create_boolean_setting("user.mouse_enable_pop_stops_scroll"),
                 create_boolean_setting("user.mouse_enable_hiss_scroll"),
