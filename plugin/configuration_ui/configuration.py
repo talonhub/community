@@ -348,7 +348,6 @@ class Manager:
         setting = page.settings[number - 1]
         error_representation_of_name = compute_readable_name(setting.name, page.prefix)
         self._toggle_setting_comment(setting, error_representation_of_name)
-        update_setting(setting, make_comment=setting.is_activated)
 
     def _is_setting_number_valid(self, number: int) -> bool:
         page = self.pages.get(self.page)
