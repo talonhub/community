@@ -364,9 +364,11 @@ class Manager:
 
 manager = None
 
+
 def on_close_cleanup():
     global manager
     manager = None
+
 
 @open_gui(
     x=0.125,
@@ -377,7 +379,7 @@ def on_close_cleanup():
     decorated=True,
     title="Community Settings",
     tag="user.community_settings_window",
-    on_close=on_close_cleanup
+    on_close=on_close_cleanup,
 )
 async def settings_gui(ui, ui_wrapper):
     await manager.render_settings_configuration_gui(ui, ui_wrapper)
