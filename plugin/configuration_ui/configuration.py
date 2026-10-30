@@ -407,7 +407,6 @@ class Actions:
     def settings_window_hide():
         """Hide the Community settings configuration window"""
         settings_gui.hide()
-        on_close_cleanup()
 
     def settings_window_open(name: str):
         """Open the page of the Community settings configuration window by name"""
