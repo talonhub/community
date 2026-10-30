@@ -251,7 +251,7 @@ class ColorSettingRenderer(SettingRenderer):
                     case 1:
                         actions.key("shift-tab")
                     case _:
-                        actions.key("enter")
+                        actions.key("space")
                         self.should_focus = False
                 self.focusing_frame += 1
 
@@ -298,7 +298,7 @@ class DiscretSettingRenderer(SettingRenderer):
                     case 1:
                         actions.key("shift-tab")
                     case _:
-                        actions.key("enter")
+                        actions.key("space")
                         self.should_focus = False
                 self.focusing_frame += 1
 
