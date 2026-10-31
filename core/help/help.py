@@ -78,6 +78,8 @@ def update_minimum_column_sizes(table: Table, ui_wrapper):
     global minimum_column_sizes
     old = minimum_column_sizes
     minimum_column_sizes = table.get_max_column_sizes(ui_wrapper)
+    # if the width changes, then auto size again
+    # the last attempt at having the GUI internally auto size on encountering a width change failed
     if old != minimum_column_sizes and current_gui:
         current_gui.auto_size_next_frame()
     return minimum_column_sizes
