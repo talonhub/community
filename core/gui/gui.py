@@ -358,7 +358,7 @@ class UIWrapper:
             # set column sizes
             for _ in range(len(headers)):
                 if auto_size_columns:
-                    table = table.column(egui.Column.auto())
+                    table = table.column(egui.Column.auto().clip(True))
                 else:
                     table = table.column(
                         egui.Column.remainder().at_most(column_width).clip(True)
