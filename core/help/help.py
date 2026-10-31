@@ -71,6 +71,15 @@ current_list_page = 1
 page_scroller: PageScroller | None = None
 # this is being used for the egui migrated guis
 current_gui = None
+minimum_column_sizes = None
+
+def update_minimum_column_sizes(table: Table, ui_wrapper):
+    global minimum_column_sizes
+    old = minimum_column_sizes
+    minimum_column_sizes = table.get_max_column_sizes(ui_wrapper)
+    if old != minimum_column_sizes and current_gui:
+        current_gui.auto_size_next_frame()
+    return minimum_column_sizes
 
 
 def update_title():
@@ -232,9 +241,7 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
-            minimum_column_sizes=operators_text.get_max_column_sizes(
-                ui_wrapper,
-            ),
+            minimum_column_sizes=update_minimum_column_sizes(operators_text, ui_wrapper),
         )
 
     ui_wrapper.spacing()
@@ -757,7 +764,7 @@ async def gui_list_help(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_list",
             scroller=page_scroller,
-            minimum_column_sizes=table.get_max_column_sizes(ui_wrapper),
+            minimum_column_sizes=update_minimum_column_sizes(table, ui_wrapper),
         )
 
     ui_wrapper.spacing()

@@ -687,3 +687,9 @@ class GUI:
                         )
                 self._previous_height_taken = self._last_height_taken
             self._window.refresh()
+
+    def auto_size_next_frame(self):
+        self._last_height_taken = None
+        self._previous_height_taken = None
+        if self._window:
+            self._window.autosize = True
