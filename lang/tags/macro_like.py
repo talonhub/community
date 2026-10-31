@@ -26,8 +26,7 @@ tag: user.code_macro_like
 
 
 def do_macro_like_insert(text: str, selection: str, left_delim: str, right_delim: str):
-    if selection:
-        out_text = f"{text}{left_delim}{selection}{right_delim}"
+    out_text = f"{text}{left_delim}{selection}{right_delim}"
     actions.user.paste(out_text)
     actions.edit.left()
 
