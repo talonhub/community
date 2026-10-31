@@ -244,8 +244,9 @@ class Table:
             for r in self.rows
         )
 
-    def get_max_column_sizes(self, ui_wrapper) -> list[float]:
-        num_columns = max(r.get_num_columns() for r in self.rows)
+    def get_max_column_sizes(self, ui_wrapper, num_columns=None) -> list[float]:
+        if num_columns is None:
+            num_columns = max(r.get_num_columns() for r in self.rows)
         return [self.get_max_column_size(i, ui_wrapper) for i in range(num_columns)]
 
 
