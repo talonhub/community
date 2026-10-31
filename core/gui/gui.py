@@ -332,7 +332,7 @@ class UIWrapper:
         table,
         row_height=None,
         render_row=None,
-        auto_size_columns=False,
+        minimum_column_sizes: list[float] | None=None,
         maximum_height=None,
         id_salt=None,
         scroller=None,
@@ -381,9 +381,9 @@ class UIWrapper:
                 .id_salt(id_salt)
             )
             # set column sizes
-            for _ in range(len(headers)):
-                if auto_size_columns:
-                    table = table.column(egui.Column.auto().clip(True))
+            for i in range(len(headers)):
+                if minimum_column_sizes:
+                    table = table.column(egui.Column.auto().at_least(minimum_column_sizes[i]).clip(True))
                 else:
                     table = table.column(
                         egui.Column.remainder().at_most(column_width).clip(True)
