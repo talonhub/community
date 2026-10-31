@@ -377,9 +377,7 @@ class UIWrapper:
                         size = minimum_column_sizes[i]
                     else:
                         size = 0
-                    table = table.column(
-                        egui.Column.auto().at_least(size).clip(True)
-                    )
+                    table = table.column(egui.Column.auto().at_least(size).clip(True))
                 else:
                     table = table.column(
                         egui.Column.remainder()

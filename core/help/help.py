@@ -224,7 +224,7 @@ async def gui_operators(ui, ui_wrapper):
         maximum_height = compute_table_height(
             row_size, ui_wrapper.get_item_spacing(), page_scroller.page_size
         )
-        
+
         await ui_wrapper.render_table(
             headers=["", ""],
             table=operators_text,
