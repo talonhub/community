@@ -316,8 +316,10 @@ def apply_formatting(m):
 no_space_after = re.compile(
     r"""
   (?:
-    [\s\-_/#@([{‘“]     # characters that never need space after them
-  | (?<!\w)[$£€¥₩₽₹]    # currency symbols not preceded by a word character
+    [\s\-_/@([{‘“]     # characters that never need space after them
+  # currency symbols and hash not preceded by a word character, so a standalone
+  # "#" still glues to the next word ("#talon") but "c#" and "F#" do not.
+  | (?<!\w)[$£€¥₩₽₹#]
   # quotes preceded by beginning of string, space, opening braces, dash, or other quotes
   | (?: ^ | [\s([{\-'"] ) ['"]
   )$""",
@@ -367,6 +369,18 @@ no_space_before = re.compile(
 # assert not actions.user.needs_space_between("example", '."')
 # assert not actions.user.needs_space_between("hello'", ".")
 # assert not actions.user.needs_space_between("hello.", "'")
+# def _omits_space_after(text: str) -> bool:
+#     return bool(no_space_after.search(text))
+# assert _omits_space_after("#")
+# assert _omits_space_after(" #")
+# assert not _omits_space_after("c#")
+# assert not _omits_space_after("C#")
+# assert not _omits_space_after("F#")
+# assert _omits_space_after("$")
+# assert not _omits_space_after("US$")
+# assert _omits_space_after("and-")
+# assert _omits_space_after("(")
+# assert not _omits_space_after("hello")
 
 no_cap_after = re.compile(
     r"""(
