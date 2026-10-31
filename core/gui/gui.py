@@ -34,18 +34,6 @@ INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
 
-# We must account for the space taken up for the column separation. This number was determined empirically.
-TWO_COLUMN_EXTRA_PADDING = 9
-
-
-def pad_title_for_two_column_rows(title, max_length_per_column):
-    required_total_width = max_length_per_column * 2 + TWO_COLUMN_EXTRA_PADDING
-    padding_width = max(0, required_total_width - len(title))
-    if padding_width > 0:
-        padding = " " * padding_width
-        title = f"{title}{padding}"
-    return title
-
 
 def wrap_with_subsequent_indent(text, width):
     return wrap(text, width=width, subsequent_indent=" ")
@@ -157,6 +145,10 @@ class Row(ABC):
     def get_num_columns(self) -> int:
         """Returns the number of columns"""
 
+    @abstractmethod
+    def get_column_size(self, column_number, ui_wrapper) -> float:
+        """Returns the size of the column in pixels"""
+
 
 class TextRow(Row):
     def __init__(self, columns, render_overline=True, rich_text_functions=None):
@@ -181,6 +173,10 @@ class TextRow(Row):
 
     def get_num_columns(self):
         return len(self.columns)
+
+    def get_column_size(self, column_number, ui_wrapper) -> float:
+        column = self.columns[column_number]
+        return ui_wrapper.compute_text_width(column)
 
     @classmethod
     def _split_across_rows(
@@ -240,6 +236,18 @@ class Table:
     def __len__(self) -> int:
         return len(self.rows)
 
+    def get_max_column_size(self, column_number, ui_wrapper) -> float:
+        return max(
+            0
+            if r.get_num_columns() <= column_number
+            else r.get_column_size(column_number, ui_wrapper)
+            for r in self.rows
+        )
+
+    def get_max_column_sizes(self, ui_wrapper) -> list[float]:
+        num_columns = max(r.get_num_columns() for r in self.rows)
+        return [self.get_max_column_size(i, ui_wrapper) for i in range(num_columns)]
+
 
 class UIWrapper:
     """Provides helper methods for rendering widgets on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
@@ -253,6 +261,14 @@ class UIWrapper:
         if ui is not None:
             return ui
         return self.ui
+
+    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+        """Compute the width of the text in pixels on the ui"""
+        ui = self._ui(ui)
+        if font_id is None:
+            font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
+        galley = ui.painter().layout_no_wrap(text, font_id, egui.Color32.black())
+        return galley.size().x
 
     def get_text_size(self, ui=None) -> float:
         """Compute the text size of the ui"""
@@ -307,21 +323,23 @@ class UIWrapper:
         table,
         row_height=None,
         render_row=None,
-        auto_size_columns=False,
+        minimum_column_sizes: list[float] | None = None,
         maximum_height=None,
         id_salt=None,
         scroller=None,
         ui=None,
+        minimum_width=None,
     ):
         """Render a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         headers: the headers to render at the top of the table. The length of the headers should equal the column size of the rows.
         table: provides the rows to render in the table.
         row_height: each row should be at most this big.
         render_row: a callback for rendering the row.
-        auto_size_columns: decides if the column width should be based on the item sizes. Otherwise, each column takes an equal portion of the available width.
+        minimum_column_sizes: optional minimum sizes for the columns in pixels. If not provided, the columns evenly divide the ui.
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
         scroller: handles programmatic scrolling.
+        minimum_width: make the table at least this wide
         """
         ui = self._ui(ui)
 
@@ -344,7 +362,6 @@ class UIWrapper:
             style.spacing = spacing
 
             # set up the table
-            column_width = ui.available_width() / len(headers)
             table = (
                 egui.TableBuilder(ui)
                 .cell_layout(
@@ -356,12 +373,24 @@ class UIWrapper:
                 .id_salt(id_salt)
             )
             # set column sizes
-            for _ in range(len(headers)):
-                if auto_size_columns:
-                    table = table.column(egui.Column.auto())
+            if minimum_column_sizes and minimum_width:
+                total_width = sum(minimum_column_sizes)
+                if total_width < minimum_width:
+                    minimum_column_sizes = [
+                        (s / total_width) * minimum_width for s in minimum_column_sizes
+                    ]
+            for i in range(len(headers)):
+                if minimum_column_sizes:
+                    if i < len(minimum_column_sizes):
+                        size = minimum_column_sizes[i]
+                    else:
+                        size = 0
+                    table = table.column(egui.Column.auto().at_least(size).clip(True))
                 else:
                     table = table.column(
-                        egui.Column.remainder().at_most(column_width).clip(True)
+                        egui.Column.remainder()
+                        .at_most(ui.available_width() / len(headers))
+                        .clip(True)
                     )
             # scroll programmatically if needed
             if scroller and scroller.is_scrolling():
@@ -666,3 +695,9 @@ class GUI:
                         )
                 self._previous_height_taken = self._last_height_taken
             self._window.refresh()
+
+    def auto_size_next_frame(self):
+        self._last_height_taken = None
+        self._previous_height_taken = None
+        if self._window:
+            self._window.autosize = True
