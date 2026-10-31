@@ -712,7 +712,7 @@ def hide_all_help_guis():
     gui_operators.hide()
 
 
-MAX_COLUMN_LENGTH_FOR_HELP_LIST = 20
+MAX_COLUMN_LENGTH_FOR_HELP_LIST = 40
 LIST_KEY_HEADER = "Spoken Form"
 LIST_VALUE_HEADER = "Value"
 
