@@ -214,7 +214,7 @@ async def gui_operators(ui, ui_wrapper):
     title = "Help: Operators"
     ui_wrapper.header(title)
 
-    if operators_text is None:
+    if operators_text is None or not operators_text.has_rows():
         ui.separator()
         ui.label(
             "There is no active programming language when you opened this menu\nor the language does not have operator support."
