@@ -361,8 +361,9 @@ class UserActions:
             else:
                 actions.key(f"alt-{number}")
         else:
+            # openEditorAtIndex takes a zero-based index
             actions.user.vscode_with_plugin(
-                "workbench.action.openEditorAtIndex", number
+                "workbench.action.openEditorAtIndex", number - 1
             )
 
     def tab_final():
