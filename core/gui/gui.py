@@ -257,6 +257,7 @@ class UIWrapper:
         return self.ui
 
     def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+        """Compute the width of the text in pixels on the ui"""
         ui = self._ui(ui)
         if font_id is None:
             font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
