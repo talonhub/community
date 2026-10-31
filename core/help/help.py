@@ -14,8 +14,6 @@ from ...core.gui.gui import (
     create_bold_text,
     create_italic_text,
     open_gui,
-    pad_title_for_two_column_rows,
-    pad_column_title,
 )
 
 mod = Module()
@@ -213,13 +211,8 @@ def add_page_navigation_buttons(ui_wrapper, scroller):
 @open_gui(y=0, refresh_period="500ms")
 async def gui_operators(ui, ui_wrapper):
     global operators_text
-    # use horizontal layout to prevent wrapping
-    async with ui.horizontal():
-        title = "Help: Operators"
-        if operators_text:
-            # add padding so the auto sizing creates enough width
-            title = pad_title_for_two_column_rows(title, OPERATORS_MAX_COLUMN_LENGTH)
-        ui_wrapper.header(title)
+    title = "Help: Operators"
+    ui_wrapper.header(title)
 
     if operators_text is None:
         ui.separator()
@@ -239,6 +232,7 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
+            minimum_column_sizes=operators_text.get_max_column_sizes(ui_wrapper)
         )
 
     ui_wrapper.spacing()

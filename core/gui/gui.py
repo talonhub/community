@@ -34,24 +34,6 @@ INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
 
-# We must account for the space taken up for the column separation. This number was determined empirically.
-TWO_COLUMN_EXTRA_PADDING = 9
-
-def pad_title_to_size(title, desired_length):
-    padding_width = max(0, desired_length - len(title))
-    if padding_width > 0:
-        padding = " " * padding_width
-        title = f"{title}{padding}"
-    return title
-
-def pad_title_for_two_column_rows(title, max_length_per_column):
-    required_total_width = max_length_per_column * 2 + TWO_COLUMN_EXTRA_PADDING
-    return pad_title_to_size(title, required_total_width)
-
-def pad_column_title(title, max_row_size):
-    return title + " "*max_row_size
-
-
 def wrap_with_subsequent_indent(text, width):
     return wrap(text, width=width, subsequent_indent=" ")
 
@@ -254,7 +236,7 @@ class Table:
         return len(self.rows)
 
     def get_max_column_size(self, column_number, ui_wrapper) -> float:
-        return max(0 if r.get_num_columns() < column_number else r.get_column_size(column_number, ui_wrapper) for r in self.rows)
+        return max(0 if r.get_num_columns() <= column_number else r.get_column_size(column_number, ui_wrapper) for r in self.rows)
 
     def get_max_column_sizes(self, ui_wrapper) -> list[float]:
         num_columns = max(r.get_num_columns() for r in self.rows)
