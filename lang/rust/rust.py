@@ -280,10 +280,7 @@ class UserActions:
     # tag: functions_gui
 
     def code_insert_function(text: str, selection: str):
-        if selection:
-            out_text = f"{text}({selection})"
-        else:
-            out_text = text + "()"
+        out_text = f"{text}({selection or ''})"
         actions.user.paste(out_text)
         actions.edit.left()
 
