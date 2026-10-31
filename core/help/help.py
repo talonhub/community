@@ -73,6 +73,7 @@ page_scroller: PageScroller | None = None
 current_gui = None
 minimum_column_sizes = None
 
+
 def update_minimum_column_sizes(table: Table, ui_wrapper):
     global minimum_column_sizes
     old = minimum_column_sizes
@@ -241,7 +242,9 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
-            minimum_column_sizes=update_minimum_column_sizes(operators_text, ui_wrapper),
+            minimum_column_sizes=update_minimum_column_sizes(
+                operators_text, ui_wrapper
+            ),
         )
 
     ui_wrapper.spacing()
