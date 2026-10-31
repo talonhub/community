@@ -281,7 +281,7 @@ class UserActions:
 
     def code_insert_function(text: str, selection: str):
         if selection:
-            out_text = text + f"({selection})"
+            out_text = f"{text}({selection})"
         else:
             out_text = text + "()"
         actions.user.paste(out_text)
