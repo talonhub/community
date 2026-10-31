@@ -1,7 +1,13 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 mod = Module()
+mod.setting(
+    "slack_contact_delay",
+    type=int,
+    default=400,
+    desc="Milliseconds to wait for Slack dialogs when messaging a contact",
+)
 apps = mod.apps
 apps.slack = "app.name: Slack"
 mod.apps.slack = r"""
@@ -117,3 +123,32 @@ class Actions:
 
     def slack_toggle_right_sidebar():
         """Toggles the visibility of the right sidebar in Slack"""
+
+    def slack_open_new_message():
+        """Opens a new message in Slack"""
+
+    def slack_message_contact(name: str):
+        """Opens a direct message to the given person in Slack"""
+        delay = f"{settings.get('user.slack_contact_delay')}ms"
+        actions.key("escape")
+        actions.user.slack_open_new_message()
+        actions.sleep(delay)
+        actions.edit.select_line()
+        actions.insert(name)
+        actions.sleep(delay)
+        actions.key("enter")
+        actions.sleep(delay)
+        # Move focus from the recipient field to the message field
+        actions.key("tab")
+
+    def slack_search_messages_from(name: str):
+        """Searches Slack for messages sent by the given person"""
+        delay = f"{settings.get('user.slack_contact_delay')}ms"
+        actions.key("escape")
+        actions.user.messaging_open_search()
+        actions.sleep(delay)
+        # Replace the "in:#channel" filter that Slack prefills
+        actions.edit.select_line()
+        actions.insert(f"from:@{name}")
+        actions.sleep(delay)
+        actions.key("enter")

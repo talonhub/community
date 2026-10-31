@@ -125,3 +125,7 @@ class UserActions:
     def slack_toggle_right_sidebar():
         """Toggles the visibility of the right sidebar in Slack"""
         actions.key("ctrl-.")
+
+    def slack_open_new_message():
+        """Opens a new message in Slack"""
+        actions.key("ctrl-n")
