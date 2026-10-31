@@ -232,7 +232,7 @@ async def gui_operators(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_operators",
             scroller=page_scroller,
-            minimum_column_sizes=operators_text.get_max_column_sizes(ui_wrapper)
+            minimum_column_sizes=operators_text.get_max_column_sizes(ui_wrapper),
         )
 
     ui_wrapper.spacing()

@@ -34,6 +34,7 @@ INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
 
+
 def wrap_with_subsequent_indent(text, width):
     return wrap(text, width=width, subsequent_indent=" ")
 
@@ -143,7 +144,7 @@ class Row(ABC):
     @abstractmethod
     def get_num_columns(self) -> int:
         """Returns the number of columns"""
-    
+
     @abstractmethod
     def get_column_size(self, column_number, ui_wrapper) -> float:
         """Returns the size of the column in pixels"""
@@ -236,7 +237,12 @@ class Table:
         return len(self.rows)
 
     def get_max_column_size(self, column_number, ui_wrapper) -> float:
-        return max(0 if r.get_num_columns() <= column_number else r.get_column_size(column_number, ui_wrapper) for r in self.rows)
+        return max(
+            0
+            if r.get_num_columns() <= column_number
+            else r.get_column_size(column_number, ui_wrapper)
+            for r in self.rows
+        )
 
     def get_max_column_sizes(self, ui_wrapper) -> list[float]:
         num_columns = max(r.get_num_columns() for r in self.rows)
@@ -261,9 +267,7 @@ class UIWrapper:
         ui = self._ui(ui)
         if font_id is None:
             font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
-        galley = ui.painter().layout_no_wrap(
-            text, font_id, egui.Color32.black()
-        )
+        galley = ui.painter().layout_no_wrap(text, font_id, egui.Color32.black())
         return galley.size().x
 
     def get_text_size(self, ui=None) -> float:
@@ -319,7 +323,7 @@ class UIWrapper:
         table,
         row_height=None,
         render_row=None,
-        minimum_column_sizes: list[float] | None=None,
+        minimum_column_sizes: list[float] | None = None,
         maximum_height=None,
         id_salt=None,
         scroller=None,
@@ -330,7 +334,7 @@ class UIWrapper:
         table: provides the rows to render in the table.
         row_height: each row should be at most this big.
         render_row: a callback for rendering the row.
-        minimum_column_sizes: optional minimum sizes for the columns in pixels. If not provided, the columns evenly divide the ui. 
+        minimum_column_sizes: optional minimum sizes for the columns in pixels. If not provided, the columns evenly divide the ui.
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
         scroller: handles programmatic scrolling.
@@ -369,10 +373,14 @@ class UIWrapper:
             # set column sizes
             for i in range(len(headers)):
                 if minimum_column_sizes:
-                    table = table.column(egui.Column.auto().at_least(minimum_column_sizes[i]).clip(True))
+                    table = table.column(
+                        egui.Column.auto().at_least(minimum_column_sizes[i]).clip(True)
+                    )
                 else:
                     table = table.column(
-                        egui.Column.remainder().at_most(ui.available_width() / len(headers)).clip(True)
+                        egui.Column.remainder()
+                        .at_most(ui.available_width() / len(headers))
+                        .clip(True)
                     )
             # scroll programmatically if needed
             if scroller and scroller.is_scrolling():
