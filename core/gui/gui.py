@@ -146,7 +146,7 @@ class Row(ABC):
     
     @abstractmethod
     def get_column_size(self, column_number, ui_wrapper) -> float:
-        """Returns the size of the column"""
+        """Returns the size of the column in pixels"""
 
 
 class TextRow(Row):
