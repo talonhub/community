@@ -429,9 +429,7 @@ class UIWrapper:
         ui = self._ui(ui)
         if font_id is None:
             font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
-        galley = ui.painter().layout_no_wrap(
-            text, font_id, egui.Color32.black()
-        )
+        galley = ui.painter().layout_no_wrap(text, font_id, egui.Color32.black())
         return galley.size().x
 
 
