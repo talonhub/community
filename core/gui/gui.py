@@ -376,7 +376,9 @@ class UIWrapper:
             if minimum_column_sizes and minimum_width:
                 total_width = sum(minimum_column_sizes)
                 if total_width < minimum_width:
-                    minimum_column_sizes = [(s/total_width)*minimum_width for s in minimum_column_sizes]
+                    minimum_column_sizes = [
+                        (s / total_width) * minimum_width for s in minimum_column_sizes
+                    ]
             for i in range(len(headers)):
                 if minimum_column_sizes:
                     if i < len(minimum_column_sizes):
