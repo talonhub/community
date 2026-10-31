@@ -15,6 +15,7 @@ from ...core.gui.gui import (
     create_italic_text,
     open_gui,
     pad_title_for_two_column_rows,
+    pad_column_title,
 )
 
 mod = Module()
@@ -755,13 +756,16 @@ async def gui_list_help(ui, ui_wrapper):
     # show the rows in a table
     if table.has_rows():
         headers = [LIST_KEY_HEADER, LIST_VALUE_HEADER]
+        padded_headers = [pad_column_title(headers[i], math.ceil(table.get_max_column_size(i, ui_wrapper)/ui_wrapper.compute_text_width(' '))) for i in range(len(headers))]
+        
         await ui_wrapper.render_table(
-            headers,
+            padded_headers,
             table,
             maximum_height=maximum_height,
             row_height=row_size,
             id_salt="help_list",
             scroller=page_scroller,
+            auto_size_columns=True,
         )
 
     ui_wrapper.spacing()

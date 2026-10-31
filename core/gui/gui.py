@@ -37,14 +37,19 @@ DEFAULT_TEXT_SIZE = 12.0 / 1.3
 # We must account for the space taken up for the column separation. This number was determined empirically.
 TWO_COLUMN_EXTRA_PADDING = 9
 
-
-def pad_title_for_two_column_rows(title, max_length_per_column):
-    required_total_width = max_length_per_column * 2 + TWO_COLUMN_EXTRA_PADDING
-    padding_width = max(0, required_total_width - len(title))
+def pad_title_to_size(title, desired_length):
+    padding_width = max(0, desired_length - len(title))
     if padding_width > 0:
         padding = " " * padding_width
         title = f"{title}{padding}"
     return title
+
+def pad_title_for_two_column_rows(title, max_length_per_column):
+    required_total_width = max_length_per_column * 2 + TWO_COLUMN_EXTRA_PADDING
+    return pad_title_to_size(title, required_total_width)
+
+def pad_column_title(title, max_row_size):
+    return title + " "*max_row_size
 
 
 def wrap_with_subsequent_indent(text, width):
@@ -156,6 +161,10 @@ class Row(ABC):
     @abstractmethod
     def get_num_columns(self) -> int:
         """Returns the number of columns"""
+    
+    @abstractmethod
+    def get_column_size(self, column_number, ui_wrapper) -> float:
+        """Returns the size of the column"""
 
 
 class TextRow(Row):
@@ -181,6 +190,10 @@ class TextRow(Row):
 
     def get_num_columns(self):
         return len(self.columns)
+
+    def get_column_size(self, column_number, ui_wrapper) -> float:
+        column = self.columns[column_number]
+        return ui_wrapper.compute_text_width(column)
 
     @classmethod
     def _split_across_rows(
@@ -240,6 +253,9 @@ class Table:
     def __len__(self) -> int:
         return len(self.rows)
 
+    def get_max_column_size(self, column_number, ui_wrapper) -> float:
+        return max(0 if r.get_num_columns() < column_number else r.get_column_size(column_number, ui_wrapper) for r in self.rows)
+
 
 class UIWrapper:
     """Provides helper methods for rendering widgets on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
@@ -253,6 +269,15 @@ class UIWrapper:
         if ui is not None:
             return ui
         return self.ui
+
+    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+        ui = self._ui(ui)
+        if font_id is None:
+            font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
+        microphone_galley = ui.painter().layout_no_wrap(
+            text, font_id, egui.Color32.black()
+        )
+        return microphone_galley.size().x
 
     def get_text_size(self, ui=None) -> float:
         """Compute the text size of the ui"""
