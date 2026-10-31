@@ -328,6 +328,7 @@ class UIWrapper:
         id_salt=None,
         scroller=None,
         ui=None,
+        minimum_width=None,
     ):
         """Render a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         headers: the headers to render at the top of the table. The length of the headers should equal the column size of the rows.
@@ -338,6 +339,7 @@ class UIWrapper:
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
         scroller: handles programmatic scrolling.
+        minimum_width: make the table at least this wide
         """
         ui = self._ui(ui)
 
@@ -371,6 +373,10 @@ class UIWrapper:
                 .id_salt(id_salt)
             )
             # set column sizes
+            if minimum_column_sizes and minimum_width:
+                total_width = sum(minimum_column_sizes)
+                if total_width < minimum_width:
+                    minimum_column_sizes = [(s/total_width)*minimum_width for s in minimum_column_sizes]
             for i in range(len(headers)):
                 if minimum_column_sizes:
                     if i < len(minimum_column_sizes):
