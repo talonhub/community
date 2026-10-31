@@ -330,7 +330,7 @@ class UIWrapper:
         table: provides the rows to render in the table.
         row_height: each row should be at most this big.
         render_row: a callback for rendering the row.
-        minimum_column_sizes: optional minimum sizes for the columns. If not provided, the columns evenly divide the ui. 
+        minimum_column_sizes: optional minimum sizes for the columns in pixels. If not provided, the columns evenly divide the ui. 
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
         scroller: handles programmatic scrolling.
@@ -356,7 +356,6 @@ class UIWrapper:
             style.spacing = spacing
 
             # set up the table
-            column_width = ui.available_width() / len(headers)
             table = (
                 egui.TableBuilder(ui)
                 .cell_layout(
@@ -373,7 +372,7 @@ class UIWrapper:
                     table = table.column(egui.Column.auto().at_least(minimum_column_sizes[i]).clip(True))
                 else:
                     table = table.column(
-                        egui.Column.remainder().at_most(column_width).clip(True)
+                        egui.Column.remainder().at_most(ui.available_width() / len(headers)).clip(True)
                     )
             # scroll programmatically if needed
             if scroller and scroller.is_scrolling():
