@@ -729,8 +729,6 @@ async def gui_list_help(ui, ui_wrapper):
 
     # show list name and description for the title
     title = f"List: {selected_list}"
-    # use the title to claim enough width: add enough padding to show columns with the maximum length
-    title = pad_title_for_two_column_rows(title, MAX_COLUMN_LENGTH_FOR_HELP_LIST)
 
     # Extract description from list declaration, i.e. mod.list(..., desc=...))
     if (desc := registry.decls.lists[selected_list].desc) is not None:
@@ -756,8 +754,6 @@ async def gui_list_help(ui, ui_wrapper):
     # show the rows in a table
     if table.has_rows():
         headers = [LIST_KEY_HEADER, LIST_VALUE_HEADER]
-        padded_headers = [pad_column_title(headers[i], math.ceil(table.get_max_column_size(i, ui_wrapper)/ui_wrapper.compute_text_width(' '))) for i in range(len(headers))]
-        column_sizes = [table.get_max_column_size(i, ui_wrapper) for i in range(len(headers))]
         await ui_wrapper.render_table(
             headers,
             table,
@@ -765,7 +761,7 @@ async def gui_list_help(ui, ui_wrapper):
             row_height=row_size,
             id_salt="help_list",
             scroller=page_scroller,
-            minimum_column_sizes=column_sizes,
+            minimum_column_sizes=table.get_max_column_sizes(ui_wrapper),
         )
 
     ui_wrapper.spacing()

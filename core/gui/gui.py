@@ -256,6 +256,10 @@ class Table:
     def get_max_column_size(self, column_number, ui_wrapper) -> float:
         return max(0 if r.get_num_columns() < column_number else r.get_column_size(column_number, ui_wrapper) for r in self.rows)
 
+    def get_max_column_sizes(self, ui_wrapper) -> list[float]:
+        num_columns = max(r.get_num_columns() for r in self.rows)
+        return [self.get_max_column_size(i, ui_wrapper) for i in range(num_columns)]
+
 
 class UIWrapper:
     """Provides helper methods for rendering widgets on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
