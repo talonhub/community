@@ -34,7 +34,7 @@ class BrowserActions:
                 AXIdentifier="WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD",
             )
             address = address_field.AXValue
-        except (ui.UIErr, AttributeError):
+        except ui.UIErr, AttributeError:
             from talon.mac import applescript
 
             address = applescript.run(f"""

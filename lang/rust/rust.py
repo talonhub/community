@@ -392,6 +392,6 @@ def code_insert_function_or_macro(
 RT = TypeVar("RT")  # return type
 
 
-def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
+def repeat_call[RT](n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
     for _ in range(n):
         f(*args, **kwargs)
