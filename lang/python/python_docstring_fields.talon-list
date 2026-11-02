@@ -1,0 +1,17 @@
+list: user.python_docstring_fields
+code.language: python
+-
+
+class: :class:
+function: :func:
+parameter: :param:
+raise: :raise:
+return type: :rtype:
+returns: :return:
+type: :type:
+
+# these are sphinx-specific
+notes: ".. notes:: "
+see also: ".. seealso:: "
+todo: ".. todo:: "
+warning: ".. warning:: "

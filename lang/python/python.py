@@ -16,25 +16,7 @@ ctx.matches = r"""
 code.language: python
 """
 
-"""a set of fields used in python docstrings that will follow the
-reStructuredText format"""
-docstring_fields = {
-    "class": ":class:",
-    "function": ":func:",
-    "parameter": ":param:",
-    "raise": ":raise:",
-    "returns": ":return:",
-    "type": ":type:",
-    "return type": ":rtype:",
-    # these are sphinx-specific
-    "see also": ".. seealso:: ",
-    "notes": ".. notes:: ",
-    "warning": ".. warning:: ",
-    "todo": ".. todo:: ",
-}
-
-mod.list("python_docstring_fields", desc="python docstring fields")
-ctx.lists["user.python_docstring_fields"] = docstring_fields
+mod.list("python_docstring_fields", desc="python docstring fields that will follow the reStructuredText format")
 
 exception_list = [
     "BaseException",
