@@ -15,7 +15,7 @@ if hasattr(talon, "test_mode"):
 	def _assert_replacement_matches_expected(text, expected_replacement):
 		assert replacer.replace_string(text) == expected_replacement
 	
-	def test_relevant_word_is_not_replaced():
+	def test_irrelevant_word_is_not_replaced():
 		_assert_replacement_matches_expected("gnork", "gnork")
 
 	def test_replacing_single_word_input():
