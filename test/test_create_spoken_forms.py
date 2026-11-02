@@ -171,38 +171,38 @@ if hasattr(talon, "test_mode"):
         )
         assert result == expected
 
-    def test_hundred_teen_century_year():
+    def test_eleven_hundred_year():
         _assert_year_spoken_form_matches_expected("1100", "eleven hundred")
 
-    def test_single_digit_teen_century_year():
+    def test_teen_century_single_digit_year():
         _assert_year_spoken_form_matches_expected("1905", "nineteen five")
 
-    def test_decade_teen_century_year():
+    def test_teen_century_decade_year():
         _assert_year_spoken_form_matches_expected("1910", "nineteen ten")
 
-    def test_two_digit_teen_century_year():
+    def test_teen_century_two_digit_year():
         _assert_year_spoken_form_matches_expected("1925", "nineteen twenty five")
 
-    def test_hundred_single_digit_century_year():
+    def test_single_digit_century_hundred_year():
         _assert_year_spoken_form_matches_expected("2000", "two thousand")
 
-    def test_single_digit_single_digit_century_year():
+    def test_single_digit_century_single_digit_year():
         _assert_year_spoken_form_matches_expected("2005", "two thousand five")
 
-    def test_decade_tens_century_year():
+    def test_tens_century_decade_year():
         _assert_year_spoken_form_matches_expected("2020", "twenty twenty")
 
-    def test_teen_tens_century_year():
+    def test_tens_century_teen_year():
         _assert_year_spoken_form_matches_expected("2019", "twenty nineteen")
 
-    def test_two_digit_tens_century_year():
+    def test_tens_century_two_digit_year():
         _assert_year_spoken_form_matches_expected("2085", "twenty eighty five")
 
-    def test_hundred_two_digit_century_year():
+    def test_two_digit_century_hundred_year():
         _assert_year_spoken_form_matches_expected("2100", "twenty one hundred")
 
-    def test_single_digit_two_century_year():
+    def test_two_digit_century_single_digit_year():
         _assert_year_spoken_form_matches_expected("2105", "twenty one five")
 
-    def test_two_digit_two_digit_century_year():
+    def test_two_digit_century_two_digit_year():
         _assert_year_spoken_form_matches_expected("9999", "ninety nine ninety nine")
