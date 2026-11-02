@@ -21,22 +21,6 @@ mod.setting(
 )
 mod.tag("stylua", desc="Tag for stylua linting commands")
 
-ctx.lists["user.code_libraries"] = {
-    "bit": "bit",
-    "I O": "io",
-    "string": "string",
-    "U T F eight": "utf8",
-    "table": "table",
-    "math": "math",
-    "O S": "os",
-    "debug": "debug",
-    "L F S": "lfs",
-    "socket": "socket",
-    "H T T P": "http",
-    "web": "http",
-    "jason": "json",
-}
-
 
 @mod.capture(rule="{user.lua_functions}")
 def lua_functions(m) -> str:
