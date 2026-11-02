@@ -163,18 +163,20 @@ if hasattr(talon, "test_mode"):
             # Generated forms at least as numerous as input if subseq is True
             if subseq:
                 assert len(result) >= len(tokens), statement
-    
+
     def _assert_year_spoken_form_matches_expected(year: str, expected: str):
         result = core.create_spoken_forms.create_spoken_form_years(year)
-        print(f"test_year: test string = {year}, result = {result}, expected = {expected}")
+        print(
+            f"test_year: test string = {year}, result = {result}, expected = {expected}"
+        )
         assert result == expected
 
     def test_hundred_year():
         _assert_year_spoken_form_matches_expected("1100", "eleven hundred")
-    
+
     def test_single_digit_nineteen_hundreds_year():
         _assert_year_spoken_form_matches_expected("1905", "nineteen five")
-    
+
     def test_decade_nineteen_hundreds_year():
         _assert_year_spoken_form_matches_expected("1910", "nineteen ten")
 
