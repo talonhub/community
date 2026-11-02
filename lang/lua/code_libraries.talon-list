@@ -5,6 +5,7 @@ code.language: lua
 bit
 debug
 H T T P: http
+web: http
 I O: io
 jason: json
 L F S: lfs
@@ -14,4 +15,3 @@ socket
 string
 table
 U T F eight: utf8
-web: http
