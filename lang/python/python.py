@@ -16,7 +16,10 @@ ctx.matches = r"""
 code.language: python
 """
 
-mod.list("python_docstring_fields", desc="python docstring fields that will follow the reStructuredText format")
+mod.list(
+    "python_docstring_fields",
+    desc="python docstring fields that will follow the reStructuredText format",
+)
 
 exception_list = [
     "BaseException",
