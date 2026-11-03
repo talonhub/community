@@ -19,6 +19,8 @@ import egui
 from talon import Module, actions, app, cron, registry, ui
 from talon.egui import Window
 
+from .thumbnails import dwm_thumbnails as dwm
+
 # While prototyping: open the editor on every (re)load so render errors show in the log.
 DEV_SHOW_ON_LOAD = False
 
