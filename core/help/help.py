@@ -116,10 +116,7 @@ def _add_rows_for_operator(table, prefix, operator_name, description):
     columns = [operator_name_text]
     if description:
         columns.append(description)
-        rich_text_functions = None
-    else:
-        rich_text_functions = (create_italic_text,)
-    table.add_row(TextRow(columns, rich_text_functions=rich_text_functions))
+    table.add_row(TextRow(columns))
 
 
 def _compute_operator_description(operator):
@@ -194,7 +191,7 @@ def update_operators_text():
 
 
 def add_help_close_button(ui_wrapper):
-    if ui_wrapper.button("Help close"):
+    if ui_wrapper.button(create_italic_text("Help close")):
         actions.user.help_hide()
 
 
@@ -202,10 +199,10 @@ def add_page_navigation_buttons(ui_wrapper, scroller):
     if not scroller:
         return
 
-    if ui_wrapper.button("Help next"):
+    if ui_wrapper.button(create_italic_text("Help next")):
         scroller.page_down()
 
-    if ui_wrapper.button("Help previous"):
+    if ui_wrapper.button(create_italic_text("Help previous")):
         scroller.page_up()
 
 
