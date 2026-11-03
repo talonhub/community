@@ -1,40 +1,10 @@
 user.windows_hinting_active: True
 -
-^<user.hinting>$: 
-    key(user.hinting)
-    key(enter)
-
-^<user.hinting> left$:
-    key(shift-l)
-    key(user.hinting)
-    key(enter)
-
-^<user.hinting> troll$:
-    key(shift-c)
-    key(user.hinting)
-    key(enter)
-
-^<user.hinting> shift$:
-    key(shift-s)
-    key(user.hinting)
-    key(enter)
-
-^<user.hinting> connie$: 
-    key(shift-r)
-    sleep(100ms)
-    key(user.hinting)
-    key(enter)
-
-^<user.hinting> duke$: 
-    key(shift-d)
-    sleep(100ms)
-    key(user.hinting)
-    key(enter)
-
-^<user.hinting> hover$: 
-    key(shift-m)
-    sleep(100ms)
-    key(user.hinting)
-    key(enter)
-
-scrape: key(escape)
+^<user.hinting>$: user.windows_hinting_select(hinting)
+^<user.hinting> left$: user.windows_hinting_select(hinting, "left")
+^<user.hinting> troll$: user.windows_hinting_select(hinting, "ctrl")
+^<user.hinting> shift$: user.windows_hinting_select(hinting, "shift")
+^<user.hinting> connie$: user.windows_hinting_select(hinting, "right")
+^<user.hinting> duke$: user.windows_hinting_select(hinting, "double")
+^<user.hinting> hover$: user.windows_hinting_select(hinting, "move")
+scrape: user.windows_hinting_deactivate()
