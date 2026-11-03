@@ -205,7 +205,7 @@ class Manager:
                         create_italic_text("comment toggle <number>"),
                         ': toggle if the setting is set in a Community .talon file, such as by saying "comment toggle one".\n',
                         create_italic_text("page up"),
-                        " and ",
+                        "  and ",
                         create_italic_text("page down"),
                         ": scroll this window",
                     )
