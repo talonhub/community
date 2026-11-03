@@ -445,8 +445,9 @@ class ViewsMixin:
             cron.after("0ms", lambda: self.select(selected))
 
     async def render_menu(self, ui: egui.Ui) -> None:
-        """The open menu, filling its popup window (egui_kit.popup). The popup never
-        takes the focus: keys, numbers and voice still go to the switcher."""
+        """The open menu, filling its popup window (egui_kit.popup). The popup has the
+        focus while it shows, so its keys come here (the same handling as the
+        switcher's with a menu open); voice commands follow the tags."""
         with self.lock:
             menu = self.menu
             entry = self._menu_entry(menu)
@@ -454,14 +455,17 @@ class ViewsMixin:
             return
         items = self._menu_items(entry, menu.page)
         async with ui.input() as inp:
+            # With a menu open, every key goes to it (arrows, Enter, digits, Escape).
+            action = self._handle_input(inp, 1, False)
             pointer = inp.pointer.latest_pos()
             # Only a mouse that is moving now takes the highlight from the keyboard.
             moving = inp.pointer.is_moving()
-            clicked = inp.pointer.primary_clicked()
+        if action is not None:
+            cron.after("0ms", action)
         rect = ui.max_rect()
         ui.painter().rect_filled(rect, 0, KIT.theme.menu_bg)
         pick = kit_menu.draw_menu(
-            ui, KIT, menu, items, rect, hover=moving, pointer=pointer, icon_texture=self._popup_menu_icon, button_tips=MENU_BUTTON_TIPS, clicked=clicked
+            ui, KIT, menu, items, rect, hover=moving, pointer=pointer, icon_texture=self._popup_menu_icon, button_tips=MENU_BUTTON_TIPS
         )
         if pick is not None:
             cron.after("0ms", lambda: self._pick(menu, pick))

@@ -135,6 +135,8 @@ class MenuMixin:
     def close_menu(self):
         with self.lock:
             self.menu = None
+        # Now, not on the next frame: the focus comes back here before it hides.
+        self._hide_menu_popup()
         self.refresh()
         self._update_tags()
 

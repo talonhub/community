@@ -162,9 +162,10 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
             toplevel=True,
             focusable=True,
         )
-        # Menus open in a window of their own, so they can reach past this one; it
-        # never takes the focus, so keys and voice still come here.
-        self.popup = PopupHost(MENU_TITLE, self.render_menu, theme=THEME, tag="thumbnail_switcher")
+        # Menus open in a window of their own, so they can reach past this one. It
+        # takes the focus (and the keys) while open; the focus rule counts it as ours,
+        # and voice commands follow the tags, not the focus.
+        self.popup = PopupHost(MENU_TITLE, self.render_menu, theme=THEME, tag="thumbnail_switcher", focusable=True)
         self.tick_job = cron.interval(f"{TICK_MS}ms", self._tick)
 
     # --- showing and hiding ---

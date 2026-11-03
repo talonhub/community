@@ -164,15 +164,8 @@ class WindowHostMixin:
         self.ticks += 1
         # Close when the user moves on to another window, like Alt+Tab; but not when
         # one of the switcher's own commands briefly activated a window.
-        foreground = native.foreground()
-        if foreground is not None and foreground == self.popup.host.hwnd:
-            # A click on the menu's popup activates it despite WS_EX_NOACTIVATE (egui
-            # takes the focus on a click): hand it straight back, keys go here. That
-            # raises the switcher, so the popup goes back over it (they can overlap).
-            native.set_foreground(self.hwnd)
-            native.raise_topmost(self.popup.host.hwnd)
-            foreground = self.hwnd
-        has_focus = foreground == self.hwnd
+        # The open menu's popup has the focus while it shows: that counts as ours.
+        has_focus = native.foreground() == self.hwnd or (self.menu is not None and self.popup.has_focus())
         if has_focus:
             self.had_focus = True
         elif self.had_focus:
@@ -195,7 +188,7 @@ class WindowHostMixin:
         """Show the menu's popup window for `request` ((x, y) where it opens, (w, h)),
         beside that point within the monitor's work area; None hides it."""
         if request is None or self.menu is None or not self.showing:
-            self.popup.hide()
+            self._hide_menu_popup()
             return
         if self.hwnd is None:
             # Not attached yet: ask again on a later frame.
@@ -204,6 +197,20 @@ class WindowHostMixin:
             return
         (x, y), size = request
         self.popup.show(popup.place((x, y, x, y), size, native.work_area(self.hwnd)))
+
+    def _hide_menu_popup(self):
+        """Hide the menu's popup, first taking the focus back if it has it (hiding the
+        active window would let Windows activate any other, and the switcher close)."""
+        if self.popup.has_focus() and self.showing and self.hwnd is not None:
+            native.set_foreground(self.hwnd)
+            # From another thread the activation lands a moment later; hiding the popup
+            # before it does still lets Windows activate the window behind. Wait for it
+            # briefly, and let the tick take the focus back if it went astray anyway.
+            deadline = time.monotonic() + 0.15
+            while native.foreground() != self.hwnd and time.monotonic() < deadline:
+                time.sleep(0.005)
+            self.hold_focus_until = max(self.hold_focus_until, time.monotonic() + 0.5)
+        self.popup.hide()
 
     def _attach(self):
         """Position the native window and register a thumbnail for every entry."""

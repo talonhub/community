@@ -7,9 +7,13 @@ grow for every menu. WinUI has the same problem and answer: Command Palette's co
 menu is a Flyout with ShouldConstrainToRootBounds=False, a popup window of its own.
 
 The window:
-  * never takes the focus (focusable=False: WS_EX_NOACTIVATE). The owner keeps the
-    keyboard and its focus rules, and Talon's context doesn't change, so the owner's
-    voice commands (numbers for the menu's items) keep working as they did.
+  * with `focusable` (as Command Palette's flyout), takes the focus when it shows. egui
+    then treats it as focused (hover, clicks, tooltips as usual) and gets the keys; the
+    owner counts it as its own in any focus rules and hands the focus back to itself
+    *before* hiding it (hiding the active window lets Windows activate any other).
+  * without (WS_EX_NOACTIVATE), the owner keeps the keyboard; but egui treats it as
+    unfocused (draw_menu's `clicked=` hit-tests by pointer), and a click still
+    activates it for a moment.
   * is topmost and raised on each show, so it's over the owner and over any DWM
     thumbnails the owner shows; off the taskbar; Windows 11's rounded corners.
   * is made once and reused: placed while hidden, then shown. A new window starts at
@@ -42,10 +46,11 @@ def place(
 
 
 class PopupHost:
-    def __init__(self, title: str, content, *, theme=None, tag: str = "egui_kit"):
+    def __init__(self, title: str, content, *, theme=None, tag: str = "egui_kit", focusable: bool = False):
         """`content` is the owner's `async def render(ui)` for the popup; `title` must
         be unique among this process's windows (the handle is found by it)."""
         self.content = content
+        self.focusable = focusable
         self.tag = tag
         # Where it should be (left, top, right, bottom), and whether it's showing.
         self.rect: tuple[int, int, int, int] | None = None
@@ -60,7 +65,7 @@ class PopupHost:
             draggable=False,
             autosize=False,
             toplevel=True,
-            focusable=False,
+            focusable=focusable,
         )
         self._styled = False
 
@@ -73,11 +78,18 @@ class PopupHost:
             native.move_hwnd(hwnd, rect)
         if not self.visible:
             self.visible = True
-            self.host.show()
+            self.host.show(focus=self.focusable)
             if hwnd is not None:
                 # Over the owner, which may have come forward since it last showed.
                 native.raise_topmost(hwnd)
+        if self.focusable and hwnd is not None and not self.has_focus():
+            # Showing, or reopened from the owner (a right-click there while open).
+            native.set_foreground(hwnd)
         self.host.repaint()
+
+    def has_focus(self) -> bool:
+        hwnd = self.host.hwnd
+        return hwnd is not None and native.foreground() == hwnd
 
     def hide(self):
         if self.visible:
@@ -102,6 +114,8 @@ class PopupHost:
                 if self.rect is not None:
                     native.move_hwnd(hwnd, self.rect)
                 native.raise_topmost(hwnd)
+                if self.focusable and self.visible:
+                    native.set_foreground(hwnd)
                 self._styled = True
             else:
                 ui.ctx().request_repaint()

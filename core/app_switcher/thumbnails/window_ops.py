@@ -249,4 +249,6 @@ class WindowOpsMixin:
 
     def _take_focus(self):
         if self.showing and self.hwnd is not None and native.foreground() != self.hwnd:
+            if self.menu is not None and self.popup.has_focus():
+                return  # the open menu's popup has it
             native.set_foreground(self.hwnd)
