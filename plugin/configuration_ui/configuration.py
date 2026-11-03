@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import egui
-from talon import Context, Module, clip, fs, registry
+from talon import actions, Context, Module, clip, fs, registry
 
 from ...core.gui.gui import (
     UIWrapper,
@@ -130,7 +130,7 @@ class Manager:
         # put the page navigation on the left and the actual page on the right
         total_available_height = ui.available_height()
         async with self._ui.horizontal():
-            await self._render_page_navigation(self._ui, total_available_height)
+            await self._render_page_navigation(total_available_height)
 
             # compute the space for the page
             available_width = self._ui.available_width()
@@ -154,15 +154,19 @@ class Manager:
         if old_error_message != self.error_message:
             settings_gui.refresh()
 
-    async def _render_page_navigation(self, ui, total_available_height):
-        async with ui.vertical():
+    async def _render_page_navigation(self, total_available_height):
+        async with self._ui.vertical():
             for page in self.pages:
-                if ui.selectable_label(
+                if self._ui.selectable_label(
                     page == self.page, create_italic_text(f"Page {page}")
                 ).clicked():
                     self.update_page(page)
-            ui.add_space(total_available_height - ui.min_size().y)
-        ui.separator()
+            self._ui_wrapper.spacing()
+            if self._ui_wrapper.button(create_italic_text("settings close")):
+                actions.user.settings_window_hide()
+            
+            self._ui.add_space(total_available_height - self._ui.min_size().y)
+        self._ui.separator()
 
     async def _render_current_page(
         self,
