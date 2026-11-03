@@ -46,11 +46,12 @@ slot, a mini-map shows it, and a frame on screen outlines it; saying a window's 
 (or Enter, or a click) puts that window there and moves on to the next slot.
 """
 
+import sys
 from typing import Any
 
 from talon import Context, Module, app, ui
 
-from ...egui_kit import a11y
+from ...egui_kit import a11y, reload
 from ...egui_kit.host import HostWindow
 from ..windows import app_identity
 from . import launcher_apps
@@ -162,11 +163,22 @@ _STASH = "_talon_thumbnail_switcher_instance"
 switcher: Switcher | None = None
 
 
-def on_ready():
+# Modules whose reloads must settle before the switcher is rebuilt (see egui_kit/reload).
+RELOAD_PREFIXES = ("user.community.core.app_switcher.", "user.community.core.egui_kit.")
+
+
+def build():
+    """A new switcher from the current Switcher class (looked up now: this module may
+    have re-run before switcher.py did)."""
     global switcher
+    current = sys.modules[__name__.rsplit(".", 1)[0] + ".switcher"].Switcher
+    switcher = HostWindow.replace(_STASH, lambda: current(ctx), tag="thumbnail_switcher")
+
+
+def on_ready():
     if app.platform != "windows":
         return
-    switcher = HostWindow.replace(_STASH, lambda: Switcher(ctx), tag="thumbnail_switcher")
+    reload.when_fresh(RELOAD_PREFIXES, build, tag="thumbnail_switcher")
 
 
 app.register("ready", on_ready)

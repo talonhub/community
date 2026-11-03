@@ -1,9 +1,8 @@
-"""Icon textures for cells and jump-list rows; created and dropped on egui's thread only."""
+"""Icon textures for cells and jump-list rows (the kit's IconTextures; egui's thread only)."""
 
 import threading
 import egui
-from ..windows import jump_lists
-from . import window_icons
+from ..windows import app_icons, jump_lists
 from .model import Entry
 
 
@@ -12,22 +11,8 @@ class TexturesMixin:
 
     def _texture(self, ui: egui.Ui, entry: Entry) -> "egui.TextureHandle | None":
         """The entry's icon as an egui texture, created on first use."""
-        if entry.icon is None:
-            return None
         icon = entry.icon
-        key = (entry.hwnd, icon.width)
-        with self.lock:
-            texture = self.textures.get(key)
-        if texture is None:
-            image = egui.ColorImage.from_rgba_unmultiplied(icon.width, icon.height, icon.rgba)
-            texture = ui.ctx().load_texture(
-                f"thumbnail_switcher_icon_{entry.hwnd}_{icon.width}",
-                image,
-                egui.TextureOptions.linear(),
-            )
-            with self.lock:
-                self.textures[key] = texture
-        return texture
+        return self.textures.get(ui, (entry.hwnd, icon.width), icon) if icon is not None else None
 
     def _menu_icon(self, ui: egui.Ui, icon_of) -> "egui.TextureHandle | None":
         """A jump list entry's icon as a texture; fetched in the background the first
@@ -35,8 +20,6 @@ class TexturesMixin:
         entry, app_id = icon_of
         key = ("jump", entry.kind, entry.path or hash(entry.data))
         with self.lock:
-            if key in self.textures:
-                return self.textures[key]
             icon = self.jump_icons.get(key, False)
             if icon is False:
                 self.jump_icons[key] = None
@@ -48,7 +31,7 @@ class TexturesMixin:
                     # A logo image (Windows Terminal's profiles): its picture, not a
                     # PNG file's icon.
                     picture = entry.kind == "link" and bool(source) and source.lower().endswith((".png", ".jpg", ".jpeg", ".bmp", ".gif"))
-                    found = window_icons.shell_pixels(source, 32, thumbnail=picture) if source else None
+                    found = app_icons.fetch(source, 32, thumbnail=picture) if source else None
                 except Exception:
                     found = None
                 with self.lock:
@@ -57,10 +40,4 @@ class TexturesMixin:
 
             threading.Thread(target=fetch, name="jump list icon", daemon=True).start()
             return None
-        if icon is None:
-            return None
-        image = egui.ColorImage.from_rgba_unmultiplied(icon.width, icon.height, icon.rgba)
-        texture = ui.ctx().load_texture(f"thumbnail_switcher_jump_{abs(hash(key))}", image, egui.TextureOptions.linear())
-        with self.lock:
-            self.textures[key] = texture
-        return texture
+        return self.textures.get(ui, key, icon)

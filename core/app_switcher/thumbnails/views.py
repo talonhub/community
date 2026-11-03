@@ -116,9 +116,7 @@ class ViewsMixin:
                 self.reveal_selected = False
             # Drop textures of windows no longer shown, here on egui's thread.
             # Jump list icons stay while a menu is open.
-            stale = [key for key in self.textures if key[0] not in icon_hwnds and not (key[0] == "jump" and menu is not None)]
-            dropped = [self.textures.pop(key) for key in stale]
-        del dropped
+            self.textures.drop_where(lambda key: key[0] not in icon_hwnds and not (key[0] == "jump" and menu is not None))
 
         async with ui.input() as inp:
             action = self._handle_input(inp, cols, previews or mode in APP_MODES)

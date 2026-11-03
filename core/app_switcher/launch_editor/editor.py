@@ -7,6 +7,8 @@ import egui
 from talon import actions, cron
 from ...egui_kit import native
 from ...egui_kit.host import HostWindow
+from ...egui_kit.textures import IconTextures
+from ..windows import app_icons
 from ...egui_kit.theme import THEME
 from .store import StoreMixin
 from .view import EditorMenu, ViewMixin
@@ -20,6 +22,8 @@ class Editor(StoreMixin, ViewMixin):
         # launch_applications.json (the Talon surface passes this machine's).
         self.path = path
         self.lock = threading.RLock()
+        # Apps' icons as textures (this window's egui context; see view.app_icon).
+        self.icons = IconTextures("lae_icon")
         self.entries: list[dict] = []
         self.baseline: dict[int, tuple] = {}
         self.mtime = 0.0
@@ -81,8 +85,10 @@ class Editor(StoreMixin, ViewMixin):
     # --- showing ---
 
     def show(self):
-        # Closed with the title bar's X: a new window.
-        self.host.ensure_open()
+        # Closed with the title bar's X: a new window, so a new egui context whose
+        # textures start empty.
+        if self.host.ensure_open():
+            self.icons.clear()
         self.load()
         self.showing = True
         # Fit the work area (physical pixels, without the taskbar) of the monitor in use.
@@ -125,8 +131,14 @@ class Editor(StoreMixin, ViewMixin):
         self.showing = False
         self.host.hide()
 
+    def icon_arrived(self, _icon):
+        """app_icons fetched an icon this window asked for: draw again (any thread)."""
+        if self.showing:
+            self.window.refresh()
+
     def shutdown(self):
         self.showing = False
+        app_icons.cancel(self.icon_arrived)
         if getattr(self, "poll_job", None) is not None:
             cron.cancel(self.poll_job)
             self.poll_job = None

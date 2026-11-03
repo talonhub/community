@@ -9,10 +9,11 @@ Say "launch applications editor" to open it.
 
 import os
 import platform
+import sys
 
 from talon import Module, app, cron
 
-from ..egui_kit import a11y, native
+from ..egui_kit import a11y, native, reload
 from ..egui_kit.host import HostWindow
 from .launch_editor.editor import Editor, WINDOW_TITLE  # noqa: F401
 from .launch_editor.store import FILTERS  # noqa: F401
@@ -51,14 +52,30 @@ def close_stray_windows():
     print(f"launch_applications_editor: closed {native.close_own_windows(WINDOW_TITLE)} leftover window(s)")
 
 
-def on_ready():
+# Modules whose reloads must settle before the editor is rebuilt (see egui_kit/reload).
+RELOAD_PREFIXES = (
+    "user.community.core.app_switcher.launch_editor.",
+    "user.community.core.app_switcher.launch_applications_editor",
+    "user.community.core.app_switcher.windows.",
+    "user.community.core.egui_kit.",
+)
+
+
+def build():
+    """A new editor from the current Editor class (looked up now: this module may have
+    re-run before launch_editor/editor.py did)."""
     global editor
+    current = sys.modules[__name__.rsplit(".", 1)[0] + ".launch_editor.editor"].Editor
     editor = HostWindow.replace(
-        _STASH, lambda: Editor(JSON_PATH), before_create=close_stray_windows, tag="launch_applications_editor"
+        _STASH, lambda: current(JSON_PATH), before_create=close_stray_windows, tag="launch_applications_editor"
     )
     if DEV_SHOW_ON_LOAD:
         editor.show()
         cron.after("4s", dump_uia)
+
+
+def on_ready():
+    reload.when_fresh(RELOAD_PREFIXES, build, tag="launch_applications_editor")
 
 
 app.register("ready", on_ready)

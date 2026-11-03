@@ -12,6 +12,7 @@ from ...egui_kit.geom import P, R
 from ...egui_kit.text import elide, wrap
 from ...egui_kit.theme import THEME, font, mono
 from ...egui_kit.widgets import Chip, Kit
+from ..windows import app_icons
 from .store import FILTERS
 
 
@@ -74,6 +75,9 @@ COLUMN_HEADER_H = 34.0
 
 
 TOGGLE_W, TOGGLE_H = 40.0, 22.0
+# App icons: drawn at these sizes (points), fetched at the cache's next size up.
+ROW_ICON = 28.0
+DETAIL_ICON = 40.0
 
 
 # The list's columns: the application and its spoken forms share the width; "Enabled"
@@ -109,6 +113,17 @@ DIGIT_KEYS = [(n, getattr(egui.Key, f"Num{n}")) for n in range(1, 10)]
 
 class ViewMixin:
     """Editor methods: see the module docstring. Mixed into Editor, whose state they use."""
+
+    def app_icon(self, ui, painter, e: dict, rect: egui.Rect, pixels: int):
+        """The entry's app icon in `rect`, from the shared cache; while it's being
+        fetched (the window redraws when it lands), nothing."""
+        uid = e.get("unique_identifier")
+        if not uid:
+            return
+        icon = app_icons.get(app_icons.apps_folder(uid), pixels, on_ready=self.icon_arrived)
+        texture = self.icons.get(ui, (uid.lower(), pixels), icon)
+        if texture is not None:
+            painter.image(texture.id(), rect, egui.Rect.from_min_max(P(0.0, 0.0), P(1.0, 1.0)), egui.Color32.from_rgb(255, 255, 255))
 
     async def render(self, ui: egui.Ui) -> None:
         # (The host sets the theme's visuals and turns on AccessKit on the first frame.)
@@ -262,15 +277,18 @@ class ViewMixin:
         uid = e.get("unique_identifier") or str(i)
         painter = rui.painter()
         x = rect.min.x
-        name_w = forms_off - 20 - 24
+        # The app's icon, then its name and executable.
+        self.app_icon(rui, painter, e, R(x + 19, rect.center().y - ROW_ICON / 2, ROW_ICON, ROW_ICON), 32)
+        text_x = x + 19 + ROW_ICON + 10
+        name_w = forms_off - 20 - 24 - (ROW_ICON + 10)
         excluded = bool(e.get("exclude"))
         name = e.get("display_name") or "?"
         name_font = font(14.5)
-        nr = painter.text(P(x + 19, rect.min.y + 9), egui.Align2.LEFT_TOP, elide(painter, name, name_font, name_w), name_font, FAINT if excluded else TEXT)
+        nr = painter.text(P(text_x, rect.min.y + 9), egui.Align2.LEFT_TOP, elide(painter, name, name_font, name_w), name_font, FAINT if excluded else TEXT)
         if excluded:
             painter.hline(nr.min.x, nr.max.x, nr.center().y, egui.Stroke(1.2, FAINT))
         sub = e.get("executable_name") or e.get("unique_identifier") or ""
-        painter.text(P(x + 19, rect.min.y + 30), egui.Align2.LEFT_TOP, elide(painter, sub, mono(12), name_w), mono(12), MUTED)
+        painter.text(P(text_x, rect.min.y + 30), egui.Align2.LEFT_TOP, elide(painter, sub, mono(12), name_w), mono(12), MUTED)
 
         # Spoken forms as chips.
         cx = x + forms_off
@@ -307,8 +325,10 @@ class ViewMixin:
             self.launch(e)
         y += 30
         name = e.get("display_name") or "?"
-        painter.text(P(x, y), egui.Align2.LEFT_TOP, elide(painter, name, font(21), w), font(21), TEXT)
-        y += 32
+        # The app's icon beside its name.
+        self.app_icon(ui, painter, e, R(x, y - 6, DETAIL_ICON, DETAIL_ICON), 64)
+        painter.text(P(x + DETAIL_ICON + 12, y), egui.Align2.LEFT_TOP, elide(painter, name, font(21), w - DETAIL_ICON - 12), font(21), TEXT)
+        y += 40
         y = wrap(painter, x, y, w, "Display name comes from Windows and is regenerated on refresh.", font(13), MUTED)
         y += 22
 

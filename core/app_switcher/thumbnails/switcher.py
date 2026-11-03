@@ -6,9 +6,9 @@ placement, window_ops)."""
 
 import threading
 from typing import Any
-import egui
 from talon import app, cron, registry, settings, ui
 from ...egui_kit.host import HostWindow
+from ...egui_kit.textures import IconTextures
 from ...egui_kit import native
 from . import dwm_thumbnails as dwm
 from ..windows import virtual_desktops as vd
@@ -89,7 +89,7 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
         self.thumbnails: dict[int, dwm.Thumbnail] = {}
         # Icon textures, keyed by (hwnd, icon width). They are only created and dropped
         # inside render, on egui's thread: dropping one elsewhere may lack a GL context.
-        self.textures: dict[tuple, egui.TextureHandle] = {}
+        self.textures = IconTextures("thumbnail_switcher_icon")
         # Jump list entries' icons by entry: None while loading or when there's none.
         self.jump_icons: dict[tuple, Any] = {}
         self.selected = 0

@@ -16,14 +16,19 @@ import os
 import subprocess
 import sys
 import threading
+import time
 import zlib
 
-from ..windows import app_identity, shell_apps
-from . import window_icons
+from ..windows import app_icons, app_identity, shell_apps
 
 COMMUNITY = "user.community.core.app_switcher.app_switcher"
-# Icons by app id (lowercase), kept across openings of the launcher.
-_icons: dict[str, "window_icons.Icon | None"] = {}
+# The launcher's icon size (its tiles' APP_ICON_PIXELS).
+ICON_PIXELS = 128
+
+
+def icon_source(app_id: str) -> str:
+    """An installed app's icon source for app_icons."""
+    return f"shell:AppsFolder\\{app_id}"
 
 
 class InstalledApp:
@@ -36,7 +41,8 @@ class InstalledApp:
         self.app_id = app_id
         self.hwnd = hwnd
         self.windows = []
-        self.icon = _icons.get(app_id.lower())
+        # From the shared cache if it has it; load_icons fetches the rest.
+        self.icon = app_icons.peek(icon_source(app_id), ICON_PIXELS)
         self.search_text = name.lower()
         self.exe_name = ""
         self.model_id = None
@@ -118,22 +124,31 @@ def launch(app_id: str | None = None, path: str | None = None):
 
 
 def load_icons(apps: list[InstalledApp], size: int, on_progress):
-    """Fetch the apps' shell icons in the background (there can be hundreds), calling
-    `on_progress` now and then so the launcher redraws as they arrive."""
-    missing = [app for app in apps if app.icon is None and app.app_id.lower() not in _icons]
+    """Fill in the apps' icons from the shared cache (app_icons), fetching missing ones
+    in the background (there can be hundreds); `on_progress` redraws the launcher as
+    they arrive, at most every 0.1 s, and after the last one."""
+    missing = [app for app in apps if app.icon is None]
+    pending = {"left": len(missing), "last": 0.0}
+    lock = threading.Lock()
 
-    def run():
-        for n, app in enumerate(missing, 1):
-            key = app.app_id.lower()
-            if key not in _icons:
-                try:
-                    _icons[key] = window_icons.shell_pixels(f"shell:AppsFolder\\{app.app_id}", size)
-                except Exception:
-                    _icons[key] = None
-            app.icon = _icons[key]
-            if n % 12 == 0:
-                on_progress()
+    def arrived(app, icon):
+        app.icon = icon
+        with lock:
+            pending["left"] -= 1
+            now = time.monotonic()
+            due = pending["left"] <= 0 or now - pending["last"] >= 0.1
+            if due:
+                pending["last"] = now
+        if due:
+            on_progress()
+
+    # Most recent requests are fetched first: ask for the list's end first, so its
+    # start (on screen when the launcher opens) comes first.
+    for app in reversed(missing):
+        icon = app_icons.get(icon_source(app.app_id), size, on_ready=lambda icon, app=app: arrived(app, icon))
+        if icon is not None:
+            app.icon = icon
+            with lock:
+                pending["left"] -= 1
+    if missing and pending["left"] < len(missing):
         on_progress()
-
-    if missing:
-        threading.Thread(target=run, name="app launcher icons", daemon=True).start()
