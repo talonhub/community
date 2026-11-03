@@ -182,14 +182,6 @@ all_traits = {
 }
 
 
-# tag: libraries
-ctx.lists["user.code_libraries"] = {
-    "eye oh": "std::io",
-    "file system": "std::fs",
-    "envy": "std::env",
-    "collections": "std::collections",
-}
-
 # tag: functions_common
 ctx.lists["user.code_common_function"] = {
     "drop": "drop",
