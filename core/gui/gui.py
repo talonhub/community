@@ -454,8 +454,8 @@ def open_gui(
     always_on_top: decides if the ui should be rendered as the top level.
     decorated: decides if the gui should be rendered with window borders.
     title: the window title
-    tag: an optional tag to activate when the GUI is rendered and deactivate when it is closed
-    on_close: a call back to call when the GUI is closed
+    tag: an optional tag to activate when the window is rendered and deactivate when it is closed
+    on_close: a call back to call when the window is closed
     """
 
     def open_inner(render):
