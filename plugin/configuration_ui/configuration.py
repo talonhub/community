@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import egui
-from talon import actions, Context, Module, clip, fs, registry
+from talon import Context, Module, actions, clip, fs, registry
 
 from ...core.gui.gui import (
     UIWrapper,
@@ -164,7 +164,7 @@ class Manager:
             self._ui_wrapper.spacing()
             if self._ui_wrapper.button(create_italic_text("settings close")):
                 actions.user.settings_window_hide()
-            
+
             self._ui.add_space(total_available_height - self._ui.min_size().y)
         self._ui.separator()
 
