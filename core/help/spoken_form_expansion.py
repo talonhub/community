@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 import egui
 from talon import Context, Module, actions, cron, registry
 
-from ..gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui
+from ..gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui, create_italic_text
 
 
 class TalonList:
@@ -256,7 +256,7 @@ class TreeRenderer:
                 description = get_description_or_default(description)
                 self._ui.label(f"Description: {description}")
             # render button for making this the root
-            if self._ui_wrapper.button(f"hoist {capture.id_number}"):
+            if self._ui_wrapper.button(create_italic_text(f"hoist {capture.id_number}")):
                 self._set_root_to_child_callback(
                     capture.compute_talon_script_representation()
                 )
@@ -330,11 +330,11 @@ class TreeRenderer:
         """Renders the bottom navigation buttons"""
         async with self._ui.with_layout(egui.Layout.bottom_up(egui.Align.Center)):
             async with self._ui.horizontal_wrapped():
-                if self._ui.button("expansion close").clicked():
+                if self._ui.button(create_italic_text("expansion close")).clicked():
                     actions.user.spoken_form_expansion_hide()
-                if self._ui_wrapper.button("page down"):
+                if self._ui_wrapper.button(create_italic_text("page down")):
                     actions.key("pagedown")
-                if self._ui_wrapper.button("page up"):
+                if self._ui_wrapper.button(create_italic_text("page up")):
                     actions.key("pageup")
             self._ui.separator()
 
