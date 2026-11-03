@@ -203,7 +203,7 @@ class Manager:
                         create_italic_text("setting <number>"),
                         ': use the input for editing the setting, such as by saying "setting one".\n',
                         create_italic_text("comment toggle <number>"),
-                        ': toggle if a setting is set in a Community .talon file, such as by saying "comment toggle one".\n',
+                        ': toggle if the setting is set in a Community .talon file, such as by saying "comment toggle one".\n',
                         create_italic_text("page up"),
                         " and ",
                         create_italic_text("page down"),
