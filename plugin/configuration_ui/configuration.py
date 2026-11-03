@@ -333,11 +333,6 @@ class Manager:
                 self._ui.label(
                     "Community provides several .talon files for configuring settings. You can use this graphical interface to edit those files without needing to learn TalonScript.\nYou may encounter unexpected behavior if you have chosen to set those settings in your own .talon files.\n\n\nThis graphical interface may not always work as intended if you have manually edited those files yourself.\nIf you run into issues with that, feel free to ask for help on the slack!"
                 )
-                self._ui.add_space(total_available_height / 8)
-                self._ui.heading("Navigation")
-                self._ui.label(
-                    'You can open a page by saying "page" and then the page name, such a saying "page text insertion" to open the text insertion settings page.'
-                )
 
     async def _render_error_copy_buttons(self, error_message, setting):
         """Render buttons for copying an error message including one that copies the relevant file for added context"""
