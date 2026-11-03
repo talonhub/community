@@ -340,48 +340,6 @@ no_space_before = re.compile(
 )
 
 
-# # TESTS, uncomment to enable
-# assert actions.user.needs_space_between("a", "break")
-# assert actions.user.needs_space_between("break", "a")
-# assert actions.user.needs_space_between(".", "a")
-# assert actions.user.needs_space_between("said", "'hello")
-# assert actions.user.needs_space_between("hello'", "said")
-# assert actions.user.needs_space_between("hello.", "'John")
-# assert actions.user.needs_space_between("John.'", "They")
-# assert actions.user.needs_space_between("paid", "$50")
-# assert actions.user.needs_space_between("50$", "payment")
-# assert not actions.user.needs_space_between("", "")
-# assert not actions.user.needs_space_between("a", "")
-# assert not actions.user.needs_space_between("a", " ")
-# assert not actions.user.needs_space_between("", "a")
-# assert not actions.user.needs_space_between(" ", "a")
-# assert not actions.user.needs_space_between("a", ",")
-# assert not actions.user.needs_space_between("'", "a")
-# assert not actions.user.needs_space_between("a", "'")
-# assert not actions.user.needs_space_between("and-", "or")
-# assert not actions.user.needs_space_between("mary", "-kate")
-# assert not actions.user.needs_space_between("$", "50")
-# assert not actions.user.needs_space_between("US", "$")
-# assert not actions.user.needs_space_between("(", ")")
-# assert not actions.user.needs_space_between("(", "e.g.")
-# assert not actions.user.needs_space_between("example", ")")
-# assert not actions.user.needs_space_between("example", '".')
-# assert not actions.user.needs_space_between("example", '."')
-# assert not actions.user.needs_space_between("hello'", ".")
-# assert not actions.user.needs_space_between("hello.", "'")
-# def _omits_space_after(text: str) -> bool:
-#     return bool(no_space_after.search(text))
-# assert _omits_space_after("#")
-# assert _omits_space_after(" #")
-# assert not _omits_space_after("c#")
-# assert not _omits_space_after("C#")
-# assert not _omits_space_after("F#")
-# assert _omits_space_after("$")
-# assert not _omits_space_after("US$")
-# assert _omits_space_after("and-")
-# assert _omits_space_after("(")
-# assert not _omits_space_after("hello")
-
 no_cap_after = re.compile(
     r"""(
     e\.g\.
