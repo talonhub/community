@@ -1,0 +1,139 @@
+"""What the app launcher view lists: installed apps, how running apps map to them, and
+launching.
+
+Installed apps are the app switcher's launch list (shell:AppsFolder merged with
+launch_applications.json: its display names, minus excluded entries such as Parallels'
+"(Mac)" shortcuts); without the app switcher, shell:AppsFolder itself. Running apps are
+matched to them by AppUserModelID, MMC console, executable or name, so a running app
+appears once, in the Running section.
+
+Apps launch through the shell (explorer.exe shell:AppsFolder\\<id>), like the app
+switcher's `switcher_launch`, so Store apps, PWAs, MMC consoles and shortcuts start the
+way the Start menu starts them.
+"""
+
+import os
+import subprocess
+import sys
+import threading
+import zlib
+
+from ..windows import app_identity, shell_apps
+from . import window_icons
+
+COMMUNITY = "user.community.core.app_switcher.app_switcher"
+# Icons by app id (lowercase), kept across openings of the launcher.
+_icons: dict[str, "window_icons.Icon | None"] = {}
+
+
+class InstalledApp:
+    """A not-running app in the launcher. It stands in for an entry where the switcher
+    expects one; its `hwnd` is a made-up negative number, as tiles, textures and menus
+    are keyed by hwnd."""
+
+    def __init__(self, name: str, app_id: str, hwnd: int):
+        self.app_name = self.title = name
+        self.app_id = app_id
+        self.hwnd = hwnd
+        self.windows = []
+        self.icon = _icons.get(app_id.lower())
+        self.search_text = name.lower()
+        self.exe_name = ""
+        self.model_id = None
+        self.key = ("launch", app_id.lower())
+        self.minimized = self.away = False
+        self.iconic = True
+        self.desktop = self.desktop_key = self.desktop_number = None
+        self.desktop_numbers = []
+        self.screen_number = None
+        self.screen_numbers = []
+
+    def state_label(self) -> str:
+        return self.title
+
+
+def stand_in_hwnd(app_id: str, used: set[int]) -> int:
+    """A made-up negative hwnd for an installed app, the same every time for the same
+    app: textures are cached by hwnd, so a number taken from the app's place in the list
+    would show a neighbour's icon once an app is added or removed."""
+    hwnd = -(1 + zlib.crc32(app_id.lower().encode("utf-8")))
+    while hwnd in used:
+        hwnd -= 1
+    used.add(hwnd)
+    return hwnd
+
+
+class LaunchList:
+    """The installed apps, with lookups to match running apps against."""
+
+    def __init__(self):
+        apps: list[tuple[str, str, str | None]] = []
+        community = sys.modules.get(COMMUNITY)
+        entries = getattr(community, "APPLICATIONS_DICT", None) if community else None
+        if entries:
+            seen = set()
+            for entry in entries.values():
+                app_id = entry.unique_identifier
+                if not app_id or app_id.lower() in seen or entry.exclude:
+                    continue
+                seen.add(app_id.lower())
+                apps.append((entry.display_name, app_id, entry.path))
+        else:
+            apps = [(item.name, item.app_id, item.path) for item in shell_apps.apps_folder_items()]
+        apps.sort(key=lambda app: app[0].lower())
+        used: set[int] = set()
+        self.apps = [InstalledApp(name, app_id, stand_in_hwnd(app_id, used)) for name, app_id, _path in apps]
+        self.by_id = {app.app_id.lower(): app for app in self.apps}
+        self.by_name = {app.app_name.lower(): app for app in self.apps}
+        self.by_path = {}
+        for app, (_name, _id, path) in zip(self.apps, apps):
+            # Not by host executables: every MMC console is mmc.exe.
+            if path and os.path.basename(path).lower() not in set(app_identity.HOST_DOCUMENTS) | app_identity.COMMAND_LINE_HOSTS:
+                self.by_path.setdefault(str(path).lower(), app)
+
+    def match(self, hwnd: int, fallback: str = "") -> InstalledApp | None:
+        """The installed app a running window belongs to, if it's in the list."""
+        identity = app_identity.resolve(hwnd, fallback)
+        for key in (identity.model_id, identity.document_id):
+            if key and key.lower() in self.by_id:
+                return self.by_id[key.lower()]
+        if identity.exe_path:
+            app = self.by_path.get(identity.exe_path.lower())
+            if app is None:
+                app_id = shell_apps.app_id_for_path(identity.exe_path)
+                app = self.by_id.get(app_id.lower()) if app_id else None
+            if app is not None and identity.process not in app_identity.COMMAND_LINE_HOSTS:
+                return app
+        return self.by_name.get(identity.name.lower())
+
+
+def launch(app_id: str | None = None, path: str | None = None):
+    """Start an app: by its Apps folder id through the shell, else its executable. For a
+    running app this starts another instance where the app supports one (single-instance
+    apps bring up their window)."""
+    if app_id:
+        subprocess.Popen(["explorer.exe", f"shell:AppsFolder\\{app_id}"])
+    elif path:
+        os.startfile(path)
+
+
+def load_icons(apps: list[InstalledApp], size: int, on_progress):
+    """Fetch the apps' shell icons in the background (there can be hundreds), calling
+    `on_progress` now and then so the launcher redraws as they arrive."""
+    missing = [app for app in apps if app.icon is None and app.app_id.lower() not in _icons]
+
+    def run():
+        for n, app in enumerate(missing, 1):
+            key = app.app_id.lower()
+            if key not in _icons:
+                try:
+                    _icons[key] = window_icons.shell_pixels(f"shell:AppsFolder\\{app.app_id}", size)
+                except Exception:
+                    _icons[key] = None
+            app.icon = _icons[key]
+            if n % 12 == 0:
+                on_progress()
+        on_progress()
+
+    if missing:
+        threading.Thread(target=run, name="app launcher icons", daemon=True).start()

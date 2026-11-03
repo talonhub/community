@@ -979,19 +979,19 @@ def cleanup_and_retry(start=False):
         ready_cron = cron.after("100ms", on_ready)
         #app.notify("start readycron")
 
-if app.platform == "windows":
-    def on_ready():
-        if update_task_bar_canvases():
-            cron_poll_start_menu_helper(True)
-            ui.unregister("screen_change", on_screen_change) 
-            ui.unregister("win_focus", on_focus_change)
-            ui.register("screen_change", on_screen_change) 
-            ui.register("win_focus", on_focus_change)
-        else:
-            cleanup_and_retry(True)
+# if app.platform == "windows":
+#     def on_ready():
+#         if update_task_bar_canvases():
+#             cron_poll_start_menu_helper(True)
+#             ui.unregister("screen_change", on_screen_change) 
+#             ui.unregister("win_focus", on_focus_change)
+#             ui.register("screen_change", on_screen_change) 
+#             ui.register("win_focus", on_focus_change)
+#         else:
+#             cleanup_and_retry(True)
             
 
-    app.register("ready", on_ready)
+#     app.register("ready", on_ready)
 
     
 

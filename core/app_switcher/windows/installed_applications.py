@@ -11,7 +11,7 @@ import os
 if app.platform == "windows":
     from  ...operating_system.windows.windows_known_paths import resolve_known_windows_path, FOLDERID, PathNotFoundException
     import ctypes
-    from ctypes import wintypes, POINTER, byref, c_void_p, c_wchar_p, c_ulong, c_int, HRESULT
+    from ctypes import wintypes
     import winreg
 
     application_frame_host = "applicationframehost.exe"
@@ -22,205 +22,12 @@ if app.platform == "windows":
     windows_system_app_dir = os.path.expandvars(os.path.join("%WINDIR%", "SystemApps"))
     windows_explorer = Path(os.path.expandvars(os.path.join("%WINDIR%", "explorer.exe"))).resolve()
 
-    # ------------------------------------------------------------------
-    # Minimal pure-ctypes COM shell layer (replaces pywin32 / win32com).
-    #
-    # We talk to the Windows shell through three COM interfaces:
-    #   IShellItem       - a namespace item (a "thing" in the shell)
-    #   IEnumShellItems  - iterates the children of a shell item
-    #   IPropertyStore   - reads properties (we want AppUserModel.ID)
-    # plus IShellLinkW / IPersistFile to read ".lnk" shortcut targets.
-    #
-    # COM objects are just a pointer to a vtable (an array of function
-    # pointers). _com() casts through that vtable to call method #index.
-    # ------------------------------------------------------------------
-    _ole32 = ctypes.OleDLL("ole32")
-    _shell32 = ctypes.OleDLL("shell32")
-    _propsys = ctypes.OleDLL("propsys")
+    # COM goes through the shared helpers in shell_com.py, on the shared COM thread (see
+    # the end of this block): initializing COM on Talon's own threads fixes their
+    # apartment, which can make Talon's own COM use fail and abort Talon.
+    from . import shell_apps, shell_com
+    from .com_thread import on_com_thread
 
-    # OleDLL raises OSError automatically when a returned HRESULT indicates
-    # failure, so most calls below don't need explicit result checks.
-    _ole32.IIDFromString.argtypes = (c_wchar_p, c_void_p)
-    _ole32.CoTaskMemFree.restype = None
-    _ole32.CoTaskMemFree.argtypes = (c_void_p,)
-    _ole32.PropVariantClear.argtypes = (c_void_p,)
-
-    class GUID(ctypes.Structure):
-        _fields_ = [
-            ("Data1", wintypes.DWORD),
-            ("Data2", wintypes.WORD),
-            ("Data3", wintypes.WORD),
-            ("Data4", ctypes.c_ubyte * 8),
-        ]
-
-        def __init__(self, guid_string=None):
-            super().__init__()
-            if guid_string:
-                _ole32.IIDFromString(guid_string, byref(self))
-
-    class PROPERTYKEY(ctypes.Structure):
-        _fields_ = [("fmtid", GUID), ("pid", wintypes.DWORD)]
-
-    class PROPVARIANT(ctypes.Structure):
-        # We never read the union directly; PropVariantToStringAlloc does the
-        # conversion for us. 16 bytes of payload covers every variant type
-        # on 64-bit Windows.
-        _fields_ = [
-            ("vt", wintypes.USHORT),
-            ("wReserved1", wintypes.USHORT),
-            ("wReserved2", wintypes.USHORT),
-            ("wReserved3", wintypes.USHORT),
-            ("data", ctypes.c_byte * 16),
-        ]
-
-    _ole32.CoCreateInstance.argtypes = (
-        c_void_p, c_void_p, wintypes.DWORD, c_void_p, POINTER(c_void_p),
-    )
-    _shell32.SHGetKnownFolderItem.argtypes = (
-        c_void_p, wintypes.DWORD, wintypes.HANDLE, c_void_p, POINTER(c_void_p),
-    )
-    _shell32.SHGetPropertyStoreForWindow.argtypes = (
-        wintypes.HWND, c_void_p, POINTER(c_void_p),
-    )
-    _propsys.PropVariantToStringAlloc.argtypes = (c_void_p, POINTER(c_wchar_p))
-
-    # Interface / class identifiers.
-    IID_IShellItem = GUID("{43826D1E-E718-42EE-BC55-A1E261C37BFE}")
-    IID_IEnumShellItems = GUID("{70629033-E363-4A28-A567-0DB78006E6D7}")
-    IID_IPropertyStore = GUID("{886D8EEB-8CF2-4446-8D02-CDBA1DBDCF99}")
-    IID_IShellLinkW = GUID("{000214F9-0000-0000-C000-000000000046}")
-    IID_IPersistFile = GUID("{0000010B-0000-0000-C000-000000000046}")
-    CLSID_ShellLink = GUID("{00021401-0000-0000-C000-000000000046}")
-    BHID_EnumItems = GUID("{94F60519-2850-4924-AA5A-D15E84868039}")
-    BHID_PropertyStore = GUID("{0384E1A4-1523-439C-A4C8-AB911052F586}")
-
-    # KNOWNFOLDERID for the virtual "Applications" folder (installed apps,
-    # including UWP/Store apps). Not defined by win32com, hence the raw GUID.
-    # https://msdn.microsoft.com/en-us/library/dd378457
-    FOLDERID_AppsFolder = GUID("{1E87508D-89C2-42F0-8A7E-645A0F50CA58}")
-
-    # The one property we read off each app/window: its AppUserModel.ID.
-    PKEY_AppUserModel_ID = PROPERTYKEY(GUID("{9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3}"), 5)
-
-    SIGDN_NORMALDISPLAY = 0x00000000
-    CLSCTX_INPROC_SERVER = 0x1
-    COINIT_APARTMENTTHREADED = 0x2
-
-    # vtable slot 0/1/2 are always IUnknown's QueryInterface/AddRef/Release.
-    _IUNKNOWN_RELEASE = 2
-    _IUNKNOWN_QUERYINTERFACE = 0
-
-    def _com(this, index, restype, *argtypes):
-        """Return a callable for method #index of the COM object `this`."""
-        vtable = ctypes.cast(this, POINTER(POINTER(c_void_p)))[0]
-        proto = ctypes.WINFUNCTYPE(restype, c_void_p, *argtypes)
-        return proto(vtable[index])
-
-    def _release(obj):
-        if obj:
-            _com(obj, _IUNKNOWN_RELEASE, c_ulong)(obj)
-
-    def _bind_to_handler(item, bhid, riid):
-        """IShellItem::BindToHandler -> a new interface pointer (caller releases)."""
-        out = c_void_p()
-        _com(item, 3, HRESULT, c_void_p, POINTER(GUID), POINTER(GUID), POINTER(c_void_p))(
-            item, None, byref(bhid), byref(riid), byref(out)
-        )
-        return out
-
-    def _item_display_name(item, sigdn=SIGDN_NORMALDISPLAY):
-        """IShellItem::GetDisplayName."""
-        pname = c_wchar_p()
-        _com(item, 5, HRESULT, c_ulong, POINTER(c_wchar_p))(item, sigdn, byref(pname))
-        try:
-            return pname.value
-        finally:
-            _ole32.CoTaskMemFree(pname)
-
-    def _store_app_user_model_id(store):
-        """Read AppUserModel.ID (a string) from an open IPropertyStore.
-
-        VT_EMPTY (property absent) converts to "" here, matching pywin32's
-        ToString() behavior.
-        """
-        pv = PROPVARIANT()
-        # IPropertyStore::GetValue (slot 5)
-        _com(store, 5, HRESULT, POINTER(PROPERTYKEY), POINTER(PROPVARIANT))(
-            store, byref(PKEY_AppUserModel_ID), byref(pv)
-        )
-        try:
-            out = c_wchar_p()
-            _propsys.PropVariantToStringAlloc(byref(pv), byref(out))
-            try:
-                return out.value or ""
-            finally:
-                _ole32.CoTaskMemFree(out)
-        finally:
-            _ole32.PropVariantClear(byref(pv))
-
-    def _item_app_user_model_id(item):
-        """AppUserModel.ID for a shell item, via its IPropertyStore.
-
-        Raises OSError if the item has no property store or the value can't
-        be read (the shell's equivalent of pywin32's pywintypes.error).
-        """
-        store = _bind_to_handler(item, BHID_PropertyStore, IID_IPropertyStore)
-        try:
-            return _store_app_user_model_id(store)
-        finally:
-            _release(store)
-
-    def iter_known_folder_items(folder_id):
-        """Yield each child IShellItem of a known folder.
-
-        Each yielded pointer is released automatically once the consumer
-        advances the iterator, so the loop body must not retain it.
-        """
-        item = c_void_p()
-        _shell32.SHGetKnownFolderItem(
-            byref(folder_id), 0, None, byref(IID_IShellItem), byref(item)
-        )
-        try:
-            enum = _bind_to_handler(item, BHID_EnumItems, IID_IEnumShellItems)
-            try:
-                while True:
-                    child = c_void_p()
-                    fetched = c_ulong(0)
-                    # IEnumShellItems::Next (slot 3); returns S_FALSE at the end.
-                    _com(enum, 3, HRESULT, c_ulong, POINTER(c_void_p), POINTER(c_ulong))(
-                        enum, 1, byref(child), byref(fetched)
-                    )
-                    if not fetched.value or not child.value:
-                        break
-                    try:
-                        yield child
-                    finally:
-                        _release(child)
-            finally:
-                _release(enum)
-        finally:
-            _release(item)
-
-    # COM must be initialized on this thread before any of the calls above.
-    # S_FALSE (already initialized) doesn't raise; RPC_E_CHANGED_MODE (the
-    # thread is already in a different apartment) is fine for our purposes.
-    try:
-        _ole32.CoInitializeEx(None, COINIT_APARTMENTTHREADED)
-    except OSError:
-        pass
-
-    #print(f"{windows_app_dir} {windows_system_app_dir}")
-    def get_desktop_path():
-        return resolve_known_windows_path(FOLDERID.Desktop)
-
-    # since I can't figure out how to get the target paths from the shell folders,
-    # we'll parse the known shortcuts and do it live!?
-    windows_application_directories = [
-        get_desktop_path(),
-        "%AppData%/Microsoft/Windows/Start Menu/Programs",
-        "%ProgramData%/Microsoft/Windows/Start Menu/Programs",
-        "%AppData%/Microsoft/Internet Explorer/Quick Launch/User Pinned/TaskBar",
-    ]
 
     def resolve_path_with_guid(path) -> Path:
         splits = path.split(os.path.sep)
@@ -243,57 +50,6 @@ if app.platform == "windows":
         except ValueError:
             return False
 
-    def get_shortcut_info(lnk_file) -> windows_shortcut:
-        # todo: ideally we'd parse the target type here... that would make things more robust
-        # windows shortcuts can include applications, Control Panel, and other weird targets.
-        name = Path(lnk_file).stem
-        target_path = None
-        arguments = ""
-
-        link = c_void_p()
-        _ole32.CoCreateInstance(
-            byref(CLSID_ShellLink), None, CLSCTX_INPROC_SERVER,
-            byref(IID_IShellLinkW), byref(link),
-        )
-        try:
-            # Load the .lnk file through IPersistFile.
-            persist = c_void_p()
-            _com(link, _IUNKNOWN_QUERYINTERFACE, HRESULT, POINTER(GUID), POINTER(c_void_p))(
-                link, byref(IID_IPersistFile), byref(persist)
-            )
-            try:
-                # IPersistFile::Load (slot 5), STGM_READ (0).
-                _com(persist, 5, HRESULT, c_wchar_p, wintypes.DWORD)(persist, str(lnk_file), 0)
-            finally:
-                _release(persist)
-
-            try:
-                # IShellLinkW::GetPath (slot 3); pass NULL for the find-data.
-                buf = ctypes.create_unicode_buffer(wintypes.MAX_PATH)
-                _com(link, 3, HRESULT, c_wchar_p, c_int, c_void_p, wintypes.DWORD)(
-                    link, buf, wintypes.MAX_PATH, None, 0
-                )
-                target_path = buf.value or None
-            except OSError:
-                target_path = None
-
-            try:
-                # IShellLinkW::GetArguments (slot 10). Empty string (not None)
-                # when there are no arguments, matching WScript.Shell so the
-                # downstream Path(shortcut_info.arguments) stays valid.
-                argbuf = ctypes.create_unicode_buffer(1024)
-                _com(link, 10, HRESULT, c_wchar_p, c_int)(link, argbuf, 1024)
-                arguments = argbuf.value
-            except OSError:
-                arguments = ""
-        except OSError:
-            # Couldn't read the shortcut at all; fall through with what we have.
-            pass
-        finally:
-            _release(link)
-
-        return windows_shortcut(str(name), lnk_file, target_path, arguments)
-
     def is_extension_allowed(extension):
         return extension.lower() in [".exe", ".msc"]
 
@@ -301,32 +57,20 @@ if app.platform == "windows":
         #in windows, many dumb things are added to the apps folder
         return "install" not in display_name.lower() and display_name not in ("This PC")
 
-    shortcut_paths = []
-    for path in windows_application_directories:
-        full_path = os.path.expandvars(path)
-        shortcut_paths.extend(glob.glob(os.path.join(full_path, '**/*.lnk'), recursive=True))
-
-    shortcut_map = {}
-    for short_cut_path in shortcut_paths:
-        shortcut =  get_shortcut_info(short_cut_path)
-        if shortcut:
-            shortcut_map[shortcut.display_name] = shortcut
-
     def get_installed_windows_apps() -> list[Application]:
         application_list = []
         applications_dict = {}
-        for item in iter_known_folder_items(FOLDERID_AppsFolder):
+        # Start menu, desktop and pinned shortcuts by name: the targets of apps the
+        # Apps folder doesn't give a path for. Scanned here, on the COM thread.
+        shortcut_map = {
+            shortcut.name: windows_shortcut(shortcut.name, shortcut.path, shortcut.target, shortcut.arguments)
+            for shortcut in shell_apps.shortcuts_by_name().values()
+        }
+        for item in shell_apps.apps_folder_items():
             path = None
             executable_name = None
-            display_name = None
-            app_user_model_id = None
-
-            try:
-                app_user_model_id = _item_app_user_model_id(item)
-            except OSError:
-                continue
-
-            display_name = _item_display_name(item, SIGDN_NORMALDISPLAY)
+            app_user_model_id = item.app_id
+            display_name = item.name
             should_create_entry = check_should_create_entry(display_name)
 
             if should_create_entry:
@@ -410,43 +154,51 @@ if app.platform == "windows":
     GetApplicationUserModelId = kernel32.GetApplicationUserModelId
     GetApplicationUserModelId.argtypes = [wintypes.HANDLE, ctypes.POINTER(wintypes.UINT), wintypes.LPWSTR]
     GetApplicationUserModelId.restype = wintypes.LONG
+    # Without these, the returned HANDLE is truncated to a 32-bit int.
+    kernel32.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+    kernel32.OpenProcess.restype = wintypes.HANDLE
+    kernel32.CloseHandle.argtypes = [wintypes.HANDLE]
+
+    ERROR_INSUFFICIENT_BUFFER = 122
+    # The process isn't a packaged app.
+    APPMODEL_ERROR_NO_APPLICATION = 15703
 
     def get_application_user_model_id(pid):
-        # Open the process
+        """The AppUserModelId of a packaged app's process, or None: for processes that
+        aren't packaged, or that can't be opened (they may have exited already)."""
         process_handle = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
         if not process_handle:
-            raise ctypes.WinError(ctypes.get_last_error())
+            return None
 
         try:
-            # Get the length of the ApplicationUserModelId
-            length = wintypes.UINT(0)
-            result = GetApplicationUserModelId(process_handle, ctypes.byref(length), None)
-
-            # we expect error 122 in this algorithm
-            if result != 122:
-                raise ctypes.WinError(result)
-
-            # Allocate buffer for the ApplicationUserModelId
+            # Asking for the length with a NULL buffer fails with ERROR_INVALID_PARAMETER
+            # (87) on current Windows, so start with a buffer and grow it if needed.
+            length = wintypes.UINT(256)
             buffer = ctypes.create_unicode_buffer(length.value)
             result = GetApplicationUserModelId(process_handle, ctypes.byref(length), buffer)
-            if result != 0:
-                raise ctypes.WinError(result)
+            if result == ERROR_INSUFFICIENT_BUFFER:
+                buffer = ctypes.create_unicode_buffer(length.value)
+                result = GetApplicationUserModelId(process_handle, ctypes.byref(length), buffer)
 
-            return buffer.value
+            if result == APPMODEL_ERROR_NO_APPLICATION:
+                return None
+            if result != 0:
+                print(f"get_application_user_model_id({pid}): {ctypes.WinError(result)}")
+                return None
+
+            return buffer.value or None
         finally:
             kernel32.CloseHandle(process_handle)
 
     def get_application_user_model_for_window(hwnd: int):
         try:
-            store = c_void_p()
-            # SHGetPropertyStoreForWindow -> IPropertyStore for the window.
-            _shell32.SHGetPropertyStoreForWindow(hwnd, byref(IID_IPropertyStore), byref(store))
-            try:
-                return _store_app_user_model_id(store) or None
-            finally:
-                _release(store)
+            return shell_com.window_property(hwnd, shell_com.PKEY_AppUserModel_ID)
         except Exception:
             return None
+
+    # Enumerating the Apps folder can take a while.
+    get_installed_windows_apps = on_com_thread(get_installed_windows_apps, timeout=120)
+    get_application_user_model_for_window = on_com_thread(get_application_user_model_for_window)
 
     def get_valid_windows_by_app_user_model_id(application,
                                             valid_window_checker: callable,
