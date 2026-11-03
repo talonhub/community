@@ -207,11 +207,13 @@ class TreeRenderer:
 
     def _render_list_button(self, talon_list):
         button_text = self._ui_wrapper.concatenate_formatted_text(
-            (create_italic_text(f"help list {talon_list.id_number}"), f": {talon_list.name}")
+            (
+                create_italic_text(f"help list {talon_list.id_number}"),
+                f": {talon_list.name}",
+            )
         )
         if self._ui_wrapper.button(button_text):
             open_list_help(talon_list.name)
-
 
     async def _render_list(self, name_to_list, list_text):
         l = name_to_list.get(list_text[1:-1])
