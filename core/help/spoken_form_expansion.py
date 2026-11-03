@@ -4,7 +4,11 @@ from dataclasses import dataclass, field
 import egui
 from talon import Context, Module, actions, cron, registry
 
-from ..gui.gui import let_user_use_page_keys_to_scroll_scroll_area, open_gui, create_italic_text
+from ..gui.gui import (
+    create_italic_text,
+    let_user_use_page_keys_to_scroll_scroll_area,
+    open_gui,
+)
 
 
 class TalonList:
@@ -256,7 +260,9 @@ class TreeRenderer:
                 description = get_description_or_default(description)
                 self._ui.label(f"Description: {description}")
             # render button for making this the root
-            if self._ui_wrapper.button(create_italic_text(f"hoist {capture.id_number}")):
+            if self._ui_wrapper.button(
+                create_italic_text(f"hoist {capture.id_number}")
+            ):
                 self._set_root_to_child_callback(
                     capture.compute_talon_script_representation()
                 )
