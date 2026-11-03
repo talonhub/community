@@ -114,7 +114,7 @@ def _add_rows_for_operator(table, prefix, operator_name, description):
     postfix = "" if description else "*"
     operator_name_text = f"    {prefix} {operator_name}{postfix}"
     columns = [operator_name_text]
-    rich_text_functions= [create_italic_text]
+    rich_text_functions = [create_italic_text]
     if description:
         columns.append(description)
         rich_text_functions.append(None)
