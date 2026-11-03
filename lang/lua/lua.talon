@@ -38,7 +38,7 @@ state label <user.text>:
 
 require <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
-    key(end enter)
+    edit.line_insert_down()
 
 state (variable | var) [<user.text>] [over]: user.code_public_variable_formatter(text)
 
