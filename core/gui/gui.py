@@ -289,7 +289,9 @@ class UIWrapper:
         ui = self._ui(ui)
         return ui.spacing().item_spacing.y
 
-    def concatenate_formatted_text(self, texts: list[str | egui.RichText], ui=None) -> egui.WidgetText:
+    def concatenate_formatted_text(
+        self, texts: list[str | egui.RichText], ui=None
+    ) -> egui.WidgetText:
         """Combine text with different formats into a single WidgetText object using the ui's style"""
         ui = self._ui(ui)
 
