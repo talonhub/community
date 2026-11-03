@@ -163,3 +163,46 @@ if hasattr(talon, "test_mode"):
             # Generated forms at least as numerous as input if subseq is True
             if subseq:
                 assert len(result) >= len(tokens), statement
+
+    def _assert_year_spoken_form_matches_expected(year: str, expected: str):
+        result = core.create_spoken_forms.create_spoken_form_years(year)
+        print(
+            f"test_year: test string = {year}, result = {result}, expected = {expected}"
+        )
+        assert result == expected
+
+    def test_eleven_hundred_year():
+        _assert_year_spoken_form_matches_expected("1100", "eleven hundred")
+
+    def test_teen_century_single_digit_year():
+        _assert_year_spoken_form_matches_expected("1905", "nineteen five")
+
+    def test_teen_century_decade_year():
+        _assert_year_spoken_form_matches_expected("1910", "nineteen ten")
+
+    def test_teen_century_two_digit_year():
+        _assert_year_spoken_form_matches_expected("1925", "nineteen twenty five")
+
+    def test_single_digit_century_hundred_year():
+        _assert_year_spoken_form_matches_expected("2000", "two thousand")
+
+    def test_single_digit_century_single_digit_year():
+        _assert_year_spoken_form_matches_expected("2005", "two thousand five")
+
+    def test_tens_century_decade_year():
+        _assert_year_spoken_form_matches_expected("2020", "twenty twenty")
+
+    def test_tens_century_teen_year():
+        _assert_year_spoken_form_matches_expected("2019", "twenty nineteen")
+
+    def test_tens_century_two_digit_year():
+        _assert_year_spoken_form_matches_expected("2085", "twenty eighty five")
+
+    def test_two_digit_century_hundred_year():
+        _assert_year_spoken_form_matches_expected("2100", "twenty one hundred")
+
+    def test_two_digit_century_single_digit_year():
+        _assert_year_spoken_form_matches_expected("2105", "twenty one five")
+
+    def test_two_digit_century_two_digit_year():
+        _assert_year_spoken_form_matches_expected("9999", "ninety nine ninety nine")
