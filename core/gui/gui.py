@@ -289,6 +289,27 @@ class UIWrapper:
         ui = self._ui(ui)
         return ui.spacing().item_spacing.y
 
+    def create_multi_formatted_text(self, rich_texts, ui=None) -> egui.WidgetText:
+        ui = self._ui(ui)
+        style = ui.style()
+
+        layout_job = egui.LayoutJob.default()
+        visuals = style.visuals()
+        text_color = visuals.text_color()
+
+        for text in rich_texts:
+            if isinstance(text, str):
+                text = egui.RichText(text)
+            text.color(text_color).append_to(
+                layout_job,
+                style,
+                egui.FontSelection.Default,
+                egui.Align.Center
+            )
+
+        return egui.WidgetText.LayoutJob(layout_job)
+
+
     def title(self, text, subtitle="", ui=None):
         """Render a title.
         text: the main title
