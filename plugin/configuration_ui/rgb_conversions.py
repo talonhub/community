@@ -8,7 +8,10 @@ def parse_rgb_from_hex_string(color):
         raise ValueError(
             f"RGB string {color} was not length {ACCEPTED_RGB_STRING_LENGTH}"
         )
-    return [int("".join(channel), base=16) for channel in itertools.batched(color, 2, strict=True)]
+    return [
+        int("".join(channel), base=16)
+        for channel in itertools.batched(color, 2, strict=True)
+    ]
 
 
 def convert_rgb_to_hex_string(rgb):
