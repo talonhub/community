@@ -1,1 +1,1 @@
-settings show: user.settings_window_show()
+community settings [show]: user.settings_window_show()
