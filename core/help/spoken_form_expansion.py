@@ -330,7 +330,7 @@ class TreeRenderer:
             if is_rendering_new_tree:
                 response.request_focus()
             if history:
-                return_button_text = self._ui_wrapper.create_multi_formatted_text(
+                return_button_text = self._ui_wrapper.concatenate_formatted_text(
                     (create_italic_text("expansion return"), f": {history[-1]}")
                 )
                 if self._ui_wrapper.button(return_button_text):
