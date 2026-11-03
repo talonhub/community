@@ -331,8 +331,7 @@ class TreeRenderer:
                 response.request_focus()
             if history:
                 return_button_text = self._ui_wrapper.create_multi_formatted_text(
-                    (create_italic_text("expansion return"),
-                    f": {history[-1]}")
+                    (create_italic_text("expansion return"), f": {history[-1]}")
                 )
                 if self._ui_wrapper.button(return_button_text):
                     self._set_root_to_parent_callback()

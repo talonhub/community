@@ -301,14 +301,10 @@ class UIWrapper:
             if isinstance(text, str):
                 text = egui.RichText(text)
             text.color(text_color).append_to(
-                layout_job,
-                style,
-                egui.FontSelection.Default,
-                egui.Align.Center
+                layout_job, style, egui.FontSelection.Default, egui.Align.Center
             )
 
         return egui.WidgetText.LayoutJob(layout_job)
-
 
     def title(self, text, subtitle="", ui=None):
         """Render a title.
