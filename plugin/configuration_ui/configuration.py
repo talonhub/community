@@ -7,6 +7,7 @@ from ...core.gui.gui import (
     UIWrapper,
     let_user_use_page_keys_to_scroll_scroll_area,
     open_gui,
+    create_italic_text,
 )
 from .pages import create_pages
 from .setting_file_paths import RELEVANT_PATHS
@@ -156,7 +157,7 @@ class Manager:
     async def _render_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
             for page in self.pages:
-                if ui.selectable_label(page == self.page, f"Page {page}").clicked():
+                if ui.selectable_label(page == self.page, create_italic_text(f"Page {page}")).clicked():
                     self.update_page(page)
             ui.add_space(total_available_height - ui.min_size().y)
         ui.separator()
@@ -195,11 +196,20 @@ class Manager:
             self._ui.separator()
             self._ui.add_space(5)
             async with self._ui.group():
-                self._ui.label(
-                    egui.RichText("Input Commands").italics().into_widget_text()
+                command_instructions_text = self._ui_wrapper.concatenate_formatted_text(
+                    (
+                        create_italic_text("setting <number>"),
+                        ': use the input for editing the setting, such as by saying "setting one".\n',
+                        create_italic_text("comment toggle <number>"),
+                        ': toggle if a setting is set in a Community .talon file, such as by saying "comment toggle one".\n',
+                        create_italic_text("page up"),
+                        " and ",
+                        create_italic_text("page down"),
+                        ": scroll this window"
+                    )
                 )
                 self._ui.label(
-                    'You can use the input for editing a setting by saying "setting" and then the setting number, such as by saying "setting one".\nYou can toggle if a setting is set in a Community .talon file by saying "comment toggle" and then the number of the setting, such as by saying "comment toggle one".\nYou can use the "page up" and "page down" commands as well as the pageup/pagedown keys to scroll in this window.'
+                    command_instructions_text
                 )
             self._ui_wrapper.spacing()
             self._ui.label("* toggle setting that setting in a Community .talon file")

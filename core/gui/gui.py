@@ -290,6 +290,26 @@ class UIWrapper:
         ui = self._ui(ui)
         return ui.spacing().item_spacing.y
 
+    def concatenate_formatted_text(
+        self, texts: list[str | egui.RichText], ui=None
+    ) -> egui.WidgetText:
+        """Combine text with different formats into a single WidgetText object using the ui's style"""
+        ui = self._ui(ui)
+
+        layout_job = egui.LayoutJob.default()
+        style = ui.style()
+        visuals = style.visuals()
+        text_color = visuals.text_color()
+
+        for text in texts:
+            if isinstance(text, str):
+                text = egui.RichText(text)
+            text.color(text_color).append_to(
+                layout_job, style, egui.FontSelection.Default, egui.Align.Center
+            )
+
+        return egui.WidgetText.LayoutJob(layout_job)
+
     def title(self, text, subtitle="", ui=None):
         """Render a title.
         text: the main title
