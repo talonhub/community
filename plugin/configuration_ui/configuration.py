@@ -5,9 +5,9 @@ from talon import Context, Module, clip, fs, registry
 
 from ...core.gui.gui import (
     UIWrapper,
+    create_italic_text,
     let_user_use_page_keys_to_scroll_scroll_area,
     open_gui,
-    create_italic_text,
 )
 from .pages import create_pages
 from .setting_file_paths import RELEVANT_PATHS
@@ -157,7 +157,9 @@ class Manager:
     async def _render_page_navigation(self, ui, total_available_height):
         async with ui.vertical():
             for page in self.pages:
-                if ui.selectable_label(page == self.page, create_italic_text(f"Page {page}")).clicked():
+                if ui.selectable_label(
+                    page == self.page, create_italic_text(f"Page {page}")
+                ).clicked():
                     self.update_page(page)
             ui.add_space(total_available_height - ui.min_size().y)
         ui.separator()
@@ -205,12 +207,10 @@ class Manager:
                         create_italic_text("page up"),
                         " and ",
                         create_italic_text("page down"),
-                        ": scroll this window"
+                        ": scroll this window",
                     )
                 )
-                self._ui.label(
-                    command_instructions_text
-                )
+                self._ui.label(command_instructions_text)
             self._ui_wrapper.spacing()
             self._ui.label("* toggle setting that setting in a Community .talon file")
             self._ui.separator()
