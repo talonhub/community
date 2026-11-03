@@ -35,6 +35,8 @@ SYNC_EVERY_TICKS = 10
 # afterwards the switcher takes focus back instead of closing.
 HOLD_FOCUS_SECONDS = 1.0
 WINDOW_TITLE = "Talon thumbnail switcher"
+# Its menus' popup window (egui_kit.popup).
+MENU_TITLE = "Talon thumbnail switcher menu"
 TICK_MS = 50
 GUARD_EVERY_TICKS = 5
 # Layout, in egui points
@@ -82,9 +84,6 @@ APP_ICON = 80.0
 APP_ICON_PIXELS = 128
 APP_MAX_COLUMNS = 8
 APPS_MIN_WIDTH = 560.0
-# Tall enough for an app's full right-click menu (twelve items and three separators)
-# under the header and search field, however few apps there are.
-APPS_MIN_HEIGHT = 580.0
 WINDOW_DETAILS_MIN_WIDTH = 1100.0
 # Views with a tile per application: the apps strip, and the launcher (running apps,
 # then every installed app).

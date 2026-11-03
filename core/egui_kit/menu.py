@@ -173,13 +173,17 @@ def draw_menu(
     button_tips: dict | None = None,
     swallow: bool = False,
     shadow: bool = False,
+    clicked: bool | None = None,
 ) -> MenuItem | None:
     """Draw the menu in `rect`; returns the item clicked this frame, if any. A click on
     a row's icon button returns that button's action as an item that keeps the menu
     open. `hover`: the pointer may take the highlight (only while it moves, so it
     doesn't fight the keyboard); `pointer`: its position. `icon_texture(ui, icon)`
     makes an item's icon texture (None while loading). `swallow`: clicks on the
-    padding don't fall through. `shadow`: a soft shadow below (light themes)."""
+    padding don't fall through. `shadow`: a soft shadow below (light themes).
+    `clicked`: the window's own primary click this frame. Given, hover and clicks
+    come from `pointer` instead of egui's responses, which stay unhovered in a window
+    egui thinks unfocused (a popup that never takes the focus, egui_kit.popup)."""
     t = kit.theme
     painter = ui.painter()
     tips = button_tips or {}
@@ -222,21 +226,26 @@ def draw_menu(
         # The buttons' own areas first, under the row's (as with tiles' close buttons):
         # UIA elements of their own, while the pointer decides for the mouse.
         invoked = None
+        by_pointer = clicked is not None
         for glyph, action, button in button_rects:
             bresp = kit.hit(ui, button, f"menu-button:{state.page}:{i}:{glyph}")
             describe(bresp, egui.WidgetType.Button, f"{tips.get(glyph, glyph)}: {item.label}")
             if bresp.clicked():
+                # (By pointer, a click on a button counts below, as the row's.)
                 invoked = (glyph, action)
         response = kit.hit(ui, row, f"menu:{state.page}:{i}")
         submenu = item.label.endswith(SUBMENU_MARK)
         describe(response, egui.WidgetType.Button, item.label[: -len(SUBMENU_MARK)] if submenu else item.label, item.enabled)
-        if hover and response.hovered() and item.enabled and state.highlight != i:
+        row_hovered = (pointer is not None and row.contains(pointer)) if by_pointer else response.hovered()
+        # A click from UI Automation (Invoke) still comes as the response's.
+        row_clicked = response.clicked() or (by_pointer and clicked and row_hovered)
+        if hover and row_hovered and item.enabled and state.highlight != i:
             state.highlight = i
         if state.highlight == i and item.enabled:
             painter.rect_filled(row, 4, t.menu_hover)
         on_button = None
         for glyph, action, button in button_rects:
-            over = response.hovered() and pointer is not None and button.contains(pointer)
+            over = row_hovered and pointer is not None and button.contains(pointer)
             if over:
                 on_button = (glyph, action)
                 response.on_hover_text(tips.get(glyph, glyph))
@@ -263,8 +272,8 @@ def draw_menu(
         )
         if invoked is not None:
             picked = MenuItem(invoked[0], invoked[1], keep_open=True)
-        elif response.clicked() and on_button is not None:
+        elif row_clicked and on_button is not None:
             picked = MenuItem(on_button[0], on_button[1], keep_open=True)
-        elif response.clicked() and item.enabled:
+        elif row_clicked and item.enabled:
             picked = item
     return picked

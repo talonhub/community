@@ -5,7 +5,6 @@ import math
 import egui
 from ...egui_kit.text import estimate_width
 from .config import (
-    APPS_MIN_HEIGHT,
     APPS_MIN_WIDTH,
     APP_CELL,
     APP_MAX_COLUMNS,
@@ -73,7 +72,7 @@ def choose_apps(count: int, work: tuple[int, int, int, int], ppp: float) -> tupl
     # Cells stretch to the width; rows are as tall as cells are wide.
     cell_w = (width - chrome_w) / cols
     rows = math.ceil(count / cols)
-    height = min(max(rows * cell_w + chrome_h, APPS_MIN_HEIGHT * ppp), work_h)
+    height = min(rows * cell_w + chrome_h, work_h)
     return cols, int(width), int(height)
 
 

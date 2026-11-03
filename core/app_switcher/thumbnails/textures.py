@@ -14,9 +14,11 @@ class TexturesMixin:
         icon = entry.icon
         return self.textures.get(ui, (entry.hwnd, icon.width), icon) if icon is not None else None
 
-    def _menu_icon(self, ui: egui.Ui, icon_of) -> "egui.TextureHandle | None":
-        """A jump list entry's icon as a texture; fetched in the background the first
-        time (the menu redraws when it arrives), None until then or if it has none."""
+    def _popup_menu_icon(self, ui: egui.Ui, icon_of) -> "egui.TextureHandle | None":
+        """A jump list entry's icon as a texture in the menu's popup window (its own
+        textures: a texture belongs to the window that made it); fetched in the
+        background the first time (the menu redraws when it arrives), None until then
+        or if it has none."""
         entry, app_id = icon_of
         key = ("jump", entry.kind, entry.path or hash(entry.data))
         with self.lock:
@@ -40,4 +42,4 @@ class TexturesMixin:
 
             threading.Thread(target=fetch, name="jump list icon", daemon=True).start()
             return None
-        return self.textures.get(ui, key, icon)
+        return self.menu_textures.get(ui, key, icon)

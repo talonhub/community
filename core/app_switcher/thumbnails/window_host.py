@@ -1,10 +1,10 @@
 """The switcher's native window and the windows it shows: following window events,
-sync, DWM thumbnails, the tick (focus, re-pinning geometry), growing for menus."""
+sync, DWM thumbnails, the tick (focus, re-pinning geometry), the menu's popup window."""
 
 import ctypes
 import time
 from talon import ui
-from ...egui_kit import native
+from ...egui_kit import native, popup
 from . import dwm_thumbnails as dwm
 from . import window_icons
 from .config import APP_ICON_PIXELS, APP_MODES, GUARD_EVERY_TICKS, SYNC_EVERY_TICKS
@@ -164,7 +164,15 @@ class WindowHostMixin:
         self.ticks += 1
         # Close when the user moves on to another window, like Alt+Tab; but not when
         # one of the switcher's own commands briefly activated a window.
-        has_focus = native.foreground() == self.hwnd
+        foreground = native.foreground()
+        if foreground is not None and foreground == self.popup.host.hwnd:
+            # A click on the menu's popup activates it despite WS_EX_NOACTIVATE (egui
+            # takes the focus on a click): hand it straight back, keys go here. That
+            # raises the switcher, so the popup goes back over it (they can overlap).
+            native.set_foreground(self.hwnd)
+            native.raise_topmost(self.popup.host.hwnd)
+            foreground = self.hwnd
+        has_focus = foreground == self.hwnd
         if has_focus:
             self.had_focus = True
         elif self.had_focus:
@@ -183,35 +191,19 @@ class WindowHostMixin:
             if native.hwnd_rect(self.hwnd) != self.target:
                 native.move_hwnd(self.hwnd, self.target)
 
-    def _grow_for_menu(self, extra_h: float, extra_w: float):
-        """Make the window `extra_h` x `extra_w` points bigger, within its monitor's work
-        area (moving it up or left if needed); `menu_restore` keeps the old rect."""
-        if self.hwnd is None or self.target is None or self.menu is None:
+    def _place_menu_popup(self, request):
+        """Show the menu's popup window for `request` ((x, y) where it opens, (w, h)),
+        beside that point within the monitor's work area; None hides it."""
+        if request is None or self.menu is None or not self.showing:
+            self.popup.hide()
             return
-        ppp = (dwm.user32.GetDpiForWindow(self.hwnd) or 96) / 96
-        left, top, right, bottom = self.target
-        work = native.work_area(self.hwnd)
-        width = min(right - left + int(extra_w * ppp), work[2] - work[0])
-        height = min(bottom - top + int(extra_h * ppp), work[3] - work[1])
-        left = max(work[0], min(left, work[2] - width))
-        top = max(work[1], min(top, work[3] - height))
-        new = (left, top, left + width, top + height)
-        if new == self.target:
+        if self.hwnd is None:
+            # Not attached yet: ask again on a later frame.
+            self.menu_request = None
+            self.refresh()
             return
-        if self.menu_restore is None:
-            self.menu_restore = self.target
-        self.target = new
-        native.move_hwnd(self.hwnd, new)
-        self.refresh()
-
-    def _restore_after_menu(self):
-        """Back to the size from before a menu made the window grow."""
-        if self.menu is not None or self.menu_restore is None:
-            return
-        self.target, self.menu_restore = self.menu_restore, None
-        if self.hwnd is not None and self.showing:
-            native.move_hwnd(self.hwnd, self.target)
-        self.refresh()
+        (x, y), size = request
+        self.popup.show(popup.place((x, y, x, y), size, native.work_area(self.hwnd)))
 
     def _attach(self):
         """Position the native window and register a thumbnail for every entry."""

@@ -157,7 +157,6 @@ class CellsMixin:
         view_px: tuple[int, int, int, int],
         ppp: float,
         badges: list,
-        cover: tuple[int, int, int, int] | None = None,
         marked: bool = False,
     ):
         """A grid tile: the live thumbnail (or icon) with the number and title below;
@@ -198,12 +197,8 @@ class CellsMixin:
         if thumbnail is not None:
             box = to_pixels(thumb, ppp)
             dest = fit(*thumbnail.source_size(), box)
-            if cover is not None and dwm.intersect(dest, cover):
-                # Under the menu: DWM would draw on top of it. Back once the menu closes.
-                thumbnail.hide()
-            else:
-                # Clipped to the viewport: DWM would otherwise draw over the header.
-                thumbnail.place(dest, view_px)
+            # Clipped to the viewport: DWM would otherwise draw over the header.
+            thumbnail.place(dest, view_px)
 
     def _draw_row(
         self, ui: egui.Ui, painter: egui.Painter, entry: Entry, i: int, row: egui.Rect, badges: list, marked: bool = False

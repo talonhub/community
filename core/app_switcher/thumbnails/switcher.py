@@ -8,6 +8,8 @@ import threading
 from typing import Any
 from talon import app, cron, registry, settings, ui
 from ...egui_kit.host import HostWindow
+from ...egui_kit.popup import PopupHost
+from ...egui_kit.theme import THEME
 from ...egui_kit.textures import IconTextures
 from ...egui_kit import native
 from . import dwm_thumbnails as dwm
@@ -16,7 +18,6 @@ from ..windows import app_identity
 from . import launcher_apps
 from .cells import CellsMixin
 from .config import (
-    APPS_MIN_HEIGHT,
     APP_ICON_PIXELS,
     APP_MODES,
     APP_TAG,
@@ -31,6 +32,7 @@ from .config import (
     SCREEN_TAG,
     SEARCH_HEIGHT,
     SORTABLE,
+    MENU_TITLE,
     TICK_MS,
     WINDOW_DETAILS_MIN_WIDTH,
     WINDOW_EVENTS,
@@ -81,8 +83,9 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
         # Where the mouse was when the switcher opened, in points; see _pointer_moved.
         self.pointer_origin: tuple[int, int] | None = None
         self.target: tuple[int, int, int, int] | None = None
-        # The window's rect before it grew to fit a menu; put back when the menu closes.
-        self.menu_restore: tuple[int, int, int, int] | None = None
+        # Where the open menu's popup was last asked to go: ((x, y), (w, h)) in screen
+        # pixels, or None; see _place_menu_popup.
+        self.menu_request = None
         # Where the marked bar's dropdowns open (page -> egui point), from the last frame.
         self.bar_anchors: dict[str, Any] = {}
         self.hwnd: int | None = None
@@ -90,6 +93,8 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
         # Icon textures, keyed by (hwnd, icon width). They are only created and dropped
         # inside render, on egui's thread: dropping one elsewhere may lack a GL context.
         self.textures = IconTextures("thumbnail_switcher_icon")
+        # The menu's popup window, its jump list icons' textures, its own.
+        self.menu_textures = IconTextures("thumbnail_switcher_menu_icon")
         # Jump list entries' icons by entry: None while loading or when there's none.
         self.jump_icons: dict[tuple, Any] = {}
         self.selected = 0
@@ -157,6 +162,9 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
             toplevel=True,
             focusable=True,
         )
+        # Menus open in a window of their own, so they can reach past this one; it
+        # never takes the focus, so keys and voice still come here.
+        self.popup = PopupHost(MENU_TITLE, self.render_menu, theme=THEME, tag="thumbnail_switcher")
         self.tick_job = cron.interval(f"{TICK_MS}ms", self._tick)
 
     # --- showing and hiding ---
@@ -214,7 +222,7 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
                 cols = 1
                 width = int(min(max(width, WINDOW_DETAILS_MIN_WIDTH * ppp), (work[2] - work[0]) * SCREEN_FILL))
                 rows_h = (HEADER_HEIGHT + SEARCH_HEIGHT + COLUMN_HEADER_HEIGHT + 2 * PADDING + count * (DETAIL_ROW_HEIGHT + ROW_GAP)) * ppp
-                height = int(min(max(rows_h, APPS_MIN_HEIGHT * ppp), (work[3] - work[1]) * SCREEN_FILL))
+                height = int(min(rows_h, (work[3] - work[1]) * SCREEN_FILL))
         elif previews:
             cols, width, height = choose_grid(len(pool), work, ppp)
         else:
@@ -253,7 +261,7 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
             # The selection may start beyond the first screenful.
             self.reveal_selected = True
             self.target = (left, top, left + width, top + height)
-            self.menu_restore = None
+            self.menu_request = None
         self.showing = True
         self.had_focus = False
         if not self.events_registered:
@@ -273,6 +281,8 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
 
     def hide(self):
         self.menu = None
+        self.menu_request = None
+        self.popup.hide()
         # Marks belong to one opening of the switcher.
         with self.lock:
             self.marked = []
@@ -290,6 +300,7 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
         """Redraw after a change. The window shows a frame late: what a refresh draws
         only appears with the next frame, so this asks for one more."""
         self.host.repaint(2)
+        self.popup.repaint(2)
 
     def _update_tags(self):
         """Tags for the switcher's voice commands; only set when they change, as each
@@ -795,4 +806,5 @@ class Switcher(ViewsMixin, CellsMixin, InputMixin, TexturesMixin, MarksMixin, Wi
         self.overlay.close()
         self.grid_overlay.close()
         cron.cancel(self.tick_job)
+        self.popup.close()
         self.host.close()

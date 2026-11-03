@@ -1,6 +1,7 @@
 """Drawing the switcher: render() picks the layout for the mode and draws the header,
-marked bar, search field, cells (via the kit's grid), column headings, A-Z index,
-menus and scrollbar; the minimap shown while placing."""
+marked bar, search field, cells (via the kit's grid), column headings, A-Z index and
+scrollbar, and says where the open menu goes; render_menu() draws the menu in its popup
+window; the minimap shown while placing."""
 
 import egui
 from talon import cron
@@ -91,8 +92,6 @@ class ViewsMixin:
             current_desktop = self.current_desktop
             show_screens = self.screen_count > 1
             menu = self.menu
-            if menu is None and self.menu_restore is not None:
-                cron.after("0ms", self._restore_after_menu)
             mode = self.mode
             marked = set(self.marked) & pool_hwnds
             if bool(self.marked) != ("user.thumbnail_switcher_marked" in (self.tag_context.tags if self.tag_context is not None else ())):
@@ -115,8 +114,7 @@ class ViewsMixin:
             if reveal:
                 self.reveal_selected = False
             # Drop textures of windows no longer shown, here on egui's thread.
-            # Jump list icons stay while a menu is open.
-            self.textures.drop_where(lambda key: key[0] not in icon_hwnds and not (key[0] == "jump" and menu is not None))
+            self.textures.drop_where(lambda key: key[0] not in icon_hwnds)
 
         async with ui.input() as inp:
             action = self._handle_input(inp, cols, previews or mode in APP_MODES)
@@ -124,7 +122,7 @@ class ViewsMixin:
             pointer_pos = inp.pointer.latest_pos()
             pointer_moving = settled and self._pointer_moved(pointer_pos)
             primary_clicked = inp.pointer.primary_clicked()
-            # Only a mouse that is moving now takes the menu highlight from the keyboard.
+            # Only a mouse that is moving now takes the selection from the keyboard.
             pointer_moving_now = inp.pointer.is_moving()
             wheel = inp.raw_scroll_delta.y
             # For Ctrl+click and Shift+click.
@@ -268,31 +266,30 @@ class ViewsMixin:
         mark_click = None
         close_click = None
         shown = set()
-        # The menu goes where it was opened, or for keyboard and voice at its tile; it's
-        # sized now so the thumbnails it covers can be hidden (DWM draws over it).
-        menu_rect = None
-        if menu is not None:
+        # The menu opens in its own popup window (render_menu), so it can reach past
+        # this one: where it was opened, or for keyboard and voice at its tile.
+        menu_request = None
+        if menu is not None and target is not None:
             items = self._menu_items(menu_entry, menu.page)
             anchor = menu.pos
             if anchor is None:
                 # The marked windows' menu opens at the selected tile.
                 index = entries.index(menu_entry) if menu_entry is not None else max(0, min(current, len(entries) - 1))
-                col = layout[index][0]
-                anchor = egui.Pos2(
-                    viewport.min.x + PADDING + col * cell_w + 40,
-                    viewport.min.y + PADDING + tile_top(index) - scroll + 20,
-                )
-            height = kit_menu.height(items)
+                if index < len(layout):
+                    col = layout[index][0]
+                    anchor = egui.Pos2(
+                        viewport.min.x + PADDING + col * cell_w + 40,
+                        viewport.min.y + PADDING + tile_top(index) - scroll + 20,
+                    )
+                else:
+                    anchor = viewport.min
             menu_w = JUMP_MENU_WIDTH if menu.page.startswith("jump") else MENU_WIDTH
-            if height > area.height() or menu_w > area.width():
-                # Too big for the window (a few apps, or a long jump list page): the
-                # window grows until the menu closes, so it's never cut off.
-                extra = (max(0.0, height - area.height()) + PADDING, max(0.0, menu_w - area.width()) + PADDING)
-                cron.after("0ms", lambda extra=extra: self._grow_for_menu(*extra))
-            x = min(max(anchor.x, area.min.x), area.max.x - menu_w)
-            y = min(max(anchor.y, area.min.y), area.max.y - height)
-            menu_rect = egui.Rect.from_min_size(egui.Pos2(x, y), egui.Vec2(menu_w, height))
-        menu_px = to_pixels(menu_rect, ppp) if menu_rect is not None else None
+            # Screen pixels: the window has no frame, so its rect is its client area.
+            at = (target[0] + round(anchor.x * ppp), target[1] + round(anchor.y * ppp))
+            menu_request = (at, (round(menu_w * ppp), round(kit_menu.height(items) * ppp)))
+        if menu_request != self.menu_request:
+            self.menu_request = menu_request
+            cron.after("0ms", lambda request=menu_request: self._place_menu_popup(request))
 
         if not entries:
             painter.text(
@@ -366,7 +363,7 @@ class ViewsMixin:
                 self._draw_app_tile(ui, clipped, entry, i, tile, badges, is_marked, launcher=mode == "launcher", letter=letter_at.get(i))
             elif previews:
                 shown.add(entry.hwnd)
-                self._draw_tile(ui, clipped, entry, i, tile, thumbnail, view_px, ppp, badges, menu_px, is_marked)
+                self._draw_tile(ui, clipped, entry, i, tile, thumbnail, view_px, ppp, badges, is_marked)
             else:
                 self._draw_row(ui, clipped, entry, i, tile, badges, is_marked)
 
@@ -435,15 +432,9 @@ class ViewsMixin:
 
         grid.scrollbar(painter, KIT, scroll, SCROLLBAR_WIDTH)
 
-        if menu_rect is not None:
-            pick = kit_menu.draw_menu(
-                ui, KIT, menu, items, menu_rect, hover=pointer_moving_now, pointer=pointer_pos, icon_texture=self._menu_icon, button_tips=MENU_BUTTON_TIPS
-            )
-            if pick is not None:
-                cron.after("0ms", lambda: self._pick(menu, pick))
-            elif primary_clicked and pointer_pos is not None and not menu_rect.contains(pointer_pos):
-                # A click elsewhere closes the menu (and doesn't pick a tile).
-                cron.after("0ms", self.close_menu)
+        if menu is not None and primary_clicked:
+            # A click here, outside the menu's popup, closes it (and doesn't pick a tile).
+            cron.after("0ms", self.close_menu)
 
         if mark_click is not None:
             cron.after("0ms", lambda: mark_click[0](mark_click[1]))
@@ -452,6 +443,28 @@ class ViewsMixin:
         if selected is not None:
             # Don't hide the window from inside its own render.
             cron.after("0ms", lambda: self.select(selected))
+
+    async def render_menu(self, ui: egui.Ui) -> None:
+        """The open menu, filling its popup window (egui_kit.popup). The popup never
+        takes the focus: keys, numbers and voice still go to the switcher."""
+        with self.lock:
+            menu = self.menu
+            entry = self._menu_entry(menu)
+        if menu is None or (entry is None and not menu.marked):
+            return
+        items = self._menu_items(entry, menu.page)
+        async with ui.input() as inp:
+            pointer = inp.pointer.latest_pos()
+            # Only a mouse that is moving now takes the highlight from the keyboard.
+            moving = inp.pointer.is_moving()
+            clicked = inp.pointer.primary_clicked()
+        rect = ui.max_rect()
+        ui.painter().rect_filled(rect, 0, KIT.theme.menu_bg)
+        pick = kit_menu.draw_menu(
+            ui, KIT, menu, items, rect, hover=moving, pointer=pointer, icon_texture=self._popup_menu_icon, button_tips=MENU_BUTTON_TIPS, clicked=clicked
+        )
+        if pick is not None:
+            cron.after("0ms", lambda: self._pick(menu, pick))
 
     def _draw_close_button(self, ui: egui.Ui, painter: egui.Painter, rect: egui.Rect) -> bool:
         """An × that closes the switcher, like Escape; returns whether it was clicked."""

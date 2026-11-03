@@ -11,8 +11,17 @@ import sys
 
 WINDOWS = sys.platform == "win32"
 
+SWP_NOSIZE = 0x0001
+SWP_NOMOVE = 0x0002
 SWP_NOZORDER = 0x0004
 SWP_NOACTIVATE = 0x0010
+SWP_FRAMECHANGED = 0x0020
+HWND_TOPMOST = -1
+GWL_EXSTYLE = -20
+WS_EX_TOOLWINDOW = 0x00000080
+WS_EX_APPWINDOW = 0x00040000
+DWMWA_WINDOW_CORNER_PREFERENCE = 33
+DWMWCP_ROUND = 2
 MONITOR_DEFAULTTONEAREST = 2
 WM_CLOSE = 0x0010
 
@@ -50,6 +59,10 @@ if WINDOWS:
     user32.MonitorFromWindow.restype = wintypes.HMONITOR
     user32.GetMonitorInfoW.argtypes = [wintypes.HMONITOR, ctypes.POINTER(MONITORINFO)]
     user32.PostMessageW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]
+    user32.GetWindowLongPtrW.argtypes = [wintypes.HWND, ctypes.c_int]
+    user32.GetWindowLongPtrW.restype = ctypes.c_ssize_t
+    user32.SetWindowLongPtrW.argtypes = [wintypes.HWND, ctypes.c_int, ctypes.c_ssize_t]
+    user32.SetWindowLongPtrW.restype = ctypes.c_ssize_t
 
 
 def own_windows(match) -> list[int]:
@@ -106,6 +119,27 @@ def move_hwnd(hwnd: int, rect: tuple[int, int, int, int]):
         return
     left, top, right, bottom = rect
     user32.SetWindowPos(hwnd, None, left, top, right - left, bottom - top, SWP_NOZORDER | SWP_NOACTIVATE)
+
+
+def raise_topmost(hwnd: int):
+    """To the top of the topmost windows, without activating it."""
+    if WINDOWS:
+        user32.SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE)
+
+
+def make_popup(hwnd: int):
+    """Style a borderless window as a popup: off the taskbar and Alt+Tab (a tool
+    window), with Windows 11's rounded corners."""
+    if not WINDOWS:
+        return
+    ex = user32.GetWindowLongPtrW(hwnd, GWL_EXSTYLE)
+    user32.SetWindowLongPtrW(hwnd, GWL_EXSTYLE, (ex & ~WS_EX_APPWINDOW) | WS_EX_TOOLWINDOW)
+    user32.SetWindowPos(hwnd, None, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED)
+    try:
+        corner = ctypes.c_int(DWMWCP_ROUND)
+        ctypes.windll.dwmapi.DwmSetWindowAttribute(wintypes.HWND(hwnd), DWMWA_WINDOW_CORNER_PREFERENCE, ctypes.byref(corner), ctypes.sizeof(corner))
+    except (AttributeError, OSError):
+        pass  # before Windows 11
 
 
 def hwnd_rect(hwnd: int) -> tuple[int, int, int, int]:
