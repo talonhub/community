@@ -12,8 +12,8 @@ app: talon_debug_window
 tag {user.talon_tags}: "{talon_tags}"
 
 #commands for dictating key combos
-key <user.keys> over: "{keys}"
-key <user.modifiers> over: "{modifiers}"
+key <user.keys> {user.phrase_ender}: "{keys}"
+key <user.modifiers> {user.phrase_ender}: "{modifiers}"
 
 action {user.talon_actions}: "{talon_actions}"
 # requires user.talon_populate_lists tag. do not use with dragon

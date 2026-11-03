@@ -5,8 +5,8 @@ and tag: user.talon_python
 -
 
 #commands for dictating key combos
-key <user.keys> over: "{keys}"
-key <user.modifiers> over: "{modifiers}"
+key <user.keys> {user.phrase_ender}: "{keys}"
+key <user.modifiers> {user.phrase_ender}: "{modifiers}"
 
 # using the optional user.talon_tags list requires the user.talon_populate_lists tag. do not use with dragon
 tag set [{user.talon_tags}]:
