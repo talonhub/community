@@ -205,6 +205,14 @@ class TreeRenderer:
         self._ui = None
         self._ui_wrapper = None
 
+    def _render_list_button(self, talon_list):
+        button_text = self._ui_wrapper.concatenate_formatted_text(
+            (create_italic_text(f"help list {talon_list.id_number}"), f": {talon_list.name}")
+        )
+        if self._ui_wrapper.button(button_text):
+            open_list_help(talon_list.name)
+
+
     async def _render_list(self, name_to_list, list_text):
         l = name_to_list.get(list_text[1:-1])
         if l is None:
@@ -213,8 +221,7 @@ class TreeRenderer:
         if not l.is_in_registry:
             self._ui.weak(f"{l.name} (list not found)")
             return
-        if self._ui_wrapper.button(f"help list {l.id_number}: {l.name}"):
-            open_list_help(l.name)
+        self._render_list_button(l)
 
     async def _render_rule(self, lists, rule_text: str):
         """Render the rule showing the lists as buttons that can be clicked to render the full list"""
@@ -283,10 +290,7 @@ class TreeRenderer:
                     if i > 0:
                         self._ui.separator()
                     if l.is_in_registry:
-                        if self._ui_wrapper.button(
-                            f"help list {l.id_number}: {l.name}"
-                        ):
-                            open_list_help(l.name)
+                        self._render_list_button(l)
                     else:
                         self._ui.weak(f"{l.name} (list not found)")
 
