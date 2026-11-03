@@ -13,7 +13,7 @@ from .rgb_conversions import (
     convert_rgb_to_hex_string,
     parse_rgb_from_hex_string,
 )
-from .setting_file_paths import SETTINGS_PATH
+from .setting_file_paths import SETTINGS_DOT_TALON_PATH
 from .talon_file_output import update_setting, update_tag
 from .talon_file_parsing import (
     VALUE_UNAVAILABLE,
@@ -46,7 +46,7 @@ class Setting:
     # the function used to update the setting's value in its .talon file
     update_function: Callable = update_setting
     # the path of the .talon file
-    path: Path = SETTINGS_PATH
+    path: Path = SETTINGS_DOT_TALON_PATH
     # is this a tag or a setting
     is_tag: bool = False
     # false means this is a commented out setting
