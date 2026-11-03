@@ -162,9 +162,9 @@ class Manager:
                 ).clicked():
                     self.update_page(page)
             if self._ui.selectable_label(
-                    MAIN_PAGE_NAME == self.page, create_italic_text("Page main")
-                ).clicked():
-                    self.update_page(MAIN_PAGE_NAME)
+                self.page == MAIN_PAGE_NAME, create_italic_text("Page main")
+            ).clicked():
+                self.update_page(MAIN_PAGE_NAME)
             self._ui_wrapper.spacing()
             if self._ui_wrapper.button(create_italic_text("settings close")):
                 actions.user.settings_window_hide()
