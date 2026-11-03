@@ -6,13 +6,15 @@ pixels never pass through Python.
 """
 
 import ctypes
-import os
 import time
 from ctypes import wintypes
 
 from talon import app
 
 from ..windows.window_filter import DWM_CLOAKED_SHELL, cloak_reason, is_alt_tab_window
+
+# Finding, moving and measuring windows is the egui kit's (egui_kit/native.py).
+from ...egui_kit.native import hwnd_rect
 
 DWM_TNP_RECTDESTINATION = 0x01
 DWM_TNP_RECTSOURCE = 0x02
@@ -160,29 +162,6 @@ if app.platform == "windows":
     user32.GetMonitorInfoW.argtypes = [wintypes.HMONITOR, ctypes.POINTER(MONITORINFO)]
 
 
-def find_own_hwnd(title: str) -> int | None:
-    """Find a top-level window of this (Talon) process with the given title.
-
-    talon.egui.Window doesn't expose its native handle, so look it up by title.
-    """
-    pid = os.getpid()
-    found = []
-    buf = ctypes.create_unicode_buffer(256)
-
-    def callback(hwnd, _lparam):
-        owner = wintypes.DWORD()
-        user32.GetWindowThreadProcessId(hwnd, ctypes.byref(owner))
-        if owner.value == pid:
-            user32.GetWindowTextW(hwnd, buf, len(buf))
-            if buf.value == title:
-                found.append(hwnd)
-                return False
-        return True
-
-    user32.EnumWindows(WNDENUMPROC(callback), 0)
-    return found[0] if found else None
-
-
 def process_image(hwnd: int) -> str:
     """The executable of the process that owns the window, or ""."""
     kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
@@ -218,14 +197,6 @@ def window_pid(hwnd: int) -> int:
     pid = wintypes.DWORD()
     user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
     return pid.value
-
-
-def foreground() -> int | None:
-    return user32.GetForegroundWindow() or None
-
-
-def set_foreground(hwnd: int) -> bool:
-    return bool(user32.SetForegroundWindow(hwnd))
 
 
 def z_order() -> dict[int, int]:
@@ -308,28 +279,6 @@ def request_close(hwnd: int):
     user32.PostMessageW(hwnd, WM_CLOSE, 0, 0)
 
 
-def work_area(hwnd: int) -> tuple[int, int, int, int]:
-    """The work area (left, top, right, bottom) of the monitor a window is on."""
-    mi = MONITORINFO()
-    mi.cbSize = ctypes.sizeof(MONITORINFO)
-    monitor = user32.MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST)
-    user32.GetMonitorInfoW(monitor, ctypes.byref(mi))
-    r = mi.rcWork
-    return (r.left, r.top, r.right, r.bottom)
-
-
-def foreground_work_area() -> tuple[int, int, int, int]:
-    """The work area (left, top, right, bottom) of the monitor with the foreground window."""
-    mi = MONITORINFO()
-    mi.cbSize = ctypes.sizeof(MONITORINFO)
-    monitor = user32.MonitorFromWindow(
-        user32.GetForegroundWindow(), MONITOR_DEFAULTTONEAREST
-    )
-    user32.GetMonitorInfoW(monitor, ctypes.byref(mi))
-    r = mi.rcWork
-    return (r.left, r.top, r.right, r.bottom)
-
-
 def make_overlay(hwnd: int, width: int, height: int, thickness: int):
     """Turn a window into a click-through, never-activated frame `thickness` wide.
 
@@ -389,19 +338,6 @@ def place_below(hwnd: int, above: int):
     user32.SetWindowPos(hwnd, above, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE)
 
 
-def move_hwnd(hwnd: int, rect: tuple[int, int, int, int]):
-    left, top, right, bottom = rect
-    user32.SetWindowPos(
-        hwnd, None, left, top, right - left, bottom - top, SWP_NOZORDER | SWP_NOACTIVATE
-    )
-
-
-def hwnd_rect(hwnd: int) -> tuple[int, int, int, int]:
-    r = wintypes.RECT()
-    user32.GetWindowRect(hwnd, ctypes.byref(r))
-    return (r.left, r.top, r.right, r.bottom)
-
-
 def frame_rect(hwnd: int) -> tuple[int, int, int, int]:
     """The window's visible frame, without the invisible resize borders; the rect
     Talon's ui.Window.rect reads and sets."""
@@ -424,10 +360,6 @@ def placed_rect(hwnd: int) -> tuple[int, int, int, int]:
             r = placement.rcNormalPosition
             return (r.left, r.top, r.right, r.bottom)
     return hwnd_rect(hwnd)
-
-
-def is_window(hwnd: int) -> bool:
-    return bool(user32.IsWindow(hwnd))
 
 
 def intersect(
