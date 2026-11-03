@@ -330,11 +330,14 @@ class TreeRenderer:
             if is_rendering_new_tree:
                 response.request_focus()
             if history:
+                style = self._ui.style()
+                visuals = style.visuals()
+                
                 layout_job = egui.LayoutJob.default()
-                italics_format = egui.TextFormat.default()
+                italics_format = egui.TextFormat.simple(egui.TextStyle.Body.resolve(style), visuals.text_color())
                 italics_format.italics = True
                 layout_job.append("expansion return", 0, italics_format)
-                layout_job.append(f": {history[-1]}", 0, egui.TextFormat.default())
+                layout_job.append(f": {history[-1]}", 0, egui.TextFormat.simple(egui.TextStyle.Body.resolve(style), visuals.text_color()))
                 widget_text = egui.WidgetText.LayoutJob(layout_job)
                 if self._ui_wrapper.button(widget_text):
                     self._set_root_to_parent_callback()
