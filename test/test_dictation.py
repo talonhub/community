@@ -1,10 +1,11 @@
-import pytest
 import talon
 
 PHRASE_EXAMPLES = ["", "foo", "foo bar", "lorem ipsum dolor sit amet"]
 
 if hasattr(talon, "test_mode"):
     # Only include this when we're running tests
+
+    from talon import actions
 
     from core.text import text_and_dictation
 
@@ -58,9 +59,8 @@ if hasattr(talon, "test_mode"):
         result = format.format("fourth")
         assert result == "fourth"
 
-    @pytest.mark.parametrize(
-        "before, after",
-        [
+    def test_needs_space_between():
+        for before, after in [
             ("a", "break"),
             ("break", "a"),
             (".", "a"),
@@ -72,14 +72,11 @@ if hasattr(talon, "test_mode"):
             ("50$", "payment"),
             ("c#", "developer"),
             ("F#", "developer"),
-        ],
-    )
-    def test_needs_space_between(before, after):
-        assert talon.actions.user.needs_space_between(before, after)
+        ]:
+            assert actions.user.needs_space_between(before, after)
 
-    @pytest.mark.parametrize(
-        "before, after",
-        [
+    def test_does_not_need_space_between():
+        for before, after in [
             ("", ""),
             ("a", ""),
             ("a", " "),
@@ -100,15 +97,11 @@ if hasattr(talon, "test_mode"):
             ("hello'", "."),
             ("hello.", "'"),
             ("#", "talon"),
-        ],
-    )
-    def test_does_not_need_space_between(before, after):
-        assert not talon.actions.user.needs_space_between(before, after)
+        ]:
+            assert not actions.user.needs_space_between(before, after)
 
-    @pytest.mark.parametrize("text", ["#", " #", "$", "and-", "("])
-    def test_omit_space_after(text):
-        assert talon.actions.user.omit_space_after(text)
-
-    @pytest.mark.parametrize("text", ["c#", "C#", "F#", "US$", "hello"])
-    def test_does_not_omit_space_after(text):
-        assert not talon.actions.user.omit_space_after(text)
+    def test_omit_space_after():
+        for text in ["#", " #", "$", "and-", "("]:
+            assert actions.user.omit_space_after(text)
+        for text in ["c#", "C#", "F#", "US$", "hello"]:
+            assert not actions.user.omit_space_after(text)
