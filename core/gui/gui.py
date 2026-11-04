@@ -276,7 +276,7 @@ async def _add_headers_to_table(table, headers):
     return header
 
 
-async def _render_table_body(header, row_height, render_row, table_info):
+async def _render_table_body(header, row_height, table_info):
     rows = table_info.rows
     current_row_index = None
     async with header.table().body() as body:
@@ -291,7 +291,7 @@ async def _render_table_body(header, row_height, render_row, table_info):
                 and settings.get("user.community_ui_table_borders")
             )
             # let the call back decide how to render the row
-            await render_row(row, rows, len(table_info.headers))
+            await render_row_ui(row, rows, len(table_info.headers))
             # if this is the first visible row, update current_row_index
             response = row.response()
             rect = response.rect
@@ -423,7 +423,6 @@ class UIWrapper:
         self,
         table_info,
         row_height=None,
-        render_row=None,
         minimum_column_sizes: list[float] | None = None,
         maximum_height=None,
         id_salt=None,
@@ -460,8 +459,6 @@ class UIWrapper:
             id_salt = str(rows)
         if row_height is None:
             row_height = ui.spacing().interact_size.y
-        if render_row is None:
-            render_row = render_row_ui
 
         async with ui.scope() as scope, scope.style_mut() as style:
             # make scrollbar always visible when a scroll area is needed
@@ -481,7 +478,7 @@ class UIWrapper:
 
             header = await _add_headers_to_table(table, headers)
             current_row_index = await _render_table_body(
-                header, row_height, render_row, table_info
+                header, row_height, table_info
             )
 
             # update the scroller's understanding of the scroll area location
