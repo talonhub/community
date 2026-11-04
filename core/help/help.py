@@ -175,7 +175,7 @@ def update_operators_text():
         names_with_prefix = _compute_operator_list_names_with_prefixes()
 
         # Fill in the table by iterating over the operator lists
-        table = Table(OPERATORS_MAX_COLUMN_LENGTH)
+        table = Table([""]*2, OPERATORS_MAX_COLUMN_LENGTH)
         has_operator_without_text_implementation = False
         for name, prefix in names_with_prefix:
             operators_list = actions.user.talon_get_active_registry_list(
@@ -239,7 +239,6 @@ async def gui_operators(ui, ui_wrapper):
         minimum_column_sizes = update_minimum_column_sizes(operators_text, ui_wrapper)
 
         await ui_wrapper.render_table(
-            headers=["", ""],
             table=operators_text,
             maximum_height=maximum_height,
             row_height=row_size,
@@ -756,7 +755,8 @@ async def gui_list_help(ui, ui_wrapper):
 
     # get the list
     talon_list = actions.user.talon_get_active_registry_list(selected_list)
-    table = Table(MAX_COLUMN_LENGTH_FOR_HELP_LIST)
+    headers = [LIST_KEY_HEADER, LIST_VALUE_HEADER]
+    table = Table(headers, MAX_COLUMN_LENGTH_FOR_HELP_LIST)
     table.add_text_rows(list(talon_list.items()))
     minimum_column_sizes = update_minimum_column_sizes(table, ui_wrapper)
 
@@ -764,7 +764,6 @@ async def gui_list_help(ui, ui_wrapper):
     if table.has_rows():
         headers = [LIST_KEY_HEADER, LIST_VALUE_HEADER]
         await ui_wrapper.render_table(
-            headers,
             table,
             maximum_height=maximum_height,
             row_height=row_size,

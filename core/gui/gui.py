@@ -207,12 +207,15 @@ class TextRow(Row):
         return TextRow._split_across_rows(column_lines, True, self.rich_text_functions)
 
 
+TABLE_HEADER_SIZE = 20
+
 class Table:
     """Helps manage row creation and normalization"""
 
-    def __init__(self, max_column_length: int | None):
+    def __init__(self, headers: list[str], max_column_length: int | None):
         self.rows: list[Row] = []
         self.max_column_length = max_column_length
+        self.headers = headers
 
     def add_row(self, row: Row):
         rows = row.split_lines()
@@ -237,12 +240,16 @@ class Table:
         return len(self.rows)
 
     def get_max_column_size(self, column_number, ui_wrapper) -> float:
-        return max(
+        max_ordinary_column_width = max(
             0
             if r.get_num_columns() <= column_number
             else r.get_column_size(column_number, ui_wrapper)
             for r in self.rows
         )
+        header_font_id = egui.FontId(TABLE_HEADER_SIZE, egui.FontFamily.Proportional)
+        header = self.headers[column_number]
+        header_width = ui_wrapper.compute_text_width(header, font_id=header_font_id)
+        return max(max_ordinary_column_width, header_width)
 
     def get_max_column_sizes(self, ui_wrapper) -> list[float]:
         num_columns = max(r.get_num_columns() for r in self.rows)
@@ -321,7 +328,6 @@ class UIWrapper:
 
     async def render_table(
         self,
-        headers,
         table,
         row_height=None,
         render_row=None,
@@ -333,7 +339,6 @@ class UIWrapper:
         minimum_width=None,
     ):
         """Render a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
-        headers: the headers to render at the top of the table. The length of the headers should equal the column size of the rows.
         table: provides the rows to render in the table.
         row_height: each row should be at most this big.
         render_row: a callback for rendering the row.
@@ -350,6 +355,7 @@ class UIWrapper:
                 ui.add_space(sum(minimum_column_sizes))
 
         rows = table.rows
+        headers = table.headers
 
         # use defaults when needed
         if id_salt is None:
@@ -399,7 +405,7 @@ class UIWrapper:
                         size = minimum_column_sizes[i]
                     else:
                         size = 0
-                    table = table.column(egui.Column.auto().at_least(size).clip(True))
+                    table = table.column(egui.Column.exact(size).clip(True))
                 else:
                     table = table.column(
                         egui.Column.remainder()
@@ -412,7 +418,7 @@ class UIWrapper:
                 table = table.scroll_to_row(target_row, egui.Align.TOP)
 
             # add the headers
-            header_size = 20 if any(headers) else 0
+            header_size = TABLE_HEADER_SIZE if any(headers) else 0
 
             async with table.header(header_size) as header:
                 for h in headers:
