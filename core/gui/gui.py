@@ -328,11 +328,11 @@ class UIWrapper:
         ui = self._ui(ui)
         scroll_style = ui.spacing().scroll
         return (
-                    scroll_style.bar_width
-                    + scroll_style.bar_inner_margin
-                    + scroll_style.bar_outer_margin
-                    + scroll_style.content_margin.right
-                )
+            scroll_style.bar_width
+            + scroll_style.bar_inner_margin
+            + scroll_style.bar_outer_margin
+            + scroll_style.content_margin.right
+        )
 
     async def render_table(
         self,
