@@ -1,4 +1,4 @@
-list: user.unix_arguments
+list: user.unix_utility
 -
 
 force
