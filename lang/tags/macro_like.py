@@ -41,10 +41,8 @@ class Actions:
     def code_insert_macro_like(text: str, selection: str):
         """
         Inserts a macro-like derived from the value portion of a spoken form-value pair in the capture <user.code_macro_like>.
-        This is achieved by parsing the value into a name and two delimiters, or into either a basic form macro-like or a snippet insertion.
-            The spoken form-value pair `"example macro": "example_macro"` either resolves to a snippet insertion
-            if `example_macro` exactly matches a snippet name, or to a basic (one-to-one) insertion otherwise.
-
+        This is achieved by parsing the value into a name and two delimiters, or into a basic form macro-like.
+        The spoken form-value pair `"example macro": "example_macro"` resolves to a basic no delimiter insertion.
             The spoken form-value `"other example macro": "other_example,<,>"` resolves to an insertion of `other_example<>`
             with the cursor positioned between the two delimiters (`<` and `>`) if selection is nil or empty, or with
             the delimiters wrapping selection if selection has a coherent value.
@@ -57,11 +55,8 @@ class Actions:
             raise ValueError("Missing macro-like definition for given spoken form")
         if len(values) == 1:
             # no delimiters defined
-            if values[0] in actions.users.get_snippet_names():
-                actions.user.insert_snippet_by_name(values[0])
-            else:
-                # macro uses a basic insertion
-                actions.user.paste(values[0])
+            # macro uses a basic insertion
+            actions.user.paste(values[0])
         elif len(values) == 2:
             # missing right delimiter
             raise ValueError(
