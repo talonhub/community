@@ -33,6 +33,7 @@ VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
+TABLE_HEADER_SIZE = 20
 
 
 def wrap_with_subsequent_indent(text, width):
@@ -205,9 +206,6 @@ class TextRow(Row):
     def split_lines(self) -> list:
         column_lines = [c.splitlines() for c in self.columns]
         return TextRow._split_across_rows(column_lines, True, self.rich_text_functions)
-
-
-TABLE_HEADER_SIZE = 20
 
 
 class Table:
