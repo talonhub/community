@@ -401,7 +401,7 @@ class UIWrapper:
             if minimum_width:
                 # the width needs to be reduced by the size of the scroll bar to make room for it
                 minimum_width -= self.get_scrollbar_width(ui)
-                
+
             # if minimum column sizes are available and the sum is less than the minimum width
             # scale them to fill the width
             if minimum_column_sizes and minimum_width:
