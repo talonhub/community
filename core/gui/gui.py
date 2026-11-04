@@ -247,9 +247,8 @@ class Table:
             else r.get_column_size(column_number, ui_wrapper)
             for r in self.rows
         )
-        header_font_id = egui.FontId(TABLE_HEADER_SIZE, egui.FontFamily.Proportional)
         header = self.headers[column_number]
-        header_width = ui_wrapper.compute_text_width(header, font_id=header_font_id)
+        header_width = ui_wrapper.compute_text_width(header)
         return max(max_ordinary_column_width, header_width)
 
     def get_max_column_sizes(self, ui_wrapper) -> list[float]:
