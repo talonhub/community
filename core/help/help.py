@@ -247,7 +247,7 @@ async def gui_operators(ui, ui_wrapper):
             minimum_column_sizes=update_minimum_column_sizes(
                 operators_text, ui_wrapper
             ),
-            minimum_width=ui.available_width(),
+            minimum_width=ui_wrapper.get_remaining_width_excluding_margin(),
         )
 
     ui_wrapper.spacing()
@@ -771,7 +771,7 @@ async def gui_list_help(ui, ui_wrapper):
             id_salt="help_list",
             scroller=page_scroller,
             minimum_column_sizes=update_minimum_column_sizes(table, ui_wrapper),
-            minimum_width=ui.available_width(),
+            minimum_width=ui_wrapper.get_remaining_width_excluding_margin(),
         )
 
     ui_wrapper.spacing()

@@ -317,6 +317,10 @@ class UIWrapper:
         ui = self._ui(ui)
         ui.add_space(compute_text_size())
 
+    def get_remaining_width_excluding_margin(self, ui=None):
+        ui = self._ui(ui)
+        return max(ui.available_width() - INNER_MARGIN, 0)
+
     async def render_table(
         self,
         headers,
