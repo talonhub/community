@@ -298,14 +298,12 @@ class UIWrapper:
         if subtitle:
             ui.strong(subtitle)
         ui.separator()
-        ui.add_space(8)
 
     def header(self, text, ui=None):
         """Render a header"""
         ui = self._ui(ui)
         header = egui.RichText(text).size(compute_text_size() * 1.5).strong()
         ui.label(header)
-        ui.add_space(8)
 
     def button(self, text, ui=None) -> bool:
         """Render a button and return True if the button was clicked this frame"""
