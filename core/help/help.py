@@ -239,7 +239,7 @@ async def gui_operators(ui, ui_wrapper):
         minimum_column_sizes = update_minimum_column_sizes(operators_text, ui_wrapper)
 
         await ui_wrapper.render_table(
-            table=operators_text,
+            table_info=operators_text,
             maximum_height=maximum_height,
             row_height=row_size,
             id_salt="help_operators",

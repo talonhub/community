@@ -259,13 +259,14 @@ def _create_table(ui, id_salt, maximum_height):
         maximum_height = ui.available_height()
     return (
         egui.TableBuilder(ui)
-        .cell_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(False))
+        .cell_layout(
+            egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(False)
+        )
         .min_scrolled_height(0.0)
         .max_scroll_height(maximum_height)
         .animate_scrolling(False)
         .id_salt(id_salt)
     )
-
 
 async def _add_headers_to_table(table, headers):
     header_size = TABLE_HEADER_SIZE if any(headers) else 0
@@ -275,8 +276,8 @@ async def _add_headers_to_table(table, headers):
                 header_ui.strong(h)
     return header
 
-
-async def _render_table_body(header, row_height, rows, render_row, headers):
+async def _render_table_body(header, row_height, render_row, table_info):
+    rows = table_info.rows
     current_row_index = None
     async with header.table().body() as body:
         # track the top of the rectangle to help determine the first visible row
@@ -290,7 +291,7 @@ async def _render_table_body(header, row_height, rows, render_row, headers):
                 and settings.get("user.community_ui_table_borders")
             )
             # let the call back decide how to render the row
-            await render_row(row, rows, len(headers))
+            await render_row(row, rows, len(table_info.headers))
             # if this is the first visible row, update current_row_index
             response = row.response()
             rect = response.rect
@@ -298,7 +299,6 @@ async def _render_table_body(header, row_height, rows, render_row, headers):
             if current_row_index is None and top >= 0:
                 current_row_index = row.index()
     return current_row_index
-
 
 class UIWrapper:
     """Provides helper methods for rendering widgets on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
@@ -380,9 +380,8 @@ class UIWrapper:
             + scroll_style.content_margin.right
         )
 
-    def _size_table_columns(
-        self, minimum_width, minimum_column_sizes, headers, table, ui=None
-    ):
+
+    def _size_table_columns(self, minimum_width, minimum_column_sizes, headers, table, ui=None):
         ui = self._ui(ui)
 
         if minimum_width:
@@ -420,7 +419,7 @@ class UIWrapper:
 
     async def render_table(
         self,
-        table,
+        table_info,
         row_height=None,
         render_row=None,
         minimum_column_sizes: list[float] | None = None,
@@ -451,8 +450,8 @@ class UIWrapper:
             async with ui.horizontal():
                 ui.add_space(padding_size)
 
-        rows = table.rows
-        headers = table.headers
+        rows = table_info.rows
+        headers = table_info.headers
 
         # use defaults when needed
         if id_salt is None:
@@ -469,9 +468,7 @@ class UIWrapper:
             style.spacing = spacing
 
             table = _create_table(ui, id_salt, maximum_height)
-            table = self._size_table_columns(
-                minimum_width, minimum_column_sizes, headers, table, ui
-            )
+            table = self._size_table_columns(minimum_width, minimum_column_sizes, headers, table, ui)
 
             # scroll programmatically if needed
             if scroller and scroller.is_scrolling():
@@ -479,9 +476,7 @@ class UIWrapper:
                 table = table.scroll_to_row(target_row, egui.Align.TOP)
 
             header = await _add_headers_to_table(table, headers)
-            current_row_index = await _render_table_body(
-                header, row_height, rows, render_row, headers
-            )
+            current_row_index = await _render_table_body(header, row_height, render_row, table_info)
 
             # update the scroller's understanding of the scroll area location
             if (
