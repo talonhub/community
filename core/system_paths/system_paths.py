@@ -49,7 +49,7 @@ def on_ready():
                 try:
                     path, value_type = winreg.QueryValueEx(key, value_name)
                     assert value_type == winreg.REG_EXPAND_SZ
-                except (FileNotFoundError, AssertionError):
+                except FileNotFoundError, AssertionError:
                     path = fallback
                 return Path(os.path.expandvars(path))
 
