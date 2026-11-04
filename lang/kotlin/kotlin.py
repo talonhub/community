@@ -54,6 +54,7 @@ operators = Operators(
     ASSIGNMENT_DIVISION=" /= ",
     ASSIGNMENT_MODULO=" %= ",
     ASSIGNMENT_INCREMENT="++",
+    ASSIGNMENT_DECREMENT="--",
     ASSIGNMENT_BITWISE_LEFT_SHIFT=" <<= ",
     ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     # code_operators_bitwise
