@@ -301,6 +301,17 @@ async def _render_table_body(header, row_height, table_info):
     return current_row_index
 
 
+async def _pad_enough_width_for_table(ui: egui.Ui, minimum_column_sizes, minimum_width):
+    padding_size = 0
+    if minimum_column_sizes:
+        padding_size = sum(minimum_column_sizes)
+    if minimum_width:
+        padding_size = max(padding_size, padding_size)
+    if padding_size:
+        async with ui.horizontal():
+            ui.add_space(padding_size)
+
+
 class UIWrapper:
     """Provides helper methods for rendering widgets on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
 
@@ -442,14 +453,7 @@ class UIWrapper:
         """
         ui = self._ui(ui)
 
-        padding_size = 0
-        if minimum_column_sizes:
-            padding_size = sum(minimum_column_sizes)
-        if minimum_width:
-            padding_size = max(padding_size, padding_size)
-        if padding_size:
-            async with ui.horizontal():
-                ui.add_space(padding_size)
+        await _pad_enough_width_for_table(ui, minimum_column_sizes, minimum_width)
 
         rows = table_info.rows
         headers = table_info.headers
