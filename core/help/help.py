@@ -175,7 +175,7 @@ def update_operators_text():
         names_with_prefix = _compute_operator_list_names_with_prefixes()
 
         # Fill in the table by iterating over the operator lists
-        table = Table([""]*2, OPERATORS_MAX_COLUMN_LENGTH)
+        table = Table([""] * 2, OPERATORS_MAX_COLUMN_LENGTH)
         has_operator_without_text_implementation = False
         for name, prefix in names_with_prefix:
             operators_list = actions.user.talon_get_active_registry_list(

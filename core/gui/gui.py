@@ -209,6 +209,7 @@ class TextRow(Row):
 
 TABLE_HEADER_SIZE = 20
 
+
 class Table:
     """Helps manage row creation and normalization"""
 
