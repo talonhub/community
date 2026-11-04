@@ -344,8 +344,8 @@ class UIWrapper:
         minimum_width: make the table at least this wide
         """
         ui = self._ui(ui)
+
         if minimum_column_sizes:
-            ui = self._ui(ui)
             async with ui.horizontal():
                 ui.add_space(sum(minimum_column_sizes))
 
