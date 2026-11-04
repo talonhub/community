@@ -236,12 +236,9 @@ async def gui_operators(ui, ui_wrapper):
         maximum_height = compute_table_height(
             row_size, ui_wrapper.get_item_spacing(), page_scroller.page_size
         )
-        minimum_column_sizes=update_minimum_column_sizes(
-                operators_text, ui_wrapper
-            )
+        minimum_column_sizes = update_minimum_column_sizes(operators_text, ui_wrapper)
         async with ui.horizontal():
             ui.add_space(sum(minimum_column_sizes))
-
 
         await ui_wrapper.render_table(
             headers=["", ""],
@@ -764,7 +761,7 @@ async def gui_list_help(ui, ui_wrapper):
     table = Table(MAX_COLUMN_LENGTH_FOR_HELP_LIST)
     table.add_text_rows(list(talon_list.items()))
 
-    minimum_column_sizes=update_minimum_column_sizes(table, ui_wrapper)
+    minimum_column_sizes = update_minimum_column_sizes(table, ui_wrapper)
     async with ui.horizontal():
         ui.add_space(sum(minimum_column_sizes))
 
