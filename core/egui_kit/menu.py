@@ -38,8 +38,12 @@ class MenuItem:
         keep_open: bool = False,
         kind: str = "item",
         icon=None,
+        mark: str | None = None,
     ):
         self.label = label
+        # Shown in the gutter in place of a number (e.g. a window's letter); such an
+        # item has no number.
+        self.mark = mark
         # "item"; "heading" (a category) or "separator", which do nothing.
         self.kind = kind
         # Something the tool's `icon_texture` turns into a texture for the icon column.
@@ -81,8 +85,8 @@ def sections(*groups: list[MenuItem]) -> list[MenuItem]:
 
 
 def numbered(item: MenuItem) -> bool:
-    """Whether an item gets a number: enabled ones, except going back."""
-    return item.enabled and item.page != "main"
+    """Whether an item gets a number: enabled ones, except going back and marked ones."""
+    return item.enabled and item.page != "main" and item.mark is None
 
 
 def numbers(items: list[MenuItem]) -> list[int | None]:
@@ -251,9 +255,10 @@ def draw_menu(
                 response.on_hover_text(tips.get(glyph, glyph))
             if state.highlight == i or over:
                 widgets.paint_glyph(painter, kit, button, glyph, over)
-        # Numbered for voice and digit keys, small and grey in the gutter.
-        if nums[i]:
-            painter.text(egui.Pos2(row.min.x + 22, row.center().y), egui.Align2.RIGHT_CENTER, str(nums[i]), egui.FontId.proportional(12.0), t.text_muted)
+        # Numbered (or marked) for voice and digit keys, small and grey in the gutter.
+        gutter = item.mark or nums[i]
+        if gutter:
+            painter.text(egui.Pos2(row.min.x + 22, row.center().y), egui.Align2.RIGHT_CENTER, str(gutter), egui.FontId.proportional(12.0), t.text_muted)
         texture = icon_texture(ui, item.icon) if item.icon is not None and icon_texture is not None else None
         if texture is not None:
             icon_rect = egui.Rect.from_min_size(egui.Pos2(row.min.x + 28, row.center().y - ICON / 2), egui.Vec2(ICON, ICON))

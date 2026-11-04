@@ -8,7 +8,7 @@ that declares anything to Talon.
 import egui
 from talon import Module, app
 
-from . import grid, menu, native, table, widgets
+from . import grid, menu, native, shortcuts, table, widgets
 from .a11y import dump_uia
 from .geom import P, R
 from .host import HostWindow
@@ -219,6 +219,37 @@ class Gallery:
             self.selected_row = result.clicked
 
         self.draw_step5(ui, kit, col2, full.min.y + 520)
+        self.draw_shortcuts(ui, kit, x + 405, full.min.y + 150, 190)
+
+    def draw_shortcuts(self, ui, kit, x, y, w):
+        """Key caps: single keys, combinations, a wrapping legend and a cheat sheet."""
+        painter = ui.painter()
+        widgets.section_label(painter, kit, x, y, "Keyboard shortcuts")
+        y += 22
+        for row in (("escape", "enter", "a", "f5", "a-z"), ("ctrl+shift+p", "up down")):
+            bx = x
+            for keys in row:
+                bx = shortcuts.paint_keys(painter, kit, bx, y + 10, keys) + 12
+            y += 30
+        y += 6
+        hints = [
+            shortcuts.Shortcut("up down", "Move"),
+            shortcuts.Shortcut("enter", "Pick"),
+            shortcuts.Shortcut("right", "Open"),
+            shortcuts.Shortcut("left backspace", "Back"),
+            shortcuts.Shortcut("escape", "Close"),
+            shortcuts.Shortcut("a-z", "Window"),
+        ]
+        card = R(x, y, w, shortcuts.legend_height(painter, hints, w - 20) + 12)
+        widgets.card(painter, kit, card)
+        y = shortcuts.legend(painter, kit, x + 10, y + 6, w - 20, hints) + 18
+        sheet = [
+            shortcuts.Shortcut("ctrl+f", "Find"),
+            shortcuts.Shortcut("ctrl+shift+p", "Palette"),
+            shortcuts.Shortcut("pageup pagedown", "Page"),
+            shortcuts.Shortcut("alt+f4", "Close"),
+        ]
+        shortcuts.shortcut_list(painter, kit, x, y, w, sheet)
 
     def draw_step5(self, ui, kit, x, y):
         """The search box, a pill row, badges and an index strip."""
