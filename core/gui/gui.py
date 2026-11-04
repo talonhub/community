@@ -377,7 +377,12 @@ class UIWrapper:
                 total_width = sum(minimum_column_sizes)
                 # the width needs to be reduced by the size of the scroll bar to make room for it
                 scroll_style = ui.spacing().scroll
-                minimum_width -= scroll_style.bar_width + scroll_style.bar_inner_margin + scroll_style.bar_outer_margin + scroll_style.content_margin.right
+                minimum_width -= (
+                    scroll_style.bar_width
+                    + scroll_style.bar_inner_margin
+                    + scroll_style.bar_outer_margin
+                    + scroll_style.content_margin.right
+                )
                 if total_width < minimum_width:
                     minimum_column_sizes = [
                         (s / total_width) * minimum_width for s in minimum_column_sizes
