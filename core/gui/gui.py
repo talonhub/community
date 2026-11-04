@@ -358,9 +358,14 @@ class UIWrapper:
         """
         ui = self._ui(ui)
 
+        padding_size = 0
         if minimum_column_sizes:
+            padding_size = sum(minimum_column_sizes)
+        if minimum_width:
+            padding_size = max(padding_size, padding_size)
+        if padding_size:
             async with ui.horizontal():
-                ui.add_space(sum(minimum_column_sizes))
+                ui.add_space(padding_size)
 
         rows = table.rows
         headers = table.headers
@@ -393,27 +398,34 @@ class UIWrapper:
                 .id_salt(id_salt)
             )
 
+            if minimum_width:
+                # the width needs to be reduced by the size of the scroll bar to make room for it
+                minimum_width -= self.get_scrollbar_width(ui)
+                
             # if minimum column sizes are available and the sum is less than the minimum width
             # scale them to fill the width
             if minimum_column_sizes and minimum_width:
                 total_width = sum(minimum_column_sizes)
-                # the width needs to be reduced by the size of the scroll bar to make room for it
-                minimum_width -= self.get_scrollbar_width(ui)
                 if total_width < minimum_width:
                     minimum_column_sizes = [
                         (s / total_width) * minimum_width for s in minimum_column_sizes
                     ]
-            for i in range(len(headers)):
-                if minimum_column_sizes:
-                    if i < len(minimum_column_sizes):
-                        size = minimum_column_sizes[i]
-                    else:
-                        size = 0
-                    table = table.column(egui.Column.exact(size).clip(True))
-                else:
+            if minimum_column_sizes:
+                for i in range(len(headers)):
+                    if minimum_column_sizes:
+                        if i < len(minimum_column_sizes):
+                            size = minimum_column_sizes[i]
+                        else:
+                            size = 0
+                        table = table.column(egui.Column.exact(size).clip(True))
+            else:
+                available_width = ui.available_width()
+                if minimum_width:
+                    available_width = max(available_width, minimum_width)
+                for _ in range(len(headers)):
                     table = table.column(
                         egui.Column.remainder()
-                        .at_most(ui.available_width() / len(headers))
+                        .at_least(available_width / len(headers))
                         .clip(True)
                     )
             # scroll programmatically if needed
