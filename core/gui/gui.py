@@ -382,7 +382,9 @@ class UIWrapper:
                 .animate_scrolling(False)
                 .id_salt(id_salt)
             )
-            # set column sizes
+            
+            # if minimum column sizes are available and the sum is less than the minimum width
+            # scale them to fill the width
             if minimum_column_sizes and minimum_width:
                 total_width = sum(minimum_column_sizes)
                 # the width needs to be reduced by the size of the scroll bar to make room for it
