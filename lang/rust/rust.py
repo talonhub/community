@@ -205,6 +205,7 @@ operators = Operators(
     MATH_AND=" && ",
     MATH_OR=" || ",
     ASSIGNMENT_INCREMENT=" += 1",
+    ASSIGNMENT_DECREMENT=" -= 1",
     # code_operators_pointer
     POINTER_INDIRECTION="*",
     POINTER_ADDRESS_OF="&",
