@@ -1,4 +1,4 @@
-list: user.unix_utility
+list: user.unix_argument
 -
 
 force
@@ -6,7 +6,7 @@ help
 
 list
 
-set-upstream, set up stream
+profile startup: prof-startup
 
 verbose
 version
