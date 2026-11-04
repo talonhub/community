@@ -382,7 +382,7 @@ class UIWrapper:
                 .animate_scrolling(False)
                 .id_salt(id_salt)
             )
-            
+
             # if minimum column sizes are available and the sum is less than the minimum width
             # scale them to fill the width
             if minimum_column_sizes and minimum_width:
