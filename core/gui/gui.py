@@ -477,9 +477,7 @@ class UIWrapper:
                 table = table.scroll_to_row(target_row, egui.Align.TOP)
 
             header = await _add_headers_to_table(table, headers)
-            current_row_index = await _render_table_body(
-                header, row_height, table_info
-            )
+            current_row_index = await _render_table_body(header, row_height, table_info)
 
             # update the scroller's understanding of the scroll area location
             if (
