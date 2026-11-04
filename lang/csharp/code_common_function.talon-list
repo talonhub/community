@@ -2,6 +2,5 @@ list: user.code_common_function
 code.language: csharp
 -
 
-integer: int.TryParse
-print: Console.WriteLine
-string: .ToString
+integer: "int.TryParse"
+print: "Console.WriteLine"

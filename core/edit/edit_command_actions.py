@@ -1,6 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Union
+from typing import Optional, Union
 
 from talon import Module, actions
 
@@ -123,6 +123,6 @@ class Actions:
             case _:
                 raise ValueError(f"Unknown edit action: {action_type}")
 
-    def get_simple_edit_action_callback(action_type: str) -> Callable | None:
+    def get_simple_edit_action_callback(action_type: str) -> Optional[Callable]:
         """Convert a edit action type created from a string into its associated Callback"""
         return simple_action_callbacks.get(action_type)

@@ -182,14 +182,6 @@ all_traits = {
 }
 
 
-# tag: libraries
-ctx.lists["user.code_libraries"] = {
-    "eye oh": "std::io",
-    "file system": "std::fs",
-    "envy": "std::env",
-    "collections": "std::collections",
-}
-
 # tag: functions_common
 ctx.lists["user.code_common_function"] = {
     "drop": "drop",
@@ -265,6 +257,7 @@ operators = Operators(
     MATH_AND=" && ",
     MATH_OR=" || ",
     ASSIGNMENT_INCREMENT=" += 1",
+    ASSIGNMENT_DECREMENT=" -= 1",
     # code_operators_pointer
     POINTER_INDIRECTION="*",
     POINTER_ADDRESS_OF="&",
@@ -392,6 +385,6 @@ def code_insert_function_or_macro(
 RT = TypeVar("RT")  # return type
 
 
-def repeat_call(n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
+def repeat_call[RT](n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
     for _ in range(n):
         f(*args, **kwargs)

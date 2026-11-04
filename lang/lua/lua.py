@@ -1,3 +1,5 @@
+from typing import Optional
+
 from talon import Context, Module, actions, settings
 
 from ...core.described_functions import (
@@ -18,22 +20,6 @@ mod.setting(
     desc="The default lua version to use. Dictates certain operators",
 )
 mod.tag("stylua", desc="Tag for stylua linting commands")
-
-ctx.lists["user.code_libraries"] = {
-    "bit": "bit",
-    "I O": "io",
-    "string": "string",
-    "U T F eight": "utf8",
-    "table": "table",
-    "math": "math",
-    "O S": "os",
-    "debug": "debug",
-    "L F S": "lfs",
-    "socket": "socket",
-    "H T T P": "http",
-    "web": "http",
-    "jason": "json",
-}
 
 
 @mod.capture(rule="{user.lua_functions}")
@@ -198,7 +184,17 @@ class UserActions:
     # code_libraries
     ##
     def code_insert_library(text: str, selection: str):
-        substitutions = {"1": selection, "0": selection}
+        substitutions = {"1": text, "0": text}
         actions.user.insert_snippet_by_name("importStatement", substitutions)
+
+    ##
+    # comment_block
+    ##
+    def code_comment_block(text: Optional[str] = None):
+        if text is None:
+            substitutions = {}
+        else:
+            substitutions = {"0": text}
+        actions.user.insert_snippet_by_name("commentMultilineBlock", substitutions)
 
     # non-tag related actions

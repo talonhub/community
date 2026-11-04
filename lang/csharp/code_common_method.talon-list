@@ -1,0 +1,40 @@
+list: user.code_common_method
+code.language: csharp
+-
+
+add: Add
+any: Any
+append: Append
+clear: Clear
+clone: Clone
+contains: Contains
+contains key: ContainsKey
+count: Count
+distinct: Distinct
+equals: Equals
+ends with: EndsWith
+first: First
+get hash code: GetHashCode
+get type: GetType
+index of: IndexOf
+join: Join
+last: Last
+last index of: LastIndexOf
+length: Length
+order by: OrderBy
+remove: Remove
+replace: Replace
+select: Select
+size: Size
+split: Split
+starts with: StartsWith
+substring: Substring
+to char array: ToCharArray
+to lower: ToLower
+to string: ToString
+to upper: ToUpper
+trim: Trim
+trim end: TrimEnd
+trim start: TrimStart
+try get value: TryGetValue
+where: Where

@@ -49,7 +49,7 @@ Usages:
 See https://github.com/talonhub/community/issues/940 for original discussion
 """
 
-import datetime
+import datetime as dt
 import os.path
 import warnings
 
@@ -69,7 +69,7 @@ mod.setting(
     "strict_command_deprecation",
     type=bool,
     default=False,
-    desc="Decides if deprecated commands should throw an exception. Setting this to true can help you learn the new replacement commands faster.",
+    desc="Decides if deprecated commands should throw an exception, which stops the commands from running. You might find this helps you learn the new replacement commands faster.",
 )
 
 # Tells us the last time a notification was shown so we can
@@ -103,9 +103,9 @@ def deprecate_notify(id: str, message: str):
     """
 
     maybe_last_shown = notification_last_shown.get(id)
-    now = datetime.datetime.now()
+    now = dt.datetime.now()
     interval = settings.get("user.deprecate_warning_interval_hours")
-    threshold = now - datetime.timedelta(hours=interval)
+    threshold = now - dt.timedelta(hours=interval)
     if maybe_last_shown is not None and maybe_last_shown > threshold:
         return
 

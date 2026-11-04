@@ -25,15 +25,9 @@ tag: user.wsl
 
 if app.platform == "windows":
     import platform
-
-    import win32api
-    import win32con
-    import win32event
+    import winreg
 
     wsl_distros = []
-
-    key_event = None
-    registry_key_handle = None
 
     # we expect the window title to begin with 'WSL:<distro> ' and end with ': <path>'.
     # this can be achieved by setting the window title in your .bashrc (or equivalent)
@@ -53,111 +47,43 @@ if app.platform == "windows":
     wsl_title_regex = re.compile(r"^WSL:([^\s]+)\s*.*@.*:\s*(.*)$")
 
     # prepare flags to use for registry calls
-    registry_access_flags = win32con.KEY_READ
-    # not sure if this check is important...I know the win32con.KEY_WOW64_64KEY value is needed
+    registry_access_flags = winreg.KEY_READ
+    # not sure if this check is important...I know the winreg.KEY_WOW64_64KEY value is needed
     # on my 64-bit windows install, but I don't know what happens on 32-bit installs...so,
     # playing it safe here.
     # https://stackoverflow.com/questions/2208828/detect-64bit-os-windows-in-python/12578715
     if platform.machine().endswith("64"):
-        registry_access_flags = registry_access_flags | win32con.KEY_WOW64_64KEY
-
-    # close registry key, if open
-    def _close_key():
-        global registry_key_handle
-        # print(f"_close_key(): {registry_key_handle}")
-        if registry_key_handle:
-            win32api.RegCloseKey(registry_key_handle)
-            registry_key_handle = None
-
-    # open the registry key containing the list of installed wsl distros
-    def _initialize_key():
-        global key_event, registry_key_handle, registry_access_flags
-
-        try:
-            # make sure the registry key is not currently open
-            if registry_key_handle:
-                _close_key()
-
-            # get an event for monitoring registry updates
-            key_event = win32event.CreateEvent(None, True, True, None)
-            # print(f"KEY_EVENT: {key_event}")
-
-            # open the registry key
-            registry_key_handle = win32api.RegOpenKeyEx(
-                win32con.HKEY_CURRENT_USER,
-                r"SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss",
-                0,
-                registry_access_flags,
-            )
-            # print(f"registry_key_handle: {registry_key_handle}")
-
-            # register for registry change events
-            win32api.RegNotifyChangeKeyValue(
-                registry_key_handle,
-                True,
-                win32api.REG_NOTIFY_CHANGE_LAST_SET,
-                key_event,
-                True,
-            )
-
-            # trigger reading the list for the first time
-            win32event.SetEvent(key_event)
-        except OSError:
-            log_exception(f"[_initialize_key()] {sys.exc_info()[1]}")
+        registry_access_flags = registry_access_flags | winreg.KEY_WOW64_64KEY
 
     # read the list of wsl distros from the registry
     def _update_wsl_distros():
-        global ctx, registry_key_handle, wsl_distros, registry_access_flags
-
-        # make sure registry is open
-        if not registry_key_handle:
-            _initialize_key()
-
-        distro_handle = None
+        global wsl_distros
+        wsl_distros = []
         try:
-            # check for registry changes
-            result = win32event.WaitForSingleObjectEx(key_event, 0, False)
-            # for testing
-            if False:
-                print(f"WAIT - {result=} (looking for 'win32con.WAIT_OBJECT_0')")
-                print(f"WAIT - {win32con.WAIT_OBJECT_0=})")
-                print(f"WAIT - {win32con.WAIT_ABANDONED=})")
-                print(f"WAIT - {win32con.WAIT_TIMEOUT=})")
-            if result == win32con.WAIT_OBJECT_0:
-                # registry has changed since we last read it, load the distros
-                subkeys = win32api.RegEnumKeyEx(registry_key_handle)
-                for subkey in subkeys:
-                    # print(f'{subkey=}')
+            with winreg.OpenKeyEx(
+                winreg.HKEY_CURRENT_USER,
+                r"SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss",
+                0,
+                registry_access_flags,
+            ) as registry_key_handle:
+                # enumerate the subkeys (one per installed distro)
+                subkey_count = winreg.QueryInfoKey(registry_key_handle)[0]
+                for index in range(subkey_count):
+                    subkey = winreg.EnumKey(registry_key_handle, index)
 
-                    distro_handle = win32api.RegOpenKeyEx(
-                        registry_key_handle, subkey[0], 0, registry_access_flags
-                    )
-                    # print(f"{distro_handle=}")
+                    with winreg.OpenKeyEx(
+                        registry_key_handle, subkey, 0, registry_access_flags
+                    ) as distro_handle:
+                        distro_name = winreg.QueryValueEx(
+                            distro_handle, "DistributionName"
+                        )[0]
 
-                    distro_name = win32api.RegQueryValueEx(
-                        distro_handle, "DistributionName"
-                    )[0]
-                    # print(f'{distro_name=}')
-                    wsl_distros.append(distro_name)
+                        wsl_distros.append(distro_name)
 
-                    win32api.RegCloseKey(distro_handle)
+            # print(f'_update_wsl_distros discovered {len(wsl_distros)} distros: {wsl_distros}')
 
-                # reset the event, will be set by system if reg key changes
-                win32event.ResetEvent(key_event)
-
-            elif result != win32con.WAIT_TIMEOUT:
-                # something unexpected happened
-                error = win32api.GetLastError()
-                _close_key()
-                raise Exception(
-                    f"failed while checking for wsl registry updates: {result=}: {error=}"
-                )
         except OSError:
-            if distro_handle:
-                win32api.RegCloseKey(distro_handle)
             log_exception(f"[_update_wsl_distros()] {sys.exc_info()[1]}")
-
-        # print(f'{wsl_distros=}')
 
     def _parse_win_title():
         path = ui.active_window().title

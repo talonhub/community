@@ -8,6 +8,7 @@ ctx.matches = r"""
 code.language: csharp
 """
 
+
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=create_described_insert_between("[", "]"),
@@ -24,6 +25,7 @@ operators = Operators(
     ASSIGNMENT_BITWISE_OR=" |= ",
     ASSIGNMENT_BITWISE_RIGHT_SHIFT=" >>= ",
     ASSIGNMENT_INCREMENT="++",
+    ASSIGNMENT_DECREMENT="--",
     # code_operators_bitwise
     BITWISE_NOT="~",
     BITWISE_AND=" & ",

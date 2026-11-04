@@ -316,8 +316,10 @@ def apply_formatting(m):
 no_space_after = re.compile(
     r"""
   (?:
-    [\s\-_/#@([{‘“]     # characters that never need space after them
-  | (?<!\w)[$£€¥₩₽₹]    # currency symbols not preceded by a word character
+    [\s\-_/@([{‘“]     # characters that never need space after them
+  # currency symbols and hash not preceded by a word character, so a standalone
+  # "#" still glues to the next word ("#talon") but "c#" and "F#" do not.
+  | (?<!\w)[$£€¥₩₽₹#]
   # quotes preceded by beginning of string, space, opening braces, dash, or other quotes
   | (?: ^ | [\s([{\-'"] ) ['"]
   )$""",
@@ -337,36 +339,6 @@ no_space_before = re.compile(
     re.VERBOSE,
 )
 
-
-# # TESTS, uncomment to enable
-# assert actions.user.needs_space_between("a", "break")
-# assert actions.user.needs_space_between("break", "a")
-# assert actions.user.needs_space_between(".", "a")
-# assert actions.user.needs_space_between("said", "'hello")
-# assert actions.user.needs_space_between("hello'", "said")
-# assert actions.user.needs_space_between("hello.", "'John")
-# assert actions.user.needs_space_between("John.'", "They")
-# assert actions.user.needs_space_between("paid", "$50")
-# assert actions.user.needs_space_between("50$", "payment")
-# assert not actions.user.needs_space_between("", "")
-# assert not actions.user.needs_space_between("a", "")
-# assert not actions.user.needs_space_between("a", " ")
-# assert not actions.user.needs_space_between("", "a")
-# assert not actions.user.needs_space_between(" ", "a")
-# assert not actions.user.needs_space_between("a", ",")
-# assert not actions.user.needs_space_between("'", "a")
-# assert not actions.user.needs_space_between("a", "'")
-# assert not actions.user.needs_space_between("and-", "or")
-# assert not actions.user.needs_space_between("mary", "-kate")
-# assert not actions.user.needs_space_between("$", "50")
-# assert not actions.user.needs_space_between("US", "$")
-# assert not actions.user.needs_space_between("(", ")")
-# assert not actions.user.needs_space_between("(", "e.g.")
-# assert not actions.user.needs_space_between("example", ")")
-# assert not actions.user.needs_space_between("example", '".')
-# assert not actions.user.needs_space_between("example", '."')
-# assert not actions.user.needs_space_between("hello'", ".")
-# assert not actions.user.needs_space_between("hello.", "'")
 
 no_cap_after = re.compile(
     r"""(

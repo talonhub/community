@@ -30,6 +30,9 @@ link soft: ln -s
 link: ln
 M D five sum: md5sum
 make dear: mkdir
+mux: tmux
+mux new: tmux new
+mux kill: tmux kill-session -t
 paste
 print format: printf
 work dear: pwd
