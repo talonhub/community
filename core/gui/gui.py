@@ -429,7 +429,7 @@ class UIWrapper:
                     size = minimum_column_sizes[i]
                 else:
                     size = 0
-                    table = table.column(egui.Column.exact(size).clip(True))
+                table = table.column(egui.Column.exact(size).clip(True))
         else:
             # divide the available width equally among the columns
             available_width = ui.available_width()
