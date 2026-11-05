@@ -21,6 +21,8 @@ tag(): user.code_operators_bitwise
 tag(): user.code_operators_math
 tag(): user.code_operators_pointer
 
+tag(): user.code_macro_like
+
 settings():
     user.code_private_function_formatter = "SNAKE_CASE"
     user.code_protected_function_formatter = "SNAKE_CASE"
@@ -91,10 +93,6 @@ returns implemented trait: " -> impl "
 trait {user.code_trait}: insert("{code_trait}")
 implemented trait {user.code_trait}: insert("impl {code_trait}")
 dynamic trait {user.code_trait}: insert("dyn {code_trait}")
-
-## for generic reference of macro
-macro {user.code_macros}: user.code_insert_macro(code_macros, "")
-macro wrap {user.code_macros}: user.code_insert_macro(code_macros, edit.selected_text())
 
 # Turbofish
 turbo fish: user.insert_between("::<", ">")
