@@ -311,12 +311,11 @@ async def _render_table_rows(header, row_height, table_info) -> int | None:
     return current_row_index
 
 
-async def _pad_enough_width_for_table(ui: egui.Ui, minimum_column_sizes):
-    """Add enough horizontal space to render the table. This workarounds the fact that egui extras tables do not always claim enough width for proper auto sizing."""
-    if minimum_column_sizes:
-        padding_size = sum(minimum_column_sizes)
-        async with ui.horizontal():
-            ui.add_space(padding_size)
+async def _pad_enough_width_for_columns(ui: egui.Ui, minimum_column_sizes):
+    """Add enough horizontal space to render the columns. This workarounds the fact that egui extras tables do not always claim enough width for proper auto sizing."""
+    padding_size = sum(minimum_column_sizes)
+    async with ui.horizontal():
+        ui.add_space(padding_size)
 
 
 class UIWrapper:
@@ -462,7 +461,8 @@ class UIWrapper:
         """
         ui = self._ui(ui)
 
-        await _pad_enough_width_for_table(ui, minimum_column_sizes)
+        if minimum_column_sizes:
+            await _pad_enough_width_for_columns(ui, minimum_column_sizes)
 
         rows = table_info.rows
         column_titles = table_info.column_titles
