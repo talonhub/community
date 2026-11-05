@@ -213,7 +213,7 @@ class Table:
 
     def __init__(self, column_titles: list[str], max_column_length: int | None):
         """column_titles: titles for the columns. There should be one title for every column of the table.
-        max_column_length: the maximum character length of the rows"""
+        max_column_length: the maximum character length of the columns"""
         self.rows: list[Row] = []
         self.max_column_length = max_column_length
         self.column_titles = column_titles
