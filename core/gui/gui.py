@@ -461,9 +461,6 @@ class UIWrapper:
         """
         ui = self._ui(ui)
 
-        if minimum_column_sizes:
-            await self._pad_enough_width_for_columns(ui, minimum_column_sizes)
-
         rows = table_info.rows
         column_titles = table_info.column_titles
 
@@ -478,6 +475,9 @@ class UIWrapper:
             spacing = style.spacing
             spacing.scroll = egui.ScrollStyle.solid()
             style.spacing = spacing
+
+            if minimum_column_sizes:
+                await self._pad_enough_width_for_columns(ui, minimum_column_sizes)
 
             table = _create_table(ui, id_salt, maximum_height)
             table = self._size_table_columns(
