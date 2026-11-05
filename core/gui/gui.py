@@ -317,7 +317,7 @@ async def _pad_enough_width_for_table(ui: egui.Ui, minimum_column_sizes, minimum
     if minimum_column_sizes:
         padding_size = sum(minimum_column_sizes)
     if minimum_width:
-        padding_size = max(padding_size, padding_size)
+        padding_size = max(minimum_width, padding_size)
     if padding_size:
         async with ui.horizontal():
             ui.add_space(padding_size)
