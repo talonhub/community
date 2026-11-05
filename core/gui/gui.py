@@ -301,7 +301,6 @@ async def _render_table_rows(header, row_height, table_info) -> int | None:
                 rows[row.index()].should_render_overline()
                 and settings.get("user.community_ui_table_borders")
             )
-            # let the call back decide how to render the row
             await render_row_ui(row, rows, len(table_info.column_titles))
             # if this is the first visible row, update current_row_index
             response = row.response()
