@@ -297,6 +297,7 @@ async def _render_table_rows(header, row_height, table_info) -> int | None:
         # .top() and .bottom() could be swapped according to the egui rectangle API, so taking the minimum is necessary
         body_top = min(body_rect.top(), body_rect.bottom())
         async for row in body.rows(row_height, len(rows)):
+            # render a line above the row when this condition is True
             row.set_overline(
                 rows[row.index()].should_render_overline()
                 and settings.get("user.community_ui_table_borders")
