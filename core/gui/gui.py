@@ -420,7 +420,9 @@ class UIWrapper:
         # size the columns
         if minimum_column_sizes:
             if len(minimum_column_sizes) != len(column_titles):
-                raise ValueError(f"minimum_column_sizes had length {len(minimum_column_sizes)} != {len(column_titles)}, the number of columns")
+                raise ValueError(
+                    f"minimum_column_sizes had length {len(minimum_column_sizes)} != {len(column_titles)}, the number of columns"
+                )
             for size in minimum_column_sizes:
                 table = table.column(egui.Column.exact(size).clip(True))
         else:
