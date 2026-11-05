@@ -426,8 +426,8 @@ class UIWrapper:
                 available_width = max(available_width, minimum_width)
             for _ in range(len(column_titles)):
                 table = table.column(
-                    egui.Column.remainder()
-                    .at_least(available_width / len(column_titles))
+                    egui.Column
+                    .exact(available_width / len(column_titles))
                     .clip(True)
                 )
 
