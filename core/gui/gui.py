@@ -33,7 +33,7 @@ VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
-TABLE_HEADER_SIZE = 20
+TABLE_HEADER_HEIGHT = 20
 
 
 def wrap_with_subsequent_indent(text, width):
@@ -268,8 +268,8 @@ def _create_table(ui, id_salt, maximum_height):
 
 
 async def _add_header_to_table(table, column_titles):
-    header_size = TABLE_HEADER_SIZE if any(column_titles) else 0
-    async with table.header(header_size) as header:
+    header_height = TABLE_HEADER_HEIGHT if any(column_titles) else 0
+    async with table.header(header_height) as header:
         for title in column_titles:
             async with header.col() as column_ui:
                 column_ui.strong(title)
