@@ -212,6 +212,8 @@ class Table:
     """Helps manage row creation and normalization"""
 
     def __init__(self, column_titles: list[str], max_column_length: int | None):
+        """column_titles: titles for the columns. There should be one title for every column of the table. 
+        max_column_length: the maximum character length of the rows"""
         self.rows: list[Row] = []
         self.max_column_length = max_column_length
         self.column_titles = column_titles
@@ -239,17 +241,22 @@ class Table:
         return len(self.rows)
 
     def get_max_column_width(self, column_number, ui_wrapper) -> float:
+        """Compute the max width of any row in this column"""
+        # compute the max width of any row. If a row is empty in this column, treat its width as 0
         max_ordinary_column_width = max(
             0
             if r.get_num_columns() <= column_number
             else r.get_column_width(column_number, ui_wrapper)
             for r in self.rows
         )
+        # compute the width of the column title
         title = self.column_titles[column_number]
         title_width = ui_wrapper.compute_text_width(title)
+        # return the biggest width between them
         return max(max_ordinary_column_width, title_width)
 
     def get_max_column_widths(self, ui_wrapper) -> list[float]:
+        """Returns a list with biggest row width for each column"""
         num_columns = max(r.get_num_columns() for r in self.rows)
         return [self.get_max_column_width(i, ui_wrapper) for i in range(num_columns)]
 
