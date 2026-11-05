@@ -212,7 +212,7 @@ class Table:
     """Helps manage row creation and normalization"""
 
     def __init__(self, column_titles: list[str], max_column_length: int | None):
-        """column_titles: titles for the columns. There should be one title for every column of the table.
+        """column_titles: titles for the columns. There should be one title for every column of the table. 
         max_column_length: the maximum character length of the rows"""
         self.rows: list[Row] = []
         self.max_column_length = max_column_length
@@ -390,6 +390,7 @@ class UIWrapper:
         ui.add_space(compute_text_size())
 
     def get_remaining_width_excluding_margin(self, ui=None):
+        """Compute the amount of width remaining excluding the padding margin"""
         ui = self._ui(ui)
         return max(ui.available_width() - INNER_MARGIN, 0)
 
@@ -457,7 +458,6 @@ class UIWrapper:
         """Render a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
         table_info: provides the rows and column titles to render in the table.
         row_height: each row should be at most this big.
-        render_row: a callback for rendering the row.
         minimum_column_sizes: optional minimum sizes for the columns in pixels. If not provided, the columns evenly divide the ui.
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
