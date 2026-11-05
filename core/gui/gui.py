@@ -212,7 +212,7 @@ class Table:
     """Helps manage row creation and normalization"""
 
     def __init__(self, column_titles: list[str], max_column_length: int | None):
-        """column_titles: titles for the columns. There should be one title for every column of the table. 
+        """column_titles: titles for the columns. There should be one title for every column of the table.
         max_column_length: the maximum character length of the rows"""
         self.rows: list[Row] = []
         self.max_column_length = max_column_length
