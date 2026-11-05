@@ -242,22 +242,23 @@ class Table:
 
     def get_max_column_width(self, column_number, ui_wrapper) -> float:
         """Compute the max width of any row in this column"""
-        # compute the max width of any row. If a row is empty in this column, treat its width as 0
-        max_ordinary_column_width = max(
-            0
-            if r.get_num_columns() <= column_number
-            else r.get_column_width(column_number, ui_wrapper)
-            for r in self.rows
-        )
         # compute the width of the column title
         title = self.column_titles[column_number]
-        title_width = ui_wrapper.compute_text_width(title)
-        # return the biggest width between them
-        return max(max_ordinary_column_width, title_width)
+        width = ui_wrapper.compute_text_width(title)
+        if self.rows:
+            # compute the max width of any row. If a row is empty in this column, treat its width as 0
+            max_ordinary_column_width = max(
+                0
+                if r.get_num_columns() <= column_number
+                else r.get_column_width(column_number, ui_wrapper)
+                for r in self.rows
+            )
+            width = max(width, max_ordinary_column_width)
+        return width
 
     def get_max_column_widths(self, ui_wrapper) -> list[float]:
         """Returns a list with biggest row width for each column"""
-        num_columns = max(r.get_num_columns() for r in self.rows)
+        num_columns = len(self.column_titles)
         return [self.get_max_column_width(i, ui_wrapper) for i in range(num_columns)]
 
 
