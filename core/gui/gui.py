@@ -147,8 +147,8 @@ class Row(ABC):
         """Returns the number of columns"""
 
     @abstractmethod
-    def get_column_size(self, column_number, ui_wrapper) -> float:
-        """Returns the size of the column in pixels"""
+    def get_column_width(self, column_number, ui_wrapper) -> float:
+        """Returns the width of the column in pixels"""
 
 
 class TextRow(Row):
@@ -175,7 +175,7 @@ class TextRow(Row):
     def get_num_columns(self):
         return len(self.columns)
 
-    def get_column_size(self, column_number, ui_wrapper) -> float:
+    def get_column_width(self, column_number, ui_wrapper) -> float:
         column = self.columns[column_number]
         return ui_wrapper.compute_text_width(column)
 
@@ -242,7 +242,7 @@ class Table:
         max_ordinary_column_width = max(
             0
             if r.get_num_columns() <= column_number
-            else r.get_column_size(column_number, ui_wrapper)
+            else r.get_column_width(column_number, ui_wrapper)
             for r in self.rows
         )
         title = self.column_titles[column_number]
