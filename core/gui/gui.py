@@ -211,10 +211,10 @@ class TextRow(Row):
 class Table:
     """Helps manage row creation and normalization"""
 
-    def __init__(self, headers: list[str], max_column_length: int | None):
+    def __init__(self, column_titles: list[str], max_column_length: int | None):
         self.rows: list[Row] = []
         self.max_column_length = max_column_length
-        self.headers = headers
+        self.column_titles = column_titles
 
     def add_row(self, row: Row):
         rows = row.split_lines()
@@ -245,9 +245,9 @@ class Table:
             else r.get_column_size(column_number, ui_wrapper)
             for r in self.rows
         )
-        header = self.headers[column_number]
-        header_width = ui_wrapper.compute_text_width(header)
-        return max(max_ordinary_column_width, header_width)
+        title = self.column_titles[column_number]
+        title_width = ui_wrapper.compute_text_width(title)
+        return max(max_ordinary_column_width, title_width)
 
     def get_max_column_sizes(self, ui_wrapper) -> list[float]:
         num_columns = max(r.get_num_columns() for r in self.rows)
@@ -267,12 +267,12 @@ def _create_table(ui, id_salt, maximum_height):
     )
 
 
-async def _add_headers_to_table(table, headers):
-    header_size = TABLE_HEADER_SIZE if any(headers) else 0
+async def _add_header_to_table(table, column_titles):
+    header_size = TABLE_HEADER_SIZE if any(column_titles) else 0
     async with table.header(header_size) as header:
-        for h in headers:
-            async with header.col() as header_ui:
-                header_ui.strong(h)
+        for title in column_titles:
+            async with header.col() as column_ui:
+                column_ui.strong(title)
     return header
 
 
@@ -291,7 +291,7 @@ async def _render_table_body(header, row_height, table_info):
                 and settings.get("user.community_ui_table_borders")
             )
             # let the call back decide how to render the row
-            await render_row_ui(row, rows, len(table_info.headers))
+            await render_row_ui(row, rows, len(table_info.column_titles))
             # if this is the first visible row, update current_row_index
             response = row.response()
             rect = response.rect
@@ -393,7 +393,7 @@ class UIWrapper:
         )
 
     def _size_table_columns(
-        self, minimum_width, minimum_column_sizes, headers, table, ui=None
+        self, minimum_width, minimum_column_sizes, column_titles, table, ui=None
     ):
         ui = self._ui(ui)
 
@@ -410,7 +410,7 @@ class UIWrapper:
                     (s / total_width) * minimum_width for s in minimum_column_sizes
                 ]
         if minimum_column_sizes:
-            for i in range(len(headers)):
+            for i in range(len(column_titles)):
                 if minimum_column_sizes:
                     if i < len(minimum_column_sizes):
                         size = minimum_column_sizes[i]
@@ -421,10 +421,10 @@ class UIWrapper:
             available_width = ui.available_width()
             if minimum_width:
                 available_width = max(available_width, minimum_width)
-            for _ in range(len(headers)):
+            for _ in range(len(column_titles)):
                 table = table.column(
                     egui.Column.remainder()
-                    .at_least(available_width / len(headers))
+                    .at_least(available_width / len(column_titles))
                     .clip(True)
                 )
 
@@ -456,7 +456,7 @@ class UIWrapper:
         await _pad_enough_width_for_table(ui, minimum_column_sizes, minimum_width)
 
         rows = table_info.rows
-        headers = table_info.headers
+        column_titles = table_info.column_titles
 
         # use defaults when needed
         if id_salt is None:
@@ -472,7 +472,7 @@ class UIWrapper:
 
             table = _create_table(ui, id_salt, maximum_height)
             table = self._size_table_columns(
-                minimum_width, minimum_column_sizes, headers, table, ui
+                minimum_width, minimum_column_sizes, column_titles, table, ui
             )
 
             # scroll programmatically if needed
@@ -480,7 +480,7 @@ class UIWrapper:
                 target_row = scroller.compute_target(len(rows) - 1)
                 table = table.scroll_to_row(target_row, egui.Align.TOP)
 
-            header = await _add_headers_to_table(table, headers)
+            header = await _add_header_to_table(table, column_titles)
             current_row_index = await _render_table_body(header, row_height, table_info)
 
             # update the scroller's understanding of the scroll area location
