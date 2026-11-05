@@ -238,7 +238,7 @@ class Table:
     def __len__(self) -> int:
         return len(self.rows)
 
-    def get_max_column_size(self, column_number, ui_wrapper) -> float:
+    def get_max_column_width(self, column_number, ui_wrapper) -> float:
         max_ordinary_column_width = max(
             0
             if r.get_num_columns() <= column_number
@@ -249,9 +249,9 @@ class Table:
         title_width = ui_wrapper.compute_text_width(title)
         return max(max_ordinary_column_width, title_width)
 
-    def get_max_column_sizes(self, ui_wrapper) -> list[float]:
+    def get_max_column_widths(self, ui_wrapper) -> list[float]:
         num_columns = max(r.get_num_columns() for r in self.rows)
-        return [self.get_max_column_size(i, ui_wrapper) for i in range(num_columns)]
+        return [self.get_max_column_width(i, ui_wrapper) for i in range(num_columns)]
 
 
 def _create_table(ui, id_salt, maximum_height):
