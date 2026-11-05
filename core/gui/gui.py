@@ -257,7 +257,7 @@ class Table:
         return width
 
     def get_max_column_widths(self, ui_wrapper) -> list[float]:
-        """Returns a list with biggest row width for each column"""
+        """Returns a list with the biggest row width for each column"""
         num_columns = len(self.column_titles)
         return [self.get_max_column_width(i, ui_wrapper) for i in range(num_columns)]
 
