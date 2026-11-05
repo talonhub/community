@@ -419,11 +419,9 @@ class UIWrapper:
                 ]
         # size the columns
         if minimum_column_sizes:
-            for i in range(len(column_titles)):
-                if i < len(minimum_column_sizes):
-                    size = minimum_column_sizes[i]
-                else:
-                    size = 0
+            if len(minimum_column_sizes) != len(column_titles):
+                raise ValueError(f"minimum_column_sizes had length {len(minimum_column_sizes)} != {len(column_titles)}, the number of columns")
+            for size in minimum_column_sizes:
                 table = table.column(egui.Column.exact(size).clip(True))
         else:
             # divide the available width equally among the columns
