@@ -294,6 +294,7 @@ async def _render_table_rows(header, row_height, table_info) -> int | None:
         # track the top of the rectangle to help determine the first visible row
         # this still gets called for some rows that are not visible, but those can be filtered out because they are considered above the scroll area
         body_rect = body.max_rect()
+        # .top() and .bottom() could be swapped according to the egui rectangle API, so taking the minimum is necessary
         body_top = min(body_rect.top(), body_rect.bottom())
         async for row in body.rows(row_height, len(rows)):
             # render lines above each row with a value for the first column
