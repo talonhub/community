@@ -17,6 +17,7 @@ mod.list(
     desc="List of function modifiers (e.g. private, async, static)",
 )
 
+
 @mod.capture(rule="{user.code_type}")
 def code_type(m) -> str:
     """Returns a macro name"""
