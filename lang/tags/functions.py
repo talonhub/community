@@ -20,7 +20,7 @@ mod.list(
 
 @mod.capture(rule="{user.code_type}")
 def code_type(m) -> str:
-    """Returns a macro name"""
+    """Returns a type name"""
     return m.code_type
 
 
