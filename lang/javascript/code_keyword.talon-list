@@ -1,0 +1,30 @@
+list: user.code_keyword
+code.language: javascript
+code.language: typescript
+code.language: javascriptreact
+code.language: typescriptreact
+-
+
+a sink: "async "
+await: "await "
+break
+class: "class "
+const: "const "
+continue
+default: "default "
+export: "export "
+false
+function: "function "
+import: "import "
+let: "let "
+new: "new "
+null
+private: "private "
+protected: "protected "
+public: "public "
+return: "return "
+throw: "throw "
+true
+try: "try "
+undefined
+yield: "yield "
