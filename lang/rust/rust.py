@@ -65,14 +65,7 @@ all_traits = {
 }
 
 
-# tag: functions_common
-ctx.lists["user.code_common_function"] = {
-    "drop": "drop",
-    "catch unwind": "catch_unwind",
-    "iterator": "iter",
-    "into iterator": "into_iter",
-    "from iterator": "from_iter",
-}
+l
 
 # rust specific grammar
 ctx.lists["user.code_type_modifier"] = {
