@@ -42,7 +42,6 @@ ctx = Context()
 ctx.matches = r"""
 code.language: rust
 """
-r
 
 # rust specific grammar
 ctx.lists["user.code_type_modifier"] = {
