@@ -103,28 +103,6 @@ all_types = {
     **standard_sync_types,
 }
 
-closure_traits = {
-    "closure": "Fn",
-    "closure once": "FnOnce",
-    "closure mutable": "FnMut",
-}
-
-conversion_traits = {
-    "into": "Into",
-    "from": "From",
-}
-
-iterator_traits = {
-    "iterator": "Iterator",
-}
-
-all_traits = {
-    **closure_traits,
-    **conversion_traits,
-    **iterator_traits,
-}
-
-
 # tag: functions
 ctx.lists["user.code_type"] = all_types
 
@@ -148,8 +126,6 @@ def code_type(m) -> str:
     """Returns a type name"""
     return "".join(m)
 
-
-ctx.lists["user.code_trait"] = all_traits
 
 operators = Operators(
     # code_operators_array
