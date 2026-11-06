@@ -139,7 +139,7 @@ class Actions:
         current_selected = actions.edit.selected_text()
         actions.insert(f"{type}({current_selected})")
 
-    def code_insert_if_statement_with_condition(condition: str):
+    def go_insert_if_statement_with_condition(condition: str):
         """Insert the if statement with the given condition"""
         substitutions = {"1": condition}
         actions.user.insert_snippet_by_name("ifStatement", substitutions)

@@ -31,10 +31,10 @@ declare: " := "
 channel (receive | send) | op channel: " <- "
 
 [state] if (err | error):
-    user.code_insert_if_statement_with_condition("err != nil")
+    user.go_insert_if_statement_with_condition("err != nil")
 
 [state] if not (err | error):
-    user.code_insert_if_statement_with_condition("err == nil")
+    user.go_insert_if_statement_with_condition("err == nil")
 
 cast to <user.code_type>: user.insert_between(user.code_type + "(", ")")
 cast wrap <user.code_type>: user.go_cast_wrap(user.code_type)
