@@ -8,33 +8,6 @@ ctx.matches = r"""
 code.language: elixir
 """
 
-# Elixir keywords and constructs
-ctx.lists["user.code_keyword"] = {
-    "def": "def ",
-    "def p": "defp ",
-    "def module": "defmodule ",
-    "do": "do ",
-    "end": "end",
-    "if": "if ",
-    "else": "else ",
-    "cond": "cond ",
-    "case": "case ",
-    "when": "when ",
-    "f n": "fn ",
-    "receive": "receive ",
-    "after": "after ",
-    "try": "try ",
-    "catch": "catch ",
-    "rescue": "rescue ",
-    "raise": "raise ",
-    "with": "with ",
-    "unless": "unless ",
-    "import": "import ",
-    "alias": "alias ",
-    "require": "require ",
-    "use": "use ",
-}
-
 operators = Operators(
     LAMBDA="->",
     ASSIGNMENT=" = ",
