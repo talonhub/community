@@ -12,27 +12,6 @@ code.language: javascriptreact
 code.language: typescriptreact
 """
 
-ctx.lists["user.code_common_method"] = {
-    "catch": "catch",
-    "concat": "concat",
-    "filter": "filter",
-    "finally": "finally",
-    "find": "find",
-    "flat map": "flatMap",
-    "for each": "forEach",
-    "join": "join",
-    "includes": "includes",
-    "map": "map",
-    "pop": "pop",
-    "push": "push",
-    "reduce": "reduce",
-    "slice": "slice",
-    "some": "some",
-    "split": "split",
-    "substring": "substring",
-    "then": "then",
-}
-
 ctx.lists["user.code_keyword"] = {
     "a sink": "async ",
     "await": "await ",
