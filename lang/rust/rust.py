@@ -65,8 +65,6 @@ all_traits = {
 }
 
 
-l
-
 # rust specific grammar
 ctx.lists["user.code_type_modifier"] = {
     "mutable": "mut ",
