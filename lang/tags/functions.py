@@ -17,13 +17,6 @@ mod.list(
     desc="List of function modifiers (e.g. private, async, static)",
 )
 
-ctx.lists["user.code_function_modifier"] = {
-    "pub": "public",
-    "pro": "protected",
-    "private": "private",
-    "static": "static",
-}
-
 
 @mod.capture(rule="{user.code_type}")
 def code_type(m) -> str:
