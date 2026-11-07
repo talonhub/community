@@ -28,7 +28,7 @@ settings():
 state return (null | nil): "return nil"
 state return true: "return true"
 state return false: "return false"
-state return (table | dick): user.insert_between("return {", "}")
+state return (table | dict): user.insert_between("return {", "}")
 state append string: " .. "
 
 state label <user.text>:
