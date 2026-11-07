@@ -1,0 +1,35 @@
+Option, Spoken form
+--add, add
+--allow-backwards, allow backwards
+--clear, clear
+--colocate, colocate
+--destination, destination
+--dry-run, dry run
+--from, from
+--ignore-immutable, ignore immutable
+--ignore-working-copy, ignore working copy
+--insert-after, insert after
+--insert-before, insert before
+--interactive, interactive
+--into, into
+-h, help
+--help, more help
+--limit, limit
+--no-edit, no edit
+--no-pager, no pager
+--patch, patch
+--quiet, quiet
+--remove, remove
+--repo, repo
+--repository, repository
+--reset-author, reset author
+--reversed, reversed
+-r, revision
+-r, revisions
+--skip-empty, skip empty
+--source, source
+--stdin, standard in
+--summary, summary
+--to, to
+--user, user
+--what, what
