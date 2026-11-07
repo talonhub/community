@@ -1,0 +1,18 @@
+list: user.code_type
+code.language: kotlin
+-
+
+any: Any
+array: Array
+boolean: Boolean
+byte: Byte
+char: Char
+double: Double
+float: Float
+int: Int
+long: Long
+map: Map
+nothing: Nothing
+short: Short
+string: String
+unit: Unit
