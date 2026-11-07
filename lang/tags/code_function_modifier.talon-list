@@ -1,0 +1,8 @@
+list: user.code_function_modifier
+-
+
+# used by the user.code_functions tag
+private
+pro: protected
+pub: public
+static

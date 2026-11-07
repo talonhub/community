@@ -1,0 +1,52 @@
+list: user.code_type
+code.language: rust
+-
+
+# scalar types
+boolean: bool
+bytes: u8
+character: char
+eye eight: i8
+eye sixteen: i16
+eye thirty two: i32
+eye sixty four: i64
+eye one hundred and twenty eight: i128
+eye size: isize
+float thirty two: f32
+float sixty four: f64
+you eight: u8
+you sixteen: u16
+you thirty two: u32
+you sixty four: u64
+you one hundred and twenty eight: u128
+you size: usize
+
+# compound types
+array: []
+tuple: ()
+
+# standard library types
+box: Box
+hash set: HashSet
+hashmap: HashMap
+option: Option
+os string slice: &OsStr
+os string: OsString
+reference count: Rc
+result: Result
+see string slice: &CStr
+see string: CString
+string slice: &str
+string: String
+vector: Vec
+
+# standard sync types
+arc: Arc
+barrier: Barrier
+condition variable: Condvar
+mutex: Mutex
+once: Once
+read write lock: RwLock
+receiver: Receiver
+sender: Sender
+sink sender: SyncSender
