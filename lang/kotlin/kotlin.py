@@ -8,7 +8,6 @@ mod = Module()
 ctx.matches = r"""
 code.language: kotlin
 """
-ear
 
 operators = Operators(
     # code_operators_array
