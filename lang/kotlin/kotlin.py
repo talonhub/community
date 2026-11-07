@@ -9,23 +9,6 @@ ctx.matches = r"""
 code.language: kotlin
 """
 
-ctx.lists["user.code_keyword"] = {
-    "var": "var ",
-    "val": "val ",
-    "lateinit": "lateinit ",
-    "public": "public ",
-    "private": "private ",
-    "protected": "protected ",
-    "companion object": "companion object ",
-    "synchronized": "synchronized ",
-    "volatile": "volatile ",
-    "transient": "transient ",
-    "abstract": "abstract ",
-    "interface": "interface ",
-    "final": "final ",
-    "return": "return ",
-}
-
 ctx.lists["user.code_type"] = {
     "boolean": "Boolean",
     "byte": "Byte",
