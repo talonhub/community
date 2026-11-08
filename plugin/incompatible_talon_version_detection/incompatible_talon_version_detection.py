@@ -32,7 +32,8 @@ ctx = Context()
 def on_ready():
     global incompatible_version_gui
 
-    try:
+    has_version_one_modules = False
+    with suppress(ImportError):
         import egui  # noqa: F401
         import skia  # noqa: F401
 
@@ -41,8 +42,6 @@ def on_ready():
             import win32com  # noqa: F401
         except ImportError:
             has_version_one_modules = True
-    except ImportError:
-        has_version_one_modules = False
 
     # mostly version 1 compatible beta has the version 1 modules, but does not work with our 0.4 tag, so do not show the message for that version of Talon
     if compute_version_number() < 1 and not has_version_one_modules:
