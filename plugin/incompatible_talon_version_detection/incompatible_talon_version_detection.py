@@ -31,7 +31,15 @@ ctx = Context()
 
 def on_ready():
     global incompatible_version_gui
-    if compute_version_number() < 1:
+
+    try:
+        import egui
+        import skia
+        has_version_one_imports = True
+    except ImportError:
+        has_version_one_imports = False
+
+    if compute_version_number() < 1 and not has_version_one_imports:
         from talon import imgui
 
         # define this inside the if statement so that future Talon versions that remove imgui do not throw an exception
