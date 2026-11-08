@@ -33,8 +33,8 @@ def on_ready():
     global incompatible_version_gui
 
     try:
-        import egui # noqa: F401
-        import skia # noqa: F401
+        import egui  # noqa: F401
+        import skia  # noqa: F401
 
         has_version_one_imports = True
     except ImportError:
