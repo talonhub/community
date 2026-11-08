@@ -35,6 +35,7 @@ def on_ready():
     try:
         import egui  # noqa: F401
         import skia  # noqa: F401
+
         has_version_one_modules = True
     except ImportError:
         has_version_one_modules = False
