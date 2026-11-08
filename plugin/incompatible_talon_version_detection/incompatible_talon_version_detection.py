@@ -35,6 +35,7 @@ def on_ready():
     try:
         import egui
         import skia
+
         has_version_one_imports = True
     except ImportError:
         has_version_one_imports = False
