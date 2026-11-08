@@ -43,7 +43,7 @@ def on_ready():
         except ImportError:
             has_version_one_modules = True
 
-    # mostly version 1 compatible beta has the version 1 modules, but does not work with our 0.4 tag, so do not show the message for those versions of Talon
+    # mostly version 1 compatible beta versions have the version 1 modules, but do not work with our 0.4 tag, so do not show the message for those versions of Talon
     if compute_version_number() < 1 and not has_version_one_modules:
         from talon import imgui
 
