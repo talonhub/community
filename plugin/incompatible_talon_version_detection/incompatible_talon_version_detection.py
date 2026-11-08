@@ -36,12 +36,16 @@ def on_ready():
         import egui  # noqa: F401
         import skia  # noqa: F401
 
-        has_version_one_imports = True
+        # check for module removed from version 1
+        try:
+            import win32com  # noqa: F401
+        except ImportError:
+            has_version_one_modules = True
     except ImportError:
-        has_version_one_imports = False
+        has_version_one_modules = False
 
-    # mostly version 1 compatible beta has the version 1 imports, but does not work with our 0.4 tag, so do not show the message for that version of Talon
-    if compute_version_number() < 1 and not has_version_one_imports:
+    # mostly version 1 compatible beta has the version 1 modules, but does not work with our 0.4 tag, so do not show the message for that version of Talon
+    if compute_version_number() < 1 and not has_version_one_modules:
         from talon import imgui
 
         # define this inside the if statement so that future Talon versions that remove imgui do not throw an exception
