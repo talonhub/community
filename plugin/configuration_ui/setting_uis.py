@@ -18,6 +18,7 @@ from .talon_file_output import update_setting, update_tag
 from .talon_file_parsing import (
     VALUE_UNAVAILABLE,
 )
+from ...core.gui.gui import create_warning_text
 
 DEFAULT_DESCRIPTION = "Something went wrong. Could not find the setting description."
 
@@ -272,10 +273,7 @@ class ColorSettingRenderer(SettingRenderer):
 
         # warn about invalid color
         if is_invalid_color:
-            warning_color = ui.visuals().warn_fg_color
-            warning_text = (
-                egui.RichText("Invalid color!").strong().color(warning_color).heading()
-            )
+            warning_text = create_warning_text(ui, "Invalid color!")
             ui.label(warning_text)
 
         # allow focusing, but focus the name picker with shift tab as a temporary workaround for not being able to focus the combo box directly

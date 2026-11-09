@@ -153,6 +153,13 @@ def create_italic_text(text):
     return egui.RichText(text).italics()
 
 
+def create_warning_text(ui: egui.Ui, text):
+    warning_color = ui.visuals().warn_fg_color
+    return (
+        egui.RichText(text).strong().color(warning_color).heading()
+    )
+
+
 class Row(ABC):
     """Represents the row of a table"""
 
