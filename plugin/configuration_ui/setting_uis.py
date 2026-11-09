@@ -70,7 +70,7 @@ class Setting:
         return DEFAULT_DESCRIPTION
 
 
-def _focus_widget(response):
+def _focus_widget(response: egui.Response):
     response.request_focus()
     response.scroll_to_me(None)
 
