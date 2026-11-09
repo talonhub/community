@@ -1,11 +1,11 @@
 from .setting_file_paths import MODE_INDICATOR_PATH, SUBTITLES_PATH
 from .setting_uis import (
+    Setting,
     create_boolean_setting,
     create_color_picker_setting,
     create_discrete_choices_setting,
     create_numeric_setting,
     create_text_setting,
-    Setting,
 )
 
 
