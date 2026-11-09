@@ -321,7 +321,7 @@ class Manager:
 
     async def _render_error_message(self, error_message, error_setting):
         async with self._ui.horizontal_wrapped():
-            error_text = self._ui_wrapper.create_warning_text(self._ui, error_message)
+            error_text = self._ui_wrapper.create_warning_text(error_message)
             self._ui.label(error_text)
             await self._render_error_copy_buttons(error_message, error_setting)
 
