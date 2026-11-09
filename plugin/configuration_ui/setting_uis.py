@@ -9,6 +9,7 @@ from pathlib import Path
 import egui
 from talon import actions, registry
 
+from ...core.gui.gui import create_warning_text
 from .rgb_conversions import (
     convert_rgb_to_hex_string,
     parse_rgb_from_hex_string,
@@ -18,7 +19,6 @@ from .talon_file_output import update_setting, update_tag
 from .talon_file_parsing import (
     VALUE_UNAVAILABLE,
 )
-from ...core.gui.gui import create_warning_text
 
 DEFAULT_DESCRIPTION = "Something went wrong. Could not find the setting description."
 
