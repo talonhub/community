@@ -1,4 +1,4 @@
-"""This module provides UIs for configuring different kinds of settings"""
+"""This module provides widgets for configuring different kinds of settings"""
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
