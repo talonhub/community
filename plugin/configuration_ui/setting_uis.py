@@ -236,6 +236,8 @@ class ColorSettingRenderer(SettingRenderer):
             # provide color picker input option
             rgb = egui.Mutable(parsed_rgb)
             color_picker_response = egui.color_edit_button_srgb(ui, rgb)
+            # update new value if the user uses the color picker to update the value or clicks to open the color picker
+            # this is done so that the default value is only used to replace an invalid color with user input
             if color_picker_response.changed() or color_picker_response.clicked():
                 new_value = convert_rgb_to_hex_string(rgb.get())
 
