@@ -2,7 +2,7 @@ from .talon_file_parsing import VALUE_UNAVAILABLE, SettingsParser
 
 
 def _convert_value_to_talon_script_literal(value, indentation) -> str:
-    """Convert the Python value to TalonScript"""
+    """Convert the Python value to a TalonScript literal"""
     if isinstance(value, bool):
         return str(value).lower()
     if isinstance(value, (int, float)):
@@ -15,7 +15,7 @@ def _convert_value_to_talon_script_literal(value, indentation) -> str:
             indented_lines = "\n".join([f"{indentation}{l}" for l in lines])
             return f'"""\n{indented_lines}"""'
         return f'"{value}"'
-    raise ValueError(f"Could not convert value {value} to Talonscript")
+    raise ValueError(f"Could not convert value {value} to a Talonscript literal")
 
 
 def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
