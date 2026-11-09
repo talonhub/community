@@ -71,6 +71,15 @@ class Setting:
                 return description
         return DEFAULT_DESCRIPTION
 
+    @staticmethod
+    def tag(name):
+        return Setting(
+            name,
+            ToggleSettingRenderer(),
+            update_tag,
+            is_tag=True,
+        )
+
 
 def _focus_widget(response: egui.Response):
     response.request_focus()
@@ -88,15 +97,6 @@ class ToggleSettingRenderer(SettingRenderer):
     @property
     def renders_description(self) -> bool:
         return True
-
-
-def create_tag_setting(name):
-    return Setting(
-        name,
-        ToggleSettingRenderer(),
-        update_tag,
-        is_tag=True,
-    )
 
 
 def create_boolean_setting(name):

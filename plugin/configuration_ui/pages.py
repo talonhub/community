@@ -4,8 +4,8 @@ from .setting_uis import (
     create_color_picker_setting,
     create_discrete_choices_setting,
     create_numeric_setting,
-    create_tag_setting,
     create_text_setting,
+    Setting,
 )
 
 
@@ -26,7 +26,7 @@ def create_pages():
             "Text Insertion",
             "",
             [
-                create_tag_setting("user.unprefixed_numbers"),
+                Setting.tag("user.unprefixed_numbers"),
                 create_numeric_setting("user.paste_to_insert_threshold", -1),
                 create_boolean_setting("user.context_sensitive_dictation"),
                 create_numeric_setting("user.insert_between_wait", 0.0),
@@ -84,8 +84,8 @@ def create_pages():
             "Popping",
             "Decide what should happen when you make a popping noise",
             [
-                create_tag_setting("user.pop_twice_to_repeat"),
-                create_tag_setting("user.pop_twice_to_wake"),
+                Setting.tag("user.pop_twice_to_repeat"),
+                Setting.tag("user.pop_twice_to_wake"),
                 create_numeric_setting("user.double_pop_speed_minimum", 0.0),
                 create_numeric_setting("user.double_pop_speed_maximum", 0.0),
                 create_discrete_choices_setting(
@@ -118,7 +118,7 @@ def create_pages():
                     "user.window_snap_screen",
                     [(option, option) for option in ("proportional", "size aware")],
                 ),
-                create_tag_setting("user.experimental_window_layout"),
+                Setting.tag("user.experimental_window_layout"),
             ],
         ),
         Page(
@@ -212,7 +212,7 @@ def create_pages():
                 create_boolean_setting("user.file_manager_auto_show_pickers"),
                 create_boolean_setting("user.strict_command_deprecation"),
                 create_numeric_setting("user.selected_text_timeout", 0.0),
-                create_tag_setting("user.mouse_cursor_commands_enable"),
+                Setting.tag("user.mouse_cursor_commands_enable"),
             ],
         ),
     ]
