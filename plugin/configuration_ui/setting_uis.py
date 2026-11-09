@@ -263,7 +263,7 @@ def create_color_picker_setting(name):
     )
 
 
-class DiscretSettingRenderer(SettingRenderer):
+class DiscreteSettingRenderer(SettingRenderer):
     def __init__(self, choices, is_numeric):
         super().__init__()
         self.focusing_frame = 0
@@ -307,5 +307,5 @@ def create_discrete_choices_setting(name, choices, is_numeric=False):
     """Choices is an iterable of tuples with the value and text of each option respectively"""
     return Setting(
         name,
-        DiscretSettingRenderer(choices, is_numeric),
+        DiscreteSettingRenderer(choices, is_numeric),
     )
