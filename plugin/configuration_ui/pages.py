@@ -48,9 +48,7 @@ def create_pages():
             [
                 Setting.numeric("user.mouse_continuous_scroll_amount", 0),
                 Setting.numeric("user.mouse_gaze_scroll_speed_multiplier", 0.0),
-                Setting.numeric(
-                    "user.mouse_continuous_scroll_acceleration", 1.0
-                ),
+                Setting.numeric("user.mouse_continuous_scroll_acceleration", 1.0),
                 Setting.boolean("user.mouse_enable_pop_stops_scroll"),
                 Setting.boolean("user.mouse_enable_hiss_scroll"),
                 Setting.numeric("user.hiss_scroll_debounce_time", 0),

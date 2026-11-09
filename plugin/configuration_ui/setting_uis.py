@@ -117,6 +117,7 @@ class Setting:
             DiscreteSettingRenderer(choices, is_numeric),
         )
 
+
 def _focus_widget(response: egui.Response):
     response.request_focus()
     response.scroll_to_me(None)
@@ -311,4 +312,3 @@ class DiscreteSettingRenderer(SettingRenderer):
                         actions.key("space")
                         self.should_focus = False
                 self.focusing_frame += 1
-
