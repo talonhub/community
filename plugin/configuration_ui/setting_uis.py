@@ -23,6 +23,8 @@ DEFAULT_DESCRIPTION = "Something went wrong. Could not find the setting descript
 
 
 class SettingRenderer(ABC):
+    
+    __slots__ = ('should_focus',)
     def __init__(self):
         self.should_focus = False
 
@@ -137,6 +139,7 @@ class ToggleSettingRenderer(SettingRenderer):
 
 
 class NumericSettingRenderer(SettingRenderer):
+    __slots__ = ('use_slider', 'minimum', 'maximum')
     def __init__(self, minimum, maximum, use_slider):
         super().__init__()
         self.minimum = minimum
@@ -209,6 +212,7 @@ COLOR_TO_NAME = {
 
 
 class ColorSettingRenderer(SettingRenderer):
+    __slots__ = ('focusing_frame')
     def __init__(self):
         super().__init__()
         self.focusing_frame = 0
@@ -275,6 +279,7 @@ class ColorSettingRenderer(SettingRenderer):
 
 
 class DiscreteSettingRenderer(SettingRenderer):
+    __slots__ = ('focusing_frame', 'choices', 'is_numeric')
     def __init__(self, choices, is_numeric):
         super().__init__()
         self.focusing_frame = 0
