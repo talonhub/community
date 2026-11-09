@@ -1,26 +1,10 @@
 from typing import Optional
 
-from talon import Context, Module, actions
+from talon import Module, actions
 
 mod = Module()
-ctx = Context()
-
-ctx.matches = r"""
-code.language: markdown
-"""
 
 mod.list("markdown_code_block_language", desc="Languages for code blocks")
-ctx.lists["user.markdown_code_block_language"] = {
-    "typescript": "typescript",
-    "python": "python",
-    "code": "",
-    "ruby": "ruby",
-    "shell": "shell",
-    "bash": "bash",
-    "json": "json",
-    "are": "r",
-    "markdown": "markdown",
-}
 
 
 @mod.action_class
