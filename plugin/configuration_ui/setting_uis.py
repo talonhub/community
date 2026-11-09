@@ -231,14 +231,13 @@ class ColorSettingRenderer(SettingRenderer):
             try:
                 parsed_rgb = parse_rgb_from_hex_string(value)
             except ValueError:
-                parsed_rgb = None
-            if parsed_rgb is not None:
-                # provide color picker input option
-                rgb = egui.Mutable(parsed_rgb)
-                egui.color_edit_button_srgb(ui, rgb)
+                # use white as the default
+                parsed_rgb = parse_rgb_from_hex_string("FFFFFF")
+            # provide color picker input option
+            rgb = egui.Mutable(parsed_rgb)
+            color_picker_response = egui.color_edit_button_srgb(ui, rgb)
+            if color_picker_response.changed() or color_picker_response.clicked():
                 new_value = convert_rgb_to_hex_string(rgb.get())
-            else:
-                ui.label("Not valid color.")
 
             # allow picking color by name
             # render the name of the current color if it is named
