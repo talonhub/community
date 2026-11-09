@@ -246,7 +246,7 @@ class Manager:
                     self._ui.weak(setting.name)
                     self._ui.add_space(5)
                     if not setting.renderer.renders_description():
-                        self._ui.label(setting.get_description())
+                        self._ui.label(setting.description)
                     if setting.value.get() == VALUE_UNAVAILABLE:
                         type_used = "tag" if setting.is_tag else "setting"
                         error_message = f"Something went wrong. The {type_used} {error_representation_of_name} could not be found or could not be parsed."

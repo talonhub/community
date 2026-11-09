@@ -59,7 +59,8 @@ class Setting:
     # the default value of the setting if one is available
     default_value = VALUE_UNAVAILABLE
 
-    def get_description(self):
+    @property
+    def description(self):
         with suppress(KeyError):
             if self.is_tag:
                 description = registry.decls.tags[self.name].desc
@@ -77,7 +78,7 @@ def _focus_widget(response: egui.Response):
 
 class ToggleSettingRenderer(SettingRenderer):
     async def render(self, setting: Setting, ui):
-        response = ui.checkbox(setting.value, setting.get_description())
+        response = ui.checkbox(setting.value, setting.description)
         if self.should_focus:
             setting.value.set(not setting.value.get())
             _focus_widget(response)
