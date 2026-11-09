@@ -213,7 +213,7 @@ COLOR_TO_NAME = {
 
 
 class ColorSettingRenderer(SettingRenderer):
-    __slots__ = "focusing_frame"
+    __slots__ = ("focusing_frame",)
 
     def __init__(self):
         super().__init__()
