@@ -33,6 +33,7 @@ class SettingRenderer(ABC):
     def focus(self):
         self.should_focus = True
 
+    @property
     def renders_description(self) -> bool:
         return False
 
@@ -84,6 +85,7 @@ class ToggleSettingRenderer(SettingRenderer):
             _focus_widget(response)
             self.should_focus = False
 
+    @property
     def renders_description(self) -> bool:
         return True
 
