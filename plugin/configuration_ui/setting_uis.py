@@ -80,6 +80,42 @@ class Setting:
             is_tag=True,
         )
 
+    @staticmethod
+    def boolean(name):
+        return Setting(
+            name,
+            ToggleSettingRenderer(),
+            update_setting,
+        )
+
+    @staticmethod
+    def numeric(name, minimum=None, maximum=None, use_slider=False):
+        return Setting(
+            name,
+            NumericSettingRenderer(minimum, maximum, use_slider),
+        )
+
+    @staticmethod
+    def text(name):
+        return Setting(
+            name,
+            TextSettingRenderer(),
+        )
+
+    @staticmethod
+    def color(name):
+        return Setting(
+            name,
+            ColorSettingRenderer(),
+        )
+
+    @staticmethod
+    def discrete_choices(name, choices, is_numeric=False):
+        """Choices is an iterable of tuples with the value and text of each option respectively"""
+        return Setting(
+            name,
+            DiscreteSettingRenderer(choices, is_numeric),
+        )
 
 def _focus_widget(response: egui.Response):
     response.request_focus()
@@ -97,14 +133,6 @@ class ToggleSettingRenderer(SettingRenderer):
     @property
     def renders_description(self) -> bool:
         return True
-
-
-def create_boolean_setting(name):
-    return Setting(
-        name,
-        ToggleSettingRenderer(),
-        update_setting,
-    )
 
 
 class NumericSettingRenderer(SettingRenderer):
@@ -147,26 +175,12 @@ class NumericSettingRenderer(SettingRenderer):
             await self._render_numeric_input(setting, ui)
 
 
-def create_numeric_setting(name, minimum=None, maximum=None, use_slider=False):
-    return Setting(
-        name,
-        NumericSettingRenderer(minimum, maximum, use_slider),
-    )
-
-
 class TextSettingRenderer(SettingRenderer):
     async def render(self, setting: Setting, ui):
         response = ui.add(egui.TextEdit.multiline(setting.value))
         if self.should_focus:
             _focus_widget(response)
             self.should_focus = False
-
-
-def create_text_setting(name):
-    return Setting(
-        name,
-        TextSettingRenderer(),
-    )
 
 
 def _compute_hexadecimal_from_color_name(name):
@@ -259,13 +273,6 @@ class ColorSettingRenderer(SettingRenderer):
                 self.focusing_frame += 1
 
 
-def create_color_picker_setting(name):
-    return Setting(
-        name,
-        ColorSettingRenderer(),
-    )
-
-
 class DiscreteSettingRenderer(SettingRenderer):
     def __init__(self, choices, is_numeric):
         super().__init__()
@@ -305,10 +312,3 @@ class DiscreteSettingRenderer(SettingRenderer):
                         self.should_focus = False
                 self.focusing_frame += 1
 
-
-def create_discrete_choices_setting(name, choices, is_numeric=False):
-    """Choices is an iterable of tuples with the value and text of each option respectively"""
-    return Setting(
-        name,
-        DiscreteSettingRenderer(choices, is_numeric),
-    )
