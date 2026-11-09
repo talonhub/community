@@ -230,9 +230,11 @@ class ColorSettingRenderer(SettingRenderer):
         async with ui.horizontal_wrapped():
             try:
                 parsed_rgb = parse_rgb_from_hex_string(value)
+                is_invalid_color = False
             except ValueError:
                 # use white as the default
                 parsed_rgb = parse_rgb_from_hex_string("FFFFFF")
+                is_invalid_color = True
             # provide color picker input option
             rgb = egui.Mutable(parsed_rgb)
             color_picker_response = egui.color_edit_button_srgb(ui, rgb)
@@ -268,17 +270,21 @@ class ColorSettingRenderer(SettingRenderer):
             # allow using a text field to set the value directly
             text_response = ui.add(egui.TextEdit.singleline(setting.value))
 
-            # allow focusing, but focus the name picker with shift tab as a temporary workaround for not being able to focus the combo box directly
-            if self.should_focus:
-                match self.focusing_frame:
-                    case 0:
-                        _focus_widget(text_response)
-                    case 1:
-                        actions.key("shift-tab")
-                    case _:
-                        actions.key("space")
-                        self.should_focus = False
-                self.focusing_frame += 1
+        # warn about invalid color
+        if is_invalid_color:
+            ui.colored_label(ui.visuals().warn_fg_color, "Invalid color!")
+
+        # allow focusing, but focus the name picker with shift tab as a temporary workaround for not being able to focus the combo box directly
+        if self.should_focus:
+            match self.focusing_frame:
+                case 0:
+                    _focus_widget(text_response)
+                case 1:
+                    actions.key("shift-tab")
+                case _:
+                    actions.key("space")
+                    self.should_focus = False
+            self.focusing_frame += 1
 
 
 class DiscreteSettingRenderer(SettingRenderer):
