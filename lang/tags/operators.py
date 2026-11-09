@@ -45,6 +45,7 @@ class Operators(TypedDict, total=False):
     ASSIGNMENT_DIVISION: Operator
     ASSIGNMENT_MODULO: Operator
     ASSIGNMENT_INCREMENT: Operator
+    ASSIGNMENT_DECREMENT: Operator
     ASSIGNMENT_BITWISE_AND: Operator
     ASSIGNMENT_BITWISE_OR: Operator
     ASSIGNMENT_BITWISE_EXCLUSIVE_OR: Operator

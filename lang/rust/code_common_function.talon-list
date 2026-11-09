@@ -1,0 +1,9 @@
+list: user.code_common_function
+code.language: rust
+-
+
+catch unwind: catch_unwind
+drop
+from iterator: from_iter
+into iterator: into_iter
+iterator: iter

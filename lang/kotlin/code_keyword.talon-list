@@ -1,0 +1,18 @@
+list: user.code_keyword
+code.language: kotlin
+-
+
+abstract: "abstract "
+companion object: "companion object "
+final: "final "
+interface: "interface "
+lateinit: "lateinit "
+private: "private "
+protected: "protected "
+public: "public "
+return: "return "
+synchronized: "synchronized "
+transient: "transient "
+val: "val "
+var: "var "
+volatile: "volatile "

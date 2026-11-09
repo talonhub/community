@@ -29,14 +29,6 @@ settings():
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
-(op | is) strict equal:
-    user.deprecate_command("2025-03-4", "(op | is) strict equal", "is equal")
-    user.code_operator("MATH_EQUAL")
-
-(op | is) strict not equal:
-    user.deprecate_command("2025-03-4", "(op | is) strict not equal", "is not equal")
-    user.code_operator("MATH_NOT_EQUAL")
-
 op null else: " ?? "
 
 state const: "const "
@@ -50,10 +42,6 @@ state export: "export "
 state async: "async "
 
 state await: "await "
-
-state map: app.notify('ERROR: Command deprecated; please use "dot map"')
-state filter: app.notify('ERROR: Command deprecated; please use "dot filter"')
-state reduce: app.notify('ERROR: Command deprecated; please use "dot reduce"')
 
 state spread: "..."
 

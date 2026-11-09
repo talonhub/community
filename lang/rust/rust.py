@@ -1,6 +1,3 @@
-from collections.abc import Callable
-from typing import Any, TypeVar
-
 from talon import Context, Module, actions, settings
 
 from ...core.described_functions import create_described_insert_between
@@ -9,7 +6,6 @@ from ..tags.operators import Operators
 mod = Module()
 # rust specific grammar
 mod.list("code_type_modifier", desc="List of type modifiers for active language")
-mod.list("code_macros", desc="List of macros for active language")
 mod.list("code_trait", desc="List of traits for active language")
 
 
@@ -17,15 +13,6 @@ mod.list("code_trait", desc="List of traits for active language")
 class Actions:
     def code_state_implements():
         """Inserts implements block, positioning the cursor appropriately"""
-
-    def code_insert_macro(text: str, selection: str):
-        """Inserts a macro and positions the cursor appropriately"""
-
-    def code_insert_macro_array(text: str, selection: str):
-        """Inserts a macro array and positions the cursor appropriately"""
-
-    def code_insert_macro_block(text: str, selection: str):
-        """Inserts a macro block and positions the cursor appropriately"""
 
     def code_state_unsafe():
         """Inserts an unsafe block and positions the cursor appropriately"""
@@ -39,169 +26,22 @@ class Actions:
     def code_comment_documentation_block_inner():
         """Inserts an inner block document comment and positions the cursor appropriately"""
 
+    # DEPRECATED
+
+    def code_insert_macro(text: str, selection: str):
+        """DEPRECATED: Inserts a macro and positions the cursor appropriately"""
+
+    def code_insert_macro_array(text: str, selection: str):
+        """DEPRECATED: Inserts a macro array and positions the cursor appropriately"""
+
+    def code_insert_macro_block(text: str, selection: str):
+        """DEPRECATED: Inserts a macro block and positions the cursor appropriately"""
+
 
 ctx = Context()
 ctx.matches = r"""
 code.language: rust
 """
-
-scalar_types = {
-    "eye eight": "i8",
-    "you eight": "u8",
-    "bytes": "u8",
-    "eye sixteen": "i16",
-    "you sixteen": "u16",
-    "eye thirty two": "i32",
-    "you thirty two": "u32",
-    "eye sixty four": "i64",
-    "you sixty four": "u64",
-    "eye one hundred and twenty eight": "i128",
-    "you one hundred and twenty eight": "u128",
-    "eye size": "isize",
-    "you size": "usize",
-    "float thirty two": "f32",
-    "float sixty four": "f64",
-    "boolean": "bool",
-    "character": "char",
-}
-
-compound_types = {
-    "tuple": "()",
-    "array": "[]",
-}
-
-standard_library_types = {
-    "box": "Box",
-    "vector": "Vec",
-    "string": "String",
-    "string slice": "&str",
-    "os string": "OsString",
-    "os string slice": "&OsStr",
-    "see string": "CString",
-    "see string slice": "&CStr",
-    "option": "Option",
-    "result": "Result",
-    "hashmap": "HashMap",
-    "hash set": "HashSet",
-    "reference count": "Rc",
-}
-
-standard_sync_types = {
-    "arc": "Arc",
-    "barrier": "Barrier",
-    "condition variable": "Condvar",
-    "mutex": "Mutex",
-    "once": "Once",
-    "read write lock": "RwLock",
-    "receiver": "Receiver",
-    "sender": "Sender",
-    "sink sender": "SyncSender",
-}
-
-all_types = {
-    **scalar_types,
-    **compound_types,
-    **standard_library_types,
-    **standard_sync_types,
-}
-
-standard_function_macros = {
-    "panic": "panic!",
-    "format": "format!",
-    "concatenate": "concat!",
-    "print": "print!",
-    "print line": "println!",
-    "error print line": "eprintln!",
-    "to do": "todo!",
-}
-
-standard_array_macros = {
-    "vector": "vec!",
-}
-
-standard_block_macros = {
-    "macro rules": "macro_rules!",
-}
-
-logging_macros = {
-    "debug": "debug!",
-    "info": "info!",
-    "warning": "warn!",
-    "error": "error!",
-}
-
-testing_macros = {
-    "assert": "assert!",
-    "assert equal": "assert_eq!",
-    "assert not equal": "assert_ne!",
-}
-
-all_function_macros = {
-    **standard_function_macros,
-    **logging_macros,
-    **testing_macros,
-}
-
-all_array_macros = {
-    **standard_array_macros,
-}
-
-all_block_macros = {
-    **standard_block_macros,
-}
-
-all_macros = {
-    **all_function_macros,
-    **all_array_macros,
-    **all_block_macros,
-}
-
-all_function_macro_values = set(all_function_macros.values())
-all_array_macro_values = set(all_array_macros.values())
-all_block_macro_values = set(all_block_macros.values())
-
-closure_traits = {
-    "closure": "Fn",
-    "closure once": "FnOnce",
-    "closure mutable": "FnMut",
-}
-
-conversion_traits = {
-    "into": "Into",
-    "from": "From",
-}
-
-iterator_traits = {
-    "iterator": "Iterator",
-}
-
-all_traits = {
-    **closure_traits,
-    **conversion_traits,
-    **iterator_traits,
-}
-
-
-# tag: libraries
-ctx.lists["user.code_libraries"] = {
-    "eye oh": "std::io",
-    "file system": "std::fs",
-    "envy": "std::env",
-    "collections": "std::collections",
-}
-
-# tag: functions_common
-ctx.lists["user.code_common_function"] = {
-    "drop": "drop",
-    "catch unwind": "catch_unwind",
-    "iterator": "iter",
-    "into iterator": "into_iter",
-    "from iterator": "from_iter",
-    **all_macros,
-}
-
-# tag: functions
-ctx.lists["user.code_type"] = all_types
 
 # rust specific grammar
 ctx.lists["user.code_type_modifier"] = {
@@ -220,13 +60,9 @@ ctx.lists["user.code_type_modifier"] = {
     rule="[{user.code_type_modifier}] {user.code_type}",
 )
 def code_type(m) -> str:
-    """Returns a macro name"""
+    """Returns a type name"""
     return "".join(m)
 
-
-ctx.lists["user.code_macros"] = all_macros
-
-ctx.lists["user.code_trait"] = all_traits
 
 operators = Operators(
     # code_operators_array
@@ -265,6 +101,7 @@ operators = Operators(
     MATH_AND=" && ",
     MATH_OR=" || ",
     ASSIGNMENT_INCREMENT=" += 1",
+    ASSIGNMENT_DECREMENT=" -= 1",
     # code_operators_pointer
     POINTER_INDIRECTION="*",
     POINTER_ADDRESS_OF="&",
@@ -340,7 +177,9 @@ class UserActions:
     # tag: functions_gui
 
     def code_insert_function(text: str, selection: str):
-        code_insert_function_or_macro(text, selection, "(", ")")
+        out_text = f"{text}({selection or ''})"
+        actions.user.paste(out_text)
+        actions.edit.left()
 
     # tag: libraries
 
@@ -351,14 +190,6 @@ class UserActions:
 
     def code_state_implements():
         actions.user.insert_snippet_by_name("implementsStruct")
-
-    def code_insert_macro(text: str, selection: str):
-        if text in all_array_macro_values:
-            code_insert_function_or_macro(text, selection, "[", "]")
-        elif text in all_block_macro_values:
-            code_insert_function_or_macro(text, selection, "{", "}")
-        else:
-            code_insert_function_or_macro(text, selection, "(", ")")
 
     def code_state_unsafe():
         actions.user.insert_snippet_by_name("unsafeBlock")
@@ -374,24 +205,9 @@ class UserActions:
         actions.user.insert_between("/*!", "*/")
         actions.key("enter")
 
-
-def code_insert_function_or_macro(
-    text: str,
-    selection: str,
-    left_delim: str,
-    right_delim: str,
-):
-    if selection:
-        out_text = text + f"{left_delim}{selection}{right_delim}"
-    else:
-        out_text = text + f"{left_delim}{right_delim}"
-    actions.user.paste(out_text)
-    actions.edit.left()
-
-
-RT = TypeVar("RT")  # return type
-
-
-def repeat_call[RT](n: int, f: Callable[..., RT], *args: Any, **kwargs: Any):
-    for _ in range(n):
-        f(*args, **kwargs)
+    # DEPRECATED
+    def code_insert_macro(text: str, selection: str):
+        actions.user.deprecate_action(
+            "2026-10-19", "user.code_insert_macro", "user.code_insert_macro_like"
+        )
+        actions.user.code_insert_macro_like(text, selection)
