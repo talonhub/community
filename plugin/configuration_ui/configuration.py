@@ -6,7 +6,6 @@ from talon import Context, Module, actions, clip, fs, registry
 from ...core.gui.gui import (
     UIWrapper,
     create_italic_text,
-    create_warning_text,
     let_user_use_page_keys_to_scroll_scroll_area,
     open_gui,
 )
@@ -322,7 +321,7 @@ class Manager:
 
     async def _render_error_message(self, error_message, error_setting):
         async with self._ui.horizontal_wrapped():
-            error_text = create_warning_text(self._ui, error_message)
+            error_text = self._ui_wrapper.create_warning_text(self._ui, error_message)
             self._ui.label(error_text)
             await self._render_error_copy_buttons(error_message, error_setting)
 

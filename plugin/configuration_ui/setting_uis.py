@@ -9,7 +9,7 @@ from pathlib import Path
 import egui
 from talon import actions, registry
 
-from ...core.gui.gui import create_warning_text
+from ...core.gui.gui import UIWrapper
 from .rgb_conversions import (
     convert_rgb_to_hex_string,
     parse_rgb_from_hex_string,
@@ -273,7 +273,8 @@ class ColorSettingRenderer(SettingRenderer):
 
         # warn about invalid color
         if is_invalid_color:
-            warning_text = create_warning_text(ui, "Invalid color!")
+            ui_wrapper = UIWrapper(ui)
+            warning_text = ui_wrapper.create_warning_text("Invalid color!")
             ui.label(warning_text)
 
         # allow focusing, but focus the name picker with shift tab as a temporary workaround for not being able to focus the combo box directly
