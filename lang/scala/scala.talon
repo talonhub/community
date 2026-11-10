@@ -26,11 +26,11 @@ settings():
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
 state {user.scala_modifier}:
-    user.deprecate_command("2026-11-10", "state {scala_modifier}", "put {scala_modifier}")
+    user.deprecate_command("2026-11-10", "state {{user.scala_modifier}}", "(keyword | put) (<user.code_keyword>+)")
     insert("{user.scala_modifier} ")
 
 state {user.scala_keyword}:
-    user.deprecate_command("2026-11-10", "state {scala_keyword}", "put {scala_keyword}")
+    user.deprecate_command("2026-11-10", "state {{user.scala_keyword}}", "(keyword | put) (<user.code_keyword>+)")
     insert("{scala_keyword} ")
 
 op right arrow: " -> "
