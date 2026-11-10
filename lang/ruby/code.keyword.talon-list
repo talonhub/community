@@ -6,11 +6,11 @@ encoding: __ENCODING__
 file: __FILE__
 line: __LINE__
 alias: " alias"
-and
+and: " and "
 capital begin: BEGIN
 begin
 break: "break "
-case
+case: "case "
 class: " class"
 def: " def"
 do
@@ -27,10 +27,10 @@ module: " module"
 next: "next "
 nil
 not
-or
+or: " or "
 redo: "redo "
 rescue
-retry: "retry "
+retry
 return: "return "
 self
 super
