@@ -35,7 +35,7 @@ retry
 return: "return "
 self
 super
-then
+then: " then"
 true
 un def: "undef "
 unless: "unless "
