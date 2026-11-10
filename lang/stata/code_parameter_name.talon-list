@@ -1,0 +1,7 @@
+list: user.code_parameter_name
+code.language: stata
+-
+
+# regressions
+V C E cluster: vce(cluster)
+V C E robust: vce(robust)
