@@ -1,0 +1,44 @@
+list: user.code_keyword
+code.language: ruby
+-
+
+encoding: __ENCODING__
+file: __FILE__
+line: __LINE__
+alias: " alias"
+and
+capital begin: BEGIN
+begin
+break: "break "
+case
+class: " class"
+def: " def"
+do
+else
+elsif: "elsif "
+capital end: END
+end
+ensure
+false
+for: "for "
+if: "if "
+in: "in "
+module: " module"
+next: "next "
+nil
+not
+or
+redo: "redo "
+rescue
+retry: "retry "
+return: "return "
+self
+super
+then
+true
+undef: "undef "
+unless: "unless "
+until: "until "
+when: "when "
+while: "while "
+yield: "yield "
