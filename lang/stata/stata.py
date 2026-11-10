@@ -16,11 +16,6 @@ ctx.lists["user.code_parameter_name"] = {
     "V C E robust": "vce(robust)",
 }
 
-# libraries.py
-ctx.lists["user.code_libraries"] = {
-    "estout": "estout",
-}
-
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=create_described_insert_between("[", "]"),
