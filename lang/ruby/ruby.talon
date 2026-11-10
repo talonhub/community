@@ -27,7 +27,7 @@ settings():
 args pipe: user.insert_between("|", "|")
 
 dock string:
-    user.deprecate_command("2026-11-09", "dock string", "dock comment")
+    user.deprecate_command("2026-11-10", "dock string", "dock comment")
     user.code_comment_documentation()
  
 state end: "end"
