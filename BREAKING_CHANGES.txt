@@ -8,7 +8,7 @@ submitted and the time they were reviewed and merged.
 
 ---
 * 2026-11-10 Deprecate `state {user.scala_keyword}` and `state {user.scala_modifier}` commands in favor `(keyword | put) (<user.code_keyword>+)`.
-* 2026-11-10 Deprecate `user.scala_keyword` and `user.scala_modifier` lists in favor of the user.code_keyword list.
+* 2026-11-10 Deprecate `user.scala_keyword` and `user.scala_modifier` lists in favor of the `user.code_keyword` list.
 * 2026-11-06 Remove deprecated Javascript commands `state map`, `state filter`, `state reduce` in favor of `dot map`, `dot filter`, `dot reduce`.
 * 2026-10-26 List `user.code_macros` as defined by the Rust language support has been removed. Use the `user.code_macro_like` list and capture instead.
 * 2026-10-23 Rust macros are no longer part of list `user.code_common_function` due to further generalization of macro-like syntax.
