@@ -23,7 +23,7 @@ false
 for: "for "
 if: "if "
 in: "in "
-module: " module"
+module: "module "
 next: "next "
 nil
 not
@@ -36,7 +36,7 @@ self
 super
 then
 true
-undef: "undef "
+un def: "undef "
 unless: "unless "
 until: "until "
 when: "when "
