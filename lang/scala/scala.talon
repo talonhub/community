@@ -29,7 +29,9 @@ state {user.scala_modifier}:
     user.deprecate_command("2026-11-10", "state {scala_modifier}", "put {scala_modifier}")
     insert("{user.scala_modifier} ")
 
-state {user.scala_keyword}: insert("{scala_keyword} ")
+state {user.scala_keyword}:
+    user.deprecate_command("2026-11-10", "state {scala_keyword}", "put {scala_keyword}")
+    insert("{scala_keyword} ")
 
 op right arrow: " -> "
 op left arrow: " <- "
