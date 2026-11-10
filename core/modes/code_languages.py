@@ -46,7 +46,6 @@ code_languages = [
     Language("rust", "rust", ["rs"]),
     Language("scala", "scala", ["scala"]),
     Language("scss", "scss", ["scss"]),
-    # Language("snippets", "snippets", ["snippets"]),
     Language("sql", "sql", ["sql"]),
     Language("stata", "stata", ["do", "ado"]),
     Language("talon", "talon", ["talon"]),
