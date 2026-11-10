@@ -90,10 +90,7 @@ class UserActions:
         actions.user.insert_between(text + ' "', '"')
 
     def code_terraform_resource(text: str):
-        result = f'resource "{actions.user.formatted_text(text, "SNAKE_CASE")}" ""'
-
-        actions.insert(result)
-        actions.key("left")
+        actions.user.insert_between(f'resource "{actions.user.formatted_text(text, "SNAKE_CASE")}" "', '"')
 
     def code_terraform_data_source(text: str):
         result = f'data "{actions.user.formatted_text(text, "SNAKE_CASE")}" ""'
