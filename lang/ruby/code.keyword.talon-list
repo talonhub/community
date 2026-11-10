@@ -11,8 +11,8 @@ capital begin: BEGIN
 begin
 break: "break "
 case: "case "
-class: " class"
-def: " def"
+class: "class "
+def: "def "
 do
 else
 elsif: "elsif "
