@@ -5,7 +5,7 @@ code.language: ruby
 encoding: __ENCODING__
 file: __FILE__
 line: __LINE__
-alias: " alias"
+alias: "alias "
 and: " and "
 capital begin: BEGIN
 begin
