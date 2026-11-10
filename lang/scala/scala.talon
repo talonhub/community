@@ -33,5 +33,4 @@ op left arrow: " <- "
 op plus plus: " ++ "
 op subtype: " <: "
 
-block string:
-    user.insert_between('"""', '"""')
+block string: user.insert_between('"""', '"""')
