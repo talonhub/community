@@ -26,7 +26,7 @@ class MainActions:
 
 @mod.action_class
 class Actions:
-    def type_text(text: str):
+    def type_text_bypassing_paste_to_insert(text: str):
         """Forces the text to be typed instead of pasted even if the paste_to_insert_threshold is used"""
         global must_type_text
         must_type_text = True
