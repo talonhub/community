@@ -34,5 +34,4 @@ op plus plus: " ++ "
 op subtype: " <: "
 
 block string:
-    insert('""""""')
-    key("left left left")
+    user.insert_between('"""', '"""')
