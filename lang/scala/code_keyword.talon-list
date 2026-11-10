@@ -3,7 +3,8 @@ code.language: scala
 -
 
 abstract: "abstract "
-case class: "case class "
+case: "case "
+class: "class "
 def: "def "
 extends: "extends "
 implicit: "implicit "
