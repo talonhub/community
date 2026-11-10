@@ -29,7 +29,7 @@ nil
 not
 or: " or "
 redo: "redo "
-rescue
+rescue: "rescue "
 retry
 return: "return "
 self
