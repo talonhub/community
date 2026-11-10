@@ -15,6 +15,7 @@ Zero means always paste; -1 means never paste. Note: some contexts (e.g. the ter
 # forces text to be typed and not pasted
 must_type_text: bool = False
 
+
 @ctx.action_class("main")
 class MainActions:
     def insert(text):
@@ -23,6 +24,7 @@ class MainActions:
             actions.user.paste(text)
             return
         actions.next(text)
+
 
 @mod.action_class
 class Actions:
