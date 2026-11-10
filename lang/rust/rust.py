@@ -43,6 +43,7 @@ ctx.matches = r"""
 code.language: rust
 """
 
+
 @ctx.capture(
     "user.code_type",
     rule="[{user.code_type_modifier}] {user.code_type}",
