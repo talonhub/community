@@ -15,19 +15,6 @@ ctx.lists["user.vimscript_functions"] = {
     "length": "len",
 }
 
-ctx.lists["user.vimscript_scope"] = {
-    "argument": "a:",
-    "arg": "a:",
-    "buffer": "b:",
-    "buf": "b:",
-    "window": "w:",
-    "win": "w:",
-    "tab": "t:",
-    "special": "v:",
-    "global": "g:",
-    "local": "l:",
-    "script local": "s:",
-}
 
 mod.list("vimscript_functions", desc="Standard built-in vimscript functions")
 mod.list("vimscript_scope", desc="vimscript scoping types for functions and variables")
