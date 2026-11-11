@@ -8,33 +8,18 @@ ctx.matches = r"""
 code.language: vimscript
 """
 
-ctx.lists["user.vimscript_scope"] = {
-    "argument": "a:",
-    "arg": "a:",
-    "buffer": "b:",
-    "buf": "b:",
-    "window": "w:",
-    "win": "w:",
-    "tab": "t:",
-    "special": "v:",
-    "global": "g:",
-    "local": "l:",
-    "script local": "s:",
-}
 
 mod.list("vimscript_scope", desc="vimscript scoping types for functions and variables")
 
 
 @mod.capture(rule="<user.code_common_function>")
 def vimscript_functions(m) -> str:
-    "Returns a string"
     actions.user.deprecate_capture("2026-11-10", "user.vimscript_functions")
     return m.code_common_function
 
 
 @mod.capture(rule="{user.vimscript_scope}")
 def vimscript_scope(m) -> str:
-    "Returns a string"
     return m.vimscript_scope
 
 
