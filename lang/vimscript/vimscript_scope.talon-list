@@ -1,0 +1,15 @@
+list: user.vimscript_scope
+code.language: vimscript
+-
+
+argument: a:
+arg: a:
+buffer: b:
+buf: b:
+window: w:
+win: w:
+tab: t:
+special: v:
+global: g:
+local: l:
+script local: s:
