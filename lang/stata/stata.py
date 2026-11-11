@@ -9,10 +9,6 @@ ctx.matches = r"""
 code.language: stata
 """
 
-# libraries.py
-ctx.lists["user.code_libraries"] = {
-    "estout": "estout",
-}
 
 operators = Operators(
     # code_operators_array
