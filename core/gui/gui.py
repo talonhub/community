@@ -358,7 +358,6 @@ class UIWrapper:
             ui.label(label_text)
             ui.take_available_space()
 
-
         size = self.compute_text_dimensions(
             text, ui, egui.FontId.proportional(label_size)
         )
@@ -385,7 +384,9 @@ class UIWrapper:
         ui=None,
     ):
         ui = self._ui(ui)
-        size_including_outline = egui.Vec2(size.x + stroke.width*2, size.y + stroke.width*2)
+        size_including_outline = egui.Vec2(
+            size.x + stroke.width * 2, size.y + stroke.width * 2
+        )
         _, background_rectangle = ui.allocate_space(size_including_outline)
         ui.painter().rect(
             background_rectangle,
