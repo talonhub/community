@@ -359,12 +359,14 @@ class UIWrapper:
         size = self.compute_text_dimensions(
             text, ui, egui.FontId.proportional(label_size)
         )
+        background_color = ui.visuals().extreme_bg_color
+        outline_color = warning_color
         await self.draw_inside_rectangle(
             draw_label,
             size,
             egui.CornerRadius.same(0),
-            egui.Color32.black(),
-            egui.Stroke(1.0, egui.Color32.gray()),
+            background_color,
+            egui.Stroke(1.0, outline_color),
             egui.StrokeKind.Outside,
             ui,
         )
