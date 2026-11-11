@@ -78,3 +78,10 @@ class UserActions:
 
     def code_public_function(text: str):
         code_function_declaration(text, "user.code_public_function_formatter")
+
+    def code_insert_function(text: str, selection: str):
+        substitutions = {"1": text}
+        if selection:
+            substitutions["0"] = selection
+        actions.user.insert_snippet_by_name("functionCall", substitutions)
+
