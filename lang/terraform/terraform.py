@@ -8,17 +8,6 @@ ctx.matches = r"""
 code.language: terraform
 """
 
-types = {
-    "string": "string",
-    "number": "number",
-    "bool": "bool",
-    "list": "list",
-    "map": "map",
-    "null": "null",
-}
-
-ctx.lists["user.code_type"] = types
-
 common_properties = {
     "name": "name",
     "type": "type",
