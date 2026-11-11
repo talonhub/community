@@ -26,15 +26,7 @@ common_properties = {
 mod.list("terraform_common_property", desc="Terraform Modifier")
 ctx.lists["user.terraform_common_property"] = common_properties
 
-module_blocks = {
-    "variable": "variable",
-    "output": "output",
-    "provider": "provider",
-    "module": "module",
-}
-
 mod.list("terraform_module_block", desc="Simple Terraform Block")
-ctx.lists["user.terraform_module_block"] = module_blocks
 
 operators = Operators(
     # code_operators_assignment
