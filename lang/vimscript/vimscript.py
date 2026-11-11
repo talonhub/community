@@ -77,4 +77,3 @@ class UserActions:
         if selection:
             substitutions["0"] = selection
         actions.user.insert_snippet_by_name("functionCall", substitutions)
-
