@@ -350,13 +350,14 @@ class UIWrapper:
         """Formats the text for a warning message"""
         ui = self._ui(ui)
         # pad text so that it is not right up against the rectangle
-        text = f" {text} "
         warning_color = ui.visuals().warn_fg_color
         label_size = self.get_text_size() * 1.5
         label_text = egui.RichText(text).strong().color(warning_color).size(label_size)
 
         async def draw_label(ui, background_rectangle):
             ui.label(label_text)
+            ui.take_available_space()
+
 
         size = self.compute_text_dimensions(
             text, ui, egui.FontId.proportional(label_size)
@@ -369,7 +370,7 @@ class UIWrapper:
             egui.CornerRadius.same(0),
             background_color,
             egui.Stroke(1.0, outline_color),
-            egui.StrokeKind.Inside,
+            egui.StrokeKind.Outside,
             ui,
         )
 
@@ -384,7 +385,8 @@ class UIWrapper:
         ui=None,
     ):
         ui = self._ui(ui)
-        _, background_rectangle = ui.allocate_space(size)
+        size_including_outline = egui.Vec2(size.x + stroke.width*2, size.y + stroke.width*2)
+        _, background_rectangle = ui.allocate_space(size_including_outline)
         ui.painter().rect(
             background_rectangle,
             corner_radius,
