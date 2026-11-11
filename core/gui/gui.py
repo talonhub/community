@@ -355,7 +355,9 @@ class UIWrapper:
         label_text = egui.RichText(text).strong().color(warning_color).size(label_size)
 
         async def draw_label(ui, background_rectangle):
-            async with ui.with_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(True)):
+            async with ui.with_layout(
+                egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(True)
+            ):
                 ui.label(label_text)
             ui.take_available_space()
 
@@ -505,7 +507,9 @@ class UIWrapper:
             ):
                 scroller.update_start_page(current_row_index, len(rows) - 1)
 
-    def compute_text_dimensions(self, text: str, ui=None, font_id=None, wrapping_width=None) -> egui.Vec2:
+    def compute_text_dimensions(
+        self, text: str, ui=None, font_id=None, wrapping_width=None
+    ) -> egui.Vec2:
         """Return the width and height of the text on the ui"""
         ui = self._ui(ui)
         if font_id is None:
