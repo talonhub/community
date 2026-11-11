@@ -28,6 +28,7 @@ mod.list("vimscript_scope", desc="vimscript scoping types for functions and vari
 @mod.capture(rule="<user.code_common_function>")
 def vimscript_functions(m) -> str:
     "Returns a string"
+    actions.user.deprecate_capture("2026-11-10", "user.vimscript_functions")
     return m.code_common_function
 
 
