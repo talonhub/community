@@ -22,15 +22,31 @@ settings():
     user.code_public_variable_formatter = "SNAKE_CASE"
 
 # Elixir-specific grammars
-state def: "def "
-state defp: "defp "
-state if: "if "
-state else: "else"
-state case: "case "
+state def:
+    user.deprecate_command("2026-11-11", "state def", "put def")
+    insert("def ")
+state defp:
+    user.deprecate_command("2026-11-11", "state defp", "put def p")
+    insert("defp ")
+state if:
+    user.deprecate_command("2026-11-11", "state if", "put if")
+    insert("if ")
+state else:
+    user.deprecate_command("2026-11-11", "state else", "put else")
+    insert("else")
+state case:
+    user.deprecate_command("2026-11-11", "state case", "put case")
+    insert("case ")
 state cond: "cond do"
 state try: "try do"
-state rescue: "rescue"
-state after: "after"
-state end: "end"
+state rescue:
+    user.deprecate_command("2026-11-11", "state rescue", "put rescue")
+    insert("rescue")
+state after:
+    user.deprecate_command("2026-11-11", "state after", "put after")
+    insert("after")
+state end:
+    user.deprecate_command("2026-11-11", "state end", "put end")
+    insert("end")
 
 op pipe: " |> "
