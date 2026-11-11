@@ -1,16 +1,13 @@
 import csv
 from collections.abc import Callable
 from pathlib import Path
-from typing import IO, Optional, Union
+from typing import IO
 
 from talon import actions, resource, settings
 
 # NOTE: This method requires this module to be one folder below the top-level
 #   community folder.
-SETTINGS_DIR = Path(__file__).parents[1] / "settings"
-SETTINGS_DIR.mkdir(exist_ok=True)
-PRIVATE_DIR = Path(__file__).parents[1] / "private"
-PRIVATE_DIR.mkdir(exist_ok=True)
+COMMUNITY_ROOT_DIR = Path(__file__).parents[1]
 
 CallbackT = Callable[[dict[str, str]], None]
 DecoratorT = Callable[[CallbackT], CallbackT]
@@ -19,122 +16,30 @@ DecoratorT = Callable[[CallbackT], CallbackT]
 def read_csv_list(
     f: IO, headers: tuple[str, str], is_spoken_form_first: bool = False
 ) -> dict[str, str]:
-    rows = list(csv.reader(f))
-
-    # print(str(rows))
+    rows = read_csv_rows(f, headers)
     mapping = {}
-    if len(rows) >= 2:
-        actual_headers = rows[0]
-        if actual_headers != list(headers):
-            print(
-                f'"{f.name}": Malformed headers - {actual_headers}.'
-                + f" Should be {list(headers)}. Ignoring row."
-            )
-        for row in rows[1:]:
-            if len(row) == 0:
-                # Windows newlines are sometimes read as empty rows. :champagne:
-                continue
-            if len(row) == 1:
-                output = spoken_form = row[0]
+    for row in rows:
+        if len(row) == 0:
+            # Windows newlines are sometimes read as empty rows.
+            continue
+        if len(row) == 1:
+            output = spoken_form = row[0]
+        else:
+            if is_spoken_form_first:
+                spoken_form, output = row[:2]
             else:
-                if is_spoken_form_first:
-                    spoken_form, output = row[:2]
-                else:
-                    output, spoken_form = row[:2]
+                output, spoken_form = row[:2]
 
-                if len(row) > 2:
-                    print(
-                        f'"{f.name}": More than two values in row: {row}.'
-                        + " Ignoring the extras."
-                    )
-            # Leading/trailing whitespace in spoken form can prevent recognition.
-            spoken_form = spoken_form.strip()
-            mapping[spoken_form] = output
+            if len(row) > 2:
+                print(
+                    f'"{f.name}": More than two values in row: {row}.'
+                    + " Ignoring the extras."
+                )
+        # Leading/trailing whitespace in spoken form can prevent recognition.
+        spoken_form = spoken_form.strip()
+        mapping[spoken_form] = output
 
     return mapping
-
-
-def write_csv_defaults(
-    path: Path,
-    headers: tuple[str, str],
-    default: Optional[dict[str, str]] = None,
-    is_spoken_form_first: bool = False,
-) -> None:
-    if not path.is_file() and default is not None:
-        with open(path, "w", encoding="utf-8", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(headers)
-            for key, value in default.items():
-                if key == value:
-                    writer.writerow([key])
-                elif is_spoken_form_first:
-                    writer.writerow([key, value])
-                else:
-                    writer.writerow([value, key])
-
-
-def track_csv_list(
-    filename: str,
-    headers: tuple[str, str],
-    default: Optional[dict[str, str]] = None,
-    is_spoken_form_first: bool = False,
-    private: bool = False,
-) -> DecoratorT:
-    assert filename.endswith(".csv")
-    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
-    write_csv_defaults(path, headers, default, is_spoken_form_first)
-
-    def decorator(fn: CallbackT) -> CallbackT:
-        @resource.watch(str(path))
-        def on_update(f):
-            data = read_csv_list(f, headers, is_spoken_form_first)
-            fn(data)
-
-    return decorator
-
-
-def needs_final_newline(path: Union[Path, str]) -> bool:
-    with open(path) as file:
-        line = None
-        for line in file:  # noqa: B007
-            pass  # iterate through each line in file
-    return line is not None and not line.endswith("\n")
-
-
-def append_to_csv(filename: str, rows: dict[str, str], private: bool = False):
-    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
-    assert filename.endswith(".csv")
-
-    needs_newline = needs_final_newline(path)
-    with open(path, "a", encoding="utf-8", newline="") as file:
-        writer = csv.writer(file)
-        if needs_newline:
-            writer.writerow([])
-        for key, value in rows.items():
-            writer.writerow([key] if key == value else [value, key])
-
-
-WatchCallbackType = Callable[[IO], None]
-WatchDecoratorType = Callable[[WatchCallbackType], WatchCallbackType]
-
-
-def track_file(
-    filename: str,
-    default: str = "",
-    private: bool = False,
-) -> WatchDecoratorType:
-    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
-    if not path.is_file():
-        path.write_text(default)
-
-    def decorator(fn: WatchCallbackType) -> WatchCallbackType:
-        @resource.watch(path)
-        def on_update(f):
-            fn(f)
-
-        return on_update
-
-    return decorator
 
 
 def read_csv_rows(f: IO, headers: tuple[str, ...]) -> list[list[str]]:
@@ -155,16 +60,109 @@ def read_csv_rows(f: IO, headers: tuple[str, ...]) -> list[list[str]]:
     return rows[1:]
 
 
+def write_csv_defaults(
+    path: Path,
+    headers: tuple[str, str],
+    default: dict[str, str] | None = None,
+    is_spoken_form_first: bool = False,
+) -> None:
+    """Writes a dict of output: spoken form pairs to csv if the file doesn't exist. is_spoken_form_first swaps the order to spoken form: output."""
+    rows = []
+    for key, value in default.items():
+        if key == value:
+            rows.append([key])
+        elif is_spoken_form_first:
+            rows.append([key, value])
+        else:
+            rows.append([value, key])
+    write_csv_default_rows(path, headers, rows)
+
+
 def write_csv_default_rows(
     path: Path,
     headers: tuple[str, ...],
-    default: Optional[list[list[str]]] = None,
+    default: list[list[str]] | None = None,
 ) -> None:
-    if not path.is_file() and default is not None:
-        with open(path, "w", encoding="utf-8", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(headers)
-            writer.writerows(default)
+    """Writes a list of rows to csv if the file doesn't exist. May be multiple columns"""
+    if path.is_file() or default is None:
+        return
+    with open(path, "w", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(headers)
+        writer.writerows(default)
+
+
+def track_csv_list(
+    filename: str,
+    headers: tuple[str, str],
+    default: dict[str, str] | None = None,
+    is_spoken_form_first: bool = False,
+    private: bool = False,
+) -> DecoratorT:
+    assert filename.endswith(".csv")
+    path = resolve_setting_file_path(filename, private)
+    write_csv_defaults(path, headers, default, is_spoken_form_first)
+
+    def decorator(fn: CallbackT) -> CallbackT:
+        @resource.watch(str(path))
+        def on_update(f):
+            data = read_csv_list(f, headers, is_spoken_form_first)
+            fn(data)
+
+    return decorator
+
+
+def append_to_csv(filename: str, rows: dict[str, str], private: bool = False):
+    assert filename.endswith(".csv")
+    path = resolve_setting_file_path(filename, private)
+
+    needs_newline = needs_final_newline(path)
+    with open(path, "a", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+        if needs_newline:
+            writer.writerow([])
+        for key, value in rows.items():
+            writer.writerow([key] if key == value else [value, key])
+
+
+def resolve_setting_file_path(filename, private):
+    # Make directory on resolve rather than earlier, in case it has been deleted since talon was started
+    settings_dir = COMMUNITY_ROOT_DIR / "settings"
+    settings_dir.mkdir(exist_ok=True)
+    private_dir = COMMUNITY_ROOT_DIR / "private"
+    private_dir.mkdir(exist_ok=True)
+    return (private_dir / filename) if private else (settings_dir / filename)
+
+
+def needs_final_newline(path: Path | str) -> bool:
+    with open(path) as file:
+        line = None
+        for line in file:  # noqa: B007
+            pass  # iterate through each line in file
+    return line is not None and not line.endswith("\n")
+
+
+WatchCallbackType = Callable[[IO], None]
+WatchDecoratorType = Callable[[WatchCallbackType], WatchCallbackType]
+
+
+def track_file(
+    filename: str,
+    default: str = "",
+    private: bool = False,
+) -> WatchDecoratorType:
+    path = resolve_setting_file_path(filename, private)
+    if not path.is_file():
+        path.write_text(default)
+
+    def decorator(fn: WatchCallbackType) -> WatchCallbackType:
+        @resource.watch(path)
+        def on_update(f):
+            fn(f)
+
+        return on_update
+
+    return decorator
 
 
 RawRowsCallbackT = Callable[[list[list[str]]], None]
@@ -174,11 +172,11 @@ RawRowsDecoratorT = Callable[[RawRowsCallbackT], RawRowsCallbackT]
 def track_csv_rows(
     filename: str,
     headers: tuple[str, ...],
-    default: Optional[list[list[str]]] = None,
+    default: list[list[str]] | None = None,
     private: bool = False,
 ) -> RawRowsDecoratorT:
     assert filename.endswith(".csv")
-    path = (PRIVATE_DIR / filename) if private else (SETTINGS_DIR / filename)
+    path = resolve_setting_file_path(filename, private)
     write_csv_default_rows(path, headers, default)
 
     def decorator(fn: RawRowsCallbackT) -> RawRowsCallbackT:
