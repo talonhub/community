@@ -355,11 +355,13 @@ class UIWrapper:
         label_text = egui.RichText(text).strong().color(warning_color).size(label_size)
 
         async def draw_label(ui, background_rectangle):
-            ui.label(label_text)
+            async with ui.with_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(True)):
+                ui.label(label_text)
             ui.take_available_space()
 
+        wrapping_width = ui.available_width() - INNER_MARGIN
         size = self.compute_text_dimensions(
-            text, ui, egui.FontId.proportional(label_size)
+            text, ui, egui.FontId.proportional(label_size), wrapping_width
         )
         background_color = ui.visuals().extreme_bg_color
         outline_color = warning_color
@@ -503,12 +505,17 @@ class UIWrapper:
             ):
                 scroller.update_start_page(current_row_index, len(rows) - 1)
 
-    def compute_text_dimensions(self, text: str, ui=None, font_id=None) -> egui.Vec2:
+    def compute_text_dimensions(self, text: str, ui=None, font_id=None, wrapping_width=None) -> egui.Vec2:
         """Return the width and height of the text on the ui"""
         ui = self._ui(ui)
         if font_id is None:
             font_id = egui.FontId.proportional(self.get_text_size(ui))
-        galley = ui.painter().layout_no_wrap(text, font_id, egui.Color32.black())
+        # the specific value does not matter
+        text_color = egui.Color32.black()
+        if wrapping_width is None:
+            galley = ui.painter().layout_no_wrap(text, font_id, text_color)
+        else:
+            galley = ui.painter().layout(text, font_id, text_color, wrapping_width)
         return galley.size()
 
     def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
