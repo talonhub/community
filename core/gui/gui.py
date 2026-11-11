@@ -349,6 +349,8 @@ class UIWrapper:
     async def warning_text(self, text, ui=None):
         """Formats the text for a warning message"""
         ui = self._ui(ui)
+        # pad text so that it is not right up against the rectangle
+        text = f" {text} "
         warning_color = ui.visuals().warn_fg_color
         label_size = self.get_text_size() * 1.5
         label_text = egui.RichText(text).strong().color(warning_color).size(label_size)
@@ -367,7 +369,7 @@ class UIWrapper:
             egui.CornerRadius.same(0),
             background_color,
             egui.Stroke(1.0, outline_color),
-            egui.StrokeKind.Outside,
+            egui.StrokeKind.Inside,
             ui,
         )
 
