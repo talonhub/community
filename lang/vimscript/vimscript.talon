@@ -28,8 +28,7 @@ assign [<user.vimscript_scope>] (variable | var) [<user.text>] [over]:
     insert(vimscript_scope or "")
     user.code_private_variable_formatter(text)
 
-# see lang/vimscript/vimscript.py for list
-<user.vimscript_functions>: insert("{vimscript_functions} ")
+<user.code_common_function>: insert("{code_common_function} ")
 
 # XXX - possibly overlap with some programming.talon
 state command: "command! "
