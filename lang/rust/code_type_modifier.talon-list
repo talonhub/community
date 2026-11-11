@@ -1,0 +1,11 @@
+list: user.code_type_modifier
+code.language: rust
+-
+
+borrowed mutable: "&mut "
+borrowed mute: "&mut "
+mutable borrowed: "&mut "
+mute borrowed: "&mut "
+borrowed: &
+mutable: "mut "
+mute: "mut "
