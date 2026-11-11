@@ -1,0 +1,14 @@
+list: user.code_type
+code.language: typescript
+code.language: typescriptreact
+# Make typescript win over javascript
+mode: command
+-
+
+any
+boolean
+integer: int
+null
+number
+string
+undefined
