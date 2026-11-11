@@ -22,13 +22,11 @@ mod.list("vimscript_scope", desc="vimscript scoping types for functions and vari
 
 @mod.capture(rule="{user.vimscript_functions}")
 def vimscript_functions(m) -> str:
-    "Returns a string"
     return m.vimscript_functions
 
 
 @mod.capture(rule="{user.vimscript_scope}")
 def vimscript_scope(m) -> str:
-    "Returns a string"
     return m.vimscript_scope
 
 
