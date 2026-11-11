@@ -8,6 +8,7 @@ code.language: typescriptreact
 mode: command
 """
 
+
 @ctx.action_class("user")
 class UserActions:
     def code_private_function(text: str):
