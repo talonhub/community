@@ -346,6 +346,40 @@ class UIWrapper:
         warning_color = ui.visuals().warn_fg_color
         return egui.RichText(text).strong().color(warning_color).heading()
 
+    async def warning_text(self, text, ui=None):
+        """Formats the text for a warning message"""
+        ui = self._ui(ui)
+        warning_color = ui.visuals().warn_fg_color
+        label_size = self.get_text_size()*1.5
+        label_text = egui.RichText(text).strong().color(warning_color).size(label_size)
+        async def draw_label(ui, background_rectangle):
+            ui.label(label_text)
+        size = self.compute_text_dimensions(text, ui, egui.FontId.proportional(label_size))
+        await self.draw_inside_rectangle(
+            draw_label,
+            size,
+            egui.CornerRadius.same(0),
+            egui.Color32.black(),
+            egui.Stroke(1.0, egui.Color32.gray()),
+            egui.StrokeKind.Outside,
+            ui
+        )
+    
+    async def draw_inside_rectangle(self, draw_function, size: egui.Vec2, corner_radius: egui.CornerRadius, color, stroke, stroke_kind, ui=None):
+        ui = self._ui(ui)
+        _, background_rectangle = ui.allocate_space(size)
+        ui.painter().rect(
+            background_rectangle,
+            corner_radius,
+            color,
+            stroke,
+            stroke_kind,
+        )
+        async with ui.scope_builder(
+            egui.UiBuilder().max_rect(background_rectangle)
+        ):
+            await draw_function(ui, background_rectangle)
+
     async def render_table(
         self,
         headers,
@@ -451,12 +485,16 @@ class UIWrapper:
             ):
                 scroller.update_start_page(current_row_index, len(rows) - 1)
 
-    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+    def compute_text_dimensions(self, text: str, ui=None, font_id=None) -> egui.Vec2:
+        """Return the width and height of the text on the ui"""
         ui = self._ui(ui)
         if font_id is None:
-            font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
+            font_id = egui.FontId.proportional(self.get_text_size(ui))
         galley = ui.painter().layout_no_wrap(text, font_id, egui.Color32.black())
-        return galley.size().x
+        return galley.size()
+
+    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+        self.compute_text_dimensions(text, ui, font_id).x
 
 
 def open_gui(
