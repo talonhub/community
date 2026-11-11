@@ -1,0 +1,8 @@
+list: user.code_common_function
+code.language: haskell
+-
+
+doc: :doc
+documentation: :doc
+null
+type: :t
