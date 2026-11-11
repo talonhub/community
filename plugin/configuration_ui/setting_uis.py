@@ -275,7 +275,6 @@ class ColorSettingRenderer(SettingRenderer):
         if is_invalid_color:
             ui_wrapper = UIWrapper(ui)
             await ui_wrapper.warning_text("Invalid color!")
-            
 
         # allow focusing, but focus the name picker with shift tab as a temporary workaround for not being able to focus the combo box directly
         if self.should_focus:

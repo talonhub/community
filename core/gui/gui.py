@@ -350,11 +350,15 @@ class UIWrapper:
         """Formats the text for a warning message"""
         ui = self._ui(ui)
         warning_color = ui.visuals().warn_fg_color
-        label_size = self.get_text_size()*1.5
+        label_size = self.get_text_size() * 1.5
         label_text = egui.RichText(text).strong().color(warning_color).size(label_size)
+
         async def draw_label(ui, background_rectangle):
             ui.label(label_text)
-        size = self.compute_text_dimensions(text, ui, egui.FontId.proportional(label_size))
+
+        size = self.compute_text_dimensions(
+            text, ui, egui.FontId.proportional(label_size)
+        )
         await self.draw_inside_rectangle(
             draw_label,
             size,
@@ -362,10 +366,19 @@ class UIWrapper:
             egui.Color32.black(),
             egui.Stroke(1.0, egui.Color32.gray()),
             egui.StrokeKind.Outside,
-            ui
+            ui,
         )
-    
-    async def draw_inside_rectangle(self, draw_function, size: egui.Vec2, corner_radius: egui.CornerRadius, color, stroke, stroke_kind, ui=None):
+
+    async def draw_inside_rectangle(
+        self,
+        draw_function,
+        size: egui.Vec2,
+        corner_radius: egui.CornerRadius,
+        color,
+        stroke,
+        stroke_kind,
+        ui=None,
+    ):
         ui = self._ui(ui)
         _, background_rectangle = ui.allocate_space(size)
         ui.painter().rect(
@@ -375,9 +388,7 @@ class UIWrapper:
             stroke,
             stroke_kind,
         )
-        async with ui.scope_builder(
-            egui.UiBuilder().max_rect(background_rectangle)
-        ):
+        async with ui.scope_builder(egui.UiBuilder().max_rect(background_rectangle)):
             await draw_function(ui, background_rectangle)
 
     async def render_table(
