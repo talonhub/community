@@ -43,17 +43,6 @@ ctx.matches = r"""
 code.language: rust
 """
 
-# rust specific grammar
-ctx.lists["user.code_type_modifier"] = {
-    "mutable": "mut ",
-    "mute": "mut ",
-    "borrowed": "&",
-    "borrowed mutable": "&mut ",
-    "borrowed mute": "&mut ",
-    "mutable borrowed": "&mut ",
-    "mute borrowed": "&mut ",
-}
-
 
 @ctx.capture(
     "user.code_type",

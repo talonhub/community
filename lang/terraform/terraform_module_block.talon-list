@@ -1,0 +1,8 @@
+list: user.terraform_module_block
+code.language: terraform
+-
+
+module
+output
+provider
+variable
