@@ -215,7 +215,7 @@ class Manager:
                         create_italic_text("page up"),
                         " / ",
                         create_italic_text("page down"),
-                        " / ",
+                        " /",
                     )
                 )
                 async with self._ui.horizontal_wrapped():
