@@ -20,9 +20,9 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 
 ## Directory Structure
 
-- `core` offers essential features and critical dependencies for other other parts of Community.
+- `core` offers essential features and dependencies for other other parts of Community.
 - `apps` offers application specific functionality. Each subdirectory is for a different application. Commands intended to be used by multiple applications with certain properties should probably go in `tags`.
-- `tags` offers general commands intended to be used in multiple contexts but context specific implementations. Each subdirectory is for features associated with a single Talon tag. A relevant application or context to one of these tags can take advantage of the general functionality and command grammar by activating the tag and providing context specific implementations for the associated Talon constructs declared in the tag subdirectory. See [Generalizing Commands](#generalizing-commands) for more information. 
+- `tags` offers general commands intended to be used in multiple contexts but require context specific implementations. Each subdirectory is for features associated with a single Talon tag. A relevant application or context to one of these tags can take advantage of the general functionality and command grammar by activating the tag and providing context specific implementations for the associated Talon constructs declared in the tag subdirectory. See [Generalizing Commands](#generalizing-commands) for more information. 
 - `plugin` has self contained features that the rest of Community does not depend on. Each subdirectory has a different set of self contained functionality. A user should be able to delete the entire directory or any of its subdirectories without breaking anything else in Community.
 - `lang` provides programming language commands. `lang/tags` provides general functionality intended to be used across multiple languages. The rest of the subdirectories offer support for specific languages.
 - `test` contains unit tests. Community's GitHub action runner runs these automatically on pull requests. Put automated tests here unless you have a good reason not to.
