@@ -382,8 +382,8 @@ class UIWrapper:
         size: egui.Vec2,
         corner_radius: egui.CornerRadius,
         color: egui.Color32,
-        stroke: egui.Stroke,
-        stroke_kind: egui.StrokeKind,
+        stroke: egui.Stroke=egui.Stroke.NONE,
+        stroke_kind: egui.StrokeKind=egui.StrokeKind.Outside,
         ui=None,
     ):
         ui = self._ui(ui)
