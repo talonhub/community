@@ -16,5 +16,5 @@ none: None
 sequence: Sequence
 string: str
 tuple: tuple
-union: UnionAny
+union: Union
 vector: Vector
