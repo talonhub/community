@@ -348,6 +348,11 @@ class UIWrapper:
         label_size = self.get_text_size() * 1.5
         label_text = egui.RichText(text).strong().color(warning_color).size(label_size)
 
+        # (egui.Color32.black(), egui.Color32.from_rgb(255, 255, 0)),
+        #     (egui.Color32.red(), egui.Color32.from_rgb(255, 255, 0)),
+        #     (egui.Color32.black(), egui.Color32.from_rgb(255, 128, 128)),
+        #     (egui.Color32.from_rgb(0x8b, 0, 0), egui.Color32.from_rgb(255, 128, 128)),
+
         async def draw_label(ui, background_rectangle):
             async with ui.with_layout(
                 egui.Layout.top_down(egui.Align.TOP).with_main_wrap(True)
