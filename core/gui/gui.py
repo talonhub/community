@@ -348,6 +348,7 @@ class UIWrapper:
         color: egui.Color32,
         stroke: egui.Stroke | None = None,
         stroke_kind: egui.StrokeKind = egui.StrokeKind.Outside,
+        shadow_rectangle_translation: egui.Vec2 | None=None,
         ui=None,
     ):
         if stroke is None:
@@ -357,6 +358,16 @@ class UIWrapper:
             size.x + stroke.width * 2, size.y + stroke.width * 2
         )
         _, background_rectangle = ui.allocate_space(size_including_outline)
+        
+        if shadow_rectangle_translation is not None:
+            shadow_rectangle = background_rectangle.translate(shadow_rectangle_translation)
+            ui.painter().rect(
+                shadow_rectangle,
+                corner_radius,
+                stroke.color,
+                stroke,
+                stroke_kind,
+            )
         ui.painter().rect(
             background_rectangle,
             corner_radius,
@@ -399,8 +410,7 @@ class UIWrapper:
             egui.CornerRadius.same(0),
             background_color,
             egui.Stroke(1.0, outline_color),
-            egui.StrokeKind.Outside,
-            ui,
+            ui=ui,
         )
 
     async def draw_key(self, text, ui=None):
@@ -433,7 +443,8 @@ class UIWrapper:
             background_color,
             egui.Stroke(outline_thickness, outline_color),
             egui.StrokeKind.Inside,
-            ui,
+            shadow_rectangle_translation=egui.Vec2(0, 1.5),
+            ui=ui,
         )
 
     async def render_table(
