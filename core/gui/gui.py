@@ -340,12 +340,6 @@ class UIWrapper:
         ui = self._ui(ui)
         ui.add_space(compute_text_size())
 
-    def create_warning_text(self, text, ui=None):
-        """Formats the text for a warning message"""
-        ui = self._ui(ui)
-        warning_color = ui.visuals().warn_fg_color
-        return egui.RichText(text).strong().color(warning_color).heading()
-
     async def warning_text(self, text, ui=None):
         """Formats the text for a warning message"""
         ui = self._ui(ui)
