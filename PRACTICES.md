@@ -6,6 +6,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 
 ## Table of Contents
 
+- [Directory Structure](#directory-structure)
 - [Breaking Changes](#breaking-changes)
 - [Useless/Unused Code](#uselessunused-code)
 - [When to Use Snippets](#when-to-use-snippets)
@@ -16,6 +17,16 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - [Sleep Practices](#sleep-practices)
 - [GUI Practices](#gui-practices)
 - [Naming Practices](#naming-practices)
+
+## Directory Structure
+
+- `core` has highly important things and things other parts of Community depend on.
+- `tags` consists of directories for different groups of functionality. Each subdirectory has a tag for activating the commands in the directory for a specific context. A relevant application or context to one of these tags can take advantage of the general functionality and command grammar by activating the tag and providing context specific implementations for any relevant actions or other Talon constructs declared in the tag directory. See [Generalizing Commands](#generalizing-commands) for more information.
+- `apps` offers application specific functionality. Each subdirectory is for a different application. Commands intended to be used by multiple applications should probably go in `tags`.
+- `plugin` has self contained features that the rest of Community does not depend on. Each subdirectory has a different set of self contained functionality. A user should be able to delete the entire directory or any of its subdirectories without breaking anything else in Community.
+- `lang` provides programming language commands. `lang/tags` provides general functionality intended to be used across multiple languages. The rest of the subdirectories offer support for specific languages.
+- `test` contains unit tests. Community's GitHub action runner runs these automatically on pull requests. Put automated tests here unless you have a good reason not to.
+- `migration_helpers` offers utility functionality for helping people migrate from older Community versions.
 
 ## Breaking Changes
 
