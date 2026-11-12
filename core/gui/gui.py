@@ -376,13 +376,43 @@ class UIWrapper:
             ui,
         )
 
+    async def draw_key(self, text, ui=None):
+        ui = self._ui(ui)
+        outline_color = egui.Color32.from_gray(200)
+        background_color = egui.Color32.from_gray(125)
+        text_color = egui.Color32.white()
+        label_text = egui.RichText(text).strong().color(text_color)
+        outline_thickness = 2.0
+        corner_radius = 4
+
+        async def draw_label(ui, background_rectangle):
+            async with ui.horizontal():
+                ui.add_space(outline_thickness)
+                async with ui.vertical():
+                    ui.add_space(outline_thickness)
+                    ui.label(label_text)
+
+        size = self.compute_text_dimensions(
+            text, ui
+        )
+
+        await self.draw_inside_rectangle(
+            draw_label,
+            size,
+            egui.CornerRadius.same(corner_radius),
+            background_color,
+            egui.Stroke(outline_thickness, outline_color),
+            egui.StrokeKind.Inside,
+            ui,
+        )
+
     async def draw_inside_rectangle(
         self,
         draw_function,
         size: egui.Vec2,
         corner_radius: egui.CornerRadius,
         color: egui.Color32,
-        stroke: egui.Stroke = egui.Stroke.NONE,
+        stroke: egui.Stroke = egui.Stroke.none(),
         stroke_kind: egui.StrokeKind = egui.StrokeKind.Outside,
         ui=None,
     ):

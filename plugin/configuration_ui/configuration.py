@@ -213,12 +213,17 @@ class Manager:
                         create_italic_text("comment toggle <number>"),
                         ': toggle if the setting is set in a Community .talon file, such as by saying "comment toggle one".\n',
                         create_italic_text("page up"),
-                        "  and ",
+                        " / ",
                         create_italic_text("page down"),
-                        ": scroll this window",
+                        " / ",
                     )
                 )
-                self._ui.label(command_instructions_text)
+                async with self._ui.horizontal_wrapped():
+                    self._ui.label(command_instructions_text)
+                    await self._ui_wrapper.draw_key("PgUp")
+                    self._ui.label("/")
+                    await self._ui_wrapper.draw_key("PgDn")
+                    self._ui.label(": scroll this window")
             self._ui_wrapper.spacing()
             self._ui.label("* toggle setting that setting in a Community .talon file")
             self._ui.separator()
