@@ -392,9 +392,7 @@ class UIWrapper:
                     ui.add_space(outline_thickness)
                     ui.label(label_text)
 
-        size = self.compute_text_dimensions(
-            text, ui
-        )
+        size = self.compute_text_dimensions(text, ui)
 
         await self.draw_inside_rectangle(
             draw_label,
