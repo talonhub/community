@@ -351,14 +351,17 @@ class UIWrapper:
         shadow_rectangle_translation: egui.Vec2 | None = None,
         ui=None,
     ):
+        ui = self._ui(ui)
         if stroke is None:
             stroke = egui.Stroke.none()
-        ui = self._ui(ui)
+
+        # allocate space for the background rectangle
         size_including_outline = egui.Vec2(
             size.x + stroke.width * 2, size.y + stroke.width * 2
         )
         _, background_rectangle = ui.allocate_space(size_including_outline)
 
+        # the optional shadow rectangle is for making the outline thicker for part of the rectangle
         if shadow_rectangle_translation is not None:
             shadow_rectangle = background_rectangle.translate(
                 shadow_rectangle_translation
@@ -370,6 +373,8 @@ class UIWrapper:
                 stroke,
                 stroke_kind,
             )
+
+        # draw the background rectangle
         ui.painter().rect(
             background_rectangle,
             corner_radius,
@@ -377,13 +382,15 @@ class UIWrapper:
             stroke,
             stroke_kind,
         )
+
+        # call the draw function to draw inside the rectangle
         async with ui.scope_builder(egui.UiBuilder().max_rect(background_rectangle)):
             await draw_function(ui, background_rectangle)
 
     async def warning_text(self, text, ui=None):
         """Formats the text for a warning message"""
         ui = self._ui(ui)
-        # pad text so that it is not right up against the rectangle
+
         warning_color = ui.visuals().warn_fg_color
         label_size = self.get_text_size() * 1.5
         label_text = egui.RichText(text).strong().color(warning_color).size(label_size)
@@ -394,6 +401,7 @@ class UIWrapper:
         #     (egui.Color32.from_rgb(0x8b, 0, 0), egui.Color32.from_rgb(255, 128, 128)),
 
         async def draw_label(ui, background_rectangle):
+            # the layout makes wrapping work properly
             async with ui.with_layout(
                 egui.Layout.top_down(egui.Align.TOP).with_main_wrap(True)
             ):
@@ -417,6 +425,8 @@ class UIWrapper:
 
     async def draw_key(self, text, ui=None):
         ui = self._ui(ui)
+
+        # pick colors
         if ui.visuals().dark_mode:
             outline_color = egui.Color32.from_gray(119)
             background_color = egui.Color32.black()
@@ -425,18 +435,21 @@ class UIWrapper:
             outline_color = egui.Color32.from_gray(178)
             background_color = egui.Color32.from_gray(230)
             text_color = egui.Color32.black()
+
+        # define rectangle properties and text
         label_text = egui.RichText(text).strong().color(text_color)
+        size = self.compute_text_dimensions(text, ui)
         outline_thickness = 2.0
         corner_radius = 4
 
         async def draw_label(ui, background_rectangle):
+            # add padding so the label is not right up against the outline
             async with ui.horizontal():
                 ui.add_space(outline_thickness)
                 async with ui.vertical():
                     ui.add_space(outline_thickness)
+                    # show the text
                     ui.label(label_text)
-
-        size = self.compute_text_dimensions(text, ui)
 
         await self.draw_inside_rectangle(
             draw_label,
