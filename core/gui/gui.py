@@ -585,6 +585,7 @@ class UIWrapper:
             ):
                 scroller.update_start_page(current_row_index, len(rows) - 1)
 
+
 def open_gui(
     *,
     screen: Screen | None = None,
