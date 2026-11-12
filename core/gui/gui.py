@@ -340,6 +340,31 @@ class UIWrapper:
         ui = self._ui(ui)
         ui.add_space(compute_text_size())
 
+    async def draw_inside_rectangle(
+        self,
+        draw_function,
+        size: egui.Vec2,
+        corner_radius: egui.CornerRadius,
+        color: egui.Color32,
+        stroke: egui.Stroke = egui.Stroke.none(),
+        stroke_kind: egui.StrokeKind = egui.StrokeKind.Outside,
+        ui=None,
+    ):
+        ui = self._ui(ui)
+        size_including_outline = egui.Vec2(
+            size.x + stroke.width * 2, size.y + stroke.width * 2
+        )
+        _, background_rectangle = ui.allocate_space(size_including_outline)
+        ui.painter().rect(
+            background_rectangle,
+            corner_radius,
+            color,
+            stroke,
+            stroke_kind,
+        )
+        async with ui.scope_builder(egui.UiBuilder().max_rect(background_rectangle)):
+            await draw_function(ui, background_rectangle)
+
     async def warning_text(self, text, ui=None):
         """Formats the text for a warning message"""
         ui = self._ui(ui)
@@ -403,31 +428,6 @@ class UIWrapper:
             egui.StrokeKind.Inside,
             ui,
         )
-
-    async def draw_inside_rectangle(
-        self,
-        draw_function,
-        size: egui.Vec2,
-        corner_radius: egui.CornerRadius,
-        color: egui.Color32,
-        stroke: egui.Stroke = egui.Stroke.none(),
-        stroke_kind: egui.StrokeKind = egui.StrokeKind.Outside,
-        ui=None,
-    ):
-        ui = self._ui(ui)
-        size_including_outline = egui.Vec2(
-            size.x + stroke.width * 2, size.y + stroke.width * 2
-        )
-        _, background_rectangle = ui.allocate_space(size_including_outline)
-        ui.painter().rect(
-            background_rectangle,
-            corner_radius,
-            color,
-            stroke,
-            stroke_kind,
-        )
-        async with ui.scope_builder(egui.UiBuilder().max_rect(background_rectangle)):
-            await draw_function(ui, background_rectangle)
 
     async def render_table(
         self,
