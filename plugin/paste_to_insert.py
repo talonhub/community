@@ -32,5 +32,7 @@ class Actions:
         """Forces the text to be typed instead of pasted even if the paste_to_insert_threshold is used"""
         global bypass_paste_to_insert
         bypass_paste_to_insert = True
-        actions.insert(text)
-        bypass_paste_to_insert = False
+        try:
+            actions.insert(text)
+        finally:
+            bypass_paste_to_insert = False
