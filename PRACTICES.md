@@ -28,6 +28,8 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - `test` contains unit tests. Community's GitHub action runner runs these automatically on pull requests. Put automated tests here unless you have a good reason not to.
 - `migration_helpers` offers utility functionality for helping people migrate from older Community versions.
 
+Most of these directories have a README.md file offering more information.
+
 ## Breaking Changes
 
 Consider discussing whether breaking changes are acceptable with maintainers before following these instructions.
