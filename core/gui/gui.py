@@ -403,9 +403,14 @@ class UIWrapper:
 
     async def draw_key(self, text, ui=None):
         ui = self._ui(ui)
-        outline_color = egui.Color32.from_gray(200)
-        background_color = egui.Color32.from_gray(125)
-        text_color = egui.Color32.white()
+        if ui.visuals().dark_mode:
+            outline_color = egui.Color32.from_gray(119)
+            background_color = egui.Color32.black()
+            text_color = egui.Color32.from_hex(TEXT_COLOR_DARK_MODE)
+        else:
+            outline_color = egui.Color32.from_gray(178)
+            background_color = egui.Color32.from_gray(230)
+            text_color = egui.Color32.black()
         label_text = egui.RichText(text).strong().color(text_color)
         outline_thickness = 2.0
         corner_radius = 4
