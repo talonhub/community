@@ -26,7 +26,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - `plugin` each subdirectory offers self contained features. Deleting any of these subdirectories will not affect the rest of Community.
 - `lang` provides programming language commands. `lang/tags` provides functionality used by multiple languages while the other subdirectories each support a specific language.
 - `test` contains unit tests. Community's GitHub action runner runs these automatically on pull requests. Put automated tests here unless you have a good reason not to.
-- `migration_helpers` offers utility functionality for helping people migrate from older Community versions.
+- `migration_helpers` offers utilities for helping users migrate from older versions.
 
 Most of these directories have a README.md file offering more information.
 
