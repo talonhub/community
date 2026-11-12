@@ -348,7 +348,7 @@ class UIWrapper:
         color: egui.Color32,
         stroke: egui.Stroke | None = None,
         stroke_kind: egui.StrokeKind = egui.StrokeKind.Outside,
-        shadow_rectangle_translation: egui.Vec2 | None=None,
+        shadow_rectangle_translation: egui.Vec2 | None = None,
         ui=None,
     ):
         if stroke is None:
@@ -358,9 +358,11 @@ class UIWrapper:
             size.x + stroke.width * 2, size.y + stroke.width * 2
         )
         _, background_rectangle = ui.allocate_space(size_including_outline)
-        
+
         if shadow_rectangle_translation is not None:
-            shadow_rectangle = background_rectangle.translate(shadow_rectangle_translation)
+            shadow_rectangle = background_rectangle.translate(
+                shadow_rectangle_translation
+            )
             ui.painter().rect(
                 shadow_rectangle,
                 corner_radius,
