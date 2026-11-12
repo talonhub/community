@@ -522,7 +522,7 @@ class UIWrapper:
         return galley.size()
 
     def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
-        self.compute_text_dimensions(text, ui, font_id).x
+        return self.compute_text_dimensions(text, ui, font_id).x
 
 
 def open_gui(
