@@ -20,7 +20,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 
 ## Directory Structure
 
-- `core` offers essential features and dependencies for other other parts of Community.
+- `core` offers essential features and dependencies for other parts of Community.
 - `apps` offers application specific functionality. Each subdirectory is for a different application. Commands intended to be used by multiple applications with certain properties should probably go in `tags`.
 - `tags` offers general commands that require context specific implementations. Each subdirectory is for a command set associated with a Talon tag. A relevant application or context can use one of these command sets by activating its tag and providing context specific implementations for the associated Talon constructs. See [Generalizing Commands](#generalizing-commands) for more information. 
 - `plugin` each subdirectory offers self contained features. Deleting any of these subdirectories will not affect the rest of Community.
