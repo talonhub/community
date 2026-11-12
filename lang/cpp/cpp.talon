@@ -14,7 +14,6 @@ tag(): user.code_object_oriented
 
 settings():
     user.code_private_variable_formatter = "SNAKE_CASE"
-    user.code_class_formatter = "PUBLIC_CAMEL_CASE"
 
 # e.g. "stood vector"
 # To allow more easily dealing with generic types, a future update might include the number of generic type arguments in the string returned by the cpp_standard_type capture
