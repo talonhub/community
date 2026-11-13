@@ -21,6 +21,13 @@ focus (move | next): key(ctrl-`)
 grab left: key(shift-up)
 grab right: key(shift-down)
 add line: key(shift-enter)
+(slack | lack) new message: user.slack_open_new_message()
+message {user.contact_full_names}: user.slack_message_contact(contact_full_names)
+message from {user.contact_full_names}:
+    user.slack_search_messages_from(contact_full_names)
+text {user.contact_full_names} <user.text>:
+    user.slack_message_contact(contact_full_names)
+    insert(text)
 
 (slack | lack) (slap | slaw | slapper): edit.line_insert_down()
 (element | bit) [next]: key(tab)
