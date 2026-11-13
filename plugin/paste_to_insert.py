@@ -13,14 +13,14 @@ Zero means always paste; -1 means never paste. Note: some contexts (e.g. the ter
 )
 
 # forces text to be typed and not pasted
-bypass_paste_to_insert: bool = False
+force_typing: bool = False
 
 
 @ctx.action_class("main")
 class MainActions:
     def insert(text):
         threshold = settings.get("user.paste_to_insert_threshold")
-        if 0 <= threshold < len(text) and not bypass_paste_to_insert:
+        if 0 <= threshold < len(text) and not force_typing:
             actions.user.paste(text)
             return
         actions.next(text)
@@ -30,9 +30,9 @@ class MainActions:
 class Actions:
     def type_text(text: str):
         """Forces the text to be typed instead of pasted even if the paste_to_insert_threshold is used"""
-        global bypass_paste_to_insert
-        bypass_paste_to_insert = True
+        global force_typing
+        force_typing = True
         try:
             actions.insert(text)
         finally:
-            bypass_paste_to_insert = False
+            force_typing = False
