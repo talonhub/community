@@ -20,3 +20,6 @@ tag(): user.anaconda
 # tag(): user.kubectl
 
 tag(): user.file_manager
+
+# Uncomment the following line to enable common unix utilities from unix_utilities.py
+# tag(): user.unix_utilities
