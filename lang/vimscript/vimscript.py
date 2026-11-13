@@ -8,21 +8,14 @@ ctx.matches = r"""
 code.language: vimscript
 """
 
-ctx.lists["user.vimscript_functions"] = {
-    "string len": "strlen",
-    "get line": "getline",
-    "set line": "setline",
-    "length": "len",
-}
 
-
-mod.list("vimscript_functions", desc="Standard built-in vimscript functions")
 mod.list("vimscript_scope", desc="vimscript scoping types for functions and variables")
 
 
-@mod.capture(rule="{user.vimscript_functions}")
+@mod.capture(rule="<user.code_common_function>")
 def vimscript_functions(m) -> str:
-    return m.vimscript_functions
+    actions.user.deprecate_capture("2026-11-10", "user.vimscript_functions")
+    return m.code_common_function
 
 
 @mod.capture(rule="{user.vimscript_scope}")
@@ -63,3 +56,9 @@ class UserActions:
 
     def code_public_function(text: str):
         code_function_declaration(text, "user.code_public_function_formatter")
+
+    def code_insert_function(text: str, selection: str):
+        substitutions = {"1": text}
+        if selection:
+            substitutions["0"] = selection
+        actions.user.insert_snippet_by_name("functionCall", substitutions)
