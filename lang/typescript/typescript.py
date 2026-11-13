@@ -8,16 +8,6 @@ code.language: typescriptreact
 mode: command
 """
 
-ctx.lists["user.code_type"] = {
-    "boolean": "boolean",
-    "integer": "int",
-    "string": "string",
-    "null": "null",
-    "undefined": "undefined",
-    "number": "number",
-    "any": "any",
-}
-
 
 @ctx.action_class("user")
 class UserActions:
