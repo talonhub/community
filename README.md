@@ -314,12 +314,15 @@ In addition to this repo, there are [other Talon user file sets](https://talon.w
 
 This repository is now officially a team effort. The following contributors have direct access:
 
+- @AndreasArvidsson
+- @auscompgeek
 - @dwiel
 - @fidgetingbits
 - @knausj85
 - @rntz
-- @splondike
+- @nriley
 - @pokey
+- @phillco
 
 Collaborators will reply to issues and pull requests as time and health permits. Please be patient.
 
