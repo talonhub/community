@@ -92,3 +92,12 @@ function $1 ($2)
     $0
 end
 ---
+
+language: stata
+
+$1.insertionFormatter: setting(user.code_private_function_formatter)
+-
+program $1
+    $0
+end
+---
