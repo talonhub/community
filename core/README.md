@@ -8,9 +8,8 @@ This folder contains `edit_settings.talon`, which has a command to open various 
 - `contacts` has captures for inserting contact information including name and email.
 - `edit` has commands for navigating and editing text with copy, paste, etc., as well as commands for zooming in and out
 - `edit_text_file` has a command for opening configuration files including .talon-list and .csv files
-- `file_extension` has a command for inserting a file extension
+- `file_extension` has a command for inserting file extensions
 - `formatters` has commands for formatting text
-- `file_extension` has a command for simpler spoken forms of file and website name extensions
 - `gui` has code for building user interfaces with egui
 - `help` has commands to open various help menus, as described in the top level [README](https://github.com/talonhub/community?tab=readme-ov-file#getting-started-with-talon)
 - `homophones` has commands to replace words with their homophones
