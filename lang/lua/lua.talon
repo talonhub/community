@@ -28,7 +28,7 @@ settings():
 state return (null | nil): "return nil"
 state return true: "return true"
 state return false: "return false"
-state return table: user.insert_between("return {", "}")
+state return (table | dict): user.insert_between("return {", "}")
 state append string: " .. "
 
 state label <user.text>:
@@ -59,8 +59,6 @@ index <user.word>: '["{word}"]'
 index (var | variable) <user.text>:
     var = user.formatted_text(text, "SNAKE_CASE")
     insert("[{var}]")
-
-state return dick: user.insert_between("return {", "}")
 
 # deprecated commands
 state local:
