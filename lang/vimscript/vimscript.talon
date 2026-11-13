@@ -30,7 +30,6 @@ assign [<user.vimscript_scope>] (variable | var) [<user.text>] [over]:
 
 <user.code_common_function>: insert("{code_common_function} ")
 
-# XXX - possibly overlap with some programming.talon
 state command: "command! "
 state end if: "endif"
 state end for: "endfor"

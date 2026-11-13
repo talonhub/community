@@ -57,9 +57,6 @@ class UserActions:
     def code_insert_is_not_null():
         actions.insert(" != nil")
 
-    def code_state_else_if():
-        actions.user.insert_between("else if ", " do\nend")
-
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
         actions.user.paste(text)

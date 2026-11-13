@@ -120,6 +120,7 @@ mod.list(
 ctx.lists["user.python_generic_type"] = {
     "callable": "Callable",
     "dictionary": "dict",
+    "frozen set": "frozenset",
     "iterable": "Iterable",
     "list": "list",
     "optional": "Optional",
