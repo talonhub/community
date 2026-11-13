@@ -20,13 +20,13 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 
 ## Directory Structure
 
-- `core` provides essential features and dependencies for other parts of Community.
-- `apps` provides application specific functionality. Each subdirectory is for a different application. Commands intended to be used by multiple applications with certain properties should probably go in `tags`.
-- `tags` provides general commands that require context specific implementations. Each subdirectory is for a command set associated with a Talon tag. A relevant application or context can use one of these command sets by activating its tag and providing context specific implementations for the associated Talon constructs. See [Generalizing Commands](#generalizing-commands) for more information. 
-- `plugin` provides self-contained features. Deleting any of its subdirectories will not affect the rest of Community.
-- `lang` provides programming language commands. `lang/tags` provides functionality used by multiple languages while the other subdirectories each support a specific language.
+- `core` contains essential features and dependencies for other parts of Community.
+- `apps` contains application specific functionality. Each subdirectory is for a different application. Commands intended to be used by multiple applications with certain properties should probably go in `tags`.
+- `tags` contains general commands that require context specific implementations. Each subdirectory is for a command set associated with a Talon tag. A relevant application or context can use one of these command sets by activating its tag and providing context specific implementations for the associated Talon constructs. See [Generalizing Commands](#generalizing-commands) for more information. 
+- `plugin` contains self-contained features. Deleting any of its subdirectories will not affect the rest of Community.
+- `lang` contains programming language commands. `lang/tags` contains functionality used by multiple languages while the other subdirectories each support a specific language.
 - `test` contains unit tests. Community's GitHub action runner runs these automatically on pull requests. Put automated tests here unless you have a good reason not to.
-- `migration_helpers` provides utilities for helping users migrate from older versions.
+- `migration_helpers` contains utilities for helping users migrate from older versions.
 
 Most of these directories have a README.md file offering more information.
 
