@@ -56,6 +56,7 @@ import warnings
 from talon import Module, actions, settings, speech_system
 
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
+SEE_BREAKING_CHANGES_MESSAGE = f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')} (say \"read breaking changes\" to open BREAKING_CHANGES.txt) "
 
 mod = Module()
 mod.setting(
@@ -150,7 +151,7 @@ class Actions:
         log_message = (
             f'The "{name}" command is deprecated since {time_deprecated}.'
             + f' Instead, say: "{replacement}".'
-            + f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
+            + SEE_BREAKING_CHANGES_MESSAGE
         )
         # No caller makes sense, since a voice command triggered this action.
         warnings.warn_explicit(log_message, DeprecationWarning, "", 0)
@@ -171,7 +172,7 @@ class Actions:
 
         msg = (
             f"The `{name}` capture is deprecated since {time_deprecated}."
-            + f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
+            + SEE_BREAKING_CHANGES_MESSAGE
             + f"{calculate_rule_info()}"
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=3)
@@ -191,7 +192,7 @@ class Actions:
         msg = (
             f"The `{name}` action is deprecated since {time_deprecated}."
             + f"{replacement_msg}"
-            + f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')}"
+            + SEE_BREAKING_CHANGES_MESSAGE
             + f"{calculate_rule_info()}"
         )
         warnings.warn(msg, DeprecationWarning, stacklevel=5)
