@@ -56,7 +56,7 @@ import warnings
 from talon import Module, actions, settings, speech_system
 
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
-SEE_BREAKING_CHANGES_MESSAGE = f" See {os.path.join(REPO_DIR, 'BREAKING_CHANGES.txt')} (say \"read breaking changes\" to open BREAKING_CHANGES.txt) "
+SEE_BREAKING_CHANGES_MESSAGE = f' See {os.path.join(REPO_DIR, "BREAKING_CHANGES.txt")} (say "read breaking changes" to open BREAKING_CHANGES.txt) '
 
 mod = Module()
 mod.setting(
