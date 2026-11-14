@@ -8,17 +8,6 @@ ctx.matches = r"""
 code.language: terraform
 """
 
-types = {
-    "string": "string",
-    "number": "number",
-    "bool": "bool",
-    "list": "list",
-    "map": "map",
-    "null": "null",
-}
-
-ctx.lists["user.code_type"] = types
-
 common_properties = {
     "name": "name",
     "type": "type",
@@ -37,15 +26,7 @@ common_properties = {
 mod.list("terraform_common_property", desc="Terraform Modifier")
 ctx.lists["user.terraform_common_property"] = common_properties
 
-module_blocks = {
-    "variable": "variable",
-    "output": "output",
-    "provider": "provider",
-    "module": "module",
-}
-
 mod.list("terraform_module_block", desc="Simple Terraform Block")
-ctx.lists["user.terraform_module_block"] = module_blocks
 
 operators = Operators(
     # code_operators_assignment
@@ -90,16 +71,14 @@ class UserActions:
         actions.user.insert_between(text + ' "', '"')
 
     def code_terraform_resource(text: str):
-        result = f'resource "{actions.user.formatted_text(text, "SNAKE_CASE")}" ""'
-
-        actions.insert(result)
-        actions.key("left")
+        actions.user.insert_between(
+            f'resource "{actions.user.formatted_text(text, "SNAKE_CASE")}" "', '"'
+        )
 
     def code_terraform_data_source(text: str):
-        result = f'data "{actions.user.formatted_text(text, "SNAKE_CASE")}" ""'
-
-        actions.insert(result)
-        actions.key("left")
+        actions.user.insert_between(
+            f'data "{actions.user.formatted_text(text, "SNAKE_CASE")}" "', '"'
+        )
 
     def code_insert_true():
         actions.insert("true")

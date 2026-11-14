@@ -6,7 +6,7 @@ mod.setting(
     "initial_mode",
     type=str,
     default="command",
-    desc="Mode initially enabled on Talon launch (sleep, command or dictation)",
+    desc="Mode initially enabled on Talon launch (sleep, command, mixed or dictation)",
 )
 
 

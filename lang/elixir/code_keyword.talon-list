@@ -1,0 +1,27 @@
+list: user.code_keyword
+code.language: elixir
+-
+
+after: "after "
+alias: "alias "
+case: "case "
+catch: "catch "
+cond: "cond "
+def module: "defmodule "
+def p: "defp "
+def: "def "
+do: "do "
+else: "else "
+end
+f n: "fn "
+if: "if "
+import: "import "
+raise: "raise "
+receive: "receive "
+require: "require "
+rescue: "rescue "
+try: "try "
+unless: "unless "
+use: "use "
+when: "when "
+with: "with "

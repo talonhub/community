@@ -26,5 +26,7 @@ gallery view: key(cmd-4)
 
 trash it: key(cmd-backspace)
 
+hidden [files] toggle: key(cmd-shift-.)
+
 hide [finder]: key(cmd-h)
 hide others: app.window_hide_others()

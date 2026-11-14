@@ -6,7 +6,7 @@ mod.setting(
     "mouse_click_hold",
     type=int,
     default=0,
-    desc="Duration to hold mouse clicks in milliseconds",
+    desc="Duration to hold mouse clicks in milliseconds. 0 means no hold. In some full-screen applications, particularly games, mouse clicks may not be recognized unless held for a short duration. If this occurs, try starting with setting this to 16.",
 )
 
 ctx = Context()

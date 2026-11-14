@@ -168,29 +168,6 @@ def create_spoken_form_years(num: str):
     return " ".join(words)
 
 
-# # ---------- create_spoken_form_years  (uncomment to run) ----------
-# def test_year(year: str, expected: str):
-#     result = create_spoken_form_years(year)
-#     print(f"test_year: test string = {year}, result = {result}, expected = {expected}")
-#     assert create_spoken_form_years(year) == expected
-
-
-# print("************* test_year tests ******************")
-# test_year("1100", "eleven hundred")
-# test_year("1905", "nineteen five")
-# test_year("1910", "nineteen ten")
-# test_year("1925", "nineteen twenty five")
-# test_year("2000", "two thousand")
-# test_year("2005", "two thousand five")
-# test_year("2020", "twenty twenty")
-# test_year("2019", "twenty nineteen")
-# test_year("2085", "twenty eighty five")
-# test_year("2100", "twenty one hundred")
-# test_year("2105", "twenty one five")
-# test_year("9999", "ninety nine ninety nine")
-# print("************* test_year tests done**************")
-
-
 def create_single_spoken_form(source: str):
     """
     Returns a spoken form of a string

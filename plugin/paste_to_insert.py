@@ -8,7 +8,7 @@ mod.setting(
     type=int,
     default=-1,
     desc="""Use paste to insert text longer than this many characters.
-Zero means always paste; -1 means never paste.
+Zero means always paste; -1 means never paste. Note: some contexts (e.g. the terminal tag) may override this global setting.
 """,
 )
 
