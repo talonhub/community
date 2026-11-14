@@ -8,7 +8,7 @@ apps.windows_open_dialog = r"""
 os: windows
 and app.name: /.*/
 and win.class: #32770
-and title: /(Save|Open|Browse|Select)/
+and title: /(Save|Open|Browse|Select|Export)/
 """
 
 ctx = Context()
