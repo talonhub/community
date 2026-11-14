@@ -33,18 +33,7 @@ VERTICAL_ITEM_SPACING = 1.0
 INNER_MARGIN = 16.0
 
 DEFAULT_TEXT_SIZE = 12.0 / 1.3
-
-# We must account for the space taken up for the column separation. This number was determined empirically.
-TWO_COLUMN_EXTRA_PADDING = 9
-
-
-def pad_title_for_two_column_rows(title, max_length_per_column):
-    required_total_width = max_length_per_column * 2 + TWO_COLUMN_EXTRA_PADDING
-    padding_width = max(0, required_total_width - len(title))
-    if padding_width > 0:
-        padding = " " * padding_width
-        title = f"{title}{padding}"
-    return title
+TABLE_HEADER_HEIGHT = 20
 
 
 def wrap_with_subsequent_indent(text, width):
@@ -157,6 +146,10 @@ class Row(ABC):
     def get_num_columns(self) -> int:
         """Returns the number of columns"""
 
+    @abstractmethod
+    def get_column_width(self, column_number, ui_wrapper) -> float:
+        """Returns the width of the column in pixels"""
+
 
 class TextRow(Row):
     def __init__(self, columns, render_overline=True, rich_text_functions=None):
@@ -181,6 +174,10 @@ class TextRow(Row):
 
     def get_num_columns(self):
         return len(self.columns)
+
+    def get_column_width(self, column_number, ui_wrapper) -> float:
+        column = self.columns[column_number]
+        return ui_wrapper.compute_text_width(column)
 
     @classmethod
     def _split_across_rows(
@@ -214,9 +211,12 @@ class TextRow(Row):
 class Table:
     """Helps manage row creation and normalization"""
 
-    def __init__(self, max_column_length: int | None):
+    def __init__(self, column_titles: list[str], max_column_length: int | None):
+        """column_titles: titles for the columns. There should be one title for every column of the table.
+        max_column_length: the maximum character length of the columns"""
         self.rows: list[Row] = []
         self.max_column_length = max_column_length
+        self.column_titles = column_titles
 
     def add_row(self, row: Row):
         rows = row.split_lines()
@@ -240,6 +240,77 @@ class Table:
     def __len__(self) -> int:
         return len(self.rows)
 
+    def get_max_column_width(self, column_number, ui_wrapper) -> float:
+        """Compute the max width of any row in this column"""
+        # compute the width of the column title
+        title = self.column_titles[column_number]
+        width = ui_wrapper.compute_text_width(title)
+        if self.rows:
+            # compute the max width of any row. If a row is empty in this column, treat its width as 0
+            max_ordinary_column_width = max(
+                0
+                if r.get_num_columns() <= column_number
+                else r.get_column_width(column_number, ui_wrapper)
+                for r in self.rows
+            )
+            width = max(width, max_ordinary_column_width)
+        return width
+
+    def get_max_column_widths(self, ui_wrapper) -> list[float]:
+        """Returns a list with the biggest row width for each column"""
+        num_columns = len(self.column_titles)
+        return [self.get_max_column_width(i, ui_wrapper) for i in range(num_columns)]
+
+
+def _create_table(ui: egui.Ui, id_salt, maximum_height):
+    """Create an egui extras table. This still needs a header and rows added to it"""
+    if maximum_height is None:
+        maximum_height = ui.available_height()
+    return (
+        egui.TableBuilder(ui)
+        .cell_layout(egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(False))
+        .min_scrolled_height(0.0)
+        .max_scroll_height(maximum_height)
+        .animate_scrolling(False)
+        .id_salt(id_salt)
+    )
+
+
+async def _add_header_to_table(table, column_titles):
+    """Add a header to the table containing the column titles"""
+    header_height = TABLE_HEADER_HEIGHT if any(column_titles) else 0
+    async with table.header(header_height) as header:
+        for title in column_titles:
+            async with header.col() as column_ui:
+                column_ui.strong(title)
+    return header
+
+
+async def _render_table_rows(header, row_height, table_info) -> int | None:
+    """Renders the table rows and returns the index of the first visible row"""
+    rows = table_info.rows
+    current_row_index = None
+    async with header.table().body() as body:
+        # track the top of the rectangle to help determine the first visible row
+        # this still gets called for some rows that are not visible, but those can be filtered out because they are considered above the scroll area
+        body_rect = body.max_rect()
+        # .top() and .bottom() could be swapped according to the egui rectangle API, so taking the minimum is necessary
+        body_top = min(body_rect.top(), body_rect.bottom())
+        async for row in body.rows(row_height, len(rows)):
+            # render a line above the row when this condition is True
+            row.set_overline(
+                rows[row.index()].should_render_overline()
+                and settings.get("user.community_ui_table_borders")
+            )
+            await render_row_ui(row, rows, len(table_info.column_titles))
+            # if this is the first visible row, update current_row_index
+            response = row.response()
+            rect = response.rect
+            top = min(rect.top(), rect.bottom()) - body_top
+            if current_row_index is None and top >= 0:
+                current_row_index = row.index()
+    return current_row_index
+
 
 class UIWrapper:
     """Provides helper methods for rendering widgets on a ui. These methods use the wrapped ui by default, but you can use the ui parameter to provide another one"""
@@ -253,6 +324,14 @@ class UIWrapper:
         if ui is not None:
             return ui
         return self.ui
+
+    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+        """Compute the width of the text in pixels on the ui"""
+        ui = self._ui(ui)
+        if font_id is None:
+            font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
+        galley = ui.painter().layout_no_wrap(text, font_id, egui.Color32.black())
+        return galley.size().x
 
     def get_text_size(self, ui=None) -> float:
         """Compute the text size of the ui"""
@@ -282,14 +361,12 @@ class UIWrapper:
         if subtitle:
             ui.strong(subtitle)
         ui.separator()
-        ui.add_space(8)
 
     def header(self, text, ui=None):
         """Render a header"""
         ui = self._ui(ui)
         header = egui.RichText(text).size(compute_text_size() * 1.5).strong()
         ui.label(header)
-        ui.add_space(8)
 
     def button(self, text, ui=None) -> bool:
         """Render a button and return True if the button was clicked this frame"""
@@ -301,41 +378,95 @@ class UIWrapper:
         ui = self._ui(ui)
         ui.add_space(compute_text_size())
 
+    def get_remaining_width_excluding_margin(self, ui=None):
+        """Compute the amount of width remaining excluding the padding margin"""
+        ui = self._ui(ui)
+        return max(ui.available_width() - INNER_MARGIN, 0)
+
+    def get_scrollbar_width(self, ui=None):
+        """Compute the amount of width in pixels needed to render a scrollbar"""
+        ui = self._ui(ui)
+        scroll_style = ui.spacing().scroll
+        return (
+            scroll_style.bar_width
+            + scroll_style.bar_inner_margin
+            + scroll_style.bar_outer_margin
+            + scroll_style.content_margin.right
+        )
+
+    def _size_table_columns(
+        self, minimum_width, minimum_column_sizes, column_titles, table, ui=None
+    ):
+        ui = self._ui(ui)
+
+        if minimum_width:
+            # the width needs to be reduced by the width of the scroll bar to make room for it
+            minimum_width -= self.get_scrollbar_width(ui)
+
+        # if minimum column sizes are available and the sum is less than the minimum width
+        # scale them to fill the width
+        if minimum_column_sizes and minimum_width:
+            total_width = sum(minimum_column_sizes)
+            if total_width < minimum_width:
+                minimum_column_sizes = [
+                    (s / total_width) * minimum_width for s in minimum_column_sizes
+                ]
+        # size the columns
+        if minimum_column_sizes:
+            if len(minimum_column_sizes) != len(column_titles):
+                raise ValueError(
+                    f"minimum_column_sizes had length {len(minimum_column_sizes)} != {len(column_titles)}, the number of columns"
+                )
+            for size in minimum_column_sizes:
+                table = table.column(egui.Column.exact(size).clip(True))
+        else:
+            # divide the available width equally among the columns
+            available_width = ui.available_width()
+            if minimum_width:
+                available_width = max(available_width, minimum_width)
+            for _ in range(len(column_titles)):
+                table = table.column(
+                    egui.Column.exact(available_width / len(column_titles)).clip(True)
+                )
+
+        return table
+
+    async def _pad_enough_width_for_columns(self, ui: egui.Ui, minimum_column_sizes):
+        """Add enough horizontal space to render the columns. This workarounds the fact that egui extras tables do not always claim enough width for proper auto sizing."""
+        padding_size = sum(minimum_column_sizes) + self.get_scrollbar_width()
+        async with ui.horizontal():
+            ui.add_space(padding_size)
+
     async def render_table(
         self,
-        headers,
-        table,
+        table_info,
         row_height=None,
-        render_row=None,
-        auto_size_columns=False,
+        minimum_column_sizes: list[float] | None = None,
         maximum_height=None,
         id_salt=None,
         scroller=None,
         ui=None,
+        minimum_width=None,
     ):
         """Render a table with consistent row height. Assumes each row is at most the given row height. Uses the interact_size of the ui for the default row height, which may be excessive for your application. This assumes that each row has a single line.
-        headers: the headers to render at the top of the table. The length of the headers should equal the column size of the rows.
-        table: provides the rows to render in the table.
+        table_info: provides the rows and column titles to render in the table.
         row_height: each row should be at most this big.
-        render_row: a callback for rendering the row.
-        auto_size_columns: decides if the column width should be based on the item sizes. Otherwise, each column takes an equal portion of the available width.
+        minimum_column_sizes: optional minimum sizes for the columns in pixels. If not provided, the columns evenly divide the ui.
         maximum_height: the maximum height of the scroll area for the table. Setting this is recommended if you need to leave room for widgets after the table.
         id_salt: used to distinguish between this table and other tables in the ui. The default used by this function is str(rows), which may be expensive.
         scroller: handles programmatic scrolling.
+        minimum_width: make the table at least this wide
         """
         ui = self._ui(ui)
 
-        rows = table.rows
+        rows = table_info.rows
+        column_titles = table_info.column_titles
 
         # use defaults when needed
         if id_salt is None:
             id_salt = str(rows)
-        if maximum_height is None:
-            maximum_height = ui.available_height()
         if row_height is None:
             row_height = ui.spacing().interact_size.y
-        if render_row is None:
-            render_row = render_row_ui
 
         async with ui.scope() as scope, scope.style_mut() as style:
             # make scrollbar always visible when a scroll area is needed
@@ -343,61 +474,22 @@ class UIWrapper:
             spacing.scroll = egui.ScrollStyle.solid()
             style.spacing = spacing
 
-            # set up the table
-            column_width = ui.available_width() / len(headers)
-            table = (
-                egui.TableBuilder(ui)
-                .cell_layout(
-                    egui.Layout.left_to_right(egui.Align.Center).with_main_wrap(False)
-                )
-                .min_scrolled_height(0.0)
-                .max_scroll_height(maximum_height)
-                .animate_scrolling(False)
-                .id_salt(id_salt)
+            if minimum_column_sizes:
+                await self._pad_enough_width_for_columns(ui, minimum_column_sizes)
+
+            table = _create_table(ui, id_salt, maximum_height)
+            table = self._size_table_columns(
+                minimum_width, minimum_column_sizes, column_titles, table, ui
             )
-            # set column sizes
-            for _ in range(len(headers)):
-                if auto_size_columns:
-                    table = table.column(egui.Column.auto())
-                else:
-                    table = table.column(
-                        egui.Column.remainder().at_most(column_width).clip(True)
-                    )
+
             # scroll programmatically if needed
             if scroller and scroller.is_scrolling():
                 target_row = scroller.compute_target(len(rows) - 1)
                 table = table.scroll_to_row(target_row, egui.Align.TOP)
 
-            # add the headers
-            header_size = 20 if any(headers) else 0
+            header = await _add_header_to_table(table, column_titles)
+            current_row_index = await _render_table_rows(header, row_height, table_info)
 
-            async with table.header(header_size) as header:
-                for h in headers:
-                    async with header.col() as header_ui:
-                        header_ui.strong(h)
-
-            current_row_index = None
-
-            # render the visible rows
-            async with header.table().body() as body:
-                # track the top of the rectangle to help determine the first visible row
-                # this still gets called for some rows that are not visible, but those can be filtered out because they are considered above the scroll area
-                body_rect = body.max_rect()
-                body_top = min(body_rect.top(), body_rect.bottom())
-                async for row in body.rows(row_height, len(rows)):
-                    # render lines above each row with a value for the first column
-                    row.set_overline(
-                        rows[row.index()].should_render_overline()
-                        and settings.get("user.community_ui_table_borders")
-                    )
-                    # let the call back decide how to render the row
-                    await render_row(row, rows, len(headers))
-                    # if this is the first visible row, update current_row_index
-                    response = row.response()
-                    rect = response.rect
-                    top = min(rect.top(), rect.bottom()) - body_top
-                    if current_row_index is None and top >= 0:
-                        current_row_index = row.index()
             # update the scroller's understanding of the scroll area location
             if (
                 scroller
@@ -666,3 +758,9 @@ class GUI:
                         )
                 self._previous_height_taken = self._last_height_taken
             self._window.refresh()
+
+    def auto_size_next_frame(self):
+        self._last_height_taken = None
+        self._previous_height_taken = None
+        if self._window:
+            self._window.autosize = True
