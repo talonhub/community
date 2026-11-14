@@ -43,111 +43,6 @@ ctx.matches = r"""
 code.language: rust
 """
 
-scalar_types = {
-    "eye eight": "i8",
-    "you eight": "u8",
-    "bytes": "u8",
-    "eye sixteen": "i16",
-    "you sixteen": "u16",
-    "eye thirty two": "i32",
-    "you thirty two": "u32",
-    "eye sixty four": "i64",
-    "you sixty four": "u64",
-    "eye one hundred and twenty eight": "i128",
-    "you one hundred and twenty eight": "u128",
-    "eye size": "isize",
-    "you size": "usize",
-    "float thirty two": "f32",
-    "float sixty four": "f64",
-    "boolean": "bool",
-    "character": "char",
-}
-
-compound_types = {
-    "tuple": "()",
-    "array": "[]",
-}
-
-standard_library_types = {
-    "box": "Box",
-    "vector": "Vec",
-    "string": "String",
-    "string slice": "&str",
-    "os string": "OsString",
-    "os string slice": "&OsStr",
-    "see string": "CString",
-    "see string slice": "&CStr",
-    "option": "Option",
-    "result": "Result",
-    "hashmap": "HashMap",
-    "hash set": "HashSet",
-    "reference count": "Rc",
-}
-
-standard_sync_types = {
-    "arc": "Arc",
-    "barrier": "Barrier",
-    "condition variable": "Condvar",
-    "mutex": "Mutex",
-    "once": "Once",
-    "read write lock": "RwLock",
-    "receiver": "Receiver",
-    "sender": "Sender",
-    "sink sender": "SyncSender",
-}
-
-all_types = {
-    **scalar_types,
-    **compound_types,
-    **standard_library_types,
-    **standard_sync_types,
-}
-
-closure_traits = {
-    "closure": "Fn",
-    "closure once": "FnOnce",
-    "closure mutable": "FnMut",
-}
-
-conversion_traits = {
-    "into": "Into",
-    "from": "From",
-}
-
-iterator_traits = {
-    "iterator": "Iterator",
-}
-
-all_traits = {
-    **closure_traits,
-    **conversion_traits,
-    **iterator_traits,
-}
-
-
-# tag: functions_common
-ctx.lists["user.code_common_function"] = {
-    "drop": "drop",
-    "catch unwind": "catch_unwind",
-    "iterator": "iter",
-    "into iterator": "into_iter",
-    "from iterator": "from_iter",
-}
-
-# tag: functions
-ctx.lists["user.code_type"] = all_types
-
-# rust specific grammar
-ctx.lists["user.code_type_modifier"] = {
-    "mutable": "mut ",
-    "mute": "mut ",
-    "borrowed": "&",
-    "borrowed mutable": "&mut ",
-    "borrowed mute": "&mut ",
-    "mutable borrowed": "&mut ",
-    "mute borrowed": "&mut ",
-}
-
 
 @ctx.capture(
     "user.code_type",
@@ -157,8 +52,6 @@ def code_type(m) -> str:
     """Returns a type name"""
     return "".join(m)
 
-
-ctx.lists["user.code_trait"] = all_traits
 
 operators = Operators(
     # code_operators_array

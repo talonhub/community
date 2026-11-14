@@ -4,17 +4,22 @@ code.language: python
 
 any: Any
 boolean: bool
+byte array: bytearray
 bytes
 callable: Callable
+complex
 dick: dict
 float
+frozen set: frozenset
 integer: int
 iterable: Iterable
 list: list
 no return: NoReturn
 none: None
+object
 sequence: Sequence
+set
 string: str
 tuple: tuple
-union: UnionAny
+union: Union
 vector: Vector

@@ -1,0 +1,25 @@
+list: user.code_common_method
+code.language: javascript
+code.language: typescript
+code.language: javascriptreact
+code.language: typescriptreact
+-
+
+catch
+concat
+filter
+finally
+find
+flat map: flatMap
+for each: forEach
+join
+includes
+map
+pop
+push
+reduce
+slice
+some
+split
+substring
+then
