@@ -27,7 +27,7 @@ class UserActions:
     def file_manager_current_path():
         path = get_active_explorer_path()
 
-        if path.is_virtual:
+        if path and path.is_virtual:
             # note:  possibly explore whether we can do anything useful with these folders via accessibility
             actions.app.notify("Cannot get path for virtual folder, command skipped")
             return None
