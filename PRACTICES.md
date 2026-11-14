@@ -23,7 +23,7 @@ Consider discussing whether breaking changes are acceptable with maintainers bef
 
 In general, document breaking changes in [BREAKING_CHANGES.txt](./BREAKING_CHANGES.txt) including a description of what replaced the prior functionality.
 
-When we decide to remove existing functionality, deprecate it if possible using [our deprecations support](./core/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. We should leave deprecated behavior unchanged in Community for 6 months if possible.
+When we decide to remove existing functionality, deprecate it if possible using [our deprecations support](./core/deprecations/deprecations.py) instead of removing it immediately. See the documentation string at the top of that file for instructions on deprecations. We should leave deprecated behavior unchanged in Community for 6 months if possible.
 
 ## Useless/Unused Code
 
