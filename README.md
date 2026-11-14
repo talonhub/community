@@ -166,7 +166,7 @@ By default, title tracking activates languages in supported applications such as
 To enable title tracking for your application:
 
 1. Ensure the active filename (including extension) is included in the window title.
-2. Implement the required Talon-defined `filename` action to correctly extract the filename from the window title. See the [Visual Studio Code implementation](apps/vscode/vscode.py#L137-L153) for an example.
+2. Implement the required Talon-defined `filename` action to correctly extract the filename from the window title. See the [Visual Studio Code implementation](https://github.com/talonhub/community/blob/e3401171b997b7092066fceecee0fb311f9ef3eb/apps/vscode/vscode.py#L210-L228) for an example.
 
 Python, C#, Talon and JavaScript language support is broken up into multiple tags in an attempt to standardize common voice commands for features available across languages. Each tag is defined in a .talon file named after a `user.code_` tag (e.g., `user.code_functions` → `functions.talon`) containing voice commands and a Python file declaring the actions that should be implemented by each concrete language implementation to support the voice commands. These files include:
 
