@@ -22,7 +22,7 @@ code_languages = [
     Language("snippet", "snippet", ["snippet"]),
     # Language("cmake", "see make", ["cmake"]),
     Language("csharp", "see sharp", ["cs"]),
-    Language("aspnetcorerazor", "asp net core razor", ["razor", "cshtml"]),
+#    Language("aspnetcorerazor", "asp net core razor", ["razor", "cshtml"]),
     Language("css", "c s s", ["css"]),
     # Language("elisp", "elisp", ["el"]),
     Language("elixir", "elixir", ["ex"]),
@@ -61,7 +61,8 @@ code_languages = [
     # These languages doesn't actually have a language mode, but we do have snippets.
     Language("cpp", "see plus plus", ["cpp", "hpp"]),
     Language("csv", "csv", ["csv"]),
-    Language("html", "html", ["html"]),
+    # In order to make HTML snippets work in aspnetcorerazor files, include Razor and CSHTML  
+    Language("html", "html", ["html", "razor", "cshtml"]),
     Language("json", "json", ["json"]),
     Language("shellscript", "shell script", ["sh"]),
     Language("xml", "xml", ["xml"]),
