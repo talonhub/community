@@ -9,6 +9,7 @@ bytes
 callable: Callable
 complex
 dick: dict
+dictionary: dict
 float
 frozen set: frozenset
 integer: int
