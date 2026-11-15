@@ -77,12 +77,10 @@ class UserActions:
         actions.insert("null")
 
     def code_insert_is_null():
-        actions.insert("is_null()")
-        actions.edit.left()
+        actions.user.insert_between("is_null(", ")")
 
     def code_insert_is_not_null():
-        actions.insert("isset()")
-        actions.edit.left()
+        actions.user.insert_between("isset(", ")")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"
