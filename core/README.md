@@ -24,6 +24,6 @@ This folder contains `edit_settings.talon`, which has a command to open various 
 - `stored_state_management` has actions for storing and reading data saved in files
 - `text` has commands for inserting and reformatting text
 - `top_level_domain` has commands for inserting top level domains
-- `vocabulary` has commands for adding new words to be recognized and for having certain words automatically by replaced by others
+- `vocabulary` has commands for adding new words to be recognized and for having certain words automatically be replaced by others
 - `websites_and_search_engines` has commands for opening websites, following links, and making browser searches
 - `windows_and_tabs` has commands for tab and [window management](https://github.com/talonhub/community?tab=readme-ov-file#window-management), launching and switching between different applications, and snapping application windows to different locations on the screen
