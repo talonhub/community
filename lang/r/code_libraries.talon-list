@@ -1,0 +1,44 @@
+list: user.code_libraries
+code.language: r
+-
+
+bayes plot: bayesplot
+BRMS: brms
+cable: kable
+car
+D plier: dplyr
+dev tools: devtools
+furr: furrr
+future
+gap minder: gapminder
+gee animate: gganimate
+gee gee plot: ggplot2
+gee highlight: gghighlight
+gee map: ggmap
+gee repel: ggrepel
+GLMM TMB: glmmTMB
+grid extra: gridExtra
+here
+inla: INLA
+knitter: knitr
+LM test: lmtest
+LME four: lme4
+lubridate
+margins
+NLME: nlme
+psych
+purr: purrr
+R color brewer: RColorBrewer
+R markdown: rmarkdown
+R stan arm: rstanarm
+R stan: rstan
+read R: readr
+shiny alert: shinyalert
+stargazer
+tidier: tidyr
+tidy bayes: tidybayes
+tidy verse: tidyverse
+TMB
+vee table: vtable
+viridis
+viridis light: viridisLite

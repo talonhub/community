@@ -119,7 +119,9 @@ mod.list(
 # this should be moved to a talon-list file after this becomes stable
 ctx.lists["user.python_generic_type"] = {
     "callable": "Callable",
+    "dick": "dict",
     "dictionary": "dict",
+    "frozen set": "frozenset",
     "iterable": "Iterable",
     "list": "list",
     "optional": "Optional",
