@@ -9,6 +9,7 @@ tag(): user.code_comment_documentation
 tag(): user.code_data_bool
 tag(): user.code_data_null
 tag(): user.code_functions
+tag(): user.code_keywords
 tag(): user.code_libraries
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
@@ -29,10 +30,18 @@ args pipe: user.insert_between("|", "|")
 # NOTE: this command is created for backward compatibility, but the documentation comments are not actually strings in Ruby.
 dock string: user.code_comment_documentation()
 
-state end: "end"
-state begin: "begin"
-state rescue: "rescue "
-state module: "module "
+state end:
+    user.deprecate_command("2026-11-09", "state end", "put end")
+    insert("end")
+state begin:
+    user.deprecate_command("2026-11-09", "state begin", "put begin")
+    insert("begin")
+state rescue:
+    user.deprecate_command("2026-11-09", "state rescue", "put rescue")
+    insert("rescue ")
+state module:
+    user.deprecate_command("2026-11-09", "state module", "put module")
+    insert("module ")
 
 ^instance <user.text>$:
     insert("@")
