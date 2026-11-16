@@ -41,6 +41,7 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
         assignment_prefix = assignment_prefix[:num_leading_spaces]
         if not assignment_prefix and not make_comment:
             # if we did not find indentation, then use a default indentation of 4 spaces to keep this inside the setting block
+            # this does not need to have the same indentation as anything else in the block
             assignment_prefix = "    "
     if make_comment:
         assignment_prefix += "# "
