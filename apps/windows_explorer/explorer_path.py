@@ -291,12 +291,12 @@ if app.platform == "windows":
         # z-order, so the first match is the active tab. Returns 0 when the
         # window has no such child (e.g. older Explorer without tabs).
         active_tab = _user32.FindWindowExW(hwnd, None, SHELL_TAB_WINDOW_CLASS, None)
-        
-		# early exit in case we sneak into this path from non-File Explorer windows
-		# utilizing CabinetWClass
+
+        # early exit in case we sneak into this path from non-File Explorer windows
+        # utilizing CabinetWClass
         if not active_tab or active_tab == 0:
             return None
-        
+
         hr = _ole32.CoInitializeEx(None, COINIT_APARTMENTTHREADED)
         need_uninit = hr in (S_OK, S_FALSE)
         try:
@@ -364,7 +364,7 @@ def get_active_explorer_path():
     """
 
     # explorer hosts a number of applications (control panel, file explorer, taskbar) that
-    # are difficult to properly distinguish reliably. 
+    # are difficult to properly distinguish reliably.
     # CabinetWClass is probably the best bet for the moment, but it is used elsewhere
     if app.platform != "windows" or ui.active_window().cls != "CabinetWClass":
         return None
@@ -389,5 +389,5 @@ def get_active_explorer_path():
     if "error" in result:
         print(f"Error getting active explorer path: {result['error']}")
         return None
-    
+
     return result.get("path")
