@@ -335,9 +335,10 @@ class Manager:
             self.error_setting = setting
 
     async def _render_error_message(self, error_message, error_setting):
-        async with self._ui.horizontal_wrapped():
+        async with self._ui.vertical():
             await self._ui_wrapper.warning_text(error_message)
-            await self._render_error_copy_buttons(error_message, error_setting)
+            async with self._ui.horizontal_wrapped():
+                await self._render_error_copy_buttons(error_message, error_setting)
 
     async def _render_main_page(self, total_available_height):
         """Render introductory page"""
