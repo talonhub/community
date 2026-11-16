@@ -8,14 +8,10 @@ apps = mod.apps
 
 apps.windows_explorer = r"""
 os: windows
-and app.name: Windows Explorer
-and win.class: CabinetWClass
-os: windows
-and app.name: Windows-Explorer
-and win.class: CabinetWClass
-os: windows
 and app.exe: /^explorer\.exe$/i
 and win.class: CabinetWClass
+# The taskbar id; Control Panel windows (also CabinetWClass) are Microsoft.Windows.ControlPanel
+and user.window_app_user_model_id: Microsoft.Windows.Explorer
 """
 ctx = Context()
 ctx.matches = r"""
