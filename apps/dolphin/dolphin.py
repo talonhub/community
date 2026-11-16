@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from talon import Context, Module, actions, ui
 
 # Dolphin is the default file manager for KDE plasma, one of
