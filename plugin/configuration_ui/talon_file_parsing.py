@@ -26,8 +26,9 @@ VALUE_UNAVAILABLE = ...
 # matches commented and uncommented tag activations. Parses the name of the tag.
 TAG_PREFIX_PATTERN = re.compile(r"^#?\s*tag\(\):\s*(?P<name>.+)")
 # matches commented and uncommented setting assignments. Parses the prefix before the assignment including spaces and hash signs, the setting name, and the value assigned to the setting.
+# assumes that the first character of a setting name is ASCII.
 SETTING_ASSIGNMENT_PATTERN = re.compile(
-    r"^(?P<assignment_prefix>[\s|#]+)(?P<name>\w\S*)\s*=\s*(?P<value>.+)"
+    r"^(?P<assignment_prefix>[\s|#]+)(?P<name>[a-zA-Z]\S*)\s*=\s*(?P<value>.+)"
 )
 
 
