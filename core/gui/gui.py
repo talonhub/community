@@ -554,7 +554,9 @@ class UIWrapper:
             shadow_rectangle_translation=egui.Vec2(0, 1.5),
             ui=ui,
         )
-        response.on_hover_text(f"You can press the {full_key_name} key to {description}")
+        response.on_hover_text(
+            f"You can press the {full_key_name} key to {description}"
+        )
 
     def get_remaining_width_excluding_margin(self, ui=None):
         """Compute the amount of width remaining excluding the padding margin"""
