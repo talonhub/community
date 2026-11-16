@@ -116,7 +116,11 @@ class SettingsParser:
 
     def _parse_file(self, path: Path):
         """Parse the .talon file at path for relevant information"""
-        self.lines = path.read_text(encoding="utf-8").splitlines()
+        try:
+            self.lines = path.read_text(encoding="utf-8").splitlines()
+        except OSError:
+            return
+
         i = 0
         while i < len(self.lines):
             line = self.lines[i]
