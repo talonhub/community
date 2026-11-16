@@ -43,7 +43,10 @@ def _update_internal_setting_information(
         setting.first_value = file_setting_information.value
 
     if not setting.is_tag and setting.default_value == VALUE_UNAVAILABLE:
-        declaration = registry.decls.settings[setting.name]
+        try:
+            declaration = registry.decls.settings[setting.name]
+        except KeyError:
+            return
         default = declaration.default
         if isinstance(default, declaration.type):
             setting.default_value = default
