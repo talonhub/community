@@ -1,4 +1,4 @@
-"""This is a temporary implementation aimed for nontechnical users who are not editing the setting .talon files themselves"""
+"""This is a temporary, minimal implementation aimed for nontechnical users who are not editing the setting .talon files themselves"""
 
 import re
 from ast import literal_eval
