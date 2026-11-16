@@ -486,7 +486,7 @@ class UIWrapper:
         """Formats the text for a warning message"""
         ui = self._ui(ui)
 
-        label_color = egui.Color32.from_rgb(255, 255, 0)
+        label_color = egui.Color32.black()
         label_size = self.get_text_size() * 1.5
         label_text = egui.RichText(text).strong().color(label_color).size(label_size)
 
@@ -502,7 +502,7 @@ class UIWrapper:
         size = self.compute_text_dimensions(
             text, ui, egui.FontId.proportional(label_size), wrapping_width
         )
-        background_color = egui.Color32.black()
+        background_color = egui.Color32.from_rgb(255, 255, 0)
         outline_color = background_color
         await self.render_inside_rectangle(
             draw_label,
