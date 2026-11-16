@@ -1,0 +1,17 @@
+list: user.code_libraries
+code.language: lua
+-
+
+bit
+debug
+H T T P: http
+web: http
+I O: io
+jason: json
+L F S: lfs
+math
+O S: os
+socket
+string
+table
+U T F eight: utf8

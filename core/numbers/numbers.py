@@ -203,42 +203,6 @@ def split_list(value, l: list) -> Iterator:
     yield l[start:]
 
 
-# # ---------- TESTS (uncomment to run) ----------
-# def test_number(expected, string):
-#     print('testing:', string)
-#     l = list(scan_small_numbers(string.split()))
-#     print("  scan --->", l)
-#     for scale in scales:
-#         old = l
-#         l = parse_scale(scale, l)
-#         if scale in old: print("  parse -->", l)
-#         else: assert old == l, "parse_scale should do nothing if the scale does not occur in the list"
-#     result = "".join(str(n) for n in l)
-#     assert result == parse_number(string.split())
-#     assert str(expected) == result, f"parsing {string!r}, expected {expected}, got {result}"
-
-# test_number(105000, "one hundred and five thousand")
-# test_number(1000000, "one thousand thousand")
-# test_number(1501000, "one million five hundred one thousand")
-# test_number(1501106, "one million five hundred and one thousand one hundred and six")
-# test_number(123, "one two three")
-# test_number(123, "one twenty three")
-# test_number(104, "ten four") # borderline, but valid in some dialects
-# test_number(1066, "ten sixty six") # a common way of saying years
-# test_number(1906, "nineteen oh six") # year
-# test_number(2001, "twenty oh one") # year
-# test_number(2020, "twenty twenty")
-# test_number(1001, "one thousand one")
-# test_number(1010, "one thousand ten")
-# test_number(123456, "one hundred and twenty three thousand and four hundred and fifty six")
-# test_number(123456, "one twenty three thousand four fifty six")
-
-# ## failing (and somewhat debatable) tests from old numbers.py
-# #test_number(10000011, "one million one one")
-# #test_number(100001010, "one million ten ten")
-# #test_number(1050006000, "one hundred thousand and five thousand and six thousand")
-
-
 # ---------- CAPTURES ----------
 alt_digits = "(" + "|".join(digits_map.keys()) + ")"
 alt_teens = "(" + "|".join(teens_map.keys()) + ")"

@@ -1,0 +1,5 @@
+list: user.code_libraries
+code.language: stata
+-
+
+estout

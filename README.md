@@ -166,7 +166,7 @@ By default, title tracking activates languages in supported applications such as
 To enable title tracking for your application:
 
 1. Ensure the active filename (including extension) is included in the window title.
-2. Implement the required Talon-defined `filename` action to correctly extract the filename from the window title. See the [Visual Studio Code implementation](apps/vscode/vscode.py#L137-L153) for an example.
+2. Implement the required Talon-defined `filename` action to correctly extract the filename from the window title. See the [Visual Studio Code implementation](https://github.com/talonhub/community/blob/e3401171b997b7092066fceecee0fb311f9ef3eb/apps/vscode/vscode.py#L210-L228) for an example.
 
 Python, C#, Talon and JavaScript language support is broken up into multiple tags in an attempt to standardize common voice commands for features available across languages. Each tag is defined in a .talon file named after a `user.code_` tag (e.g., `user.code_functions` → `functions.talon`) containing voice commands and a Python file declaring the actions that should be implemented by each concrete language implementation to support the voice commands. These files include:
 
@@ -314,12 +314,15 @@ In addition to this repo, there are [other Talon user file sets](https://talon.w
 
 This repository is now officially a team effort. The following contributors have direct access:
 
+- @AndreasArvidsson
+- @auscompgeek
 - @dwiel
 - @fidgetingbits
 - @knausj85
 - @rntz
-- @splondike
+- @nriley
 - @pokey
+- @phillco
 
 Collaborators will reply to issues and pull requests as time and health permits. Please be patient.
 
@@ -355,7 +358,7 @@ You then have a few options as to when to run it:
   - Note that because many of the rules automatically apply fixes, typically you just need to stage the changes that they made, then reattempt your commit.
   - Whether to use the hook comes down to personal taste. If you like to make many small incremental "work" commits developing a feature, it may be too much overhead.
 
-If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [uv](https://github.com/astral-sh/uv) is good way to install such Python versions without affecting your system Python. We recommend a version of Python matching Talon's current version, which is 3.11 for Talon 0.4 as of this writing (`uv tool install --python 3.11 pre-commit`).
+If you run into setup difficulty with `pre-commit`, you might want to ensure that you have a modern Python 3 local environment first. [uv](https://github.com/astral-sh/uv) is good way to install such Python versions without affecting your system Python. We recommend a version of Python matching Talon's current version, which is 3.14 for Talon 1.0 as of this writing (`uv tool install --python 3.14 pre-commit`).
 
 ## Automated tests
 
