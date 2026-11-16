@@ -1,3 +1,5 @@
+"""This is a temporary implementation aimed for nontechnical users who are not editing the setting .talon files themselves"""
+
 import re
 from ast import literal_eval
 from contextlib import suppress
