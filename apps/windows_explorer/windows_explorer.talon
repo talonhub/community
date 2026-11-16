@@ -1,5 +1,5 @@
 app: windows_explorer
-app: windows_open_dialog
+app: windows_file_browser
 -
 
 tag(): user.address
