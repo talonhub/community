@@ -30,7 +30,7 @@ settings():
 #python-specific grammars
 dunder in it: "__init__"
 state (def | deaf | deft):
-    user.deprecate_command("2026-11-16", "state (def | deaf | deft)", "put def")
+    user.deprecate_command("2026-11-16", "state (def | deaf | deft)", "put (deaf | define)")
     insert("def ")
 state try: "try:\n"
 state except:
