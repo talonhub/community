@@ -5,6 +5,7 @@ from .setting_uis import (
 
 
 class Page:
+    __slots__ = ('title', 'settings', 'prefix', 'description')
     def __init__(self, title, description, settings, prefix="", path=None):
         self.title = title
         self.description = description
