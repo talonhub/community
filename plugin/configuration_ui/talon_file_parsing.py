@@ -4,6 +4,7 @@ import re
 from ast import literal_eval
 from contextlib import suppress
 from dataclasses import dataclass
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -44,7 +45,8 @@ def _parse_value(value):
     try:
         return literal_eval(value)
     # literal_eval can throw many kinds of exceptions, so this is simpler than handling them explicitly
-    except Exception:
+    except:
+        logging.exception(f"Could not parse value {value}")
         return VALUE_UNAVAILABLE
 
 
