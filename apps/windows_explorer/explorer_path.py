@@ -292,7 +292,10 @@ if app.platform == "windows":
         # z-order, so the first match is the active tab. Returns 0 when the
         # window has no such child (e.g. older Explorer without tabs).
         active_tab = _user32.FindWindowExW(hwnd, None, SHELL_TAB_WINDOW_CLASS, None)
-
+        
+        if active_tab == 0:
+            return None
+        
         hr = _ole32.CoInitializeEx(None, COINIT_APARTMENTTHREADED)
         need_uninit = hr in (S_OK, S_FALSE)
         try:
