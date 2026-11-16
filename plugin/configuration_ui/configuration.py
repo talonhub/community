@@ -95,6 +95,7 @@ class Manager:
         self.chosen_setting = None
         self._ui: egui.Ui
         self._ui_wrapper: UIWrapper
+        self.was_just_opened = False
 
     def update_page(self, page_name):
         self.page = page_name
@@ -152,6 +153,11 @@ class Manager:
             self.chosen_setting = None
             settings_gui.refresh()
         if old_error_message != self.error_message:
+            settings_gui.refresh()
+
+        # the refresh is sometimes needed for this to display correctly
+        if self.was_just_opened:
+            self.was_just_opened = False
             settings_gui.refresh()
 
     async def _render_page_navigation(self, total_available_height):
@@ -398,6 +404,7 @@ def on_close_cleanup():
     on_close=on_close_cleanup,
 )
 async def settings_gui(ui, ui_wrapper):
+    manager.was_just_opened = True
     await manager.render_settings_configuration_gui(ui, ui_wrapper)
 
 
@@ -419,8 +426,6 @@ class Actions:
         if manager is None:
             manager = Manager()
         settings_gui.show()
-        # the refresh is sometimes needed for this to display correctly
-        settings_gui.refresh()
 
     def settings_window_hide():
         """Hide the Community settings configuration window"""
