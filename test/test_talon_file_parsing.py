@@ -75,7 +75,7 @@ tag(): user.pop_to_repeat
         _assert_parser_matches_expected(test_case, settings, tags, set(), set())
 
     def test_handles_more_kinds_of_values():
-        test_case = r"""settings()
+        test_case = r"""settings():
     user.a="test"
     user.b=12
     user.c=false
