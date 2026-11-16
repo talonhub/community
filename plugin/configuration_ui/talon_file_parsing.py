@@ -1,10 +1,10 @@
 """This is a temporary, minimal implementation aimed for nontechnical users who are not editing the setting .talon files themselves"""
 
+import logging
 import re
 from ast import literal_eval
 from contextlib import suppress
 from dataclasses import dataclass
-import logging
 from pathlib import Path
 from typing import Any
 
