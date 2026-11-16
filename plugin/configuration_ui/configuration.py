@@ -435,6 +435,7 @@ class Actions:
 
     def settings_window_choose_setting_ui(number: int):
         """Focus or toggle the setting by number"""
+        settings_gui.focus()
         if manager is None:
             return
         manager.chosen_setting = number
@@ -442,6 +443,7 @@ class Actions:
 
     def settings_window_toggle_commenting_setting(number: int):
         """Toggle commenting the setting by number"""
+        settings_gui.focus()
         if manager is None:
             return
         manager.toggle_commenting_setting_by_number(number)

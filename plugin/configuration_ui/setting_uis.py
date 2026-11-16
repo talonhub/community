@@ -284,8 +284,8 @@ class ColorSettingRenderer(SettingRenderer):
                     _focus_widget(text_response)
                 case 1:
                     actions.key("shift-tab")
-                case _:
-                    actions.key("space")
+                case 3:
+                    actions.key("enter")
                     self.should_focus = False
             self.focusing_frame += 1
 
@@ -326,7 +326,7 @@ class DiscreteSettingRenderer(SettingRenderer):
                         _focus_widget(response)
                     case 1:
                         actions.key("shift-tab")
-                    case _:
-                        actions.key("space")
+                    case 3:
+                        actions.key("enter")
                         self.should_focus = False
                 self.focusing_frame += 1
