@@ -417,7 +417,7 @@ class UIWrapper:
         ui = self._ui(ui)
         ui.add_space(compute_text_size())
 
-    async def draw_inside_rectangle(
+    async def render_inside_rectangle(
         self,
         draw_function,
         size: egui.Vec2,
@@ -508,8 +508,8 @@ class UIWrapper:
             text, ui, egui.FontId.proportional(label_size), wrapping_width
         )
         background_color = ui.visuals().extreme_bg_color
-        outline_color = warning_color
-        await self.draw_inside_rectangle(
+        outline_color = background_color
+        await self.render_inside_rectangle(
             draw_label,
             size,
             egui.CornerRadius.same(0),
@@ -546,7 +546,7 @@ class UIWrapper:
                     # show the text
                     ui.label(label_text)
 
-        await self.draw_inside_rectangle(
+        await self.render_inside_rectangle(
             draw_label,
             size,
             egui.CornerRadius.same(corner_radius),
