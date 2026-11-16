@@ -113,7 +113,10 @@ class Manager:
 
     def on_file_change(self, path):
         """Update setting values rendered in response to the .talon file at path changing"""
-        tags, settings = parse_settings(path)
+        try:
+            tags, settings = parse_settings(path)
+        except FileNotFoundError:
+            tags, settings = {}, {}
         for setting in self._get_settings_at_path(path):
             _update_setting_information_based_on_file_update(setting, tags, settings)
 
