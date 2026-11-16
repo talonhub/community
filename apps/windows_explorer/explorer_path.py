@@ -362,7 +362,9 @@ def get_active_explorer_path():
     This PC or Home. Check .is_virtual to tell them apart.
     """
 
-    # add a safety check to ensure this is actual a File Explorer window
+    # explorer hosts a number of applications (control panel, file explorer, taskbar) that
+    # are difficult to properly distinguish reliably. 
+    # CabinetWClass is probably the best bet for the moment, but it is used elsewhere
     if app.platform != "windows" or ui.active_window().cls != "CabinetWClass":
         return None
 
@@ -370,6 +372,9 @@ def get_active_explorer_path():
 
     result = {}
 
+    # it's necessary to run the retrieval in a separate thread to avoid causing issues
+    # with Talon's COM calls. At present, this is reached from Talon's win_title and win_focus callbacks.
+    # As is, the main risk here is a frozen explorer tab.
     def work():
         try:
             result["path"] = _get_active_explorer_path_windows(hwnd)
@@ -381,6 +386,7 @@ def get_active_explorer_path():
     t.join(2.0)
 
     if "error" in result:
-        return None 
+        print(f"Error getting active explorer path: {result['error']}")
+        return None
     
     return result.get("path")

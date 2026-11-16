@@ -1,6 +1,5 @@
-import os
+from talon import Context, Module, actions
 
-from talon import Context, Module, actions, ui
 from .explorer_path import get_active_explorer_path
 
 mod = Module()
@@ -8,15 +7,21 @@ apps = mod.apps
 
 apps.windows_explorer = r"""
 os: windows
+and app.name: Windows Explorer
+and win.class: CabinetWClass
+os: windows
+and app.name: Windows-Explorer
+and win.class: CabinetWClass
+os: windows
 and app.exe: /^explorer\.exe$/i
 and win.class: CabinetWClass
-# The taskbar id; Control Panel windows (also CabinetWClass) are Microsoft.Windows.ControlPanel
-and user.window_app_user_model_id: Microsoft.Windows.Explorer
 """
+
 ctx = Context()
 ctx.matches = r"""
 app: windows_explorer
 """
+
 
 @ctx.action_class("user")
 class UserActions:
@@ -30,8 +35,7 @@ class UserActions:
             # note:  possibly explore whether we can do anything useful with these folders via accessibility
             actions.app.notify("Cannot get path for virtual folder, command skipped")
             return None
-        else:
-            return path
+        return path
 
     def file_manager_terminal_here():
         actions.key("ctrl-l")
