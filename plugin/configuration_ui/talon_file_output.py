@@ -39,6 +39,9 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
     if not assignment_prefix.isspace():
         num_leading_spaces = len(assignment_prefix) - len(assignment_prefix.lstrip())
         assignment_prefix = assignment_prefix[:num_leading_spaces]
+        if not assignment_prefix and not make_comment:
+            # if we did not find indentation, then use a default indentation of 4 spaces to keep this inside the setting block
+            assignment_prefix = "    "
     if make_comment:
         assignment_prefix += "# "
     converted_value = _convert_value_to_talon_script_literal(value, assignment_prefix)
