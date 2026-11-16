@@ -226,9 +226,9 @@ class Manager:
                 )
                 async with self._ui.horizontal_wrapped():
                     self._ui.label(command_instructions_text)
-                    await self._ui_wrapper.draw_key("PgUp")
+                    await self._ui_wrapper.render_key("PgUp", "Page Up", "scroll this window up")
                     self._ui.label("/")
-                    await self._ui_wrapper.draw_key("PgDn")
+                    await self._ui_wrapper.render_key("PgDn", "Page Down", "scroll this window down")
                     self._ui.label(": scroll this window")
             self._ui_wrapper.spacing()
             self._ui.label("* toggle setting that setting in a Community .talon file")

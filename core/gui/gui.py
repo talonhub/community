@@ -436,7 +436,7 @@ class UIWrapper:
         size_including_outline = egui.Vec2(
             size.x + stroke.width * 2, size.y + stroke.width * 2
         )
-        _, background_rectangle = ui.allocate_space(size_including_outline)
+        background_id, background_rectangle = ui.allocate_space(size_including_outline)
 
         # the optional shadow rectangle is for making the outline thicker for part of the rectangle
         if shadow_rectangle_translation is not None:
@@ -463,6 +463,9 @@ class UIWrapper:
         # call the draw function to draw inside the rectangle
         async with ui.scope_builder(egui.UiBuilder().max_rect(background_rectangle)):
             await draw_function(ui, background_rectangle)
+
+        # return response object for handling interaction
+        return ui.interact(background_rectangle, background_id, egui.Sense.click())
 
     def compute_text_dimensions(
         self, text: str, ui=None, font_id=None, wrapping_width=None
@@ -513,7 +516,7 @@ class UIWrapper:
             ui=ui,
         )
 
-    async def draw_key(self, text, ui=None):
+    async def render_key(self, text, full_key_name, description, ui=None):
         ui = self._ui(ui)
 
         # pick colors
@@ -541,7 +544,7 @@ class UIWrapper:
                     # show the text
                     ui.label(label_text)
 
-        await self.render_inside_rectangle(
+        response = await self.render_inside_rectangle(
             draw_label,
             size,
             egui.CornerRadius.same(corner_radius),
@@ -551,6 +554,7 @@ class UIWrapper:
             shadow_rectangle_translation=egui.Vec2(0, 1.5),
             ui=ui,
         )
+        response.on_hover_text(f"You can press the {full_key_name} key to {description}")
 
     def get_remaining_width_excluding_margin(self, ui=None):
         """Compute the amount of width remaining excluding the padding margin"""
