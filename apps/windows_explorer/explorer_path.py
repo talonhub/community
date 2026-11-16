@@ -8,6 +8,8 @@ dependency.
 The public entry point is get_active_explorer_path
 """
 
+import threading
+
 from talon import app, ui
 
 
@@ -283,17 +285,18 @@ if app.platform == "windows":
         finally:
             _release(sp)
 
-    def _get_active_explorer_path_windows():
-        hwnd_fg = ui.active_window().id
-        if not hwnd_fg:
-            return None
-
+    def _get_active_explorer_path_windows(hwnd):
         # The active tab is hosted in the topmost ShellTabWindowClass child
         # of the foreground window. FindWindowEx enumerates children in
         # z-order, so the first match is the active tab. Returns 0 when the
         # window has no such child (e.g. older Explorer without tabs).
-        active_tab = _user32.FindWindowExW(hwnd_fg, None, SHELL_TAB_WINDOW_CLASS, None)
-
+        active_tab = _user32.FindWindowExW(hwnd, None, SHELL_TAB_WINDOW_CLASS, None)
+        
+		# early exit in case we sneak into this path from non-File Explorer windows
+		# utilizing CabinetWClass
+        if not active_tab or active_tab == 0:
+            return None
+        
         hr = _ole32.CoInitializeEx(None, COINIT_APARTMENTTHREADED)
         need_uninit = hr in (S_OK, S_FALSE)
         try:
@@ -339,7 +342,7 @@ if app.platform == "windows":
                     ):
                         continue
                     try:
-                        path = _path_from_browser(disp, hwnd_fg, active_tab)
+                        path = _path_from_browser(disp, hwnd, active_tab)
                         if path is not None:
                             return path
                     finally:
@@ -359,6 +362,32 @@ def get_active_explorer_path():
     ordinary folders, or a shell parsing name for virtual folders such as
     This PC or Home. Check .is_virtual to tell them apart.
     """
-    if app.platform != "windows":
+
+    # explorer hosts a number of applications (control panel, file explorer, taskbar) that
+    # are difficult to properly distinguish reliably. 
+    # CabinetWClass is probably the best bet for the moment, but it is used elsewhere
+    if app.platform != "windows" or ui.active_window().cls != "CabinetWClass":
         return None
-    return _get_active_explorer_path_windows()
+
+    hwnd = ui.active_window().id
+
+    result = {}
+
+    # it's necessary to run the retrieval in a separate thread to avoid causing issues
+    # with Talon's COM calls. At present, this is reached from Talon's win_title and win_focus callbacks.
+    # As is, the main risk here is a frozen explorer tab.
+    def work():
+        try:
+            result["path"] = _get_active_explorer_path_windows(hwnd)
+        except Exception as e:
+            result["error"] = e
+
+    t = threading.Thread(target=work, name="explorer_path", daemon=True)
+    t.start()
+    t.join(2.0)
+
+    if "error" in result:
+        print(f"Error getting active explorer path: {result['error']}")
+        return None
+    
+    return result.get("path")

@@ -20,7 +20,10 @@ app: windows_open_dialog
 def get_path():
     path = None
     try:
-        toolbar = ui.active_window().element.find_one(automation_id="1001", max_depth=0)
+        # Save dialogs also give the "File name:" box id 1001, so match the class too.
+        toolbar = ui.active_window().element.find_one(
+            automation_id="1001", class_name="ToolbarWindow32", max_depth=0
+        )
         if toolbar:
             path = toolbar.legacyiaccessible_pattern.name.replace("Address: ", "")
         else:

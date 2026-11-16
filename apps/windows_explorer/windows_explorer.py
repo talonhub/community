@@ -8,11 +8,15 @@ apps = mod.apps
 apps.windows_explorer = r"""
 os: windows
 and app.name: Windows Explorer
+and win.class: CabinetWClass
 os: windows
 and app.name: Windows-Explorer
+and win.class: CabinetWClass
 os: windows
 and app.exe: /^explorer\.exe$/i
+and win.class: CabinetWClass
 """
+
 ctx = Context()
 ctx.matches = r"""
 app: windows_explorer
