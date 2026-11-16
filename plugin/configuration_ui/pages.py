@@ -124,7 +124,7 @@ def create_pages():
                     "user.mode_indicator_show",
                 ),
                 Setting.boolean("user.mode_indicator_show_microphone_name"),
-                Setting.numeric("user.mode_indicator_size", 1),
+                Setting.numeric("user.mode_indicator_size", 1.0),
                 Setting.numeric(
                     "user.mode_indicator_x",
                     0.0,
