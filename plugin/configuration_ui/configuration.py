@@ -408,7 +408,6 @@ def on_close_cleanup():
     on_close=on_close_cleanup,
 )
 async def settings_gui(ui, ui_wrapper):
-    manager.was_just_opened = True
     await manager.render_settings_configuration_gui(ui, ui_wrapper)
 
 
@@ -429,6 +428,7 @@ class Actions:
         global manager
         if manager is None:
             manager = Manager()
+        manager.was_just_opened = True
         settings_gui.show()
 
     def settings_window_hide():
