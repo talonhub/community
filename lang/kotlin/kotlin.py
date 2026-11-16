@@ -9,40 +9,6 @@ ctx.matches = r"""
 code.language: kotlin
 """
 
-ctx.lists["user.code_keyword"] = {
-    "var": "var ",
-    "val": "val ",
-    "lateinit": "lateinit ",
-    "public": "public ",
-    "private": "private ",
-    "protected": "protected ",
-    "companion object": "companion object ",
-    "synchronized": "synchronized ",
-    "volatile": "volatile ",
-    "transient": "transient ",
-    "abstract": "abstract ",
-    "interface": "interface ",
-    "final": "final ",
-    "return": "return ",
-}
-
-ctx.lists["user.code_type"] = {
-    "boolean": "Boolean",
-    "byte": "Byte",
-    "short": "Short",
-    "int": "Int",
-    "long": "Long",
-    "float": "Float",
-    "double": "Double",
-    "char": "Char",
-    "string": "String",
-    "array": "Array",
-    "map": "Map",
-    "any": "Any",
-    "nothing": "Nothing",
-    "unit": "Unit",
-}
-
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=create_described_insert_between("[", "]"),

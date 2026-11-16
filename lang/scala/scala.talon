@@ -9,6 +9,7 @@ tag(): user.code_comment_block_c_like
 tag(): user.code_data_bool
 tag(): user.code_data_null
 tag(): user.code_functions
+tag(): user.code_keywords
 tag(): user.code_libraries
 tag(): user.code_operators_array
 tag(): user.code_operators_assignment
@@ -24,15 +25,17 @@ settings():
     user.code_protected_variable_formatter = "PRIVATE_CAMEL_CASE"
     user.code_public_variable_formatter = "PRIVATE_CAMEL_CASE"
 
-state {user.scala_modifier}: insert("{user.scala_modifier} ")
+state {user.scala_modifier}:
+    user.deprecate_command("2026-11-10", "state {{user.scala_modifier}}", "(keyword | put) (<user.code_keyword>+)")
+    insert("{user.scala_modifier} ")
 
-state {user.scala_keyword}: insert("{scala_keyword} ")
+state {user.scala_keyword}:
+    user.deprecate_command("2026-11-10", "state {{user.scala_keyword}}", "(keyword | put) (<user.code_keyword>+)")
+    insert("{scala_keyword} ")
 
 op right arrow: " -> "
 op left arrow: " <- "
 op plus plus: " ++ "
 op subtype: " <: "
 
-block string:
-    insert('""""""')
-    key("left left left")
+block string: user.insert_between('"""', '"""')

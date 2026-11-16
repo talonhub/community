@@ -22,12 +22,6 @@ mod.setting(
 mod.tag("stylua", desc="Tag for stylua linting commands")
 
 
-@mod.capture(rule="{user.lua_functions}")
-def lua_functions(m) -> str:
-    "Returns a string"
-    return m.lua_functions
-
-
 ###
 # code_operators_bitwise
 ###

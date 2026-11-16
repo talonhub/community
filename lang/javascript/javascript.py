@@ -12,53 +12,6 @@ code.language: javascriptreact
 code.language: typescriptreact
 """
 
-ctx.lists["user.code_common_method"] = {
-    "catch": "catch",
-    "concat": "concat",
-    "filter": "filter",
-    "finally": "finally",
-    "find": "find",
-    "flat map": "flatMap",
-    "for each": "forEach",
-    "join": "join",
-    "includes": "includes",
-    "map": "map",
-    "pop": "pop",
-    "push": "push",
-    "reduce": "reduce",
-    "slice": "slice",
-    "some": "some",
-    "split": "split",
-    "substring": "substring",
-    "then": "then",
-}
-
-ctx.lists["user.code_keyword"] = {
-    "a sink": "async ",
-    "await": "await ",
-    "break": "break",
-    "class": "class ",
-    "const": "const ",
-    "continue": "continue",
-    "default": "default ",
-    "export": "export ",
-    "false": "false",
-    "function": "function ",
-    "import": "import ",
-    "let": "let ",
-    "new": "new ",
-    "null": "null",
-    "private": "private ",
-    "protected": "protected ",
-    "public": "public ",
-    "return": "return ",
-    "throw": "throw ",
-    "true": "true",
-    "try": "try ",
-    "undefined": "undefined",
-    "yield": "yield ",
-}
-
 operators = Operators(
     # code_operators_array
     SUBSCRIPT=create_described_insert_between("[", "]"),
