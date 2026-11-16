@@ -300,12 +300,12 @@ async def _render_table_rows(
         body_top = min(body_rect.top(), body_rect.bottom())
         async for row in body.rows(row_height, len(rows)):
             # render a line above the row when this condition is True
-            show_overline = (
+            should_show_overline = (
                 rows[row.index()].should_render_overline()
                 and settings.get("user.community_ui_table_borders")
                 and (has_a_column_title or row.index() > 0)
             )
-            row.set_overline(show_overline)
+            row.set_overline(should_show_overline)
             await render_row_ui(row, rows, len(table_info.column_titles))
             # if this is the first visible row, update current_row_index
             response = row.response()
