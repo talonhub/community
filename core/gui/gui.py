@@ -502,7 +502,7 @@ class UIWrapper:
         size = self.compute_text_dimensions(
             text, ui, egui.FontId.proportional(label_size), wrapping_width
         )
-        background_color = egui.Color32.from_rgb(255, 255, 0)
+        background_color = egui.Color32.from_rgb(255, 255, 0) # yellow
         outline_color = background_color
         await self.render_inside_rectangle(
             draw_label,
