@@ -1,6 +1,6 @@
 import os
 
-from talon import Context, Module, actions, app, ui
+from talon import Context, Module, actions, ui
 from .explorer_path import get_active_explorer_path
 
 mod = Module()
@@ -9,10 +9,13 @@ apps = mod.apps
 apps.windows_explorer = r"""
 os: windows
 and app.name: Windows Explorer
+and win.class: CabinetWClass
 os: windows
 and app.name: Windows-Explorer
+and win.class: CabinetWClass
 os: windows
 and app.exe: /^explorer\.exe$/i
+and win.class: CabinetWClass
 """
 ctx = Context()
 ctx.matches = r"""
@@ -27,7 +30,7 @@ class UserActions:
     def file_manager_current_path():
         path = get_active_explorer_path()
 
-        if path.is_virtual:
+        if path and path.is_virtual:
             # note:  possibly explore whether we can do anything useful with these folders via accessibility
             actions.app.notify("Cannot get path for virtual folder, command skipped")
             return None
