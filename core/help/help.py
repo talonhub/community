@@ -84,6 +84,7 @@ def update_minimum_column_sizes(table: Table, ui_wrapper):
         current_gui.auto_size_next_frame()
     return minimum_column_sizes
 
+
 GUI_ID = "help"
 
 
