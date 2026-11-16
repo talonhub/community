@@ -1,0 +1,15 @@
+list: user.code_trait
+code.language: rust
+-
+
+# closure traits
+closure mutable: FnMut
+closure once: FnOnce
+closure: Fn
+
+# conversion traits
+from: From
+into: Into
+
+# iterator traits
+iterator: Iterator

@@ -52,6 +52,7 @@ scala_types = scala_common_types.copy()
 scala_types.update(scala_common_generic_types)
 ctx.lists["user.code_type"] = scala_types
 
+# deprecated
 # Scala Modifies
 scala_modifiers = {
     "public": "public",
@@ -59,9 +60,12 @@ scala_modifiers = {
     "protected": "protected",
 }
 
-mod.list("scala_modifier", desc="Scala Modifiers")
+# deprecated
+mod.list("scala_modifier", desc="Scala Modifiers (deprecated)")
+# deprecated
 ctx.lists["user.scala_modifier"] = scala_modifiers
 
+# deprecated
 scala_keywords = {
     "abstract": "abstract",
     "case class": "case class",
@@ -83,7 +87,9 @@ scala_keywords = {
     "yield": "yield",
 }
 
-mod.list("scala_keyword", desc="Scala Keywords")
+# deprecated
+mod.list("scala_keyword", desc="Scala Keywords (deprecated)")
+# deprecated
 ctx.lists["user.scala_keyword"] = scala_keywords
 
 operators = Operators(
@@ -96,7 +102,8 @@ operators = Operators(
     ASSIGNMENT_MULTIPLICATION=" *= ",
     ASSIGNMENT_DIVISION=" /= ",
     ASSIGNMENT_MODULO=" %= ",
-    ASSIGNMENT_INCREMENT="++",
+    ASSIGNMENT_INCREMENT=" += 1",
+    ASSIGNMENT_DECREMENT=" -= 1",
     ASSIGNMENT_BITWISE_AND=" &= ",
     ASSIGNMENT_BITWISE_OR=" |= ",
     ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
