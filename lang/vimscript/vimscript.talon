@@ -5,6 +5,7 @@ tag(): user.code_imperative
 tag(): user.code_operators_assignment
 tag(): user.code_operators_math
 tag(): user.code_comment_line
+tag(): user.code_functions_common
 
 # XXX - revisit these
 settings():
@@ -27,10 +28,8 @@ assign [<user.vimscript_scope>] (variable | var) [<user.text>] [over]:
     insert(vimscript_scope or "")
     user.code_private_variable_formatter(text)
 
-# see lang/vimscript/vimscript.py for list
-<user.vimscript_functions>: insert("{vimscript_functions} ")
+<user.code_common_function>: insert("{code_common_function} ")
 
-# XXX - possibly overlap with some programming.talon
 state command: "command! "
 state end if: "endif"
 state end for: "endfor"

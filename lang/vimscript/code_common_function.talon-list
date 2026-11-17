@@ -1,0 +1,8 @@
+list: user.code_common_function
+code.language: vimscript
+-
+
+get line: getline
+length: len
+set line: setline
+string len: strlen

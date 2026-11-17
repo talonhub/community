@@ -3,10 +3,17 @@ import time
 from pathlib import Path
 from typing import Any
 
-from talon import actions
+from talon import Module, actions, settings
 
-# The amount of time to wait for application to perform a command, in seconds
-RPC_COMMAND_TIMEOUT_SECONDS = 3.0
+mod = Module()
+
+mod.setting(
+    "rpc_command_timeout_seconds",
+    type=float,
+    default=3.0,
+    desc="The amount of time to wait for application to perform a command, in seconds",
+)
+
 
 # When doing exponential back off waiting for application to perform a command, how
 # long to sleep the first time
@@ -26,7 +33,9 @@ def read_json_with_timeout(path: Path) -> Any:
     Returns:
         Any: The json-decoded contents of the file
     """
-    timeout_time = time.perf_counter() + RPC_COMMAND_TIMEOUT_SECONDS
+    timeout_time = time.perf_counter() + settings.get(
+        "user.rpc_command_timeout_seconds"
+    )
     sleep_time = MINIMUM_SLEEP_TIME_SECONDS
     while True:
         try:
