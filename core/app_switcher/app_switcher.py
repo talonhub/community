@@ -1,5 +1,3 @@
-from ..gui.gui import create_italic_text, open_gui
-
 import os
 import shlex
 import subprocess
@@ -7,7 +5,9 @@ import time
 from pathlib import Path
 
 import talon
-from talon import Context, Module, actions, app, fs, imgui, ui
+from talon import Context, Module, actions, app, fs, ui
+
+from ..gui.gui import create_italic_text, open_gui
 
 # Construct a list of spoken form overrides for application names (similar to how homophone list is managed)
 # These overrides are used *instead* of the generated spoken forms for the given app name or .exe (on Windows)
