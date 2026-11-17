@@ -1,10 +1,10 @@
-from ...core.gui.gui import open_gui, create_italic_text
-
 import time
 from enum import Enum, auto
 from typing import Optional
 
-from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
+from talon import Context, Module, actions, app, cron, ctrl, settings, ui
+
+from ...core.gui.gui import create_italic_text, open_gui
 
 hiss_scroll_up = False
 
