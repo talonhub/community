@@ -7,6 +7,7 @@ ctx.matches = r"""
 code.language: typst
 """
 
+
 @ctx.action_class("user")
 class UserActions:
     def code_comment_line_prefix():
