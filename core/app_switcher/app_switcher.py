@@ -304,6 +304,8 @@ def update_running_list():
             running[running_name] = running_app_name
 
     ctx.lists["user.running"] = running
+    gui_running.auto_size_next_frame()
+    gui_running.refresh()
 
 
 def update_overrides(name, flags):
