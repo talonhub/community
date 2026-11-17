@@ -25,19 +25,6 @@ hist_more: bool = False
 history: list[str] = []
 
 
-def on_phrase(j):
-    global history
-    if skip_phrase(j):
-        return
-
-    words = j.get("phrase")
-    text = actions.user.history_transform_phrase_text(words)
-    if text is not None:
-        history.append(text)
-        history = history[-settings.get("user.command_history_size") :]
-    gui.refresh()
-
-
 @open_gui(y=0)
 async def gui(ui, ui_wrapper):
     global history
@@ -54,6 +41,22 @@ async def gui(ui, ui_wrapper):
     close_button_text = create_italic_text("Command history close")
     if ui_wrapper.button(close_button_text):
         actions.user.history_disable()
+
+def refresh_gui():
+    gui.auto_size_next_frame()
+    gui.refresh()
+
+def on_phrase(j):
+    global history
+    if skip_phrase(j):
+        return
+
+    words = j.get("phrase")
+    text = actions.user.history_transform_phrase_text(words)
+    if text is not None:
+        history.append(text)
+        history = history[-settings.get("user.command_history_size") :]
+    refresh_gui()
 
 
 speech_system.register("phrase", on_phrase)
@@ -80,19 +83,19 @@ class Actions:
         """Clear the history"""
         global history
         history = []
-        gui.refresh()
+        refresh_gui()
 
     def history_more():
         """Show more history"""
         global hist_more
         hist_more = True
-        gui.refresh()
+        refresh_gui()
 
     def history_less():
         """Show less history"""
         global hist_more
         hist_more = False
-        gui.refresh()
+        refresh_gui()
 
     def history_get(number: int) -> str:
         """returns the history entry at the specified index"""
