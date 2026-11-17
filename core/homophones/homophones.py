@@ -3,7 +3,7 @@ from ..gui.gui import open_gui, create_italic_text
 import os
 from typing import Optional
 
-from talon import Context, Module, actions, app, clip, fs, imgui, ui
+from talon import Context, Module, actions, app, clip, fs
 
 ########################################################################
 # global settings
@@ -28,9 +28,6 @@ mod.tag(
     "homophones_open",
     desc="Tag for enabling homophones commands when the associated gui is open",
 )
-
-main_screen = ui.main_screen()
-
 
 def update_homophones(name, flags):
     if name != homophones_file:
