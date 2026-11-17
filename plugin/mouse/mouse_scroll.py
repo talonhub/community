@@ -239,6 +239,11 @@ async def gui_wheel(ui, ui_wrapper):
         actions.user.mouse_scroll_stop()
 
 
+def refresh_gui_wheel():
+    gui_wheel.auto_size_next_frame()
+    gui_wheel.refresh()
+
+
 @mod.action_class
 class Actions:
     def mouse_scroll_up(amount: float = 1):
@@ -294,6 +299,8 @@ class Actions:
         scrolling_state.start_gaze_scrolling_job()
 
         if not settings.get("user.mouse_hide_mouse_gui"):
+            if gui_wheel.showing:
+                refresh_gui_wheel()
             gui_wheel.show()
 
     def mouse_gaze_scroll_toggle():
@@ -376,6 +383,8 @@ def mouse_scroll_continuous(
         ctx.tags = ["user.continuous_scrolling"]
 
         if not settings.get("user.mouse_hide_mouse_gui"):
+            if gui_wheel.showing:
+                refresh_gui_wheel()
             gui_wheel.show()
 
 
