@@ -154,7 +154,11 @@ async def gui(ui, ui_wrapper):
     ui_wrapper.title("Select a homophone")
     index = 1
     for word in active_word_list:
-        if ui_wrapper.button(f"Choose {index}: {word}"):
+        option_text = ui_wrapper.concatenate_formatted_text(
+            (create_italic_text(f"Choose {index}"),
+            f": {word}")
+        )
+        if ui_wrapper.button(option_text):
             actions.insert(actions.user.homophones_select(index))
             actions.user.homophones_hide()
         index = index + 1
