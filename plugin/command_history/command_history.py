@@ -1,8 +1,10 @@
 from typing import Optional
 
-from talon import Module, actions, imgui, settings, speech_system
+
+from talon import Module, actions, settings, speech_system
 
 from ..subtitles.on_phrase import skip_phrase
+from ...core.gui.gui import open_gui, create_italic_text
 
 # We keep command_history_size lines of history, but by default display only
 # command_history_display of them.
@@ -34,23 +36,24 @@ def on_phrase(j):
     if text is not None:
         history.append(text)
         history = history[-settings.get("user.command_history_size") :]
+    gui.refresh()
 
 
-@imgui.open(y=0)
-def gui(gui: imgui.GUI):
+@open_gui(y=0)
+def gui(ui, ui_wrapper):
     global history
-    gui.text("Command History")
-    gui.line()
+    ui_wrapper.title("Command History")
     text = (
         history[:]
         if hist_more
         else history[-settings.get("user.command_history_display") :]
     )
     for line in text:
-        gui.text(line)
+        ui.label(line)
 
-    gui.spacer()
-    if gui.button("Command history close"):
+    ui_wrapper.spacing()
+    close_button_text = create_italic_text("Command history close")
+    if ui_wrapper.button(close_button_text):
         actions.user.history_disable()
 
 
@@ -78,16 +81,19 @@ class Actions:
         """Clear the history"""
         global history
         history = []
+        gui.refresh()
 
     def history_more():
         """Show more history"""
         global hist_more
         hist_more = True
+        gui.refresh()
 
     def history_less():
         """Show less history"""
         global hist_more
         hist_more = False
+        gui.refresh()
 
     def history_get(number: int) -> str:
         """returns the history entry at the specified index"""
