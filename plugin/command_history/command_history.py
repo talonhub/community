@@ -39,7 +39,7 @@ def on_phrase(j):
 
 
 @open_gui(y=0)
-def gui(ui, ui_wrapper):
+async def gui(ui, ui_wrapper):
     global history
     ui_wrapper.title("Command History")
     text = (
