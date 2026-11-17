@@ -27,8 +27,9 @@ timestamp insert UTC high resolution:
 # Date entry commands using day, month, year lists
 
 # Insert date using the configured default format from settings.
-# Example command: 'date 31 January 2026'
-date {user.day} {user.month} <number>: user.insert_date_from_parts(day, month, number)
+# Examples: 'date 31 January' or 'date 31 January 2026'
+date {user.day} {user.month}: user.insert_date_from_parts(day, month)
+date {user.day} {user.month} <number>: user.insert_date_from_parts_with_year(day, month, number)
 
 # Relative date commands
 # Today/now uses the configured default format from settings.

@@ -39,6 +39,15 @@ MONTH_MAP = {
 }
 
 
+def _insert_date_from_parts(day: int, month: str, year: int | None = None):
+    """Insert date from spoken day/month/[year] using preferred date_format.
+
+    When the year is omitted, the current year is used.
+    """
+    resolved_year = date.today().year if year is None else year
+    actions.user.insert_date_formatted(day, month, resolved_year, None)
+
+
 def _resolve_date_format(fmt: str | None) -> str:
     """Return the configured format or a concrete strftime pattern."""
     return fmt or settings.get("user.date_format") or "%Y-%m-%d"
@@ -67,9 +76,13 @@ def _month_to_int(month) -> int:
 
 @mod.action_class
 class Actions:
-    def insert_date_from_parts(day: int, month: str, year: int):
+    def insert_date_from_parts(day: int, month: str):
+        """Insert date from spoken day/month using preferred date_format."""
+        _insert_date_from_parts(day, month)
+
+    def insert_date_from_parts_with_year(day: int, month: str, year: int):
         """Insert date from spoken day/month/year using preferred date_format."""
-        actions.user.insert_date_formatted(day, month, year, None)
+        _insert_date_from_parts(day, month, year)
 
     def insert_date_formatted(day: int, month: str, year: int, fmt: str = None):
         """Insert a date from spoken day/month/year using `strftime` format codes.
