@@ -55,6 +55,16 @@ def delete_word_right():
     normal_cmd("right d w i")
 
 
+def delete_chars_right(action, modifier_type, count):
+    # the normal escape key shifts the position one to the left, so let's undo that first
+    normal_cmd(f"right {' '.join(str(count))} x i")
+
+
+def delete_chars_left(action, modifier_type, count):
+    # the normal escape key shifts the position one to the left, so let's undo that first
+    normal_cmd(f"right {' '.join(str(count))} X i")
+
+
 simple_action_callbacks: dict[str, Callable] = {}
 
 custom_callbacks = {}
@@ -63,6 +73,8 @@ compound_actions = {
     ("delete", "word"): lambda: normal_cmd("d i w"),
     ("delete", "wordLeft"): lambda: actions.key("ctrl-w"),
     ("delete", "wordRight"): delete_word_right,
+    ("delete", "left"): delete_chars_left,
+    ("delete", "right"): delete_chars_right,
     ("cutToClipboard", "word"): lambda: normal_cmd("c i w "),
     ("cutToClipboard", "wordLeft"): lambda: normal_cmd("c b"),
     ("cutToClipboard", "wordRight"): lambda: normal_cmd("c w"),
@@ -153,7 +165,7 @@ class Actions:
     def cut_line():
         normal_cmd("c c")
 
-    def get_simple_edit_action_callback(action_type: str) -> Callable | None:
+    def get_simple_edit_action_callback(action_type):
         """Convert a edit action type created from a string into its associated Callback.
         If it can't find one in this file, it will try the next most specific community version
         """
@@ -162,9 +174,7 @@ class Actions:
             cb = actions.next(action_type)
         return cb
 
-    def get_compound_edit_action_modifier_callback(
-        pair: tuple[str, str],
-    ) -> Callable | None:
+    def get_compound_edit_action_modifier_callback(pair):
         return (
             custom_callbacks.get(pair)
             or compound_actions.get(pair)

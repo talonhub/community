@@ -1,5 +1,4 @@
 from talon import Context, Module, actions, ui
-from talon.mac import applescript
 
 ctx = Context()
 mod = Module()
@@ -35,7 +34,9 @@ class BrowserActions:
                 AXIdentifier="WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD",
             )
             address = address_field.AXValue
-        except (ui.UIErr, AttributeError):
+        except ui.UIErr, AttributeError:
+            from talon.mac import applescript
+
             address = applescript.run(f"""
                 tell application id "{actions.app.bundle()}"
                     with timeout of 0.1 seconds

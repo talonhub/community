@@ -11,6 +11,7 @@ The plugin folder has several other subfolders containing various commands and f
 - `draft_editor` has some of the commands to open and use a built-in pop-up text editor
 - `dropdown` has commands to select an option from a dropdown menu
 - `gamepad` has default bindings for using a gamepad device to do tasks like clicking, scrolling and moving your cursor.
+- `incompatible_talon_version_detection` warns if you are running incompatible Community and Talon versions.
 - `listening_timeout` has a setting for turning off speech recognition if Talon does not detect any commands for the specified number of minutes.
 - `macro` has commands to use macros
 - `media` has commands for video and volume control

@@ -9,17 +9,6 @@ ctx.matches = r"""
 code.language: stata
 """
 
-# functions.py
-ctx.lists["user.code_parameter_name"] = {
-    # regressions
-    "V C E cluster": "vce(cluster)",
-    "V C E robust": "vce(robust)",
-}
-
-# libraries.py
-ctx.lists["user.code_libraries"] = {
-    "estout": "estout",
-}
 
 operators = Operators(
     # code_operators_array

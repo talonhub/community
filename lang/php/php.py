@@ -16,6 +16,7 @@ operators = Operators(
     ASSIGNMENT_DIVISION=" /= ",
     ASSIGNMENT_MODULO=" %= ",
     ASSIGNMENT_INCREMENT="++",
+    ASSIGNMENT_DECREMENT="--",
     ASSIGNMENT_BITWISE_AND=" &= ",
     ASSIGNMENT_BITWISE_OR=" |= ",
     ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",
@@ -76,12 +77,10 @@ class UserActions:
         actions.insert("null")
 
     def code_insert_is_null():
-        actions.insert("is_null()")
-        actions.edit.left()
+        actions.user.insert_between("is_null(", ")")
 
     def code_insert_is_not_null():
-        actions.insert("isset()")
-        actions.edit.left()
+        actions.user.insert_between("isset(", ")")
 
     def code_insert_function(text: str, selection: str):
         text += f"({selection or ''})"

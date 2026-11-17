@@ -5,7 +5,10 @@ from talon import Context, Module, actions, settings
 ctx = Context()
 mod = Module()
 
-mod.tag("pop_twice_to_repeat", desc="tag for enabling pop twice to repeat")
+mod.tag(
+    "pop_twice_to_repeat",
+    desc="Pop twice to repeat. Enabling this tag disables other pop to click actions in command mode, including pop to click",
+)
 
 ctx.matches = r"""
 mode: command

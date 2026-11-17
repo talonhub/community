@@ -1,8 +1,6 @@
 name: PR label events
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   pull_request_review:
     types: [submitted, dismissed]
 

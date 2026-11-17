@@ -6,6 +6,7 @@ tag(): user.code_object_oriented
 
 tag(): user.code_comment_documentation
 tag(): user.code_comment_line
+tag(): user.code_comment_block
 tag(): user.code_data_bool
 tag(): user.code_data_null
 tag(): user.code_functions
@@ -28,13 +29,21 @@ settings():
 
 #python-specific grammars
 dunder in it: "__init__"
-state (def | deaf | deft): "def "
+state (def | deaf | deft):
+    user.deprecate_command("2026-11-16", "state (def | deaf | deft)", "put (deaf | define)")
+    insert("def ")
 state try: "try:\n"
-state except: "except "
-state raise: "raise "
+state except:
+    user.deprecate_command("2026-11-16", "state except", "put except")
+    insert("except ")
+state raise:
+    user.deprecate_command("2026-11-16", "state raise", "put raise")
+    insert("raise ")
 self taught: "self."
 pie test: "pytest"
-state past: "pass"
+state past:
+    user.deprecate_command("2026-11-16", "state past", "put pass")
+    insert("pass")
 
 [state] raise {user.python_exception}:
     user.insert_between("raise {python_exception}(", ")")
@@ -46,10 +55,6 @@ dock {user.python_docstring_fields}:
     edit.left()
 dock type {user.code_type}: user.insert_between(":type ", ": {code_type}")
 dock returns type {user.code_type}: user.insert_between(":rtype ", ": {code_type}")
-
-import <user.code_libraries>:
-    user.code_insert_library(code_libraries, "")
-    key(end enter)
 
 from import: user.insert_snippet_by_name("importFromStatement")
 
