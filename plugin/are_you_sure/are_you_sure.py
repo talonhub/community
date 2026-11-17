@@ -1,7 +1,9 @@
 from collections.abc import Callable
 from typing import Optional
 
-from talon import Context, Module, actions, imgui
+from talon import Context, Module, actions
+
+from ...core.gui.gui import create_italic_text, open_gui
 
 mod = Module()
 mod.tag("are_you_sure", desc="Activates are you sure commands")
@@ -25,6 +27,9 @@ class ConfirmationState:
         self.on_cancel = on_disconfirmation
         self.message = message
         self.context.tags = ["user.are_you_sure"]
+        if gui.showing:
+            gui.auto_size_next_frame()
+            gui.refresh()
         gui.show()
 
     def confirm(self):
@@ -51,13 +56,14 @@ class ConfirmationState:
 confirmation = ConfirmationState()
 
 
-@imgui.open(y=0)
-def gui(gui: imgui.GUI):
-    gui.text(confirmation.get_message())
-    gui.line()
-    if gui.button("Yes I am sure"):
+@open_gui(y=0)
+async def gui(ui, ui_wrapper):
+    ui_wrapper.title(confirmation.get_message())
+    accept_command_text = create_italic_text("Yes I am sure")
+    if ui_wrapper.button(accept_command_text):
         actions.user.are_you_sure_confirm()
-    if gui.button("Cancel"):
+    cancel_command_text = create_italic_text("Cancel")
+    if ui_wrapper.button(cancel_command_text):
         actions.user.are_you_sure_cancel()
 
 
