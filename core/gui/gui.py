@@ -287,7 +287,7 @@ async def _add_header_to_table(table, column_titles, has_a_column_title):
 
 
 async def _render_table_rows(
-    header, row_height, table_info, has_a_column_title
+    header, row_height, table_info, render_header_line
 ) -> int | None:
     """Renders the table rows and returns the index of the first visible row"""
     rows = table_info.rows
@@ -303,7 +303,7 @@ async def _render_table_rows(
             should_render_overline = (
                 rows[row.index()].should_render_overline()
                 and settings.get("user.community_ui_table_borders")
-                and (has_a_column_title or row.index() > 0)
+                and (render_header_line or row.index() > 0)
             )
             row.set_overline(should_render_overline)
             await render_row_ui(row, rows, len(table_info.column_titles))
