@@ -1,8 +1,8 @@
-from ...core.gui.gui import create_italic_text, open_gui
-
 import os
 
 from talon import Context, Module, actions, app
+
+from ...core.gui.gui import open_gui
 
 # we know to stop showing the new user message when the following path is defined
 NEW_USER_MESSAGE_DISMISSAL_PATH = os.path.join(
