@@ -1,10 +1,9 @@
 from typing import Optional
 
-
 from talon import Module, actions, settings, speech_system
 
+from ...core.gui.gui import create_italic_text, open_gui
 from ..subtitles.on_phrase import skip_phrase
-from ...core.gui.gui import open_gui, create_italic_text
 
 # We keep command_history_size lines of history, but by default display only
 # command_history_display of them.
