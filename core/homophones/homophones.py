@@ -1,9 +1,9 @@
-from ..gui.gui import open_gui, create_italic_text
-
 import os
 from typing import Optional
 
 from talon import Context, Module, actions, app, clip, fs
+
+from ..gui.gui import create_italic_text, open_gui
 
 ########################################################################
 # global settings
@@ -28,6 +28,7 @@ mod.tag(
     "homophones_open",
     desc="Tag for enabling homophones commands when the associated gui is open",
 )
+
 
 def update_homophones(name, flags):
     if name != homophones_file:
@@ -152,8 +153,7 @@ async def gui(ui, ui_wrapper):
     index = 1
     for word in active_word_list:
         option_text = ui_wrapper.concatenate_formatted_text(
-            (create_italic_text(f"Choose {index}"),
-            f": {word}")
+            (create_italic_text(f"Choose {index}"), f": {word}")
         )
         if ui_wrapper.button(option_text):
             actions.insert(actions.user.homophones_select(index))
