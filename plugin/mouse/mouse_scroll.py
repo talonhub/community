@@ -1,3 +1,5 @@
+from ...core.gui.gui import open_gui, create_italic_text
+
 import time
 from enum import Enum, auto
 from typing import Optional
@@ -225,12 +227,13 @@ mod.tag(
 )
 
 
-@imgui.open(x=700, y=0)
-def gui_wheel(gui: imgui.GUI):
-    gui.text(f"Scroll mode: {scrolling_state.get_scrolling_mode_description()}")
-    gui.text("say a number between 0 and 99 to set scrolling speed")
-    gui.line()
-    if gui.button("[Wheel] Stop"):
+@open_gui(y=0)
+async def gui_wheel(ui, ui_wrapper):
+    ui_wrapper.title(f"Scroll mode: {scrolling_state.get_scrolling_mode_description()}")
+    ui.label("say a number between 0 and 99 to set scrolling speed")
+    ui_wrapper.spacing()
+    stop_button_text = create_italic_text("[Wheel] Stop")
+    if ui_wrapper.button(stop_button_text):
         actions.user.mouse_scroll_stop()
 
 
