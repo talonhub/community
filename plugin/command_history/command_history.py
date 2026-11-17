@@ -42,9 +42,11 @@ async def gui(ui, ui_wrapper):
     if ui_wrapper.button(close_button_text):
         actions.user.history_disable()
 
+
 def refresh_gui():
     gui.auto_size_next_frame()
     gui.refresh()
+
 
 def on_phrase(j):
     global history
