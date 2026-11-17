@@ -229,9 +229,9 @@ mod.tag(
 
 @open_gui(y=0)
 async def gui_wheel(ui, ui_wrapper):
-    ui_wrapper.title(f"Scroll mode: {scrolling_state.get_scrolling_mode_description()}")
+    ui_wrapper.header(f"Scroll mode: {scrolling_state.get_scrolling_mode_description()}")
     ui.label("say a number between 0 and 99 to set scrolling speed")
-    ui_wrapper.spacing()
+    ui.separator()
     stop_button_text = create_italic_text("[Wheel] Stop")
     if ui_wrapper.button(stop_button_text):
         actions.user.mouse_scroll_stop()
