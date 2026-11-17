@@ -119,7 +119,9 @@ mod.list(
 # this should be moved to a talon-list file after this becomes stable
 ctx.lists["user.python_generic_type"] = {
     "callable": "Callable",
+    "dick": "dict",
     "dictionary": "dict",
+    "frozen set": "frozenset",
     "iterable": "Iterable",
     "list": "list",
     "optional": "Optional",
@@ -192,6 +194,7 @@ operators = Operators(
     ASSIGNMENT_DIVISION=" /= ",
     ASSIGNMENT_MODULO=" %= ",
     ASSIGNMENT_INCREMENT=" += 1",
+    ASSIGNMENT_DECREMENT=" -= 1",
     ASSIGNMENT_BITWISE_AND=" &= ",
     ASSIGNMENT_BITWISE_OR=" |= ",
     ASSIGNMENT_BITWISE_EXCLUSIVE_OR=" ^= ",

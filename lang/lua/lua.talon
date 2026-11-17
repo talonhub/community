@@ -28,7 +28,7 @@ settings():
 state return (null | nil): "return nil"
 state return true: "return true"
 state return false: "return false"
-state return table: user.insert_between("return {", "}")
+state return (table | dick): user.insert_between("return {", "}")
 state append string: " .. "
 
 state label <user.text>:
@@ -38,7 +38,7 @@ state label <user.text>:
 
 require <user.code_libraries>:
     user.code_insert_library(code_libraries, "")
-    key(end enter)
+    edit.line_insert_down()
 
 state (variable | var) [<user.text>] [over]: user.code_public_variable_formatter(text)
 
@@ -59,8 +59,6 @@ index <user.word>: '["{word}"]'
 index (var | variable) <user.text>:
     var = user.formatted_text(text, "SNAKE_CASE")
     insert("[{var}]")
-
-state return dick: user.insert_between("return {", "}")
 
 # deprecated commands
 state local:

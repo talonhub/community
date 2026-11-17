@@ -26,7 +26,7 @@ library <user.code_libraries>:
     # Import library - easier than 'snip import' for impossible to pronounce r
     # library names
     user.code_insert_library(code_libraries, "")
-    key(end enter)
+    edit.line_insert_down()
 
 using <user.code_libraries>:
     # Insert library for function call, eg tidyr::

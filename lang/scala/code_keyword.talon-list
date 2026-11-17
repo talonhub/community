@@ -1,0 +1,26 @@
+list: user.code_keyword
+code.language: scala
+-
+
+abstract: "abstract "
+case: "case "
+class: "class "
+def: "def "
+extends: "extends "
+implicit: "implicit "
+lazy val: "lazy val "
+new: "new "
+object: "object "
+override: "override "
+package: "package "
+private: "private "
+protected: "protected "
+public: "public "
+sealed: "sealed "
+throw: "throw "
+trait: "trait "
+type: "type "
+val: "val "
+var: "var "
+with: "with "
+yield: "yield "
