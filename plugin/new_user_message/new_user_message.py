@@ -18,7 +18,7 @@ else:
 
 
 @open_gui(y=0)
-def new_user_gui(ui, ui_wrapper):
+async def new_user_gui(ui, ui_wrapper):
     ui_wrapper.title("Welcome to Talon Community!")
 
     ui.label("For additional help or to close this:")
