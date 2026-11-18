@@ -56,7 +56,7 @@ mod.tag(
 @open_gui(refresh_period="500ms")
 async def gui(ui, ui_wrapper):
     subtitle = ui_wrapper.concatenate_formatted_text(
-        ("(or say “", create_italic_text("microphone pick # "), ")”")
+        ("(or say: ", create_italic_text("microphone pick # "), ")")
     )
     ui_wrapper.title(
         "Click or press a number key to select a microphone",
