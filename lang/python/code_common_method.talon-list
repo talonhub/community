@@ -11,6 +11,8 @@ case fold: "casefold"
 clear
 copy
 count
+difference
+discard
 ends with: "endswith"
 extend
 find
@@ -18,6 +20,10 @@ format
 get
 index
 insert
+intersection
+is disjoint: "isdisjoint"
+is subset: "issubset"
+is superset: "issuperset"
 items
 join
 keys
@@ -30,7 +36,9 @@ sort
 split
 starts with: "startswith"
 strip
+symmetric difference: "symmetric_difference"
 title
+union
 update
 upper
 values
