@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, clip, imgui, speech_system
+from talon import Context, Module, actions, clip, speech_system
 
 from ...core.gui.gui import open_gui
 
