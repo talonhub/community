@@ -276,9 +276,9 @@ def _create_table(ui: egui.Ui, id_salt, maximum_height):
     )
 
 
-async def _add_header_to_table(table, column_titles):
+async def _add_header_to_table(table, column_titles, has_a_column_title):
     """Add a header to the table containing the column titles"""
-    header_height = TABLE_HEADER_HEIGHT if any(column_titles) else 0
+    header_height = TABLE_HEADER_HEIGHT if has_a_column_title else 0
     async with table.header(header_height) as header:
         for title in column_titles:
             async with header.col() as column_ui:
@@ -286,7 +286,9 @@ async def _add_header_to_table(table, column_titles):
     return header
 
 
-async def _render_table_rows(header, row_height, table_info) -> int | None:
+async def _render_table_rows(
+    header, row_height, table_info, render_header_line
+) -> int | None:
     """Renders the table rows and returns the index of the first visible row"""
     rows = table_info.rows
     current_row_index = None
@@ -298,10 +300,12 @@ async def _render_table_rows(header, row_height, table_info) -> int | None:
         body_top = min(body_rect.top(), body_rect.bottom())
         async for row in body.rows(row_height, len(rows)):
             # render a line above the row when this condition is True
-            row.set_overline(
+            should_render_overline = (
                 rows[row.index()].should_render_overline()
                 and settings.get("user.community_ui_table_borders")
+                and (render_header_line or row.index() > 0)
             )
+            row.set_overline(should_render_overline)
             await render_row_ui(row, rows, len(table_info.column_titles))
             # if this is the first visible row, update current_row_index
             response = row.response()
@@ -492,8 +496,13 @@ class UIWrapper:
                 target_row = scroller.compute_target(len(rows) - 1)
                 table = table.scroll_to_row(target_row, egui.Align.TOP)
 
-            header = await _add_header_to_table(table, column_titles)
-            current_row_index = await _render_table_rows(header, row_height, table_info)
+            has_a_column_title = any(column_titles)
+            header = await _add_header_to_table(
+                table, column_titles, has_a_column_title
+            )
+            current_row_index = await _render_table_rows(
+                header, row_height, table_info, has_a_column_title
+            )
 
             # update the scroller's understanding of the scroll area location
             if (
