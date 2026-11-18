@@ -1,8 +1,8 @@
 import logging
 
-from talon import Module, actions, imgui
+from talon import Module, actions
 
-from ..gui.gui import open_gui, create_italic_text
+from ..gui.gui import create_italic_text, open_gui
 
 mod = Module()
 
@@ -80,7 +80,10 @@ class Actions:
 async def gui(ui, ui_wrapper):
     ui_wrapper.title("Recent phrases")
     recent_repeat_description = ui_wrapper.concatenate_formatted_text(
-        (create_italic_text("recent repeat <number>"), ": retype a phrase on this list.")
+        (
+            create_italic_text("recent repeat <number>"),
+            ": retype a phrase on this list.",
+        )
     )
     ui.label(recent_repeat_description)
     recent_copy_description = ui_wrapper.concatenate_formatted_text(
@@ -94,6 +97,7 @@ async def gui(ui, ui_wrapper):
     ui_wrapper.spacing()
     if ui_wrapper.command_button("Recent close"):
         actions.user.phrase_history_hide()
+
 
 def refresh_gui():
     gui.auto_size_next_frame()
