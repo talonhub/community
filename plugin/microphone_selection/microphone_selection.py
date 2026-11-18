@@ -1,6 +1,6 @@
 from talon import Context, Module, actions
 
-from ...core.gui.gui import open_gui
+from ...core.gui.gui import create_italic_text, open_gui
 from ...core.user_settings import track_csv_rows
 
 mod = Module()
@@ -55,9 +55,14 @@ mod.tag(
 
 @open_gui(refresh_period="500ms")
 async def gui(ui, ui_wrapper):
+    subtitle = ui_wrapper.concatenate_formatted_text(
+        ("(or say “",
+        create_italic_text("microphone pick # "),
+        ")”")
+    )
     ui_wrapper.title(
         "Click or press a number key to select a microphone",
-        "(or say “microphone pick #)",
+        subtitle,
     )
     ui_wrapper.spacing()
     active_microphone = actions.sound.active_microphone()

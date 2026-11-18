@@ -374,7 +374,7 @@ class UIWrapper:
 
         return egui.WidgetText.LayoutJob(layout_job)
 
-    def title(self, text, subtitle="", ui=None):
+    def title(self, text, subtitle: str | egui.RichText | egui.WidgetText="", ui=None):
         """Render a title.
         text: the main title
         subtitle: an optional subtitle rendered in smaller font
@@ -383,7 +383,9 @@ class UIWrapper:
         title = egui.RichText(text).size(compute_text_size() * 1.5).strong()
         ui.label(title)
         if subtitle:
-            ui.strong(subtitle)
+            if isinstance(subtitle, str):
+                subtitle = create_bold_text(subtitle)
+            ui.label(subtitle)
         ui.separator()
 
     def header(self, text, ui=None):
