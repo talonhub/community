@@ -63,6 +63,7 @@ def update_function_list():
     else:
         function_list = []
 
+
 @open_gui(refresh_period="500ms")
 async def gui_functions(ui, ui_wrapper):
     ui_wrapper.title("Functions")
