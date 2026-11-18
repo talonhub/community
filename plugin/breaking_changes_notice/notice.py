@@ -6,7 +6,7 @@ import pathlib
 
 from talon import Context, Module, actions, app, fs
 
-from ...core.gui.gui import open_gui
+from ...core.gui.gui import create_italic_text, open_gui
 
 # used to activate the tag for when the notice is showing
 ctx = Context()
@@ -27,7 +27,10 @@ async def notice_gui(ui, ui_wrapper):
         actions.user.breaking_changes_open()
     if ui_wrapper.command_button("breaking hide"):
         actions.user.breaking_changes_notice_hide()
-    if ui_wrapper.command_button("breaking dismiss (do not show this again)"):
+    never_show_again_button_text = ui_wrapper.concatenate_formatted_text(
+        (create_italic_text("breaking dismiss"), "  (do not show this again)")
+    )
+    if ui_wrapper.button(never_show_again_button_text):
         actions.user.breaking_changes_notice_never_show_again()
 
 
