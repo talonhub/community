@@ -59,7 +59,7 @@ async def gui(ui, ui_wrapper):
         ("(or say: ", create_italic_text("microphone pick # "), ")")
     )
     ui_wrapper.title(
-        "Click or press a number key to select a microphone",
+        "Click microphone name or press a number key to select a microphone",
         subtitle,
     )
     ui_wrapper.spacing()
