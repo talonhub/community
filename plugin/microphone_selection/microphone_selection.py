@@ -1,6 +1,5 @@
 from talon import Context, Module, actions
 
-
 from ...core.gui.gui import open_gui
 from ...core.user_settings import track_csv_rows
 
@@ -56,7 +55,10 @@ mod.tag(
 
 @open_gui(refresh_period="500ms")
 async def gui(ui, ui_wrapper):
-    ui_wrapper.title("Click or press a number key to select a microphone", "(or say “microphone pick #)")
+    ui_wrapper.title(
+        "Click or press a number key to select a microphone",
+        "(or say “microphone pick #)",
+    )
     ui_wrapper.spacing()
     active_microphone = actions.sound.active_microphone()
     microphone_device_list = get_microphone_list()
