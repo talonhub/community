@@ -2,6 +2,8 @@ from typing import Optional
 
 from talon import Context, Module, actions, imgui, scope, settings, ui
 
+from ..gui.gui import open_gui
+
 ctx = Context()
 mod = Module()
 mod.tag("help_scope_open", "tag for showing the scope help gui")
@@ -13,44 +15,43 @@ mod.setting(
 )
 
 
-@imgui.open(x=ui.main_screen().x)
-def gui(gui: imgui.GUI):
-    gui.text("Scope")
-    gui.line()
-    gui.spacer()
-    gui.text("Modes")
-    gui.line()
+@open_gui(x=0, y=0, refresh_period="100ms")
+async def gui(ui, ui_wrapper):
+    ui_wrapper.title("Scope")
+    ui_wrapper.spacing()
+    ui.strong("Modes")
+    ui.separator()
     for mode in sorted(scope.get("mode")):
-        gui.text(mode)
-    gui.spacer()
-    gui.text("Tags")
-    gui.line()
+        ui.label(mode)
+    ui_wrapper.spacing()
+    ui.strong("Tags")
+    ui.separator()
     for tag in sorted(scope.get("tag")):
-        gui.text(tag)
-    gui.spacer()
-    gui.text("Misc")
-    gui.line()
+        ui.label(tag)
+    ui_wrapper.spacing()
+    ui.strong("Misc")
+    ui.separator()
     ignore = {"main", "mode", "tag"}
     keys = {*scope.data.keys(), *scope.data["main"].keys()}
     for key in sorted(keys):
         if key not in ignore:
             value = scope.get(key)
-            print_value(gui, key, value, ignore)
-    gui.spacer()
-    if gui.button("scope close"):
+            print_value(ui, key, value, ignore)
+    ui_wrapper.spacing()
+    if ui_wrapper.command_button("scope close"):
         actions.user.help_scope_toggle()
 
 
-def print_value(gui: imgui.GUI, path: str, value, ignore: Optional[set[str]] = None):
+def print_value(ui, path: str, value, ignore: Optional[set[str]] = None):
     if isinstance(value, dict):
         if not ignore:
             ignore = set()
         for key in value:
             if key not in ignore:
                 p = f"{path}.{key}" if path else key
-                print_value(gui, p, value[key])
+                print_value(ui, p, value[key])
     elif value:
-        gui.text(f"{path}: {format_value(value)}")
+        ui.label(f"{path}: {format_value(value)}")
 
 
 def format_value(value):
