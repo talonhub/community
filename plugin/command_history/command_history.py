@@ -1,7 +1,8 @@
 from typing import Optional
 
-from talon import Module, actions, imgui, settings, speech_system
+from talon import Module, actions, settings, speech_system
 
+from ...core.gui.gui import create_italic_text, open_gui
 from ..subtitles.on_phrase import skip_phrase
 
 # We keep command_history_size lines of history, but by default display only
@@ -24,6 +25,29 @@ hist_more: bool = False
 history: list[str] = []
 
 
+@open_gui(y=0)
+async def gui(ui, ui_wrapper):
+    global history
+    ui_wrapper.title("Command History")
+    text = (
+        history[:]
+        if hist_more
+        else history[-settings.get("user.command_history_display") :]
+    )
+    for line in text:
+        ui.label(line)
+
+    ui_wrapper.spacing()
+    close_button_text = create_italic_text("Command history close")
+    if ui_wrapper.button(close_button_text):
+        actions.user.history_disable()
+
+
+def refresh_gui():
+    gui.auto_size_next_frame()
+    gui.refresh()
+
+
 def on_phrase(j):
     global history
     if skip_phrase(j):
@@ -34,24 +58,7 @@ def on_phrase(j):
     if text is not None:
         history.append(text)
         history = history[-settings.get("user.command_history_size") :]
-
-
-@imgui.open(y=0)
-def gui(gui: imgui.GUI):
-    global history
-    gui.text("Command History")
-    gui.line()
-    text = (
-        history[:]
-        if hist_more
-        else history[-settings.get("user.command_history_display") :]
-    )
-    for line in text:
-        gui.text(line)
-
-    gui.spacer()
-    if gui.button("Command history close"):
-        actions.user.history_disable()
+    refresh_gui()
 
 
 speech_system.register("phrase", on_phrase)
@@ -78,16 +85,19 @@ class Actions:
         """Clear the history"""
         global history
         history = []
+        refresh_gui()
 
     def history_more():
         """Show more history"""
         global hist_more
         hist_more = True
+        refresh_gui()
 
     def history_less():
         """Show less history"""
         global hist_more
         hist_more = False
+        refresh_gui()
 
     def history_get(number: int) -> str:
         """returns the history entry at the specified index"""
