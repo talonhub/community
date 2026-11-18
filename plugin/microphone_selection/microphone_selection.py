@@ -81,7 +81,7 @@ async def gui(ui, ui_wrapper):
         await ui_wrapper.render_key("esc", "escape", "close this window")
         if ui_wrapper.command_button("microphone close"):
             actions.user.microphone_selection_hide()
-    
+
     gui.auto_size_next_frame()
 
 
