@@ -16,7 +16,7 @@ mod.setting(
 )
 
 
-@open_gui(x=0, y=0, refresh_period="100ms")
+@open_gui(x=0, y=0, refresh_period="500ms")
 async def gui(ui, ui_wrapper):
     ui_wrapper.title("Scope")
     ui_wrapper.spacing()
