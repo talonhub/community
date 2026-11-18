@@ -66,13 +66,20 @@ async def gui(ui, ui_wrapper):
     active_microphone = actions.sound.active_microphone()
     microphone_device_list = get_microphone_list()
     for index, item in enumerate(microphone_device_list, 1):
-        if ui_wrapper.button(
-            f"{f'[{index}] ' if index < 10 else ''}{item}{' — active' if item == active_microphone else ''}"
-        ):
-            actions.user.microphone_select(index)
+        microphone_text = f"{item}{' — active' if item == active_microphone else ''}"
+        if index < 10:
+            async with ui.horizontal():
+                await ui_wrapper.render_key(f" {index} ", str(index), f"select microphone {item}")
+                if ui_wrapper.button(microphone_text):
+                    actions.user.microphone_select(index)
+        else:
+            if ui_wrapper.button(f"{index} {microphone_text}"):
+                actions.user.microphone_select(index)
     ui_wrapper.spacing()
-    if ui_wrapper.command_button("[esc] microphone close"):
-        actions.user.microphone_selection_hide()
+    async with ui.horizontal():
+        await ui_wrapper.render_key("esc", "escape", "close this window")
+        if ui_wrapper.command_button("microphone close"):
+            actions.user.microphone_selection_hide()
 
 
 @mod.action_class

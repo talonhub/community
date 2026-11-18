@@ -390,6 +390,117 @@ class UIWrapper:
             ui.label(subtitle)
         ui.separator()
 
+    async def render_inside_rectangle(
+        self,
+        draw_function,
+        size: egui.Vec2,
+        corner_radius: egui.CornerRadius,
+        color: egui.Color32,
+        stroke: egui.Stroke | None = None,
+        stroke_kind: egui.StrokeKind = egui.StrokeKind.Outside,
+        shadow_rectangle_translation: egui.Vec2 | None = None,
+        ui=None,
+    ):
+        ui = self._ui(ui)
+        if stroke is None:
+            stroke = egui.Stroke.none()
+
+        # allocate space for the background rectangle
+        size_including_outline = egui.Vec2(
+            size.x + stroke.width * 2, size.y + stroke.width * 2
+        )
+        background_id, background_rectangle = ui.allocate_space(size_including_outline)
+
+        # the optional shadow rectangle is for making the outline thicker for part of the rectangle
+        if shadow_rectangle_translation is not None:
+            shadow_rectangle = background_rectangle.translate(
+                shadow_rectangle_translation
+            )
+            ui.painter().rect(
+                shadow_rectangle,
+                corner_radius,
+                stroke.color,
+                stroke,
+                stroke_kind,
+            )
+
+        # draw the background rectangle
+        ui.painter().rect(
+            background_rectangle,
+            corner_radius,
+            color,
+            stroke,
+            stroke_kind,
+        )
+
+        # call the draw function to draw inside the rectangle
+        async with ui.scope_builder(egui.UiBuilder().max_rect(background_rectangle)):
+            await draw_function(ui, background_rectangle)
+
+        # return response object for handling interaction
+        return ui.interact(background_rectangle, background_id, egui.Sense.click())
+
+    def compute_text_dimensions(
+        self, text: str, ui=None, font_id=None, wrapping_width=None
+    ) -> egui.Vec2:
+        """Return the width and height of the text on the ui"""
+        ui = self._ui(ui)
+        if font_id is None:
+            font_id = egui.FontId.proportional(self.get_text_size(ui))
+        # the specific value does not matter
+        text_color = egui.Color32.black()
+        if wrapping_width is None:
+            galley = ui.painter().layout_no_wrap(text, font_id, text_color)
+        else:
+            galley = ui.painter().layout(text, font_id, text_color, wrapping_width)
+        return galley.size()
+
+    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+        return self.compute_text_dimensions(text, ui, font_id).x
+
+    async def render_key(self, text, full_key_name, description, ui=None):
+        ui = self._ui(ui)
+
+        # pick colors
+        if ui.visuals().dark_mode:
+            outline_color = egui.Color32.from_gray(119)
+            background_color = egui.Color32.black()
+            text_color = egui.Color32.from_hex(TEXT_COLOR_DARK_MODE)
+        else:
+            outline_color = egui.Color32.from_gray(178)
+            background_color = egui.Color32.from_gray(230)
+            text_color = egui.Color32.black()
+
+        # define rectangle properties and text
+        label_text = egui.RichText(text).strong().color(text_color)
+        size = self.compute_text_dimensions(text, ui)
+        outline_thickness = 2.0
+        corner_radius = 4
+
+        async def draw_label(ui, background_rectangle):
+            # add padding so the label is not right up against the outline
+            async with ui.horizontal():
+                ui.add_space(outline_thickness)
+                async with ui.vertical():
+                    ui.add_space(outline_thickness)
+                    # show the text
+                    ui.label(label_text)
+
+        response = await self.render_inside_rectangle(
+            draw_label,
+            size,
+            egui.CornerRadius.same(corner_radius),
+            background_color,
+            egui.Stroke(outline_thickness, outline_color),
+            egui.StrokeKind.Inside,
+            shadow_rectangle_translation=egui.Vec2(0, 1.5),
+            ui=ui,
+        )
+        response.on_hover_text(
+            f"You can press the {full_key_name} key to {description}"
+        )
+
+
     def header(self, text, ui=None):
         """Render a header"""
         ui = self._ui(ui)
