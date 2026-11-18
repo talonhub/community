@@ -500,7 +500,6 @@ class UIWrapper:
             f"You can press the {full_key_name} key to {description}"
         )
 
-
     def header(self, text, ui=None):
         """Render a header"""
         ui = self._ui(ui)
