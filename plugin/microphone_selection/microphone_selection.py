@@ -67,15 +67,14 @@ async def gui(ui, ui_wrapper):
     microphone_device_list = get_microphone_list()
     for index, item in enumerate(microphone_device_list, 1):
         microphone_text = f"{item}{' — active' if item == active_microphone else ''}"
-        if index < 10:
-            async with ui.horizontal():
+        async with ui.horizontal():
+            if index < 10:
                 await ui_wrapper.render_key(
                     f" {index} ", str(index), f"select microphone {item}"
                 )
-                if ui_wrapper.button(microphone_text):
-                    actions.user.microphone_select(index)
-        else:
-            if ui_wrapper.button(f"{index} {microphone_text}"):
+            else:
+                microphone_text = f"{index}: " + microphone_text
+            if ui_wrapper.button(microphone_text):
                 actions.user.microphone_select(index)
     ui_wrapper.spacing()
     async with ui.horizontal():
