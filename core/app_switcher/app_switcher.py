@@ -5,7 +5,9 @@ import time
 from pathlib import Path
 
 import talon
-from talon import Context, Module, actions, app, fs, imgui, ui
+from talon import Context, Module, actions, app, fs, ui
+
+from ..gui.gui import create_italic_text, open_gui
 
 # Construct a list of spoken form overrides for application names (similar to how homophone list is managed)
 # These overrides are used *instead* of the generated spoken forms for the given app name or .exe (on Windows)
@@ -302,6 +304,8 @@ def update_running_list():
             running[running_name] = running_app_name
 
     ctx.lists["user.running"] = running
+    gui_running.auto_size_next_frame()
+    gui_running.refresh()
 
 
 def update_overrides(name, flags):
@@ -434,18 +438,18 @@ class Actions:
         gui_running.hide()
 
 
-@imgui.open()
-def gui_running(gui: imgui.GUI):
-    gui.text("Running applications (with spoken forms)")
-    gui.line()
+@open_gui()
+async def gui_running(ui, ui_wrapper):
+    ui_wrapper.title("Running applications (with spoken forms)")
     running_apps = sorted(
         (v.lower(), k, v) for k, v in ctx.lists["user.running"].items()
     )
     for _, running_name, full_application_name in running_apps:
-        gui.text(f"{full_application_name}: {running_name}")
+        ui.label(f"{full_application_name}: {running_name}")
 
-    gui.spacer()
-    if gui.button("Running close"):
+    ui_wrapper.spacing()
+    close_button_text = create_italic_text("Running close")
+    if ui_wrapper.button(close_button_text):
         actions.user.switcher_hide_running()
 
 
