@@ -41,7 +41,7 @@ async def gui(ui, ui_wrapper):
     ui_wrapper.spacing()
     if ui_wrapper.command_button("scope close"):
         actions.user.help_scope_toggle()
-    
+
     # if we update this to use a scroll area or table, we will want to only call this when the
     # width of the gui changes
     gui.auto_size_next_frame()
