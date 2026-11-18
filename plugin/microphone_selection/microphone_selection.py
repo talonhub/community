@@ -1,5 +1,7 @@
-from talon import Context, Module, actions, imgui
+from talon import Context, Module, actions
 
+
+from ...core.gui.gui import open_gui
 from ...core.user_settings import track_csv_rows
 
 mod = Module()
@@ -52,21 +54,19 @@ mod.tag(
 )
 
 
-@imgui.open()
-def gui(gui: imgui.GUI):
-    gui.text("Click or press a number key to select a microphone")
-    gui.text("(or say “microphone pick #”)")
-    gui.line()
-    gui.spacer()
+@open_gui(refresh_period="500ms")
+async def gui(ui, ui_wrapper):
+    ui_wrapper.title("Click or press a number key to select a microphone", "(or say “microphone pick #)")
+    ui_wrapper.spacing()
     active_microphone = actions.sound.active_microphone()
     microphone_device_list = get_microphone_list()
     for index, item in enumerate(microphone_device_list, 1):
-        if gui.button(
+        if ui_wrapper.button(
             f"{f'[{index}] ' if index < 10 else ''}{item}{' — active' if item == active_microphone else ''}"
         ):
             actions.user.microphone_select(index)
-    gui.spacer()
-    if gui.button("[esc] microphone close"):
+    ui_wrapper.spacing()
+    if ui_wrapper.command_button("[esc] microphone close"):
         actions.user.microphone_selection_hide()
 
 
