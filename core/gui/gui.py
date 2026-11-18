@@ -373,6 +373,11 @@ class UIWrapper:
         ui = self._ui(ui)
         return ui.button(text).clicked()
 
+    def command_button(self, text, ui=None) -> bool:
+        """Renders a button with text corresponding to the spoken form of a command"""
+        italic_text = create_italic_text(text)
+        return self.button(italic_text, ui)
+
     def spacing(self, ui=None):
         """Add space based on the default text size"""
         ui = self._ui(ui)
