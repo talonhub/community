@@ -608,7 +608,8 @@ class GUI:
 
     def show(self):
         if self.showing:
-            self._window.focus()
+            if not self._props.always_on_top:
+                self._window.focus()
             return
 
         self._cancel_refresh_job()

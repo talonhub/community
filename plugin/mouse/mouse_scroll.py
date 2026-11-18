@@ -2,7 +2,9 @@ import time
 from enum import Enum, auto
 from typing import Optional
 
-from talon import Context, Module, actions, app, cron, ctrl, imgui, settings, ui
+from talon import Context, Module, actions, app, cron, ctrl, settings, ui
+
+from ...core.gui.gui import create_italic_text, open_gui
 
 hiss_scroll_up = False
 
@@ -225,13 +227,21 @@ mod.tag(
 )
 
 
-@imgui.open(x=700, y=0)
-def gui_wheel(gui: imgui.GUI):
-    gui.text(f"Scroll mode: {scrolling_state.get_scrolling_mode_description()}")
-    gui.text("say a number between 0 and 99 to set scrolling speed")
-    gui.line()
-    if gui.button("[Wheel] Stop"):
+@open_gui(y=0)
+async def gui_wheel(ui, ui_wrapper):
+    ui_wrapper.header(
+        f"Scroll mode: {scrolling_state.get_scrolling_mode_description()}"
+    )
+    ui.label("say a number between 0 and 99 to set scrolling speed")
+    ui.separator()
+    stop_button_text = create_italic_text("[Wheel] Stop")
+    if ui_wrapper.button(stop_button_text):
         actions.user.mouse_scroll_stop()
+
+
+def refresh_gui_wheel():
+    gui_wheel.auto_size_next_frame()
+    gui_wheel.refresh()
 
 
 @mod.action_class
@@ -289,6 +299,8 @@ class Actions:
         scrolling_state.start_gaze_scrolling_job()
 
         if not settings.get("user.mouse_hide_mouse_gui"):
+            if gui_wheel.showing:
+                refresh_gui_wheel()
             gui_wheel.show()
 
     def mouse_gaze_scroll_toggle():
@@ -371,6 +383,8 @@ def mouse_scroll_continuous(
         ctx.tags = ["user.continuous_scrolling"]
 
         if not settings.get("user.mouse_hide_mouse_gui"):
+            if gui_wheel.showing:
+                refresh_gui_wheel()
             gui_wheel.show()
 
 
