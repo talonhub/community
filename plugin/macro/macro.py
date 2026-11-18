@@ -21,7 +21,7 @@ async def macro_list_gui(ui, ui_wrapper):
     for command_name in macros:
         ui.label(command_name)
 
-    if ui_wrapper.button("macro list close"):
+    if ui_wrapper.command_button("macro list close"):
         actions.user.macro_list_close()
 
 
