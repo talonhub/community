@@ -35,6 +35,8 @@ class Actions:
             ctx.tags = []
         else:
             update_function_list()
+            gui_functions.show()
+            ctx.tags = ["user.code_functions_common_gui_active"]
 
     def code_select_function(number: int, selection: str):
         """Inserts the selected function when the gui is open"""
@@ -60,10 +62,6 @@ def update_function_list():
         function_list = sorted(talon_list.keys())
     else:
         function_list = []
-
-    gui_functions.show()
-    ctx.tags = ["user.code_functions_common_gui_active"]
-
 
 @open_gui(refresh_period="500ms")
 async def gui_functions(ui, ui_wrapper):
