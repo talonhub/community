@@ -1,6 +1,6 @@
 from talon import Context, Module, actions, registry
 
-from ...core.gui.gui import open_gui 
+from ...core.gui.gui import open_gui
 
 ctx = Context()
 mod = Module()
