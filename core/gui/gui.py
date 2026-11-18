@@ -374,7 +374,9 @@ class UIWrapper:
 
         return egui.WidgetText.LayoutJob(layout_job)
 
-    def title(self, text, subtitle: str | egui.RichText | egui.WidgetText="", ui=None):
+    def title(
+        self, text, subtitle: str | egui.RichText | egui.WidgetText = "", ui=None
+    ):
         """Render a title.
         text: the main title
         subtitle: an optional subtitle rendered in smaller font
