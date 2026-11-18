@@ -1,6 +1,7 @@
 from typing import Optional
 
 from talon import Context, Module, actions, scope, settings
+import egui
 
 from ..gui.gui import open_gui
 
@@ -42,7 +43,7 @@ async def gui(ui, ui_wrapper):
         actions.user.help_scope_toggle()
 
 
-def render_value(ui, path: str, value, ignore: Optional[set[str]] = None):
+def render_value(ui: egui.Ui, path: str, value, ignore: Optional[set[str]] = None):
     if isinstance(value, dict):
         if not ignore:
             ignore = set()
