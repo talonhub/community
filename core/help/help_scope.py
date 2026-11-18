@@ -36,20 +36,20 @@ async def gui(ui, ui_wrapper):
     for key in sorted(keys):
         if key not in ignore:
             value = scope.get(key)
-            print_value(ui, key, value, ignore)
+            render_value(ui, key, value, ignore)
     ui_wrapper.spacing()
     if ui_wrapper.command_button("scope close"):
         actions.user.help_scope_toggle()
 
 
-def print_value(ui, path: str, value, ignore: Optional[set[str]] = None):
+def render_value(ui, path: str, value, ignore: Optional[set[str]] = None):
     if isinstance(value, dict):
         if not ignore:
             ignore = set()
         for key in value:
             if key not in ignore:
                 p = f"{path}.{key}" if path else key
-                print_value(ui, p, value[key])
+                render_value(ui, p, value[key])
     elif value:
         ui.label(f"{path}: {format_value(value)}")
 
