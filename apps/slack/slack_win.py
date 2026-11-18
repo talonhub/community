@@ -126,6 +126,18 @@ class UserActions:
         """Toggles the visibility of the right sidebar in Slack"""
         actions.key("ctrl-.")
 
-    def slack_open_new_message():
-        """Opens a new message in Slack"""
+
+# ctrl-n opens a new browser window when Slack runs in a browser
+desktop_ctx = Context()
+desktop_ctx.matches = r"""
+os: windows
+os: linux
+app: slack
+not tag: browser
+"""
+
+
+@desktop_ctx.action_class("user")
+class DesktopUserActions:
+    def messaging_open_new_message():
         actions.key("ctrl-n")
