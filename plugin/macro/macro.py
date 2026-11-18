@@ -47,6 +47,7 @@ class Actions:
         """Save the macro."""
         actions.user.macro_stop()
         macros[name] = macro
+        macro_list_gui.auto_size_next_frame()
         macro_list_gui.refresh()
 
         ctx.lists["user.saved_macros"] = macros.keys()
