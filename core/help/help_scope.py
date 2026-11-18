@@ -1,6 +1,6 @@
 from typing import Optional
 
-from talon import Context, Module, actions, imgui, scope, settings, ui
+from talon import Context, Module, actions, scope, settings
 
 from ..gui.gui import open_gui
 
