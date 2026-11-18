@@ -61,14 +61,11 @@ def update_function_list():
     else:
         function_list = []
 
-    gui_functions.auto_size_next_frame()
-    if gui_functions.showing:
-        gui_functions.refresh()
     gui_functions.show()
     ctx.tags = ["user.code_functions_common_gui_active"]
 
 
-@open_gui()
+@open_gui(refresh_period="500ms")
 async def gui_functions(ui, ui_wrapper):
     ui_wrapper.title("Functions")
 
@@ -82,6 +79,9 @@ async def gui_functions(ui, ui_wrapper):
     ui_wrapper.spacing()
     if ui_wrapper.command_button("funk close"):
         actions.user.code_toggle_functions()
+
+    # stop calling this every frame if we use a scroll area or table
+    gui_functions.auto_size_next_frame()
 
 
 def commands_updated(_):
