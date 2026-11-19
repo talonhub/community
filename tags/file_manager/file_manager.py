@@ -245,6 +245,7 @@ def get_file_map(current_path):
 def run_in_cron_after_job(callback):
     cron.after("0s", callback)
 
+
 @open_gui(y=0.01, x=0.5)
 async def gui_folders(ui, ui_wrapper):
     global current_folder_page, total_folder_pages
