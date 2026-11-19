@@ -282,9 +282,8 @@ async def gui_folders(ui, ui_wrapper):
 
     ui_wrapper.spacing()
     if ui_wrapper.command_button("Manager close"):
-        gui_folders.hide()
-        # use this instead of a direct hide to avoid freezing Talon
-        gui_files.hide_after_next_frame()
+        # we need to hide gui_files in another thread to avoid freezing
+        cron.after("0s", actions.user.file_manager_hide_pickers)
 
     gui_folders.auto_size_next_frame()
 
