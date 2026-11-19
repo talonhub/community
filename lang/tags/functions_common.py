@@ -1,4 +1,6 @@
-from talon import Context, Module, actions, imgui, registry
+from talon import Context, Module, actions, registry
+
+from ...core.gui.gui import open_gui
 
 ctx = Context()
 mod = Module()
@@ -32,10 +34,12 @@ class Actions:
             gui_functions.hide()
             ctx.tags = []
         else:
-            update_function_list_and_freeze()
+            update_function_list()
+            gui_functions.show()
+            ctx.tags = ["user.code_functions_common_gui_active"]
 
     def code_select_function(number: int, selection: str):
-        """Inserts the selected function when the imgui is open"""
+        """Inserts the selected function when the gui is open"""
         if gui_functions.showing and number < len(function_list):
             talon_list = actions.user.talon_get_active_registry_list(
                 "user.code_common_function"
@@ -49,7 +53,7 @@ class Actions:
         """Inserts a function and positions the cursor appropriately"""
 
 
-def update_function_list_and_freeze():
+def update_function_list():
     global function_list
     if "user.code_common_function" in registry.lists:
         talon_list = actions.user.talon_get_active_registry_list(
@@ -59,30 +63,29 @@ def update_function_list_and_freeze():
     else:
         function_list = []
 
-    gui_functions.show()
-    ctx.tags = ["user.code_functions_common_gui_active"]
 
-
-@imgui.open()
-def gui_functions(gui: imgui.GUI):
-    gui.text("Functions")
-    gui.line()
+@open_gui(refresh_period="500ms")
+async def gui_functions(ui, ui_wrapper):
+    ui_wrapper.title("Functions")
 
     for i, entry in enumerate(function_list, 1):
         talon_list = actions.user.talon_get_active_registry_list(
             "user.code_common_function"
         )
         if entry in talon_list:
-            gui.text(f"{i}. {entry}: {talon_list[entry]}")
+            ui.label(f"{i}. {entry}: {talon_list[entry]}")
 
-    gui.spacer()
-    if gui.button("funk close"):
+    ui_wrapper.spacing()
+    if ui_wrapper.command_button("funk close"):
         actions.user.code_toggle_functions()
+
+    # stop calling this every frame if we use a scroll area or table
+    gui_functions.auto_size_next_frame()
 
 
 def commands_updated(_):
     if gui_functions.showing:
-        update_function_list_and_freeze()
+        update_function_list()
 
 
 registry.register("update_commands", commands_updated)
