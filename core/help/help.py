@@ -95,6 +95,7 @@ def update_title():
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
                 update_active_contexts_cache(registry.last_active_contexts)
+            refresh_gui()
         if gui_operators.showing:
             update_operators_text()
 
@@ -392,10 +393,10 @@ async def gui_context_help(ui, ui_wrapper):
 
         if total_page_count > 1:
             ui_wrapper.spacing()
-            if ui_wrapper.button("Help next"):
+            if ui_wrapper.command_button("Help next"):
                 actions.user.help_next()
 
-            if ui_wrapper.button("Help previous"):
+            if ui_wrapper.command_button("Help previous"):
                 actions.user.help_previous()
 
     # if there's a selected context, draw the commands for it
@@ -407,19 +408,19 @@ async def gui_context_help(ui, ui_wrapper):
 
         ui_wrapper.spacing()
         if total_page_count > 1:
-            if ui_wrapper.button("Help next"):
+            if ui_wrapper.command_button("Help next"):
                 actions.user.help_next()
 
-            if ui_wrapper.button("Help previous"):
+            if ui_wrapper.command_button("Help previous"):
                 actions.user.help_previous()
 
-        if ui_wrapper.button("Help return"):
+        if ui_wrapper.command_button("Help return"):
             actions.user.help_return()
 
-    if ui_wrapper.button("Help refresh"):
+    if ui_wrapper.command_button("Help refresh"):
         actions.user.help_refresh()
 
-    if ui_wrapper.button("Help close"):
+    if ui_wrapper.command_button("Help close"):
         actions.user.help_hide()
 
 
@@ -820,7 +821,9 @@ class Actions:
 
     def help_context_enabled():
         """Display contextual command info"""
+        global current_gui
         reset()
+        current_gui = gui_context_help
         refresh_context_command_map(enabled_only=True)
         hide_all_help_guis()
         gui_context_help.show()
@@ -838,9 +841,10 @@ class Actions:
 
     def help_search(phrase: str, enabled_only: Optional[bool] = False):
         """Display command info for search phrase"""
-        global search_phrase
+        global search_phrase, current_gui
 
         reset()
+        current_gui = gui_context_help
         search_phrase = phrase
         refresh_context_command_map(enabled_only=enabled_only)
         hide_all_help_guis()
@@ -850,12 +854,12 @@ class Actions:
 
     def help_selected_context(m: str):
         """Display command info for selected context"""
-        global selected_context
-        global selected_context_page
+        global selected_context, selected_context_page, current_gui
 
         if not gui_context_help.showing:
             reset()
             refresh_context_command_map()
+            current_gui = gui_context_help 
         else:
             selected_context_page = 1
             update_active_contexts_cache(registry.last_active_contexts)
@@ -891,6 +895,7 @@ class Actions:
                     selected_context_page += 1
                 else:
                     selected_context_page = 1
+            refresh_gui()
 
     def help_select_index(index: int):
         """Select the context by a number"""
@@ -937,6 +942,7 @@ class Actions:
                     selected_context_page -= 1
                 else:
                     selected_context_page = total_page_count
+            refresh_gui()
 
     def help_return():
         """Returns to the main help window"""
@@ -948,6 +954,7 @@ class Actions:
             refresh_context_command_map(show_enabled_contexts_only)
             selected_context_page = 1
             selected_context = None
+            refresh_gui()
 
     def help_refresh():
         """Refreshes the help"""
@@ -959,6 +966,7 @@ class Actions:
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
                 update_active_contexts_cache(registry.last_active_contexts)
+            refresh_gui()
 
     def help_hide():
         """Hides the help"""
