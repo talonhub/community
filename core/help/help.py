@@ -267,7 +267,7 @@ def format_context_title(context_name: str) -> str:
     )
 
 
-def format_context_button(index: int, context_label: str, context_name: str) -> str:
+def format_context_label(context_label: str, context_name: str) -> str:
     global cached_active_contexts
     global show_enabled_contexts_only
     should_show_asterisk: bool = (
@@ -276,7 +276,7 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
     )
     postfix: str = "*" if should_show_asterisk else ""
 
-    return f"help {index}. {context_label}{postfix}"
+    return f". {context_label}{postfix}"
 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
@@ -386,13 +386,15 @@ async def gui_context_help(ui, ui_wrapper):
                     ui.strong(f"{group}:")
                     current_group = group
 
-                button_name = format_context_button(
-                    current_selection_index,
+                context_label = format_context_label(
                     display_name,
                     context_name,
                 )
+                button_text = ui_wrapper.concatenate_formatted_text(
+                    (create_italic_text(f"help {current_item_index}"), context_label)
+                )
 
-                if ui_wrapper.button(button_name):
+                if ui_wrapper.button(button_text):
                     selected_context = context_name
                     run_in_cron_after_job(refresh_gui)
                 current_selection_index = current_selection_index + 1
