@@ -340,8 +340,8 @@ def get_pages(item_line_counts: list[int]) -> list[int]:
     return pages
 
 
-@imgui.open(y=0)
-def gui_context_help(gui: imgui.GUI):
+@open_gui(y=0)
+async def gui_context_help(ui, ui_wrapper):
     global context_command_map
     global current_context_page
     global selected_context
@@ -357,15 +357,13 @@ def gui_context_help(gui: imgui.GUI):
         total_page_count = get_total_context_pages()
 
         if not show_enabled_contexts_only:
-            gui.text(
+            ui_wrapper.title(
                 f"Help: All ({current_context_page}/{total_page_count}) (* = active)"
             )
         else:
-            gui.text(
+            ui_wrapper.title(
                 f"Help: Active Contexts Only ({current_context_page}/{total_page_count})"
             )
-
-        gui.line()
 
         current_item_index = 1
         current_selection_index = 1
@@ -376,8 +374,8 @@ def gui_context_help(gui: imgui.GUI):
             if current_context_page == target_page:
                 if current_group != group:
                     if current_group:
-                        gui.line()
-                    gui.text(f"{group}:")
+                        ui.separator()
+                    ui.label(f"{group}:")
                     current_group = group
 
                 button_name = format_context_button(
@@ -386,18 +384,18 @@ def gui_context_help(gui: imgui.GUI):
                     context_name,
                 )
 
-                if gui.button(button_name):
+                if ui_wrapper.button(button_name):
                     selected_context = context_name
                 current_selection_index = current_selection_index + 1
 
             current_item_index += 1
 
         if total_page_count > 1:
-            gui.spacer()
-            if gui.button("Help next"):
+            ui_wrapper.spacing()
+            if ui_wrapper.button("Help next"):
                 actions.user.help_next()
 
-            if gui.button("Help previous"):
+            if ui_wrapper.button("Help previous"):
                 actions.user.help_previous()
 
     # if there's a selected context, draw the commands for it
@@ -407,21 +405,21 @@ def gui_context_help(gui: imgui.GUI):
         elif search_phrase is not None:
             draw_search_commands(gui)
 
-        gui.spacer()
+        ui_wrapper.spacing()
         if total_page_count > 1:
-            if gui.button("Help next"):
+            if ui_wrapper.button("Help next"):
                 actions.user.help_next()
 
-            if gui.button("Help previous"):
+            if ui_wrapper.button("Help previous"):
                 actions.user.help_previous()
 
-        if gui.button("Help return"):
+        if ui_wrapper.button("Help return"):
             actions.user.help_return()
 
-    if gui.button("Help refresh"):
+    if ui_wrapper.button("Help refresh"):
         actions.user.help_refresh()
 
-    if gui.button("Help close"):
+    if ui_wrapper.button("Help close"):
         actions.user.help_hide()
 
 
