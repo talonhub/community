@@ -461,7 +461,7 @@ async def draw_search_commands(ui, ui_wrapper):
     global selected_context_page
 
     title = f"Search: {search_phrase}"
-    commands_grouped = get_search_commands(search_phrase)
+    commands_grouped = get_search_commands()
 
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
@@ -496,7 +496,7 @@ async def draw_search_commands(ui, ui_wrapper):
         await draw_command(ui, ui_wrapper, command)
 
 
-def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
+def get_search_commands() -> dict[str, tuple[str, str]]:
     global rule_word_map
     tokens = search_phrase.split(" ")
 
