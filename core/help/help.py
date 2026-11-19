@@ -383,7 +383,7 @@ async def gui_context_help(ui, ui_wrapper):
                 if current_group != group:
                     if current_group:
                         ui.separator()
-                    ui.label(f"{group}:")
+                    ui.strong(f"{group}:")
                     current_group = group
 
                 button_name = format_context_button(
