@@ -98,8 +98,10 @@ def update_title():
         if gui_operators.showing:
             update_operators_text()
 
+
 # this will only matter if the user uses a very long custom spoken form
 MAX_COLUMN_LENGTH_FOR_FORMATTERS = 100
+
 
 @open_gui(y=0, refresh_period="500ms")
 async def gui_formatters(ui, ui_wrapper):
@@ -123,7 +125,6 @@ async def gui_formatters(ui, ui_wrapper):
             minimum_column_sizes=minimum_column_sizes,
             minimum_width=ui_wrapper.get_remaining_width_excluding_margin(),
         )
-
 
     ui_wrapper.spacing()
     ui.label("* prose formatter")
