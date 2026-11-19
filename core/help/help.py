@@ -103,7 +103,7 @@ def update_title():
 MAX_COLUMN_LENGTH_FOR_FORMATTERS = 100
 
 
-@open_gui(y=0, refresh_period="500ms")
+@open_gui(y=0)
 async def gui_formatters(ui, ui_wrapper):
     global formatters_words
     if formatters_reformat:
