@@ -275,10 +275,11 @@ async def gui_folders(ui, ui_wrapper):
 
     if total_folder_pages > 1:
         ui_wrapper.spacing()
-        if ui_wrapper.command_button("Folder next"):
-            actions.user.file_manager_next_folder_page()
-        if ui_wrapper.command_button("Folder last"):
-            actions.user.file_manager_previous_folder_page()
+        async with ui.horizontal_wrapped():
+            if ui_wrapper.command_button("Folder next"):
+                actions.user.file_manager_next_folder_page()
+            if ui_wrapper.command_button("Folder last"):
+                actions.user.file_manager_previous_folder_page()
 
     ui_wrapper.spacing()
     if ui_wrapper.command_button("Manager close"):
@@ -322,10 +323,11 @@ async def gui_files(ui, ui_wrapper):
 
     if total_file_pages > 1:
         ui_wrapper.spacing()
-        if ui_wrapper.command_button("File next"):
-            actions.user.file_manager_next_file_page()
-        if ui_wrapper.command_button("File last"):
-            actions.user.file_manager_previous_file_page()
+        async with ui.horizontal_wrapped():
+            if ui_wrapper.command_button("File next"):
+                actions.user.file_manager_next_file_page()
+            if ui_wrapper.command_button("File last"):
+                actions.user.file_manager_previous_file_page()
 
     gui_files.auto_size_next_frame()
 
