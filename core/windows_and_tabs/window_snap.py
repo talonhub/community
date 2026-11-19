@@ -10,6 +10,8 @@ from typing import Optional
 from talon import Context, Module, actions, app, registry, settings, ui
 from talon.ui import Window
 
+from .windows_and_tabs import is_window_valid
+
 mod = Module()
 mod.list(
     "window_snap_positions",
@@ -190,6 +192,22 @@ def _move_to_screen(
         window.maximized = True
 
 
+def _move_windows(
+    count: int, offset: Optional[int] = None, screen_number: Optional[int] = None
+) -> None:
+    """Move the most recently used valid windows to another screen.
+
+    `ui.windows()` returns windows in z-order. Take a snapshot before moving
+    anything, because moving a window can change that order.
+    """
+    if count < 1:
+        return
+
+    windows = [window for window in ui.windows() if is_window_valid(window)]
+    for window in windows[:count]:
+        _move_to_screen(window, offset=offset, screen_number=screen_number)
+
+
 def _snap_window_helper(window, pos):
     screen = window.screen.visible_rect
 
@@ -321,16 +339,20 @@ class Actions:
             else:
                 raise KeyError(position_name)
 
-    def move_window_next_screen() -> None:
-        """Move the active window to a specific screen."""
-        _move_to_screen(ui.active_window(), offset=1)
+    def move_window_next_screen(count: int = 1) -> None:
+        """Move the most recently used window(s) to the next screen."""
+        _move_windows(count, offset=1)
 
-    def move_window_previous_screen() -> None:
-        """Move the active window to the previous screen."""
-        _move_to_screen(ui.active_window(), offset=-1)
+    def move_window_previous_screen(count: int = 1) -> None:
+        """Move the most recently used window(s) to the previous screen."""
+        _move_windows(count, offset=-1)
+
+    def move_windows(screen_number: int, count: int) -> None:
+        """Move the specified number of most recently used windows to a screen."""
+        _move_windows(count, screen_number=screen_number)
 
     def move_window_to_screen(screen_number: int) -> None:
-        """Move the active window leftward by one."""
+        """Move the active window to a specific screen."""
         _move_to_screen(ui.active_window(), screen_number=screen_number)
 
     def snap_app(app_name: str, position: RelativeScreenPos):
