@@ -113,7 +113,7 @@ async def gui_formatters(ui, ui_wrapper):
 
     row_size = ui_wrapper.get_label_row_size()
     column_titles = ["Spoken Form", "Example"]
-    table = Table(column_titles, MAX_COLUMN_LENGTH_FOR_HELP_LIST)
+    table = Table(column_titles, MAX_COLUMN_LENGTH_FOR_FORMATTERS)
     table.add_text_rows(list(formatters_words.items()))
     minimum_column_sizes = update_minimum_column_sizes(table, ui_wrapper)
 
