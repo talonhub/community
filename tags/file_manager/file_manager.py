@@ -243,6 +243,7 @@ def get_file_map(current_path):
 
 
 def run_in_cron_after_job(callback):
+    """Run the callback immediately in another thread. This is used because having some actions run in the egui render function can cause all Talon egui windows to freeze"""
     cron.after("0s", callback)
 
 
