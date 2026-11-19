@@ -4,7 +4,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from typing import Any, Optional
 
-from talon import Context, Module, actions, imgui, registry, settings
+from talon import Context, Module, actions, cron, imgui, registry, settings
 
 from ...core.gui.gui import (
     PageScroller,
@@ -341,7 +341,11 @@ def get_pages(item_line_counts: list[int]) -> list[int]:
     return pages
 
 
-@open_gui(y=0)
+def run_in_cron_after_job(callback):
+    """Run the callback immediately in another thread. This is used because having some actions run in the egui render function can cause all Talon egui windows to freeze"""
+    cron.after("0s", callback)
+
+@open_gui(y=0, refresh_period="500ms")
 async def gui_context_help(ui, ui_wrapper):
     global context_command_map
     global current_context_page
@@ -394,10 +398,10 @@ async def gui_context_help(ui, ui_wrapper):
         if total_page_count > 1:
             ui_wrapper.spacing()
             if ui_wrapper.command_button("Help next"):
-                actions.user.help_next()
+                run_in_cron_after_job(actions.user.help_next)
 
             if ui_wrapper.command_button("Help previous"):
-                actions.user.help_previous()
+                run_in_cron_after_job(actions.user.help_previous)
 
     # if there's a selected context, draw the commands for it
     else:
@@ -409,19 +413,22 @@ async def gui_context_help(ui, ui_wrapper):
         ui_wrapper.spacing()
         if total_page_count > 1:
             if ui_wrapper.command_button("Help next"):
-                actions.user.help_next()
+                run_in_cron_after_job(actions.user.help_next)
 
             if ui_wrapper.command_button("Help previous"):
-                actions.user.help_previous()
+                run_in_cron_after_job(actions.user.help_previous)
 
         if ui_wrapper.command_button("Help return"):
-            actions.user.help_return()
+            run_in_cron_after_job(actions.user.help_return)
 
     if ui_wrapper.command_button("Help refresh"):
-        actions.user.help_refresh()
+        run_in_cron_after_job(actions.user.help_refresh)
 
     if ui_wrapper.command_button("Help close"):
-        actions.user.help_hide()
+        run_in_cron_after_job(actions.user.help_hide)
+
+    # make auto sizing conditional on width changing when updating this to use a table or scroll area
+    gui_context_help.auto_size_next_frame()
 
 
 def draw_context_commands(gui: imgui.GUI):
