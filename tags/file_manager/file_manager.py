@@ -2,7 +2,9 @@ import math
 from itertools import islice
 from pathlib import Path
 
-from talon import Context, Module, actions, app, imgui, scope, settings, ui
+from talon import Context, Module, actions, app, scope, settings, ui
+
+from ...core.gui.gui import open_gui
 
 mod = Module()
 ctx = Context()
@@ -57,13 +59,13 @@ mod.setting(
     "file_manager_imgui_limit",
     type=int,
     default=20,
-    desc="Maximum number of files/folders to display in the imgui",
+    desc="Maximum number of files/folders to display in the gui",
 )
 mod.setting(
     "file_manager_string_limit",
     type=int,
     default=20,
-    desc="Maximum like of string to display in the imgui",
+    desc="Maximum like of string to display in the gui",
 )
 cached_path = None
 file_selections = folder_selections = []
@@ -139,7 +141,7 @@ class Actions:
             gui_folders.hide()
 
     def file_manager_get_directory_by_index(index: int) -> str:
-        """Returns the requested directory for the imgui display by index"""
+        """Returns the requested directory for the gui display by index"""
         index = (current_folder_page - 1) * settings.get(
             "user.file_manager_imgui_limit"
         ) + index
@@ -147,7 +149,7 @@ class Actions:
         return folder_selections[index]
 
     def file_manager_get_file_by_index(index: int) -> str:
-        """Returns the requested directory for the imgui display by index"""
+        """Returns the requested directory for the gui display by index"""
         index = (current_file_page - 1) * settings.get(
             "user.file_manager_imgui_limit"
         ) + index
@@ -240,14 +242,13 @@ def get_file_map(current_path):
     )
 
 
-@imgui.open(y=10, x=900)
-def gui_folders(gui: imgui.GUI):
+@open_gui(y=0.01, x=0.5, refresh_period="500ms")
+async def gui_folders(ui, ui_wrapper):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
         len(folder_selections) / settings.get("user.file_manager_imgui_limit")
     )
-    gui.text(f"Select a directory ({current_folder_page}/{total_folder_pages})")
-    gui.line()
+    ui_wrapper.title(f"Select a directory ({current_folder_page}/{total_folder_pages})")
 
     index = 1
     current_index = (current_folder_page - 1) * settings.get(
@@ -268,31 +269,32 @@ def gui_folders(gui: imgui.GUI):
             > settings.get("user.file_manager_string_limit")
             else folder_selections[current_index]
         )
-        gui.text(f"{index}: {name} ")
+        ui.label(f"{index}: {name} ")
         current_index += 1
         index = index + 1
 
     if total_folder_pages > 1:
-        gui.spacer()
-        if gui.button("Folder next"):
+        ui_wrapper.spacing()
+        if ui_wrapper.command_button("Folder next"):
             actions.user.file_manager_next_folder_page()
-        if gui.button("Folder last"):
+        if ui_wrapper.command_button("Folder last"):
             actions.user.file_manager_previous_folder_page()
 
-    gui.spacer()
-    if gui.button("Manager close"):
+    ui_wrapper.spacing()
+    if ui_wrapper.command_button("Manager close"):
         actions.user.file_manager_hide_pickers()
 
+    gui_folders.auto_size_next_frame()
 
-@imgui.open(y=10, x=1300)
-def gui_files(gui: imgui.GUI):
+
+@open_gui(y=0.01, x=0.75, refresh_period="500ms")
+async def gui_files(ui, ui_wrapper):
     global file_selections, current_file_page, total_file_pages
     total_file_pages = math.ceil(
         len(file_selections) / settings.get("user.file_manager_imgui_limit")
     )
 
-    gui.text(f"Select a file ({current_file_page}/{total_file_pages})")
-    gui.line()
+    ui_wrapper.title(f"Select a file ({current_file_page}/{total_file_pages})")
     index = 1
     current_index = (current_file_page - 1) * settings.get(
         "user.file_manager_imgui_limit"
@@ -313,16 +315,18 @@ def gui_files(gui: imgui.GUI):
             else file_selections[current_index]
         )
 
-        gui.text(f"{index}: {name} ")
+        ui.label(f"{index}: {name} ")
         current_index = current_index + 1
         index = index + 1
 
     if total_file_pages > 1:
-        gui.spacer()
-        if gui.button("File next"):
+        ui_wrapper.spacing()
+        if ui_wrapper.command_button("File next"):
             actions.user.file_manager_next_file_page()
-        if gui.button("File last"):
+        if ui_wrapper.command_button("File last"):
             actions.user.file_manager_previous_file_page()
+
+    gui_files.auto_size_next_frame()
 
 
 def clear_lists():
