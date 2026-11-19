@@ -345,6 +345,7 @@ def run_in_cron_after_job(callback):
     """Run the callback immediately in another thread. This is used because having some actions run in the egui render function can cause all Talon egui windows to freeze"""
     cron.after("0s", callback)
 
+
 @open_gui(y=0, refresh_period="500ms")
 async def gui_context_help(ui, ui_wrapper):
     global context_command_map
@@ -412,11 +413,11 @@ async def gui_context_help(ui, ui_wrapper):
         render_return_button = True
 
     ui_wrapper.spacing()
-    
+
     async with ui.horizontal_wrapped():
         if ui_wrapper.command_button("Help close"):
             run_in_cron_after_job(actions.user.help_hide)
-        
+
         if ui_wrapper.command_button("Help refresh"):
             run_in_cron_after_job(actions.user.help_refresh)
 
@@ -429,7 +430,6 @@ async def gui_context_help(ui, ui_wrapper):
         if render_return_button:
             if ui_wrapper.command_button("Help return"):
                 run_in_cron_after_job(actions.user.help_return)
-
 
     # make auto sizing conditional on width changing when updating this to use a table or scroll area
     gui_context_help.auto_size_next_frame()
@@ -531,9 +531,7 @@ async def render_command(ui, ui_wrapper, command: tuple[str, str]):
     val = val.split("\n")
     key_text = create_italic_text(key)
     if len(val) > 1:
-        key_label_text = ui_wrapper.concatenate_formatted_text(
-            (key_text, ":")
-        )
+        key_label_text = ui_wrapper.concatenate_formatted_text((key_text, ":"))
         ui.label(key_label_text)
         for line in val:
             ui.label(f"    {line}")
@@ -876,7 +874,7 @@ class Actions:
         if not gui_context_help.showing:
             reset()
             refresh_context_command_map()
-            current_gui = gui_context_help 
+            current_gui = gui_context_help
         else:
             selected_context_page = 1
             update_active_contexts_cache(registry.last_active_contexts)
