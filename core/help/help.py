@@ -407,9 +407,9 @@ async def gui_context_help(ui, ui_wrapper):
     # if there's a selected context, draw the commands for it
     else:
         if selected_context is not None:
-            draw_context_commands(gui)
+            await draw_context_commands(ui, ui_wrapper)
         elif search_phrase is not None:
-            draw_search_commands(gui)
+            await draw_search_commands(ui, ui_wrapper)
 
         ui_wrapper.spacing()
         if total_page_count > 1:
@@ -432,7 +432,7 @@ async def gui_context_help(ui, ui_wrapper):
     gui_context_help.auto_size_next_frame()
 
 
-def draw_context_commands(gui: imgui.GUI):
+async def draw_context_commands(ui, ui_wrapper):
     global selected_context
     global total_page_count
     global selected_context_page
@@ -443,7 +443,7 @@ def draw_context_commands(gui: imgui.GUI):
     item_line_counts = [get_command_line_count(command) for command in commands]
     pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
-    draw_commands_title(gui, title)
+    await draw_commands_title(ui_wrapper, title)
 
     filtered_commands = [
         command
@@ -451,10 +451,10 @@ def draw_context_commands(gui: imgui.GUI):
         if page == selected_context_page
     ]
 
-    draw_commands(gui, filtered_commands)
+    await draw_commands(ui, ui_wrapper, filtered_commands)
 
 
-def draw_search_commands(gui: imgui.GUI):
+async def draw_search_commands(ui, ui_wrapper):
     global search_phrase
     global total_page_count
     global cached_active_contexts
@@ -481,7 +481,7 @@ def draw_search_commands(gui: imgui.GUI):
     pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
 
-    draw_commands_title(gui, title)
+    await draw_commands_title(ui_wrapper, title)
 
     current_context = None
     for (context, command), page in zip(flat_commands, pages, strict=True):
@@ -489,11 +489,11 @@ def draw_search_commands(gui: imgui.GUI):
             continue
         if context != current_context:
             if current_context is not None:
-                gui.spacer()
-            gui.text(format_context_title(context))
-            gui.line()
+                ui_wrapper.spacing()
+            ui.strong(format_context_title(context))
+            ui.separator()
             current_context = context
-        draw_command(gui, command)
+        await draw_command(ui, ui_wrapper, command)
 
 
 def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
@@ -516,28 +516,27 @@ def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
     return commands_grouped
 
 
-def draw_commands_title(gui: imgui.GUI, title: str):
+async def draw_commands_title(ui_wrapper, title: str):
     global selected_context_page
     global total_page_count
 
-    gui.text(f"{title} ({selected_context_page}/{total_page_count})")
-    gui.line()
+    ui_wrapper.title(f"{title} ({selected_context_page}/{total_page_count})")
 
 
-def draw_command(gui: imgui.GUI, command: tuple[str, str]):
+async def draw_command(ui, ui_wrapper, command: tuple[str, str]):
     key, val = command
     val = val.split("\n")
     if len(val) > 1:
-        gui.text(f"{key}:")
+        ui.label(f"{key}:")
         for line in val:
-            gui.text(f"    {line}")
+            ui.label(f"    {line}")
     else:
-        gui.text(f"{key}: {val[0]}")
+        ui.label(f"{key}: {val[0]}")
 
 
-def draw_commands(gui: imgui.GUI, commands: Iterable[tuple[str, str]]):
+async def draw_commands(ui, ui_wrapper, commands: Iterable[tuple[str, str]]):
     for command in commands:
-        draw_command(gui, command)
+        await draw_command(ui, ui_wrapper, command)
 
 
 def reset():
