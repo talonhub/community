@@ -200,11 +200,14 @@ def _move_windows(
     `ui.windows()` returns windows in z-order. Take a snapshot before moving
     anything, because moving a window can change that order.
     """
+    print(f"Moving {count} window(s) to screen {screen_number} with offset {offset}")
     if count < 1:
         return
 
     windows = [window for window in ui.windows() if is_window_valid(window)]
+    print(f"Found {len(windows)} valid window(s) to move")
     for window in windows[:count]:
+        print(f"Moving window {window} to screen {screen_number} with offset {offset}")
         _move_to_screen(window, offset=offset, screen_number=screen_number)
 
 
@@ -341,10 +344,12 @@ class Actions:
 
     def move_window_next_screen(count: int = 1) -> None:
         """Move the most recently used window(s) to the next screen."""
+        print(f"Moving {count} window(s) to the next screen")
         _move_windows(count, offset=1)
 
     def move_window_previous_screen(count: int = 1) -> None:
         """Move the most recently used window(s) to the previous screen."""
+        print(f"Moving {count} window(s) to the previous screen")
         _move_windows(count, offset=-1)
 
     def move_windows(screen_number: int, count: int) -> None:
