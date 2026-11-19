@@ -412,7 +412,7 @@ async def gui_context_help(ui, ui_wrapper):
             await render_context_commands(ui, ui_wrapper)
         elif search_phrase is not None:
             await render_search_commands(ui, ui_wrapper)
-            render_navigation_buttons = total_page_count > 1
+        render_navigation_buttons = total_page_count > 1
         render_return_button = True
 
     ui_wrapper.spacing()
