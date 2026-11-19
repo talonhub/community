@@ -113,8 +113,7 @@ async def gui_formatters(ui, ui_wrapper):
     ui_wrapper.spacing()
     ui.label("* prose formatter")
     ui_wrapper.spacing()
-    if ui_wrapper.command_button("Help close"):
-        gui_formatters.hide()
+    add_help_close_button(ui_wrapper)
 
 
 OPERATORS_MAX_COLUMN_LENGTH = 40
@@ -798,10 +797,11 @@ class Actions:
     def help_formatters(ab: dict, reformat: bool):
         """Provides the list of formatter keywords"""
         # what you say is stored as a trigger
-        global formatters_words, formatters_reformat
+        global formatters_words, formatters_reformat, current_gui
         formatters_words = ab
         formatters_reformat = reformat
         reset()
+        current_gui = gui_formatters
         hide_all_help_guis()
         gui_formatters.show()
         register_events(False)
