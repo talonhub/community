@@ -302,7 +302,7 @@ def get_current_context_page_length() -> int:
 
 
 def get_command_line_count(command: tuple[str, str]) -> int:
-    """This should be kept in sync with draw_commands"""
+    """This should be kept in sync with render_commands"""
     _, body = command
     lines = len(body.split("\n"))
     if lines == 1:
@@ -360,7 +360,7 @@ async def gui_context_help(ui, ui_wrapper):
     render_navigation_buttons = False
     render_return_button = False
 
-    # if no selected context, draw the contexts
+    # if no selected context, render the contexts
     if selected_context is None and search_phrase is None:
         total_page_count = get_total_context_pages()
 
@@ -402,12 +402,12 @@ async def gui_context_help(ui, ui_wrapper):
             current_item_index += 1
             render_navigation_buttons = total_page_count > 1
 
-    # if there's a selected context, draw the commands for it
+    # if there's a selected context, render the commands for it
     else:
         if selected_context is not None:
-            await draw_context_commands(ui, ui_wrapper)
+            await render_context_commands(ui, ui_wrapper)
         elif search_phrase is not None:
-            await draw_search_commands(ui, ui_wrapper)
+            await render_search_commands(ui, ui_wrapper)
             render_navigation_buttons = total_page_count > 1
         render_return_button = True
 
@@ -435,7 +435,7 @@ async def gui_context_help(ui, ui_wrapper):
     gui_context_help.auto_size_next_frame()
 
 
-async def draw_context_commands(ui, ui_wrapper):
+async def render_context_commands(ui, ui_wrapper):
     global selected_context
     global total_page_count
     global selected_context_page
@@ -446,7 +446,7 @@ async def draw_context_commands(ui, ui_wrapper):
     item_line_counts = [get_command_line_count(command) for command in commands]
     pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
-    await draw_commands_title(ui_wrapper, title)
+    await render_commands_title(ui_wrapper, title)
 
     filtered_commands = [
         command
@@ -454,10 +454,10 @@ async def draw_context_commands(ui, ui_wrapper):
         if page == selected_context_page
     ]
 
-    await draw_commands(ui, ui_wrapper, filtered_commands)
+    await render_commands(ui, ui_wrapper, filtered_commands)
 
 
-async def draw_search_commands(ui, ui_wrapper):
+async def render_search_commands(ui, ui_wrapper):
     global search_phrase
     global total_page_count
     global cached_active_contexts
@@ -484,7 +484,7 @@ async def draw_search_commands(ui, ui_wrapper):
     pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
 
-    await draw_commands_title(ui_wrapper, title)
+    await render_commands_title(ui_wrapper, title)
 
     current_context = None
     for (context, command), page in zip(flat_commands, pages, strict=True):
@@ -496,7 +496,7 @@ async def draw_search_commands(ui, ui_wrapper):
             ui.strong(format_context_title(context))
             ui.separator()
             current_context = context
-        await draw_command(ui, ui_wrapper, command)
+        await render_command(ui, ui_wrapper, command)
 
 
 def get_search_commands() -> dict[str, tuple[str, str]]:
@@ -519,14 +519,14 @@ def get_search_commands() -> dict[str, tuple[str, str]]:
     return commands_grouped
 
 
-async def draw_commands_title(ui_wrapper, title: str):
+async def render_commands_title(ui_wrapper, title: str):
     global selected_context_page
     global total_page_count
 
     ui_wrapper.title(f"{title} ({selected_context_page}/{total_page_count})")
 
 
-async def draw_command(ui, ui_wrapper, command: tuple[str, str]):
+async def render_command(ui, ui_wrapper, command: tuple[str, str]):
     key, val = command
     val = val.split("\n")
     if len(val) > 1:
@@ -537,9 +537,9 @@ async def draw_command(ui, ui_wrapper, command: tuple[str, str]):
         ui.label(f"{key}: {val[0]}")
 
 
-async def draw_commands(ui, ui_wrapper, commands: Iterable[tuple[str, str]]):
+async def render_commands(ui, ui_wrapper, commands: Iterable[tuple[str, str]]):
     for command in commands:
-        await draw_command(ui, ui_wrapper, command)
+        await render_command(ui, ui_wrapper, command)
 
 
 def reset():
