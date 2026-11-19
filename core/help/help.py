@@ -99,22 +99,21 @@ def update_title():
             update_operators_text()
 
 
-@imgui.open(y=0)
-def gui_formatters(gui: imgui.GUI):
+@open_gui(y=0)
+async def gui_formatters(ui, ui_wrapper):
     global formatters_words
     if formatters_reformat:
-        gui.text("re-formatters help")
+        ui_wrapper.title("re-formatters help")
     else:
-        gui.text("formatters help")
-    gui.line()
+        ui_wrapper.title("formatters help")
 
     for key, val in formatters_words.items():
-        gui.text(f"{val}: {key}")
+        ui.label(f"{val}: {key}")
 
-    gui.spacer()
-    gui.text("* prose formatter")
-    gui.spacer()
-    if gui.button("Help close"):
+    ui_wrapper.spacing()
+    ui.label("* prose formatter")
+    ui_wrapper.spacing()
+    if ui_wrapper.command_button("Help close"):
         gui_formatters.hide()
 
 
