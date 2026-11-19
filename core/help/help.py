@@ -392,7 +392,10 @@ async def gui_context_help(ui, ui_wrapper):
                     context_name,
                 )
                 button_text = ui_wrapper.concatenate_formatted_text(
-                    (create_italic_text(f"help {current_selection_index}"), context_label)
+                    (
+                        create_italic_text(f"help {current_selection_index}"),
+                        context_label,
+                    )
                 )
 
                 if ui_wrapper.button(button_text):
