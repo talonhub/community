@@ -635,6 +635,7 @@ class GUI:
         self._refresh_job = None
         self._last_height_taken = None
         self._previous_height_taken = None
+        self._hide_after_next_frame = False
 
     @property
     def showing(self) -> bool:
@@ -687,6 +688,9 @@ class GUI:
         finally:
             self._window = None
 
+    def hide_after_next_frame(self):
+        self._hide_after_next_frame = True
+
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
 
@@ -704,6 +708,9 @@ class GUI:
         self._last_height_taken = (
             available_height - ui.available_height() + INNER_MARGIN
         )
+        if self._hide_after_next_frame:
+            # use another thread to avoid freeze
+            cron.after("0s", self.hide)
 
     def _apply_theme(self, ui: egui.Ui) -> None:
         style = ui.style()

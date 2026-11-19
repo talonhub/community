@@ -2,7 +2,7 @@ import math
 from itertools import islice
 from pathlib import Path
 
-from talon import Context, Module, actions, app, scope, settings, ui
+from talon import Context, Module, actions, app, cron, scope, settings, ui
 
 from ...core.gui.gui import open_gui
 
@@ -282,7 +282,9 @@ async def gui_folders(ui, ui_wrapper):
 
     ui_wrapper.spacing()
     if ui_wrapper.command_button("Manager close"):
-        actions.user.file_manager_hide_pickers()
+        gui_folders.hide()
+        # use this instead of a direct hide to avoid freezing Talon
+        gui_files.hide_after_next_frame()
 
     gui_folders.auto_size_next_frame()
 
