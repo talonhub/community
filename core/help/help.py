@@ -357,6 +357,9 @@ async def gui_context_help(ui, ui_wrapper):
     global total_page_count
     global search_phrase
 
+    render_navigation_buttons = False
+    render_return_button = False
+
     # if no selected context, draw the contexts
     if selected_context is None and search_phrase is None:
         total_page_count = get_total_context_pages()
@@ -397,12 +400,7 @@ async def gui_context_help(ui, ui_wrapper):
             current_item_index += 1
 
         if total_page_count > 1:
-            ui_wrapper.spacing()
-            if ui_wrapper.command_button("Help next"):
-                run_in_cron_after_job(actions.user.help_next)
-
-            if ui_wrapper.command_button("Help previous"):
-                run_in_cron_after_job(actions.user.help_previous)
+            render_navigation_buttons = True
 
     # if there's a selected context, draw the commands for it
     else:
@@ -411,22 +409,30 @@ async def gui_context_help(ui, ui_wrapper):
         elif search_phrase is not None:
             await draw_search_commands(ui, ui_wrapper)
 
-        ui_wrapper.spacing()
         if total_page_count > 1:
+            render_navigation_buttons = True
+
+        render_return_button = True
+
+    ui_wrapper.spacing()
+    
+    async with ui.horizontal_wrapped():
+        if ui_wrapper.command_button("Help close"):
+            run_in_cron_after_job(actions.user.help_hide)
+        
+        if ui_wrapper.command_button("Help refresh"):
+            run_in_cron_after_job(actions.user.help_refresh)
+
+        if render_navigation_buttons:
             if ui_wrapper.command_button("Help next"):
                 run_in_cron_after_job(actions.user.help_next)
 
             if ui_wrapper.command_button("Help previous"):
                 run_in_cron_after_job(actions.user.help_previous)
+        if render_return_button:
+            if ui_wrapper.command_button("Help return"):
+                run_in_cron_after_job(actions.user.help_return)
 
-        if ui_wrapper.command_button("Help return"):
-            run_in_cron_after_job(actions.user.help_return)
-
-    if ui_wrapper.command_button("Help refresh"):
-        run_in_cron_after_job(actions.user.help_refresh)
-
-    if ui_wrapper.command_button("Help close"):
-        run_in_cron_after_job(actions.user.help_hide)
 
     # make auto sizing conditional on width changing when updating this to use a table or scroll area
     gui_context_help.auto_size_next_frame()
