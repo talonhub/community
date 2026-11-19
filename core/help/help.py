@@ -391,6 +391,7 @@ async def gui_context_help(ui, ui_wrapper):
 
                 if ui_wrapper.button(button_name):
                     selected_context = context_name
+                    run_in_cron_after_job(refresh_gui)
                 current_selection_index = current_selection_index + 1
 
             current_item_index += 1
