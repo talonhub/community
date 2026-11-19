@@ -164,7 +164,7 @@ class Actions:
                 current_file_page += 1
             else:
                 current_file_page = 1
-            gui_files.show()
+            gui_files.refresh()
 
     def file_manager_previous_file_page():
         """previous_file_page"""
@@ -175,7 +175,7 @@ class Actions:
             else:
                 current_file_page = total_file_pages
 
-            gui_files.show()
+            gui_files.refresh()
 
     def file_manager_next_folder_page():
         """next_folder_page"""
@@ -186,7 +186,7 @@ class Actions:
             else:
                 current_folder_page = 1
 
-            gui_folders.show()
+            gui_folders.refresh()
 
     def file_manager_previous_folder_page():
         """previous_folder_page"""
@@ -197,7 +197,7 @@ class Actions:
             else:
                 current_folder_page = total_folder_pages
 
-            gui_folders.show()
+            gui_folders.refresh()
 
 
 def is_dir(f):
@@ -242,7 +242,7 @@ def get_file_map(current_path):
     )
 
 
-@open_gui(y=0.01, x=0.5, refresh_period="500ms")
+@open_gui(y=0.01, x=0.5)
 async def gui_folders(ui, ui_wrapper):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
@@ -289,7 +289,7 @@ async def gui_folders(ui, ui_wrapper):
     gui_folders.auto_size_next_frame()
 
 
-@open_gui(y=0.01, x=0.75, refresh_period="500ms")
+@open_gui(y=0.01, x=0.75)
 async def gui_files(ui, ui_wrapper):
     global file_selections, current_file_page, total_file_pages
     total_file_pages = math.ceil(
@@ -349,10 +349,11 @@ def clear_lists():
         file_selections = []
 
 
-def update_gui():
+def update_guis():
     if gui_folders.showing or settings.get("user.file_manager_auto_show_pickers"):
-        gui_folders.show()
-        gui_files.show()
+        for gui in (gui_folders, gui_files):
+            gui.refresh()
+            gui.show()
 
 
 def update_lists(path=None):
@@ -395,7 +396,7 @@ def update_lists(path=None):
     file_selections = list(set(files.values()))
     file_selections.sort(key=str.casefold)
 
-    update_gui()
+    update_guis()
 
 
 def win_event_handler(window):
