@@ -531,13 +531,13 @@ async def render_command(ui, ui_wrapper, command: tuple[str, str]):
     val = val.split("\n")
     key_text = create_italic_text(key)
     if len(val) > 1:
-        key_label_text = ui_wrapper.concatenate_formatted_text((key_text, ":"))
+        key_label_text = ui_wrapper.concatenate_formatted_text((key_text, " :"))
         ui.label(key_label_text)
         for line in val:
             ui.label(f"    {line}")
     else:
         key_label_text = ui_wrapper.concatenate_formatted_text(
-            (key_text, f": {val[0]}")
+            (key_text, f" : {val[0]}")
         )
         ui.label(key_label_text)
 
