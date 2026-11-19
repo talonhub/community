@@ -427,9 +427,9 @@ async def gui_context_help(ui, ui_wrapper):
 
             if ui_wrapper.command_button("Help previous"):
                 run_in_cron_after_job(actions.user.help_previous)
-        if render_return_button:
-            if ui_wrapper.command_button("Help return"):
-                run_in_cron_after_job(actions.user.help_return)
+
+        if render_return_button and ui_wrapper.command_button("Help return"):
+            run_in_cron_after_job(actions.user.help_return)
 
     # make auto sizing conditional on width changing when updating this to use a table or scroll area
     gui_context_help.auto_size_next_frame()
