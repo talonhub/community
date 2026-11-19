@@ -242,6 +242,9 @@ def get_file_map(current_path):
     )
 
 
+def run_in_cron_after_job(callback):
+    cron.after("0s", callback)
+
 @open_gui(y=0.01, x=0.5)
 async def gui_folders(ui, ui_wrapper):
     global current_folder_page, total_folder_pages
@@ -277,14 +280,14 @@ async def gui_folders(ui, ui_wrapper):
         ui_wrapper.spacing()
         async with ui.horizontal_wrapped():
             if ui_wrapper.command_button("Folder next"):
-                actions.user.file_manager_next_folder_page()
+                run_in_cron_after_job(actions.user.file_manager_next_folder_page)
             if ui_wrapper.command_button("Folder last"):
-                actions.user.file_manager_previous_folder_page()
+                run_in_cron_after_job(actions.user.file_manager_previous_folder_page)
 
     ui_wrapper.spacing()
     if ui_wrapper.command_button("Manager close"):
         # we need to hide gui_files in another thread to avoid freezing
-        cron.after("0s", actions.user.file_manager_hide_pickers)
+        run_in_cron_after_job(actions.user.file_manager_hide_pickers)
 
     gui_folders.auto_size_next_frame()
 
@@ -325,9 +328,9 @@ async def gui_files(ui, ui_wrapper):
         ui_wrapper.spacing()
         async with ui.horizontal_wrapped():
             if ui_wrapper.command_button("File next"):
-                actions.user.file_manager_next_file_page()
+                run_in_cron_after_job(actions.user.file_manager_next_file_page)
             if ui_wrapper.command_button("File last"):
-                actions.user.file_manager_previous_file_page()
+                run_in_cron_after_job(actions.user.file_manager_previous_file_page)
 
     gui_files.auto_size_next_frame()
 
