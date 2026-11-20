@@ -15,6 +15,9 @@ snap <user.window_snap_position>: user.snap_window(window_snap_position)
 snap next [screen]: user.move_window_next_screen()
 snap last [screen]: user.move_window_previous_screen()
 snap screen <number>: user.move_window_to_screen(number)
+snap <number> next [screen]: user.move_window_next_screen(number)
+snap <number> last [screen]: user.move_window_previous_screen(number)
+snap <number> screen <number>: user.move_windows(number_2, number_1)
 snap <user.running_applications> <user.window_snap_position>:
     user.snap_app(running_applications, window_snap_position)
 

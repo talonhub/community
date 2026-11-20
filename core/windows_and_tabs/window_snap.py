@@ -10,6 +10,8 @@ from typing import Optional
 from talon import Context, Module, actions, app, registry, settings, ui
 from talon.ui import Window
 
+from .windows_and_tabs import is_window_valid
+
 mod = Module()
 mod.list(
     "window_snap_positions",
@@ -190,6 +192,95 @@ def _move_to_screen(
         window.maximized = True
 
 
+def _windows_in_z_order():
+    """Return Talon windows in native Windows z-order.
+
+    Talon's ui.windows() collection is not ordered by z-order on Windows.
+    Match native HWNDs back to Talon Window objects using Window.id.
+    """
+    if app.platform != "windows":
+        return [window for window in ui.windows() if is_window_valid(window)]
+
+    import ctypes
+
+    user32 = ctypes.windll.user32
+    get_top_window = user32.GetTopWindow
+    get_top_window.argtypes = [ctypes.c_void_p]
+    get_top_window.restype = ctypes.c_void_p
+
+    get_window = user32.GetWindow
+    get_window.argtypes = [ctypes.c_void_p, ctypes.c_uint]
+    get_window.restype = ctypes.c_void_p
+    is_window_visible = user32.IsWindowVisible
+    is_window_visible.argtypes = [ctypes.c_void_p]
+    is_window_visible.restype = ctypes.c_bool
+
+    get_window_long = getattr(user32, "GetWindowLongPtrW", user32.GetWindowLongW)
+    get_window_long.argtypes = [ctypes.c_void_p, ctypes.c_int]
+    get_window_long.restype = ctypes.c_ssize_t
+
+    gw_hwndnext = 2
+    gwl_exstyle = -20
+    ws_ex_toolwindow = 0x00000080
+    excluded_apps = {
+        "Talon",
+        "TextInputHost.exe",
+        "SearchHost.exe",
+        "Windows Start Experience Host",
+    }
+
+    talon_windows = {
+        int(window.id): window for window in ui.windows() if is_window_valid(window)
+    }
+
+    ordered = []
+    hwnd = get_top_window(None)
+    visited = set()
+
+    while hwnd:
+        hwnd_value = int(hwnd)
+        if hwnd_value in visited:
+            break
+        visited.add(hwnd_value)
+
+        window = talon_windows.get(hwnd_value)
+        if (
+            window is not None
+            and is_window_visible(hwnd)
+            and not (get_window_long(hwnd, gwl_exstyle) & ws_ex_toolwindow)
+            and window.app.name not in excluded_apps
+        ):
+            ordered.append(window)
+
+        hwnd = get_window(hwnd, gw_hwndnext)
+
+    return ordered
+
+
+def _move_windows(
+    count: int, offset: Optional[int] = None, screen_number: Optional[int] = None
+) -> None:
+    """Move the most recently used valid windows to another screen.
+
+    Windows are selected in native z-order, with hidden, owned and tool
+    windows excluded. Take a snapshot before moving anything because moving
+    a window can change the z-order.
+    """
+    print(f"Moving {count} window(s) to screen {screen_number} with offset {offset}")
+    if count < 1:
+        return
+
+    windows = _windows_in_z_order()
+    print(f"Found {len(windows)} eligible window(s) in z-order")
+    for window in windows[:count]:
+        print(
+            f"Moving window id={window.id}, title={window.title!r}, "
+            f"app={window.app.name!r}, screen={window.screen} "
+            f"to screen {screen_number} with offset {offset}"
+        )
+        _move_to_screen(window, offset=offset, screen_number=screen_number)
+
+
 def _snap_window_helper(window, pos):
     screen = window.screen.visible_rect
 
@@ -321,16 +412,22 @@ class Actions:
             else:
                 raise KeyError(position_name)
 
-    def move_window_next_screen() -> None:
-        """Move the active window to a specific screen."""
-        _move_to_screen(ui.active_window(), offset=1)
+    def move_window_next_screen(count: int = 1) -> None:
+        """Move the most recently used window(s) to the next screen."""
+        print(f"Moving {count} window(s) to the next screen")
+        _move_windows(count, offset=1)
 
-    def move_window_previous_screen() -> None:
-        """Move the active window to the previous screen."""
-        _move_to_screen(ui.active_window(), offset=-1)
+    def move_window_previous_screen(count: int = 1) -> None:
+        """Move the most recently used window(s) to the previous screen."""
+        print(f"Moving {count} window(s) to the previous screen")
+        _move_windows(count, offset=-1)
+
+    def move_windows(screen_number: int, count: int) -> None:
+        """Move the specified number of most recently used windows to a screen."""
+        _move_windows(count, screen_number=screen_number)
 
     def move_window_to_screen(screen_number: int) -> None:
-        """Move the active window leftward by one."""
+        """Move the active window to a specific screen."""
         _move_to_screen(ui.active_window(), screen_number=screen_number)
 
     def snap_app(app_name: str, position: RelativeScreenPos):
