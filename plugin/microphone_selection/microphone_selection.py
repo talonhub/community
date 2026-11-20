@@ -1,5 +1,6 @@
-from talon import Context, Module, actions, imgui
+from talon import Context, Module, actions
 
+from ...core.gui.gui import create_italic_text, open_gui
 from ...core.user_settings import track_csv_rows
 
 mod = Module()
@@ -52,22 +53,38 @@ mod.tag(
 )
 
 
-@imgui.open()
-def gui(gui: imgui.GUI):
-    gui.text("Click or press a number key to select a microphone")
-    gui.text("(or say “microphone pick #”)")
-    gui.line()
-    gui.spacer()
+@open_gui(refresh_period="500ms")
+async def gui(ui, ui_wrapper):
+    ui_wrapper.header("Microphone Picker")
+    async with ui.horizontal():
+        ui.label("press ")
+        await ui_wrapper.render_key(" 1 ")
+        ui.label("—")
+        await ui_wrapper.render_key(" 9 ")
+    voice_command_text = ui_wrapper.concatenate_formatted_text(
+        ("or say ", create_italic_text("microphone pick #"))
+    )
+    ui.label(voice_command_text)
+    ui.separator()
+    ui_wrapper.spacing()
     active_microphone = actions.sound.active_microphone()
     microphone_device_list = get_microphone_list()
     for index, item in enumerate(microphone_device_list, 1):
-        if gui.button(
-            f"{f'[{index}] ' if index < 10 else ''}{item}{' — active' if item == active_microphone else ''}"
-        ):
-            actions.user.microphone_select(index)
-    gui.spacer()
-    if gui.button("[esc] microphone close"):
-        actions.user.microphone_selection_hide()
+        microphone_text = f"{item}{' — active' if item == active_microphone else ''}"
+        async with ui.horizontal():
+            if index < 10:
+                await ui_wrapper.render_key(f" {index} ")
+            else:
+                microphone_text = f"{index}: " + microphone_text
+            if ui_wrapper.button(microphone_text):
+                actions.user.microphone_select(index)
+    ui_wrapper.spacing()
+    async with ui.horizontal():
+        await ui_wrapper.render_key("esc")
+        if ui_wrapper.command_button("microphone close"):
+            actions.user.microphone_selection_hide()
+
+    gui.auto_size_next_frame()
 
 
 @mod.action_class
