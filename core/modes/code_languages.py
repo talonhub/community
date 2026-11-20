@@ -56,6 +56,7 @@ code_languages = [
     Language("tex", ["tech", "lay tech", "latex"], ["tex"]),
     Language("typescript", "type script", ["ts"]),
     Language("typescriptreact", "type script react", ["tsx"]),
+    Language("typst", "typst", ["typ"]),
     # Language("vba", "vba", ["vba"]),
     Language("vimscript", "vim script", ["vim", "vimrc"]),
     # These languages doesn't actually have a language mode, but we do have snippets.

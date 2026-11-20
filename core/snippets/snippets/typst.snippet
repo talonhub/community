@@ -1,0 +1,105 @@
+language: typst
+---
+
+name: link
+phrase: link
+-
+#link("$1", "$0")
+---
+
+name: figure
+phrase: figure
+-
+#figure(
+	image("$1", width: ${2:80%}),
+	caption: [$0],
+) <fig-$3>
+---
+
+name: math (unlabelled/inline equation)
+phrase: math
+-
+\$ $0 \$
+---
+
+name: equation (labelled)
+phrase: equation
+-
+\$ $0 \$ <eq:$1>
+---
+
+name: table
+phrase: table
+-
+#table(
+	columns: $1,
+	table.header([*name*]),
+	[$0],
+)
+---
+
+name: quote
+phrase: quote
+-
+#quote(block: true)[$0]
+---
+
+name: highlight
+phrase: highlight
+-
+#highlight[$0]
+---
+
+name: underline
+phrase: underline
+-
+#underline[$0]
+---
+
+name: strike
+phrase: strike
+-
+#strike[$0]
+---
+
+name: footnote
+phrase: footnote
+-
+#footnote[$0]
+---
+
+name: functionDeclaration
+phrase: function definition | let
+-
+#let $1($2) = {
+	$0
+}
+---
+
+name: show set rule
+phrase: show set
+-
+#show $1: set $0
+---
+
+name: show rule
+phrase: show
+-
+#show $1: $0
+---
+
+name: set rule
+phrase: set
+-
+#set $1($0)
+---
+
+name: place
+phrase: place
+-
+#place(
+  $1,
+)[
+  $0
+]
+---
