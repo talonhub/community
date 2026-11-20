@@ -793,6 +793,16 @@ async def gui_list_help(ui, ui_wrapper):
         if len(table) > page_size:
             add_page_navigation_buttons(ui_wrapper, page_scroller)
 
+def render_help_context(enabled_only=False, phrase=""):
+    global search_phrase
+    reset()
+    if phrase:
+        search_phrase = phrase
+    refresh_context_command_map(enabled_only=enabled_only)
+    update_current_gui(gui_context_help)
+    register_events(True)
+    ctx.tags = ["user.help_open"]
+
 
 @mod.action_class
 class Actions:
@@ -831,31 +841,15 @@ class Actions:
 
     def help_context_enabled():
         """Display contextual command info"""
-        reset()
-        refresh_context_command_map(enabled_only=True)
-        update_current_gui(gui_context_help)
-        register_events(True)
-        ctx.tags = ["user.help_open"]
+        render_help_context(enabled_only=True)
 
     def help_context():
         """Display contextual command info"""
-        reset()
-        refresh_context_command_map()
-        update_current_gui(gui_context_help)
-        register_events(True)
-        ctx.tags = ["user.help_open"]
+        render_help_context()
 
     def help_search(phrase: str, enabled_only: Optional[bool] = False):
         """Display command info for search phrase"""
-        global search_phrase
-
-        reset()
-        search_phrase = phrase
-        refresh_context_command_map(enabled_only=enabled_only)
-        update_current_gui(gui_context_help)
-        gui_context_help.show()
-        register_events(True)
-        ctx.tags = ["user.help_open"]
+        render_help_context(enabled_only, phrase)
 
     def help_selected_context(m: str):
         """Display command info for selected context"""
