@@ -192,20 +192,79 @@ def _move_to_screen(
         window.maximized = True
 
 
+def _windows_in_z_order():
+    """Return Talon windows in native Windows z-order.
+
+    Talon's ui.windows() collection is not ordered by z-order on Windows.
+    Match native HWNDs back to Talon Window objects using Window.id.
+    """
+    if app.platform != "windows":
+        return [window for window in ui.windows() if is_window_valid(window)]
+
+    import ctypes
+
+    user32 = ctypes.windll.user32
+    get_window = user32.GetWindow
+    get_window.argtypes = [ctypes.c_void_p, ctypes.c_uint]
+    get_window.restype = ctypes.c_void_p
+    is_window_visible = user32.IsWindowVisible
+    is_window_visible.argtypes = [ctypes.c_void_p]
+    is_window_visible.restype = ctypes.c_bool
+
+    get_window_long = getattr(user32, "GetWindowLongPtrW", user32.GetWindowLongW)
+    get_window_long.argtypes = [ctypes.c_void_p, ctypes.c_int]
+    get_window_long.restype = ctypes.c_ssize_t
+
+    gw_hwndnext = 2
+    gw_owner = 4
+    gwl_exstyle = -20
+    ws_ex_toolwindow = 0x00000080
+
+    talon_windows = {
+        int(window.id): window
+        for window in ui.windows()
+        if is_window_valid(window)
+    }
+
+    ordered = []
+    hwnd = user32.GetTopWindow(None)
+    visited = set()
+
+    while hwnd:
+        hwnd_value = int(hwnd)
+        if hwnd_value in visited:
+            break
+        visited.add(hwnd_value)
+
+        window = talon_windows.get(hwnd_value)
+        if (
+            window is not None
+            and is_window_visible(hwnd)
+            and not get_window(hwnd, gw_owner)
+            and not (get_window_long(hwnd, gwl_exstyle) & ws_ex_toolwindow)
+        ):
+            ordered.append(window)
+
+        hwnd = get_window(hwnd, gw_hwndnext)
+
+    return ordered
+
+
 def _move_windows(
     count: int, offset: Optional[int] = None, screen_number: Optional[int] = None
 ) -> None:
     """Move the most recently used valid windows to another screen.
 
-    `ui.windows()` returns windows in z-order. Take a snapshot before moving
-    anything, because moving a window can change that order.
+    Windows are selected in native z-order, with hidden, owned and tool
+    windows excluded. Take a snapshot before moving anything because moving
+    a window can change the z-order.
     """
     print(f"Moving {count} window(s) to screen {screen_number} with offset {offset}")
     if count < 1:
         return
 
-    windows = [window for window in ui.windows() if is_window_valid(window)]
-    print(f"Found {len(windows)} valid window(s) to move")
+    windows = _windows_in_z_order()
+    print(f"Found {len(windows)} eligible window(s) in z-order")
     for window in windows[:count]:
         print(f"Moving window {window} to screen {screen_number} with offset {offset}")
         _move_to_screen(window, offset=offset, screen_number=screen_number)
