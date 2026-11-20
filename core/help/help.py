@@ -4,7 +4,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from typing import Any, Optional
 
-from talon import Context, Module, actions, imgui, registry, settings
+from talon import Context, Module, actions, registry, settings
 
 from ...core.gui.gui import (
     PageScroller,
@@ -802,6 +802,7 @@ async def gui_list_help(ui, ui_wrapper):
         add_help_close_button(ui_wrapper)
         if len(table) > page_size:
             add_page_navigation_buttons(ui_wrapper, page_scroller)
+
 
 def render_help_context(enabled_only=False, phrase=""):
     global search_phrase
