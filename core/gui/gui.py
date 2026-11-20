@@ -673,7 +673,7 @@ class GUI:
     def hide_unsafe(self):
         """Running this in the rendering thread can freeze Talon egui. It is fine to use this in other threads"""
         if not self._window:
-            return 
+            return
 
         try:
             self._stored_rect = self._window.rect
