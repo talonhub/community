@@ -794,13 +794,23 @@ async def gui_list_help(ui, ui_wrapper):
             add_page_navigation_buttons(ui_wrapper, page_scroller)
 
 
-def render_help_context(enabled_only=False, phrase=""):
-    global search_phrase
+def render_help_context(enabled_only=False, phrase="", new_selected_context=None, use_last_active_contents=False):
+    global search_phrase, selected_context, selected_context_page
     unsafe_hide_current_gui()
-    reset()
+
+    if use_last_active_contents:
+        update_active_contexts_cache(registry.last_active_contexts)
+    else:
+        reset()
+        refresh_context_command_map(enabled_only=enabled_only)
+    
     if phrase:
         search_phrase = phrase
-    refresh_context_command_map(enabled_only=enabled_only)
+
+    if new_selected_context:
+        selected_context = new_selected_context
+        selected_context_page = 1
+
     update_current_gui(gui_context_help)
     register_events(True)
     ctx.tags = ["user.help_open"]
@@ -857,19 +867,7 @@ class Actions:
 
     def help_selected_context(m: str):
         """Display command info for selected context"""
-        global selected_context, selected_context_page
-
-        if not gui_context_help.showing:
-            reset()
-            refresh_context_command_map()
-        else:
-            selected_context_page = 1
-            update_active_contexts_cache(registry.last_active_contexts)
-
-        selected_context = m
-        update_current_gui(gui_context_help)
-        register_events(True)
-        ctx.tags = ["user.help_open"]
+        render_help_context(new_selected_context=m, use_last_active_contents=gui_context_help.showing)
 
     def help_next():
         """Navigates to next page"""
