@@ -676,11 +676,6 @@ class GUI:
         if self._window is None:
             return
 
-        # Defer hiding until after rendering
-        if self._egui is not None:
-            cron.after("1ms", self.hide)
-            return
-
         try:
             self._stored_rect = self._window.rect
             self._window.close()
