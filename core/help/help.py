@@ -806,6 +806,7 @@ async def gui_list_help(ui, ui_wrapper):
         if len(table) > page_size:
             add_page_navigation_buttons(ui_wrapper, page_scroller)
 
+
 def render_help_context(enabled_only=False, phrase=""):
     global search_phrase
     reset()
