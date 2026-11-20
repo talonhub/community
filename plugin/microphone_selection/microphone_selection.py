@@ -55,13 +55,14 @@ mod.tag(
 
 @open_gui(refresh_period="500ms")
 async def gui(ui, ui_wrapper):
-    subtitle = ui_wrapper.concatenate_formatted_text(
-        ("(or say: ", create_italic_text("microphone pick # "), ")")
-    )
-    ui_wrapper.title(
-        "Click microphone name or press a number key to select a microphone",
-        subtitle,
-    )
+    ui_wrapper.header("Microphone Picker")
+    async with ui.horizontal():
+        ui.label("Click microphone name, press ")
+        await ui_wrapper.render_key(" 1 ", "one", "select microphone 1")
+        ui.label(" — ")
+        await ui_wrapper.render_key(" 9 ", "nine", "select microphone 9")
+        ui.label(", or say ")
+        ui.label(create_italic_text("microphone pick # "))
     ui_wrapper.spacing()
     active_microphone = actions.sound.active_microphone()
     microphone_device_list = get_microphone_list()
