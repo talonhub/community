@@ -1,6 +1,8 @@
 import logging
 
-from talon import Module, actions, imgui
+from talon import Module, actions
+
+from ..gui.gui import create_italic_text, open_gui
 
 mod = Module()
 
@@ -35,6 +37,7 @@ class Actions:
             return
         for _ in phrase_history.pop(0):
             actions.key("backspace")
+        refresh_gui()
 
     def select_last_phrase():
         """Selects the last phrase"""
@@ -49,6 +52,7 @@ class Actions:
         try:
             for _ in phrase_history.pop(0):
                 actions.edit.left()
+            refresh_gui()
         except IndexError:
             logging.warning("before_last_phrase(): No last phrase to move before!")
 
@@ -57,6 +61,7 @@ class Actions:
         global phrase_history
         phrase_history.insert(0, text)
         phrase_history = phrase_history[:phrase_history_length]
+        refresh_gui()
 
     def toggle_phrase_history():
         """Toggles list of recent phrases"""
@@ -71,15 +76,29 @@ class Actions:
         gui.hide()
 
 
-@imgui.open()
-def gui(gui: imgui.GUI):
-    gui.text("Recent phrases")
-    gui.text("Say 'recent repeat <number>' retype a phrase on this list.")
-    gui.text("Say 'recent copy <number>' to copy a phrase from this list.")
-    gui.line()
+@open_gui()
+async def gui(ui, ui_wrapper):
+    ui_wrapper.title("Recent phrases")
+    recent_repeat_description = ui_wrapper.concatenate_formatted_text(
+        (
+            create_italic_text("recent repeat <number>"),
+            ": retype a phrase on this list.",
+        )
+    )
+    ui.label(recent_repeat_description)
+    recent_copy_description = ui_wrapper.concatenate_formatted_text(
+        (create_italic_text("recent copy <number>"), ": copy a phrase from this list.")
+    )
+    ui.label(recent_copy_description)
+    ui.separator()
     for index, text in enumerate(phrase_history[:phrase_history_display_length], 1):
-        gui.text(f"{index}: {text}")
+        ui.label(f"{index}: {text}")
 
-    gui.spacer()
-    if gui.button("Recent close"):
+    ui_wrapper.spacing()
+    if ui_wrapper.command_button("Recent close"):
         actions.user.phrase_history_hide()
+
+
+def refresh_gui():
+    gui.auto_size_next_frame()
+    gui.refresh()
