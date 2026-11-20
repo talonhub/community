@@ -7,3 +7,5 @@ drop
 from iterator: from_iter
 into iterator: into_iter
 iterator: iter
+to string: to_string
+string from: "String::from"
