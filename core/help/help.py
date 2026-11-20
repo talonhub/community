@@ -99,23 +99,33 @@ def update_title():
             update_operators_text()
 
 
-@imgui.open(y=0)
-def gui_formatters(gui: imgui.GUI):
+@open_gui(y=0)
+async def gui_formatters(ui, ui_wrapper):
     global formatters_words
     if formatters_reformat:
-        gui.text("re-formatters help")
+        ui_wrapper.title("re-formatters help")
     else:
-        gui.text("formatters help")
-    gui.line()
+        ui_wrapper.title("formatters help")
 
-    for key, val in formatters_words.items():
-        gui.text(f"{val}: {key}")
+    row_size = ui_wrapper.get_label_row_size()
+    column_titles = ["Spoken Form", "Example"]
+    table = Table(column_titles, MAX_COLUMN_LENGTH_FOR_HELP_LIST)
+    table.add_text_rows(list(formatters_words.items()))
+    minimum_column_sizes = update_minimum_column_sizes(table, ui_wrapper)
 
-    gui.spacer()
-    gui.text("* prose formatter")
-    gui.spacer()
-    if gui.button("Help close"):
-        gui_formatters.hide()
+    if table.has_rows():
+        await ui_wrapper.render_table(
+            table,
+            row_height=row_size,
+            id_salt="help_list",
+            minimum_column_sizes=minimum_column_sizes,
+            minimum_width=ui_wrapper.get_remaining_width_excluding_margin(),
+        )
+
+    ui_wrapper.spacing()
+    ui.label("* prose formatter")
+    ui_wrapper.spacing()
+    add_help_close_button(ui_wrapper)
 
 
 OPERATORS_MAX_COLUMN_LENGTH = 40
@@ -799,10 +809,11 @@ class Actions:
     def help_formatters(ab: dict, reformat: bool):
         """Provides the list of formatter keywords"""
         # what you say is stored as a trigger
-        global formatters_words, formatters_reformat
+        global formatters_words, formatters_reformat, current_gui
         formatters_words = ab
         formatters_reformat = reformat
         reset()
+        current_gui = gui_formatters
         hide_all_help_guis()
         gui_formatters.show()
         register_events(False)
