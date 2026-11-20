@@ -341,11 +341,6 @@ def get_pages(item_line_counts: list[int]) -> list[int]:
     return pages
 
 
-def run_in_cron_after_job(callback):
-    """Run the callback immediately in another thread. This is used because having some actions run in the egui render function can cause all Talon egui windows to freeze"""
-    cron.after("0s", callback)
-
-
 @open_gui(y=0, refresh_period="500ms")
 async def gui_context_help(ui, ui_wrapper):
     global context_command_map
@@ -400,7 +395,7 @@ async def gui_context_help(ui, ui_wrapper):
 
                 if ui_wrapper.button(button_text):
                     selected_context = context_name
-                    run_in_cron_after_job(refresh_gui)
+                    refresh_gui()
                 current_selection_index = current_selection_index + 1
 
             current_item_index += 1
@@ -422,17 +417,17 @@ async def gui_context_help(ui, ui_wrapper):
             actions.user.help_hide()
 
         if ui_wrapper.command_button("Help refresh"):
-            run_in_cron_after_job(actions.user.help_refresh)
+            actions.user.help_refresh()
 
         if render_navigation_buttons:
             if ui_wrapper.command_button("Help next"):
-                run_in_cron_after_job(actions.user.help_next)
+                actions.user.help_next()
 
             if ui_wrapper.command_button("Help previous"):
-                run_in_cron_after_job(actions.user.help_previous)
+                actions.user.help_previous()
 
         if render_return_button and ui_wrapper.command_button("Help return"):
-            run_in_cron_after_job(actions.user.help_return)
+            actions.user.help_return()
 
     # make auto sizing conditional on width changing when updating this to use a table or scroll area
     gui_context_help.auto_size_next_frame()

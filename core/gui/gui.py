@@ -670,8 +670,8 @@ class GUI:
             cron.cancel(self._refresh_job)
             self._refresh_job = None
 
-    def _hide(self):
-        """This cannot be run in the rendering thread without freezing Talon egui"""
+    def hide_unsafe(self):
+        """This cannot be run in the rendering thread without freezing Talon egui. It is fine to use this in other threads"""
         try:
             self._stored_rect = self._window.rect
             self._window.close()
@@ -682,7 +682,7 @@ class GUI:
         self._cancel_refresh_job()
 
         if self._window:
-            cron.after("0s", self._hide)
+            cron.after("0s", self.hide_unsafe)
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
@@ -768,7 +768,8 @@ class GUI:
         if self._window:
             self._window.focus()
 
-    def refresh(self):
+    def refresh_unsafe(self):
+        """This cannot be run in the rendering thread without freezing Talon egui. It is fine to use this in other threads"""
         if self._window:
             # do our own auto sizing instead of the builtin for now
             # our on detection of the height is flawed unless we allow the auto sizing first
@@ -790,6 +791,9 @@ class GUI:
                         )
                 self._previous_height_taken = self._last_height_taken
             self._window.refresh()
+
+    def refresh(self):
+        cron.after("0s", self.refresh_unsafe)
 
     def auto_size_next_frame(self):
         self._last_height_taken = None
