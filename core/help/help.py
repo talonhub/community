@@ -731,19 +731,6 @@ def register_events(register: bool):
         registry.unregister("update_commands", commands_updated)
 
 
-def update_current_gui(gui):
-    global current_gui
-    if current_gui != gui:
-        if current_gui:
-            current_gui.hide()
-        current_gui = gui
-        if gui:
-            gui.show()
-    elif current_gui:
-        current_gui.auto_size_next_frame()
-        current_gui.refresh()
-
-
 MAX_COLUMN_LENGTH_FOR_HELP_LIST = 40
 LIST_KEY_HEADER = "Spoken Form"
 LIST_VALUE_HEADER = "Value"
@@ -809,6 +796,7 @@ async def gui_list_help(ui, ui_wrapper):
 
 def render_help_context(enabled_only=False, phrase=""):
     global search_phrase
+    unsafe_hide_current_gui()
     reset()
     if phrase:
         search_phrase = phrase
@@ -1001,3 +989,22 @@ def refresh_gui():
     # egui UIs must be refreshed to update without user interaction
     if current_gui:
         current_gui.refresh()
+
+def update_current_gui(gui):
+    global current_gui
+    if current_gui != gui:
+        if current_gui:
+            current_gui.hide()
+        if gui:
+            gui.show()
+    elif current_gui:
+        current_gui.auto_size_next_frame()
+        current_gui.refresh()
+    current_gui = gui
+
+def unsafe_hide_current_gui():
+    """hides the current current_gui immediately. Do not run in an egui rendering thread"""
+    global current_gui
+    if current_gui:
+        current_gui.hide_unsafe()
+        current_gui = None
