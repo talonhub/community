@@ -99,10 +99,6 @@ def update_title():
             update_operators_text()
 
 
-# this will only matter if the user uses a very long custom spoken form
-MAX_COLUMN_LENGTH_FOR_FORMATTERS = 100
-
-
 @open_gui(y=0)
 async def gui_formatters(ui, ui_wrapper):
     global formatters_words
@@ -113,7 +109,7 @@ async def gui_formatters(ui, ui_wrapper):
 
     row_size = ui_wrapper.get_label_row_size()
     column_titles = ["Spoken Form", "Example"]
-    table = Table(column_titles, MAX_COLUMN_LENGTH_FOR_FORMATTERS)
+    table = Table(column_titles, MAX_COLUMN_LENGTH_FOR_HELP_LIST)
     table.add_text_rows(list(formatters_words.items()))
     minimum_column_sizes = update_minimum_column_sizes(table, ui_wrapper)
 
