@@ -812,6 +812,7 @@ class Actions:
         """Provides the symbol dictionary"""
         # what you say is stored as a trigger
         global selected_list, page_scroller
+        unsafe_hide_current_gui()
         reset()
         update_current_gui(gui_list_help)
         selected_list = ab
@@ -825,6 +826,7 @@ class Actions:
         global formatters_words, formatters_reformat, current_gui
         formatters_words = ab
         formatters_reformat = reformat
+        unsafe_hide_current_gui()
         reset()
         update_current_gui(gui_formatters)
         register_events(False)
@@ -833,8 +835,9 @@ class Actions:
     def help_operators():
         """Displays the list of operator names"""
         global page_scroller
+        unsafe_hide_current_gui()
         reset()
-        update_current_gui(gui_operators)
+        update_current_gui(gui_operators, use_unsafe_hide=True)
         page_scroller = PageScroller()
         update_operators_text()
         register_events(True)
@@ -913,6 +916,7 @@ class Actions:
                             + index
                         ][0]
                     ]
+                    refresh_gui()
 
     def help_previous():
         """Navigates to previous page"""
@@ -968,17 +972,15 @@ class Actions:
 
     def help_hide():
         """Hides the help"""
-        reset()
-
-        # print("help_hide - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_hide - gui_context_help showing: {}".format(gui_context_help.showing)
-        # )
-
-        update_current_gui(gui=None)
-        refresh_context_command_map()
-        register_events(False)
-        ctx.tags = []
+        def reset_state():
+            reset()
+            refresh_context_command_map()
+            register_events(False)
+            ctx.tags = []
+        global current_gui
+        if current_gui:
+            current_gui.hide(post_hide_callback=reset_state)
+            current_gui = None
 
 
 def commands_updated(_):
