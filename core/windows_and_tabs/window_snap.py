@@ -58,6 +58,45 @@ def _bring_forward(window):
 def _get_app_window(app_name: str) -> ui.Window:
     return actions.user.get_running_app(app_name).active_window
 
+def _debug_windows():
+        import ctypes
+        from ctypes import wintypes
+
+        user32 = ctypes.windll.user32
+
+        user32.GetTopWindow.restype = wintypes.HWND
+        user32.GetWindow.restype = wintypes.HWND
+        user32.GetWindowTextLengthW.restype = ctypes.c_int
+
+        print("=== TALON SCREENS ===")
+        for screen in ui.screens():
+            print(f"Screen: {screen}")
+
+        print("=== TALON WINDOWS ===")
+        for window in ui.windows():
+            print(
+                f"ID={window.id!r}, "
+                f"Title={window.title!r}, "
+                f"App={window.app.name!r}, "
+                f"Screen={window.screen}"
+            )
+
+        print("=== NATIVE WINDOWS Z-ORDER ===")
+
+        hwnd = user32.GetTopWindow(None)
+
+        while hwnd:
+            length = user32.GetWindowTextLengthW(hwnd)
+            buffer = ctypes.create_unicode_buffer(length + 1)
+            user32.GetWindowTextW(hwnd, buffer, length + 1)
+
+            if user32.IsWindowVisible(hwnd):
+                print(
+                    f"HWND={int(hwnd):#x}, "
+                    f"Title={buffer.value!r}"
+                )
+
+            hwnd = user32.GetWindow(hwnd, 2)  # GW_HWNDNEXT
 
 def interpolate_interval(w0, w1, s0, s1, d0, d1):
     """
@@ -200,12 +239,35 @@ def _move_windows(
     `ui.windows()` returns windows in z-order. Take a snapshot before moving
     anything, because moving a window can change that order.
     """
+    _debug_windows()    
     print(f"Moving {count} window(s) to screen {screen_number} with offset {offset}")
     if count < 1:
         return
 
     windows = [window for window in ui.windows() if is_window_valid(window)]
     print(f"Found {len(windows)} valid window(s) to move")
+
+    for window in windows[:count]:
+        print(
+            f"Window: {window.title!r}, "
+            f"App: {window.app.name!r}, "
+            f"Rect: {window.rect}, "
+            f"Screen: {window.screen}"
+        )
+
+        old_rect = window.rect
+        _move_to_screen(
+            window,
+            offset=offset,
+            screen_number=screen_number,
+        )
+
+        print(
+            f"After move: {window.title!r}, "
+            f"Rect: {window.rect}, "
+            f"Changed: {old_rect != window.rect}"
+        )
+
     for window in windows[:count]:
         print(f"Moving window {window} to screen {screen_number} with offset {offset}")
         _move_to_screen(window, offset=offset, screen_number=screen_number)
@@ -374,3 +436,4 @@ class Actions:
             window,
             screen_number=screen_number,
         )
+    
