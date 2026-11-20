@@ -670,17 +670,21 @@ class GUI:
             cron.cancel(self._refresh_job)
             self._refresh_job = None
 
-    def hide(self):
-        self._cancel_refresh_job()
-
-        if self._window is None:
-            return
-
+    def _hide(self):
+        """This cannot be run in the rendering thread without freezing Talon egui"""
         try:
             self._stored_rect = self._window.rect
             self._window.close()
         finally:
             self._window = None
+        
+
+    def hide(self):
+        self._cancel_refresh_job()
+
+        if self._window:
+            cron.after("0s", self._hide)
+
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)

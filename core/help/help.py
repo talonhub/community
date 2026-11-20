@@ -419,7 +419,7 @@ async def gui_context_help(ui, ui_wrapper):
 
     async with ui.horizontal_wrapped():
         if ui_wrapper.command_button("Help close"):
-            run_in_cron_after_job(actions.user.help_hide)
+            actions.user.help_hide()
 
         if ui_wrapper.command_button("Help refresh"):
             run_in_cron_after_job(actions.user.help_refresh)
