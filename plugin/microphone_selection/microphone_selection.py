@@ -59,7 +59,7 @@ async def gui(ui, ui_wrapper):
     async with ui.horizontal():
         ui.label("Click microphone name, press ")
         await ui_wrapper.render_key(" 1 ", "one", "select microphone 1")
-        ui.label(" — ")
+        ui.label("—")
         await ui_wrapper.render_key(" 9 ", "nine", "select microphone 9")
         voice_command_text = ui_wrapper.concatenate_formatted_text(
             (", or say ", create_italic_text("microphone pick #"))
