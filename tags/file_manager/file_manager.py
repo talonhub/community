@@ -2,7 +2,9 @@ import math
 from itertools import islice
 from pathlib import Path
 
-from talon import Context, Module, actions, app, imgui, scope, settings, ui
+from talon import Context, Module, actions, app, cron, scope, settings, ui
+
+from ...core.gui.gui import open_gui
 
 mod = Module()
 ctx = Context()
@@ -57,13 +59,13 @@ mod.setting(
     "file_manager_imgui_limit",
     type=int,
     default=20,
-    desc="Maximum number of files/folders to display in the imgui",
+    desc="Maximum number of files/folders to display in the gui",
 )
 mod.setting(
     "file_manager_string_limit",
     type=int,
     default=20,
-    desc="Maximum like of string to display in the imgui",
+    desc="Maximum like of string to display in the gui",
 )
 cached_path = None
 file_selections = folder_selections = []
@@ -139,7 +141,7 @@ class Actions:
             gui_folders.hide()
 
     def file_manager_get_directory_by_index(index: int) -> str:
-        """Returns the requested directory for the imgui display by index"""
+        """Returns the requested directory for the gui display by index"""
         index = (current_folder_page - 1) * settings.get(
             "user.file_manager_imgui_limit"
         ) + index
@@ -147,7 +149,7 @@ class Actions:
         return folder_selections[index]
 
     def file_manager_get_file_by_index(index: int) -> str:
-        """Returns the requested directory for the imgui display by index"""
+        """Returns the requested directory for the gui display by index"""
         index = (current_file_page - 1) * settings.get(
             "user.file_manager_imgui_limit"
         ) + index
@@ -162,7 +164,7 @@ class Actions:
                 current_file_page += 1
             else:
                 current_file_page = 1
-            gui_files.show()
+            gui_files.refresh()
 
     def file_manager_previous_file_page():
         """previous_file_page"""
@@ -173,7 +175,7 @@ class Actions:
             else:
                 current_file_page = total_file_pages
 
-            gui_files.show()
+            gui_files.refresh()
 
     def file_manager_next_folder_page():
         """next_folder_page"""
@@ -184,7 +186,7 @@ class Actions:
             else:
                 current_folder_page = 1
 
-            gui_folders.show()
+            gui_folders.refresh()
 
     def file_manager_previous_folder_page():
         """previous_folder_page"""
@@ -195,7 +197,7 @@ class Actions:
             else:
                 current_folder_page = total_folder_pages
 
-            gui_folders.show()
+            gui_folders.refresh()
 
 
 def is_dir(f):
@@ -240,14 +242,18 @@ def get_file_map(current_path):
     )
 
 
-@imgui.open(y=10, x=900)
-def gui_folders(gui: imgui.GUI):
+def run_in_cron_after_job(callback):
+    """Run the callback immediately in another thread. This is used because having some actions run in the egui render function can cause all Talon egui windows to freeze"""
+    cron.after("0s", callback)
+
+
+@open_gui(y=0.01, x=0.5)
+async def gui_folders(ui, ui_wrapper):
     global current_folder_page, total_folder_pages
     total_folder_pages = math.ceil(
         len(folder_selections) / settings.get("user.file_manager_imgui_limit")
     )
-    gui.text(f"Select a directory ({current_folder_page}/{total_folder_pages})")
-    gui.line()
+    ui_wrapper.title(f"Select a directory ({current_folder_page}/{total_folder_pages})")
 
     index = 1
     current_index = (current_folder_page - 1) * settings.get(
@@ -268,31 +274,34 @@ def gui_folders(gui: imgui.GUI):
             > settings.get("user.file_manager_string_limit")
             else folder_selections[current_index]
         )
-        gui.text(f"{index}: {name} ")
+        ui.label(f"{index}: {name} ")
         current_index += 1
         index = index + 1
 
     if total_folder_pages > 1:
-        gui.spacer()
-        if gui.button("Folder next"):
-            actions.user.file_manager_next_folder_page()
-        if gui.button("Folder last"):
-            actions.user.file_manager_previous_folder_page()
+        ui_wrapper.spacing()
+        async with ui.horizontal_wrapped():
+            if ui_wrapper.command_button("Folder next"):
+                run_in_cron_after_job(actions.user.file_manager_next_folder_page)
+            if ui_wrapper.command_button("Folder last"):
+                run_in_cron_after_job(actions.user.file_manager_previous_folder_page)
 
-    gui.spacer()
-    if gui.button("Manager close"):
-        actions.user.file_manager_hide_pickers()
+    ui_wrapper.spacing()
+    if ui_wrapper.command_button("Manager close"):
+        # we need to hide gui_files in another thread to avoid freezing
+        run_in_cron_after_job(actions.user.file_manager_hide_pickers)
+
+    gui_folders.auto_size_next_frame()
 
 
-@imgui.open(y=10, x=1300)
-def gui_files(gui: imgui.GUI):
+@open_gui(y=0.01, x=0.75)
+async def gui_files(ui, ui_wrapper):
     global file_selections, current_file_page, total_file_pages
     total_file_pages = math.ceil(
         len(file_selections) / settings.get("user.file_manager_imgui_limit")
     )
 
-    gui.text(f"Select a file ({current_file_page}/{total_file_pages})")
-    gui.line()
+    ui_wrapper.title(f"Select a file ({current_file_page}/{total_file_pages})")
     index = 1
     current_index = (current_file_page - 1) * settings.get(
         "user.file_manager_imgui_limit"
@@ -313,16 +322,19 @@ def gui_files(gui: imgui.GUI):
             else file_selections[current_index]
         )
 
-        gui.text(f"{index}: {name} ")
+        ui.label(f"{index}: {name} ")
         current_index = current_index + 1
         index = index + 1
 
     if total_file_pages > 1:
-        gui.spacer()
-        if gui.button("File next"):
-            actions.user.file_manager_next_file_page()
-        if gui.button("File last"):
-            actions.user.file_manager_previous_file_page()
+        ui_wrapper.spacing()
+        async with ui.horizontal_wrapped():
+            if ui_wrapper.command_button("File next"):
+                run_in_cron_after_job(actions.user.file_manager_next_file_page)
+            if ui_wrapper.command_button("File last"):
+                run_in_cron_after_job(actions.user.file_manager_previous_file_page)
+
+    gui_files.auto_size_next_frame()
 
 
 def clear_lists():
@@ -342,10 +354,11 @@ def clear_lists():
         file_selections = []
 
 
-def update_gui():
+def update_guis():
     if gui_folders.showing or settings.get("user.file_manager_auto_show_pickers"):
-        gui_folders.show()
-        gui_files.show()
+        for gui in (gui_folders, gui_files):
+            gui.refresh()
+            gui.show()
 
 
 def update_lists(path=None):
@@ -388,7 +401,7 @@ def update_lists(path=None):
     file_selections = list(set(files.values()))
     file_selections.sort(key=str.casefold)
 
-    update_gui()
+    update_guis()
 
 
 def win_event_handler(window):
