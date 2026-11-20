@@ -677,14 +677,12 @@ class GUI:
             self._window.close()
         finally:
             self._window = None
-        
 
     def hide(self):
         self._cancel_refresh_job()
 
         if self._window:
             cron.after("0s", self._hide)
-
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
