@@ -682,11 +682,13 @@ class GUI:
         self._cancel_refresh_job()
 
         if self._window:
+
             def hide_and_call_callback():
                 self.hide_unsafe()
                 # for if some code needs to run in the hide thread after the close
                 if post_hide_callback:
                     post_hide_callback()
+
             cron.after("0s", hide_and_call_callback)
 
     async def _render(self, ui: egui.Ui) -> None:

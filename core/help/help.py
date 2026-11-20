@@ -972,11 +972,13 @@ class Actions:
 
     def help_hide():
         """Hides the help"""
+
         def reset_state():
             reset()
             refresh_context_command_map()
             register_events(False)
             ctx.tags = []
+
         global current_gui
         if current_gui:
             current_gui.hide(post_hide_callback=reset_state)
