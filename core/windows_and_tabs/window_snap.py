@@ -59,44 +59,6 @@ def _get_app_window(app_name: str) -> ui.Window:
     return actions.user.get_running_app(app_name).active_window
 
 
-def _debug_windows():
-    import ctypes
-    from ctypes import wintypes
-
-    user32 = ctypes.windll.user32
-
-    user32.GetTopWindow.restype = wintypes.HWND
-    user32.GetWindow.restype = wintypes.HWND
-    user32.GetWindowTextLengthW.restype = ctypes.c_int
-
-    print("=== TALON SCREENS ===")
-    for screen in ui.screens():
-        print(f"Screen: {screen}")
-
-    print("=== TALON WINDOWS ===")
-    for window in ui.windows():
-        print(
-            f"ID={window.id!r}, "
-            f"Title={window.title!r}, "
-            f"App={window.app.name!r}, "
-            f"Screen={window.screen}"
-        )
-
-    print("=== NATIVE WINDOWS Z-ORDER ===")
-
-    hwnd = user32.GetTopWindow(None)
-
-    while hwnd:
-        length = user32.GetWindowTextLengthW(hwnd)
-        buffer = ctypes.create_unicode_buffer(length + 1)
-        user32.GetWindowTextW(hwnd, buffer, length + 1)
-
-        if user32.IsWindowVisible(hwnd):
-            print(f"HWND={int(hwnd):#x}, Title={buffer.value!r}")
-
-        hwnd = user32.GetWindow(hwnd, 2)  # GW_HWNDNEXT
-
-
 def interpolate_interval(w0, w1, s0, s1, d0, d1):
     """
     Interpolates an interval (w0, w1) which is within (s0, s1) so that it lies
@@ -304,7 +266,6 @@ def _move_windows(
     windows excluded. Take a snapshot before moving anything because moving
     a window can change the z-order.
     """
-    _debug_windows()
     print(f"Moving {count} window(s) to screen {screen_number} with offset {offset}")
     if count < 1:
         return
