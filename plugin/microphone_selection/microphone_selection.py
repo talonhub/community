@@ -73,9 +73,7 @@ async def gui(ui, ui_wrapper):
         microphone_text = f"{item}{' — active' if item == active_microphone else ''}"
         async with ui.horizontal():
             if index < 10:
-                await ui_wrapper.render_key(
-                    f" {index} "
-                )
+                await ui_wrapper.render_key(f" {index} ")
             else:
                 microphone_text = f"{index}: " + microphone_text
             if ui_wrapper.button(microphone_text):
