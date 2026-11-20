@@ -4,7 +4,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from typing import Any, Optional
 
-from talon import Context, Module, actions, registry, settings
+from talon import Context, Module, actions, cron, registry, settings
 
 from ...core.gui.gui import (
     PageScroller,
@@ -837,7 +837,7 @@ class Actions:
         global page_scroller
         unsafe_hide_current_gui()
         reset()
-        update_current_gui(gui_operators, use_unsafe_hide=True)
+        update_current_gui(gui_operators)
         page_scroller = PageScroller()
         update_operators_text()
         register_events(True)
@@ -972,17 +972,18 @@ class Actions:
 
     def help_hide():
         """Hides the help"""
+        global current_gui
 
         def reset_state():
+            unsafe_hide_current_gui()
             reset()
             refresh_context_command_map()
             register_events(False)
             ctx.tags = []
 
-        global current_gui
         if current_gui:
-            current_gui.hide(post_hide_callback=reset_state)
-            current_gui = None
+            # use this call to avoid resetting state inside an egui rendering thread
+            cron.after("0s", reset_state)
 
 
 def commands_updated(_):

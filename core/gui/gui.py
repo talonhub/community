@@ -672,24 +672,20 @@ class GUI:
 
     def hide_unsafe(self):
         """Running this in the rendering thread can freeze Talon egui. It is fine to use this in other threads"""
+        if not self._window:
+            return 
+
         try:
             self._stored_rect = self._window.rect
             self._window.close()
         finally:
             self._window = None
 
-    def hide(self, post_hide_callback=None):
+    def hide(self):
         self._cancel_refresh_job()
 
         if self._window:
-
-            def hide_and_call_callback():
-                self.hide_unsafe()
-                # for if some code needs to run in the hide thread after the close
-                if post_hide_callback:
-                    post_hide_callback()
-
-            cron.after("0s", hide_and_call_callback)
+            cron.after("0s", self.hide_unsafe)
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
