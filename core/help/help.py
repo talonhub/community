@@ -990,6 +990,7 @@ def refresh_gui():
     if current_gui:
         current_gui.refresh()
 
+
 def update_current_gui(gui):
     global current_gui
     if current_gui != gui:
@@ -1001,6 +1002,7 @@ def update_current_gui(gui):
         current_gui.auto_size_next_frame()
         current_gui.refresh()
     current_gui = gui
+
 
 def unsafe_hide_current_gui():
     """hides the current current_gui immediately. Do not run in an egui rendering thread"""
