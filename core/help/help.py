@@ -841,18 +841,20 @@ class Actions:
         """Display contextual command info"""
         global current_gui
         reset()
-        current_gui = gui_context_help
         refresh_context_command_map(enabled_only=True)
         hide_all_help_guis()
+        current_gui = gui_context_help
         gui_context_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
 
     def help_context():
         """Display contextual command info"""
+        global current_gui
         reset()
         refresh_context_command_map()
         hide_all_help_guis()
+        current_gui = gui_context_help
         gui_context_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
@@ -862,10 +864,10 @@ class Actions:
         global search_phrase, current_gui
 
         reset()
-        current_gui = gui_context_help
         search_phrase = phrase
         refresh_context_command_map(enabled_only=enabled_only)
         hide_all_help_guis()
+        current_gui = gui_context_help
         gui_context_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
@@ -877,7 +879,6 @@ class Actions:
         if not gui_context_help.showing:
             reset()
             refresh_context_command_map()
-            current_gui = gui_context_help
         else:
             selected_context_page = 1
             update_active_contexts_cache(registry.last_active_contexts)
@@ -885,6 +886,7 @@ class Actions:
         selected_context = m
         hide_all_help_guis()
         gui_context_help.show()
+        current_gui = gui_context_help
         register_events(True)
         ctx.tags = ["user.help_open"]
 
