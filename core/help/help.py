@@ -885,8 +885,8 @@ class Actions:
 
         selected_context = m
         hide_all_help_guis()
-        gui_context_help.show()
         current_gui = gui_context_help
+        gui_context_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
 
