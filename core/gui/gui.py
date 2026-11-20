@@ -663,7 +663,7 @@ class GUI:
             self._window.rect = rectangle
 
         if self._refresh_period:
-            self._refresh_job = cron.interval(self._refresh_period, self.refresh)
+            self._refresh_job = cron.interval(self._refresh_period, self.refresh_unsafe)
 
     def _cancel_refresh_job(self):
         if self._refresh_job:
