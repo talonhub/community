@@ -57,11 +57,10 @@ mod.tag(
 async def gui(ui, ui_wrapper):
     ui_wrapper.header("Microphone Picker")
     async with ui.horizontal():
-        ui.label("Click microphone name, press ")
-        await ui_wrapper.render_key(" 1 ", "one", "select microphone 1")
+        ui.label("press ")
+        await ui_wrapper.render_key(" 1 ")
         ui.label("—")
-        await ui_wrapper.render_key(" 9 ", "nine", "select microphone 9")
-        ui.label(",")
+        await ui_wrapper.render_key(" 9 ")
     voice_command_text = ui_wrapper.concatenate_formatted_text(
         ("or say ", create_italic_text("microphone pick #"))
     )
@@ -75,7 +74,7 @@ async def gui(ui, ui_wrapper):
         async with ui.horizontal():
             if index < 10:
                 await ui_wrapper.render_key(
-                    f" {index} ", str(index), f"select microphone {item}"
+                    f" {index} "
                 )
             else:
                 microphone_text = f"{index}: " + microphone_text
@@ -83,7 +82,7 @@ async def gui(ui, ui_wrapper):
                 actions.user.microphone_select(index)
     ui_wrapper.spacing()
     async with ui.horizontal():
-        await ui_wrapper.render_key("esc", "escape", "close this window")
+        await ui_wrapper.render_key("esc")
         if ui_wrapper.command_button("microphone close"):
             actions.user.microphone_selection_hide()
 

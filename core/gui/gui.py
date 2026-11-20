@@ -450,7 +450,7 @@ class UIWrapper:
     def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
         return self.compute_text_dimensions(text, ui, font_id).x
 
-    async def render_key(self, text, full_key_name, description, ui=None):
+    async def render_key(self, text, full_key_name="", description="", ui=None):
         ui = self._ui(ui)
 
         # pick colors
@@ -488,9 +488,10 @@ class UIWrapper:
             shadow_rectangle_translation=egui.Vec2(0, 1.5),
             ui=ui,
         )
-        response.on_hover_text(
-            f"You can press the {full_key_name} key to {description}"
-        )
+        if full_key_name and description:
+            response.on_hover_text(
+                f"You can press the {full_key_name} key to {description}"
+            )
 
     def header(self, text, ui=None):
         """Render a header"""
