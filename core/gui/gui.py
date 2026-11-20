@@ -13,7 +13,7 @@ from textwrap import wrap
 
 import egui
 from skia import Rect
-from talon import Module, cron, settings, ui
+from talon import Context, Module, cron, settings, ui
 from talon.egui import Window
 from talon.screen import Screen
 
@@ -60,6 +60,25 @@ async def render_row_ui(row, contents, num_columns):
 def compute_table_height(row_size, item_spacing, rows_per_page):
     """Compute how big the table needs to be to hold the given number of rows"""
     return (row_size + item_spacing) * rows_per_page + item_spacing
+
+
+async def let_user_use_page_keys_to_scroll_scroll_area(scroll_ui: egui.Ui):
+    """Let the user use page up and down keys to scroll in the scroll area"""
+    async with scroll_ui.input() as input_state:
+        events = input_state.events()
+        scrolling_delta = None
+        for event in events:
+            if key := event.key():
+                match key.name():
+                    case "PageDown":
+                        scrolling_delta = -1
+                    case "PageUp":
+                        scrolling_delta = 1
+        if scrolling_delta is not None:
+            clip_rect = scroll_ui.clip_rect()
+            scroll_ui.scroll_with_delta(
+                egui.Vec2(0, scrolling_delta * abs(clip_rect.height()))
+            )
 
 
 class PageScroller:
@@ -329,14 +348,6 @@ class UIWrapper:
             return ui
         return self.ui
 
-    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
-        """Compute the width of the text in pixels on the ui"""
-        ui = self._ui(ui)
-        if font_id is None:
-            font_id = egui.FontId(self.get_text_size(ui), egui.FontFamily.Proportional)
-        galley = ui.painter().layout_no_wrap(text, font_id, egui.Color32.black())
-        return galley.size().x
-
     def get_text_size(self, ui=None) -> float:
         """Compute the text size of the ui"""
         ui = self._ui(ui)
@@ -406,6 +417,147 @@ class UIWrapper:
         """Add space based on the default text size"""
         ui = self._ui(ui)
         ui.add_space(compute_text_size())
+
+    async def render_inside_rectangle(
+        self,
+        draw_function,
+        size: egui.Vec2,
+        corner_radius: egui.CornerRadius,
+        color: egui.Color32,
+        stroke: egui.Stroke | None = None,
+        stroke_kind: egui.StrokeKind = egui.StrokeKind.Outside,
+        shadow_rectangle_translation: egui.Vec2 | None = None,
+        ui=None,
+    ):
+        ui = self._ui(ui)
+        if stroke is None:
+            stroke = egui.Stroke.none()
+
+        # allocate space for the background rectangle
+        size_including_outline = egui.Vec2(
+            size.x + stroke.width * 2, size.y + stroke.width * 2
+        )
+        background_id, background_rectangle = ui.allocate_space(size_including_outline)
+
+        # the optional shadow rectangle is for making the outline thicker for part of the rectangle
+        if shadow_rectangle_translation is not None:
+            shadow_rectangle = background_rectangle.translate(
+                shadow_rectangle_translation
+            )
+            ui.painter().rect(
+                shadow_rectangle,
+                corner_radius,
+                stroke.color,
+                stroke,
+                stroke_kind,
+            )
+
+        # draw the background rectangle
+        ui.painter().rect(
+            background_rectangle,
+            corner_radius,
+            color,
+            stroke,
+            stroke_kind,
+        )
+
+        # call the draw function to draw inside the rectangle
+        async with ui.scope_builder(egui.UiBuilder().max_rect(background_rectangle)):
+            await draw_function(ui, background_rectangle)
+
+        # return response object for handling interaction
+        return ui.interact(background_rectangle, background_id, egui.Sense.click())
+
+    def compute_text_dimensions(
+        self, text: str, ui=None, font_id=None, wrapping_width=None
+    ) -> egui.Vec2:
+        """Return the width and height of the text on the ui"""
+        ui = self._ui(ui)
+        if font_id is None:
+            font_id = egui.FontId.proportional(self.get_text_size(ui))
+        # the specific value does not matter
+        text_color = egui.Color32.black()
+        if wrapping_width is None:
+            galley = ui.painter().layout_no_wrap(text, font_id, text_color)
+        else:
+            galley = ui.painter().layout(text, font_id, text_color, wrapping_width)
+        return galley.size()
+
+    def compute_text_width(self, text: str, ui=None, font_id=None) -> float:
+        return self.compute_text_dimensions(text, ui, font_id).x
+
+    async def warning_text(self, text, ui=None):
+        """Formats the text for a warning message"""
+        ui = self._ui(ui)
+
+        label_color = egui.Color32.black()
+        label_size = self.get_text_size() * 1.5
+        label_text = egui.RichText(text).strong().color(label_color).size(label_size)
+
+        async def draw_label(ui, background_rectangle):
+            # the layout makes wrapping work properly
+            async with ui.with_layout(
+                egui.Layout.top_down(egui.Align.TOP).with_main_wrap(True)
+            ):
+                ui.label(label_text)
+            ui.take_available_space()
+
+        wrapping_width = ui.available_width() - INNER_MARGIN
+        size = self.compute_text_dimensions(
+            text, ui, egui.FontId.proportional(label_size), wrapping_width
+        )
+        background_color = egui.Color32.from_rgb(255, 255, 0)  # yellow
+        outline_color = background_color
+        await self.render_inside_rectangle(
+            draw_label,
+            size,
+            egui.CornerRadius.same(0),
+            background_color,
+            egui.Stroke(1.0, outline_color),
+            ui=ui,
+        )
+
+    async def render_key(self, text, full_key_name, description, ui=None):
+        ui = self._ui(ui)
+
+        # pick colors
+        if ui.visuals().dark_mode:
+            outline_color = egui.Color32.from_gray(119)
+            background_color = egui.Color32.black()
+            text_color = egui.Color32.from_hex(TEXT_COLOR_DARK_MODE)
+        else:
+            outline_color = egui.Color32.from_gray(178)
+            background_color = egui.Color32.from_gray(230)
+            text_color = egui.Color32.black()
+
+        # define rectangle properties and text
+        label_text = egui.RichText(text).strong().color(text_color)
+        size = self.compute_text_dimensions(text, ui)
+        outline_thickness = 2.0
+        corner_radius = 4
+
+        async def draw_label(ui, background_rectangle):
+            # add padding so the label is not right up against the outline
+            async with ui.horizontal():
+                ui.add_space(outline_thickness)
+                async with ui.vertical():
+                    ui.add_space(outline_thickness)
+                    # show the text
+                    ui.label(label_text)
+
+        response = await self.render_inside_rectangle(
+            draw_label,
+            size,
+            egui.CornerRadius.same(corner_radius),
+            background_color,
+            egui.Stroke(outline_thickness, outline_color),
+            egui.StrokeKind.Inside,
+            shadow_rectangle_translation=egui.Vec2(0, 1.5),
+            ui=ui,
+        )
+        response.on_hover_text(
+            f"You can press the {full_key_name} key to {description}"
+        )
 
     def get_remaining_width_excluding_margin(self, ui=None):
         """Compute the amount of width remaining excluding the padding margin"""
@@ -543,6 +695,9 @@ def open_gui(
     refresh_period: str | None = None,
     always_on_top: bool = True,
     decorated: bool = False,
+    title: str = "",
+    tag: str = "",
+    on_close: Callable | None = None,
 ):
     """Decorator for for an egui callback rendering function.
     screen: the screen to render the gui on.
@@ -550,6 +705,9 @@ def open_gui(
     refresh_period: an optional string giving a cron time period for how often to refresh the gui. egui only updates a ui when the user interacts with it, so setting this causes a periodic refresh. If you only need to update the ui under specific conditions, call .refresh() on the GUI instead.
     always_on_top: decides if the ui should be rendered as the top level.
     decorated: decides if the gui should be rendered with window borders.
+    title: the window title
+    tag: an optional tag to activate when the window is rendered and deactivate when it is closed
+    on_close: a call back to call when the window is closed
     """
 
     def open_inner(render):
@@ -563,6 +721,9 @@ def open_gui(
             refresh_period=refresh_period,
             always_on_top=always_on_top,
             decorated=decorated,
+            title=title,
+            tag=tag,
+            on_close=on_close,
         )
 
     return open_inner
@@ -580,6 +741,7 @@ class Props:
     height: float | None
     always_on_top: bool
     decorated: bool
+    title: str
 
     def will_auto_size(self):
         return self.width is None or self.height is None
@@ -587,6 +749,8 @@ class Props:
     def create_window(self, callback):
         """Create a window for rendering the callback on a ui. This allows wrapping the render callable."""
         window = Window()
+        if self.title:
+            window.title = self.title
         window.draggable = True
         window.autosize = self.will_auto_size()
         window.decorated = self.decorated
@@ -617,6 +781,9 @@ class GUI:
         refresh_period: str | None,
         always_on_top: bool,
         decorated: bool,
+        title: str,
+        tag: str,
+        on_close: Callable | None,
     ):
         self._props = Props(
             render=render,
@@ -627,6 +794,7 @@ class GUI:
             height=height,
             always_on_top=always_on_top,
             decorated=decorated,
+            title=title,
         )
         self._window = None
         self._egui = None
@@ -635,6 +803,10 @@ class GUI:
         self._refresh_job = None
         self._last_height_taken = None
         self._previous_height_taken = None
+        self.tag = tag
+        if tag:
+            self.context = Context()
+        self._on_close = on_close
 
     @property
     def showing(self) -> bool:
@@ -646,9 +818,13 @@ class GUI:
                 self._window.focus()
             return
 
+        if self.tag:
+            self.context.tags = [self.tag]
+
         self._cancel_refresh_job()
 
         self._window = self._props.create_window(self._render)
+        self._window.register("on_close", self._on_hide_cleanup)
 
         if self._stored_rect is not None and not self._props.will_auto_size():
             self._window.show()
@@ -671,8 +847,6 @@ class GUI:
             self._refresh_job = None
 
     def hide(self):
-        self._cancel_refresh_job()
-
         if self._window is None:
             return
 
@@ -681,11 +855,17 @@ class GUI:
             cron.after("1ms", self.hide)
             return
 
-        try:
-            self._stored_rect = self._window.rect
-            self._window.close()
-        finally:
-            self._window = None
+        self._stored_rect = self._window.rect
+        self._window.close()
+
+    def _on_hide_cleanup(self):
+        if self.tag:
+            self.context.tags = []
+
+        self._cancel_refresh_job()
+        self._window = None
+        if self._on_close:
+            self._on_close()
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
