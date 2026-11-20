@@ -258,9 +258,14 @@ def _windows_in_z_order():
     get_window_long.restype = ctypes.c_ssize_t
 
     gw_hwndnext = 2
-    gw_owner = 4
     gwl_exstyle = -20
     ws_ex_toolwindow = 0x00000080
+    excluded_apps = {
+        "Talon",
+        "TextInputHost.exe",
+        "SearchHost.exe",
+        "Windows Start Experience Host",
+    }
 
     talon_windows = {
         int(window.id): window for window in ui.windows() if is_window_valid(window)
@@ -280,8 +285,8 @@ def _windows_in_z_order():
         if (
             window is not None
             and is_window_visible(hwnd)
-            and not get_window(hwnd, gw_owner)
             and not (get_window_long(hwnd, gwl_exstyle) & ws_ex_toolwindow)
+            and window.app.name not in excluded_apps
         ):
             ordered.append(window)
 
@@ -307,7 +312,11 @@ def _move_windows(
     windows = _windows_in_z_order()
     print(f"Found {len(windows)} eligible window(s) in z-order")
     for window in windows[:count]:
-        print(f"Moving window {window} to screen {screen_number} with offset {offset}")
+        print(
+            f"Moving window id={window.id}, title={window.title!r}, "
+            f"app={window.app.name!r}, screen={window.screen} "
+            f"to screen {screen_number} with offset {offset}"
+        )
         _move_to_screen(window, offset=offset, screen_number=screen_number)
 
 
