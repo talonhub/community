@@ -61,10 +61,11 @@ async def gui(ui, ui_wrapper):
         await ui_wrapper.render_key(" 1 ", "one", "select microphone 1")
         ui.label("—")
         await ui_wrapper.render_key(" 9 ", "nine", "select microphone 9")
-        voice_command_text = ui_wrapper.concatenate_formatted_text(
-            (", or say ", create_italic_text("microphone pick #"))
-        )
-        ui.label(voice_command_text)
+        ui.label(",")
+    voice_command_text = ui_wrapper.concatenate_formatted_text(
+        ("or say ", create_italic_text("microphone pick #"))
+    )
+    ui.label(voice_command_text)
     ui.separator()
     ui_wrapper.spacing()
     active_microphone = actions.sound.active_microphone()
