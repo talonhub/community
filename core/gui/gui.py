@@ -671,7 +671,7 @@ class GUI:
             self._refresh_job = None
 
     def hide_unsafe(self):
-        """This cannot be run in the rendering thread without freezing Talon egui. It is fine to use this in other threads"""
+        """Running this in the rendering thread can freeze Talon egui. It is fine to use this in other threads"""
         try:
             self._stored_rect = self._window.rect
             self._window.close()
@@ -769,7 +769,7 @@ class GUI:
             self._window.focus()
 
     def refresh_unsafe(self):
-        """This cannot be run in the rendering thread without freezing Talon egui. It is fine to use this in other threads"""
+        """Running this in the rendering thread can freeze Talon egui. It is fine to use this in other threads"""
         if self._window:
             # do our own auto sizing instead of the builtin for now
             # our on detection of the height is flawed unless we allow the auto sizing first
