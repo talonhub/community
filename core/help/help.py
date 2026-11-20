@@ -4,7 +4,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from typing import Any, Optional
 
-from talon import Context, Module, actions, cron, imgui, registry, settings
+from talon import Context, Module, actions, imgui, registry, settings
 
 from ...core.gui.gui import (
     PageScroller,
