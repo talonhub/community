@@ -739,6 +739,9 @@ def update_current_gui(gui):
         current_gui = gui
         if gui:
             gui.show()
+    elif current_gui:
+        current_gui.auto_size_next_frame()
+        current_gui.refresh()
 
 
 MAX_COLUMN_LENGTH_FOR_HELP_LIST = 40
@@ -803,7 +806,6 @@ async def gui_list_help(ui, ui_wrapper):
         if len(table) > page_size:
             add_page_navigation_buttons(ui_wrapper, page_scroller)
 
-
 def render_help_context(enabled_only=False, phrase=""):
     global search_phrase
     reset()
@@ -835,9 +837,7 @@ class Actions:
         formatters_words = ab
         formatters_reformat = reformat
         reset()
-        current_gui = gui_formatters
-        hide_all_help_guis()
-        gui_formatters.show()
+        update_current_gui(gui_formatters)
         register_events(False)
         ctx.tags = ["user.help_open"]
 
