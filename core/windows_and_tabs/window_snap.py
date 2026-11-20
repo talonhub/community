@@ -225,9 +225,7 @@ def _windows_in_z_order():
     ws_ex_toolwindow = 0x00000080
 
     talon_windows = {
-        int(window.id): window
-        for window in ui.windows()
-        if is_window_valid(window)
+        int(window.id): window for window in ui.windows() if is_window_valid(window)
     }
 
     ordered = []
