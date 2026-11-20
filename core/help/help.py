@@ -562,7 +562,6 @@ def reset():
     global operators_text
     global current_list_page
     global page_scroller
-    global current_gui
 
     current_context_page = 1
     sorted_display_list = []
@@ -575,7 +574,6 @@ def reset():
     operators_text = None
     current_list_page = 1
     page_scroller = None
-    current_gui = None
 
 
 def update_active_contexts_cache(active_contexts):
@@ -728,11 +726,14 @@ def register_events(register: bool):
         registry.unregister("update_commands", commands_updated)
 
 
-def hide_all_help_guis():
-    gui_context_help.hide()
-    gui_formatters.hide()
-    gui_list_help.hide()
-    gui_operators.hide()
+def update_current_gui(gui):
+    global current_gui
+    if current_gui != gui:
+        if current_gui:
+            current_gui.hide()
+        current_gui = gui
+        if gui:
+            gui.show()
 
 
 MAX_COLUMN_LENGTH_FOR_HELP_LIST = 40
@@ -803,13 +804,11 @@ class Actions:
     def help_list(ab: str):
         """Provides the symbol dictionary"""
         # what you say is stored as a trigger
-        global selected_list, current_gui, page_scroller
-        hide_all_help_guis()
+        global selected_list, page_scroller
         reset()
-        current_gui = gui_list_help
+        update_current_gui(gui_list_help)
         selected_list = ab
         page_scroller = PageScroller()
-        gui_list_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
 
@@ -820,61 +819,52 @@ class Actions:
         formatters_words = ab
         formatters_reformat = reformat
         reset()
-        hide_all_help_guis()
+        update_current_gui()
         gui_formatters.show()
         register_events(False)
         ctx.tags = ["user.help_open"]
 
     def help_operators():
         """Displays the list of operator names"""
-        global page_scroller, current_gui
+        global page_scroller
         reset()
-        hide_all_help_guis()
-        current_gui = gui_operators
+        update_current_gui(gui_operators)
         page_scroller = PageScroller()
         update_operators_text()
-        gui_operators.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
 
     def help_context_enabled():
         """Display contextual command info"""
-        global current_gui
         reset()
         refresh_context_command_map(enabled_only=True)
-        hide_all_help_guis()
-        current_gui = gui_context_help
-        gui_context_help.show()
+        update_current_gui(gui_context_help)
         register_events(True)
         ctx.tags = ["user.help_open"]
 
     def help_context():
         """Display contextual command info"""
-        global current_gui
         reset()
         refresh_context_command_map()
-        hide_all_help_guis()
-        current_gui = gui_context_help
-        gui_context_help.show()
+        update_current_gui(gui_context_help)
         register_events(True)
         ctx.tags = ["user.help_open"]
 
     def help_search(phrase: str, enabled_only: Optional[bool] = False):
         """Display command info for search phrase"""
-        global search_phrase, current_gui
+        global search_phrase
 
         reset()
         search_phrase = phrase
         refresh_context_command_map(enabled_only=enabled_only)
-        hide_all_help_guis()
-        current_gui = gui_context_help
+        update_current_gui(gui_context_help)
         gui_context_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
 
     def help_selected_context(m: str):
         """Display command info for selected context"""
-        global selected_context, selected_context_page, current_gui
+        global selected_context, selected_context_page
 
         if not gui_context_help.showing:
             reset()
@@ -884,9 +874,7 @@ class Actions:
             update_active_contexts_cache(registry.last_active_contexts)
 
         selected_context = m
-        hide_all_help_guis()
-        current_gui = gui_context_help
-        gui_context_help.show()
+        update_current_gui(gui_context_help)
         register_events(True)
         ctx.tags = ["user.help_open"]
 
@@ -997,7 +985,7 @@ class Actions:
         #     "help_hide - gui_context_help showing: {}".format(gui_context_help.showing)
         # )
 
-        hide_all_help_guis()
+        update_current_gui(gui=None)
         refresh_context_command_map()
         register_events(False)
         ctx.tags = []
