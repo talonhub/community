@@ -204,6 +204,10 @@ def _windows_in_z_order():
     import ctypes
 
     user32 = ctypes.windll.user32
+    get_top_window = user32.GetTopWindow
+    get_top_window.argtypes = [ctypes.c_void_p]
+    get_top_window.restype = ctypes.c_void_p
+
     get_window = user32.GetWindow
     get_window.argtypes = [ctypes.c_void_p, ctypes.c_uint]
     get_window.restype = ctypes.c_void_p
@@ -227,7 +231,7 @@ def _windows_in_z_order():
     }
 
     ordered = []
-    hwnd = user32.GetTopWindow(None)
+    hwnd = get_top_window(None)
     visited = set()
 
     while hwnd:
