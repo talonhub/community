@@ -366,6 +366,8 @@ async def gui_context_help(ui, ui_wrapper):
     render_navigation_buttons = False
     render_return_button = False
 
+    new_selected_context = None
+
     # if no selected context, render the contexts
     if selected_context is None and search_phrase is None:
         total_page_count = get_total_context_pages()
@@ -404,8 +406,7 @@ async def gui_context_help(ui, ui_wrapper):
                 )
 
                 if ui_wrapper.button(button_text):
-                    selected_context = context_name
-                    refresh_gui()
+                    new_selected_context = context_name
                 current_selection_index = current_selection_index + 1
 
             current_item_index += 1
@@ -421,6 +422,10 @@ async def gui_context_help(ui, ui_wrapper):
         render_return_button = True
 
     ui_wrapper.spacing()
+
+    if new_selected_context is not None:
+        selected_context = new_selected_context
+        refresh_gui()
 
     async with ui.horizontal_wrapped():
         if ui_wrapper.command_button("Help close"):
