@@ -4,7 +4,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from typing import Any, Optional
 
-from talon import Context, Module, actions, imgui, registry, settings
+from talon import Context, Module, actions, cron, registry, settings
 
 from ...core.gui.gui import (
     PageScroller,
@@ -95,6 +95,7 @@ def update_title():
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
                 update_active_contexts_cache(registry.last_active_contexts)
+            refresh_gui()
         if gui_operators.showing:
             update_operators_text()
 
@@ -276,7 +277,7 @@ def format_context_title(context_name: str) -> str:
     )
 
 
-def format_context_button(index: int, context_label: str, context_name: str) -> str:
+def format_context_label(context_label: str, context_name: str) -> str:
     global cached_active_contexts
     global show_enabled_contexts_only
     should_show_asterisk: bool = (
@@ -285,7 +286,7 @@ def format_context_button(index: int, context_label: str, context_name: str) -> 
     )
     postfix: str = "*" if should_show_asterisk else ""
 
-    return f"help {index}. {context_label}{postfix}"
+    return f". {context_label}{postfix}"
 
 
 # translates 1-based index -> actual index in sorted_context_map_keys
@@ -311,7 +312,7 @@ def get_current_context_page_length() -> int:
 
 
 def get_command_line_count(command: tuple[str, str]) -> int:
-    """This should be kept in sync with draw_commands"""
+    """This should be kept in sync with render_commands"""
     _, body = command
     lines = len(body.split("\n"))
     if lines == 1:
@@ -350,8 +351,8 @@ def get_pages(item_line_counts: list[int]) -> list[int]:
     return pages
 
 
-@imgui.open(y=0)
-def gui_context_help(gui: imgui.GUI):
+@open_gui(y=0, refresh_period="500ms")
+async def gui_context_help(ui, ui_wrapper):
     global context_command_map
     global current_context_page
     global selected_context
@@ -362,20 +363,23 @@ def gui_context_help(gui: imgui.GUI):
     global total_page_count
     global search_phrase
 
-    # if no selected context, draw the contexts
+    render_navigation_buttons = False
+    render_return_button = False
+
+    new_selected_context = None
+
+    # if no selected context, render the contexts
     if selected_context is None and search_phrase is None:
         total_page_count = get_total_context_pages()
 
         if not show_enabled_contexts_only:
-            gui.text(
+            ui_wrapper.title(
                 f"Help: All ({current_context_page}/{total_page_count}) (* = active)"
             )
         else:
-            gui.text(
+            ui_wrapper.title(
                 f"Help: Active Contexts Only ({current_context_page}/{total_page_count})"
             )
-
-        gui.line()
 
         current_item_index = 1
         current_selection_index = 1
@@ -386,56 +390,65 @@ def gui_context_help(gui: imgui.GUI):
             if current_context_page == target_page:
                 if current_group != group:
                     if current_group:
-                        gui.line()
-                    gui.text(f"{group}:")
+                        ui.separator()
+                    ui.strong(f"{group}:")
                     current_group = group
 
-                button_name = format_context_button(
-                    current_selection_index,
+                context_label = format_context_label(
                     display_name,
                     context_name,
                 )
+                button_text = ui_wrapper.concatenate_formatted_text(
+                    (
+                        create_italic_text(f"help {current_selection_index}"),
+                        context_label,
+                    )
+                )
 
-                if gui.button(button_name):
-                    selected_context = context_name
+                if ui_wrapper.button(button_text):
+                    new_selected_context = context_name
                 current_selection_index = current_selection_index + 1
 
             current_item_index += 1
+            render_navigation_buttons = total_page_count > 1
 
-        if total_page_count > 1:
-            gui.spacer()
-            if gui.button("Help next"):
-                actions.user.help_next()
-
-            if gui.button("Help previous"):
-                actions.user.help_previous()
-
-    # if there's a selected context, draw the commands for it
+    # if there's a selected context, render the commands for it
     else:
         if selected_context is not None:
-            draw_context_commands(gui)
+            await render_context_commands(ui, ui_wrapper)
         elif search_phrase is not None:
-            draw_search_commands(gui)
+            await render_search_commands(ui, ui_wrapper)
+        render_navigation_buttons = total_page_count > 1
+        render_return_button = True
 
-        gui.spacer()
-        if total_page_count > 1:
-            if gui.button("Help next"):
+    ui_wrapper.spacing()
+
+    if new_selected_context is not None:
+        selected_context = new_selected_context
+        refresh_gui()
+
+    async with ui.horizontal_wrapped():
+        if ui_wrapper.command_button("Help close"):
+            actions.user.help_hide()
+
+        if ui_wrapper.command_button("Help refresh"):
+            actions.user.help_refresh()
+
+        if render_navigation_buttons:
+            if ui_wrapper.command_button("Help next"):
                 actions.user.help_next()
 
-            if gui.button("Help previous"):
+            if ui_wrapper.command_button("Help previous"):
                 actions.user.help_previous()
 
-        if gui.button("Help return"):
+        if render_return_button and ui_wrapper.command_button("Help return"):
             actions.user.help_return()
 
-    if gui.button("Help refresh"):
-        actions.user.help_refresh()
-
-    if gui.button("Help close"):
-        actions.user.help_hide()
+    # make auto sizing conditional on width changing when updating this to use a table or scroll area
+    gui_context_help.auto_size_next_frame()
 
 
-def draw_context_commands(gui: imgui.GUI):
+async def render_context_commands(ui, ui_wrapper):
     global selected_context
     global total_page_count
     global selected_context_page
@@ -446,7 +459,7 @@ def draw_context_commands(gui: imgui.GUI):
     item_line_counts = [get_command_line_count(command) for command in commands]
     pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
-    draw_commands_title(gui, title)
+    await render_commands_title(ui_wrapper, title)
 
     filtered_commands = [
         command
@@ -454,17 +467,17 @@ def draw_context_commands(gui: imgui.GUI):
         if page == selected_context_page
     ]
 
-    draw_commands(gui, filtered_commands)
+    await render_commands(ui, ui_wrapper, filtered_commands)
 
 
-def draw_search_commands(gui: imgui.GUI):
+async def render_search_commands(ui, ui_wrapper):
     global search_phrase
     global total_page_count
     global cached_active_contexts
     global selected_context_page
 
     title = f"Search: {search_phrase}"
-    commands_grouped = get_search_commands(search_phrase)
+    commands_grouped = get_search_commands()
 
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
@@ -484,7 +497,7 @@ def draw_search_commands(gui: imgui.GUI):
     pages = get_pages(item_line_counts)
     total_page_count = max(pages, default=1)
 
-    draw_commands_title(gui, title)
+    await render_commands_title(ui_wrapper, title)
 
     current_context = None
     for (context, command), page in zip(flat_commands, pages, strict=True):
@@ -492,14 +505,14 @@ def draw_search_commands(gui: imgui.GUI):
             continue
         if context != current_context:
             if current_context is not None:
-                gui.spacer()
-            gui.text(format_context_title(context))
-            gui.line()
+                ui_wrapper.spacing()
+            ui.strong(format_context_title(context))
+            ui.separator()
             current_context = context
-        draw_command(gui, command)
+        await render_command(ui, ui_wrapper, command)
 
 
-def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
+def get_search_commands() -> dict[str, tuple[str, str]]:
     global rule_word_map
     tokens = search_phrase.split(" ")
 
@@ -519,28 +532,32 @@ def get_search_commands(phrase: str) -> dict[str, tuple[str, str]]:
     return commands_grouped
 
 
-def draw_commands_title(gui: imgui.GUI, title: str):
+async def render_commands_title(ui_wrapper, title: str):
     global selected_context_page
     global total_page_count
 
-    gui.text(f"{title} ({selected_context_page}/{total_page_count})")
-    gui.line()
+    ui_wrapper.title(f"{title} ({selected_context_page}/{total_page_count})")
 
 
-def draw_command(gui: imgui.GUI, command: tuple[str, str]):
+async def render_command(ui, ui_wrapper, command: tuple[str, str]):
     key, val = command
     val = val.split("\n")
+    key_text = create_italic_text(key)
     if len(val) > 1:
-        gui.text(f"{key}:")
+        key_label_text = ui_wrapper.concatenate_formatted_text((key_text, " :"))
+        ui.label(key_label_text)
         for line in val:
-            gui.text(f"    {line}")
+            ui.label(f"    {line}")
     else:
-        gui.text(f"{key}: {val[0]}")
+        key_label_text = ui_wrapper.concatenate_formatted_text(
+            (key_text, f" : {val[0]}")
+        )
+        ui.label(key_label_text)
 
 
-def draw_commands(gui: imgui.GUI, commands: Iterable[tuple[str, str]]):
+async def render_commands(ui, ui_wrapper, commands: Iterable[tuple[str, str]]):
     for command in commands:
-        draw_command(gui, command)
+        await render_command(ui, ui_wrapper, command)
 
 
 def reset():
@@ -555,7 +572,6 @@ def reset():
     global operators_text
     global current_list_page
     global page_scroller
-    global current_gui
 
     current_context_page = 1
     sorted_display_list = []
@@ -568,7 +584,6 @@ def reset():
     operators_text = None
     current_list_page = 1
     page_scroller = None
-    current_gui = None
 
 
 def update_active_contexts_cache(active_contexts):
@@ -721,13 +736,6 @@ def register_events(register: bool):
         registry.unregister("update_commands", commands_updated)
 
 
-def hide_all_help_guis():
-    gui_context_help.hide()
-    gui_formatters.hide()
-    gui_list_help.hide()
-    gui_operators.hide()
-
-
 MAX_COLUMN_LENGTH_FOR_HELP_LIST = 40
 LIST_KEY_HEADER = "Spoken Form"
 LIST_VALUE_HEADER = "Value"
@@ -791,18 +799,44 @@ async def gui_list_help(ui, ui_wrapper):
             add_page_navigation_buttons(ui_wrapper, page_scroller)
 
 
+def render_help_context(
+    enabled_only=False,
+    phrase="",
+    new_selected_context=None,
+    use_last_active_contents=False,
+):
+    global search_phrase, selected_context, selected_context_page
+    unsafe_hide_current_gui()
+
+    if use_last_active_contents:
+        update_active_contexts_cache(registry.last_active_contexts)
+    else:
+        reset()
+        refresh_context_command_map(enabled_only=enabled_only)
+
+    if phrase:
+        search_phrase = phrase
+
+    if new_selected_context:
+        selected_context = new_selected_context
+        selected_context_page = 1
+
+    update_current_gui(gui_context_help)
+    register_events(True)
+    ctx.tags = ["user.help_open"]
+
+
 @mod.action_class
 class Actions:
     def help_list(ab: str):
         """Provides the symbol dictionary"""
         # what you say is stored as a trigger
-        global selected_list, current_gui, page_scroller
-        hide_all_help_guis()
+        global selected_list, page_scroller
+        unsafe_hide_current_gui()
         reset()
-        current_gui = gui_list_help
+        update_current_gui(gui_list_help)
         selected_list = ab
         page_scroller = PageScroller()
-        gui_list_help.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
 
@@ -812,72 +846,40 @@ class Actions:
         global formatters_words, formatters_reformat, current_gui
         formatters_words = ab
         formatters_reformat = reformat
+        unsafe_hide_current_gui()
         reset()
-        current_gui = gui_formatters
-        hide_all_help_guis()
-        gui_formatters.show()
+        update_current_gui(gui_formatters)
         register_events(False)
         ctx.tags = ["user.help_open"]
 
     def help_operators():
         """Displays the list of operator names"""
-        global page_scroller, current_gui
+        global page_scroller
+        unsafe_hide_current_gui()
         reset()
-        hide_all_help_guis()
-        current_gui = gui_operators
+        update_current_gui(gui_operators)
         page_scroller = PageScroller()
         update_operators_text()
-        gui_operators.show()
         register_events(True)
         ctx.tags = ["user.help_open"]
 
     def help_context_enabled():
         """Display contextual command info"""
-        reset()
-        refresh_context_command_map(enabled_only=True)
-        hide_all_help_guis()
-        gui_context_help.show()
-        register_events(True)
-        ctx.tags = ["user.help_open"]
+        render_help_context(enabled_only=True)
 
     def help_context():
         """Display contextual command info"""
-        reset()
-        refresh_context_command_map()
-        hide_all_help_guis()
-        gui_context_help.show()
-        register_events(True)
-        ctx.tags = ["user.help_open"]
+        render_help_context()
 
     def help_search(phrase: str, enabled_only: Optional[bool] = False):
         """Display command info for search phrase"""
-        global search_phrase
-
-        reset()
-        search_phrase = phrase
-        refresh_context_command_map(enabled_only=enabled_only)
-        hide_all_help_guis()
-        gui_context_help.show()
-        register_events(True)
-        ctx.tags = ["user.help_open"]
+        render_help_context(enabled_only, phrase)
 
     def help_selected_context(m: str):
         """Display command info for selected context"""
-        global selected_context
-        global selected_context_page
-
-        if not gui_context_help.showing:
-            reset()
-            refresh_context_command_map()
-        else:
-            selected_context_page = 1
-            update_active_contexts_cache(registry.last_active_contexts)
-
-        selected_context = m
-        hide_all_help_guis()
-        gui_context_help.show()
-        register_events(True)
-        ctx.tags = ["user.help_open"]
+        render_help_context(
+            new_selected_context=m, use_last_active_contents=gui_context_help.showing
+        )
 
     def help_next():
         """Navigates to next page"""
@@ -904,6 +906,7 @@ class Actions:
                     selected_context_page += 1
                 else:
                     selected_context_page = 1
+            refresh_gui()
 
     def help_select_index(index: int):
         """Select the context by a number"""
@@ -923,6 +926,7 @@ class Actions:
                             + index
                         ][0]
                     ]
+                    refresh_gui()
 
     def help_previous():
         """Navigates to previous page"""
@@ -950,6 +954,7 @@ class Actions:
                     selected_context_page -= 1
                 else:
                     selected_context_page = total_page_count
+            refresh_gui()
 
     def help_return():
         """Returns to the main help window"""
@@ -961,6 +966,7 @@ class Actions:
             refresh_context_command_map(show_enabled_contexts_only)
             selected_context_page = 1
             selected_context = None
+            refresh_gui()
 
     def help_refresh():
         """Refreshes the help"""
@@ -972,20 +978,22 @@ class Actions:
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
                 update_active_contexts_cache(registry.last_active_contexts)
+            refresh_gui()
 
     def help_hide():
         """Hides the help"""
-        reset()
+        global current_gui
 
-        # print("help_hide - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
-        # print(
-        #     "help_hide - gui_context_help showing: {}".format(gui_context_help.showing)
-        # )
+        def reset_state():
+            unsafe_hide_current_gui()
+            reset()
+            refresh_context_command_map()
+            register_events(False)
+            ctx.tags = []
 
-        hide_all_help_guis()
-        refresh_context_command_map()
-        register_events(False)
-        ctx.tags = []
+        if current_gui:
+            # use this call to avoid resetting state inside an egui rendering thread
+            cron.after("0s", reset_state)
 
 
 def commands_updated(_):
@@ -996,3 +1004,24 @@ def refresh_gui():
     # egui UIs must be refreshed to update without user interaction
     if current_gui:
         current_gui.refresh()
+
+
+def update_current_gui(gui):
+    global current_gui
+    if current_gui != gui:
+        if current_gui:
+            current_gui.hide()
+        if gui:
+            gui.show()
+    elif current_gui:
+        current_gui.auto_size_next_frame()
+        current_gui.refresh()
+    current_gui = gui
+
+
+def unsafe_hide_current_gui():
+    """hides the current current_gui immediately. Do not run in an egui rendering thread"""
+    global current_gui
+    if current_gui:
+        current_gui.hide_unsafe()
+        current_gui = None

@@ -663,22 +663,16 @@ class GUI:
             self._window.rect = rectangle
 
         if self._refresh_period:
-            self._refresh_job = cron.interval(self._refresh_period, self.refresh)
+            self._refresh_job = cron.interval(self._refresh_period, self.refresh_unsafe)
 
     def _cancel_refresh_job(self):
         if self._refresh_job:
             cron.cancel(self._refresh_job)
             self._refresh_job = None
 
-    def hide(self):
-        self._cancel_refresh_job()
-
-        if self._window is None:
-            return
-
-        # Defer hiding until after rendering
-        if self._egui is not None:
-            cron.after("1ms", self.hide)
+    def hide_unsafe(self):
+        """Running this in the rendering thread can freeze Talon egui. It is fine to use this in other threads"""
+        if not self._window:
             return
 
         try:
@@ -686,6 +680,12 @@ class GUI:
             self._window.close()
         finally:
             self._window = None
+
+    def hide(self):
+        self._cancel_refresh_job()
+
+        if self._window:
+            cron.after("0s", self.hide_unsafe)
 
     async def _render(self, ui: egui.Ui) -> None:
         self._apply_theme(ui)
@@ -771,7 +771,8 @@ class GUI:
         if self._window:
             self._window.focus()
 
-    def refresh(self):
+    def refresh_unsafe(self):
+        """Running this in the rendering thread can freeze Talon egui. It is fine to use this in other threads"""
         if self._window:
             # do our own auto sizing instead of the builtin for now
             # our on detection of the height is flawed unless we allow the auto sizing first
@@ -793,6 +794,9 @@ class GUI:
                         )
                 self._previous_height_taken = self._last_height_taken
             self._window.refresh()
+
+    def refresh(self):
+        cron.after("0s", self.refresh_unsafe)
 
     def auto_size_next_frame(self):
         self._last_height_taken = None
