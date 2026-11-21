@@ -55,7 +55,7 @@ mod.tag(
 
 @open_gui(refresh_period="500ms")
 async def gui(ui, ui_wrapper):
-    ui_wrapper.header("Microphone Picker")
+    ui_wrapper.header("Pick a microphone")
     async with ui.horizontal():
         ui.label("press ")
         await ui_wrapper.render_key(" 1 ")
