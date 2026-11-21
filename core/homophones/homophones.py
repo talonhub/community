@@ -1,7 +1,9 @@
 import os
 from typing import Optional
 
-from talon import Context, Module, actions, app, clip, fs, imgui, ui
+from talon import Context, Module, actions, app, clip, fs
+
+from ..gui.gui import create_italic_text, open_gui
 
 ########################################################################
 # global settings
@@ -26,8 +28,6 @@ mod.tag(
     "homophones_open",
     desc="Tag for enabling homophones commands when the associated gui is open",
 )
-
-main_screen = ui.main_screen()
 
 
 def update_homophones(name, flags):
@@ -146,19 +146,23 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     gui.show()
 
 
-@imgui.open(x=main_screen.x + main_screen.width / 2.6, y=main_screen.y)
-def gui(gui: imgui.GUI):
+@open_gui(y=0, refresh_period="500ms")
+async def gui(ui, ui_wrapper):
     global active_word_list
-    gui.text("Select a homophone")
-    gui.line()
+    ui_wrapper.title("Select a homophone")
     index = 1
     for word in active_word_list:
-        if gui.button(f"Choose {index}: {word}"):
+        option_text = ui_wrapper.concatenate_formatted_text(
+            (create_italic_text(f"Choose {index}"), f": {word}")
+        )
+        if ui_wrapper.button(option_text):
             actions.insert(actions.user.homophones_select(index))
             actions.user.homophones_hide()
         index = index + 1
 
-    if gui.button("Phones (hide | exit)"):
+    ui_wrapper.spacing()
+    close_button_text = create_italic_text("Phones (hide | exit)")
+    if ui_wrapper.button(close_button_text):
         actions.user.homophones_hide()
 
 
