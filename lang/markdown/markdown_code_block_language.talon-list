@@ -1,0 +1,13 @@
+list: user.markdown_code_block_language
+code.language: markdown
+-
+
+are: r
+bash
+code: ""
+json
+markdown
+python
+ruby
+shell
+typescript
