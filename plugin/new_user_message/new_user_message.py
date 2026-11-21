@@ -1,6 +1,8 @@
 import os
 
-from talon import Context, Module, actions, app, imgui
+from talon import Context, Module, actions, app
+
+from ...core.gui.gui import open_gui
 
 # we know to stop showing the new user message when the following path is defined
 NEW_USER_MESSAGE_DISMISSAL_PATH = os.path.join(
@@ -15,53 +17,52 @@ else:
     talon_menu_location = "system tray or status area"
 
 
-@imgui.open(y=0)
-def new_user_gui(gui: imgui.GUI):
-    gui.text("Welcome to Talon Community!")
-    gui.line()
+@open_gui(y=0)
+async def new_user_gui(ui, ui_wrapper):
+    ui_wrapper.title("Welcome to Talon Community!")
 
-    gui.text("For additional help or to close this:")
-    gui.text(
+    ui.label("For additional help or to close this:")
+    ui.label(
         "You may click any of the following buttons or use the corresponding voice commands"
     )
-    gui.text(
+    ui.label(
         "If a Community graphical user interface does not have an explanation of what to say for each button,"
     )
-    gui.text(
+    ui.label(
         "    then each button will show the name of the equivalent voice command and"
     )
-    gui.text(
+    ui.label(
         "    buttons corresponding to options in a list will have the command before the : and the option description after."
     )
-    gui.text('You can reopen this message by saying: "New User Message"')
+    ui.label('You can reopen this message by saying: "New User Message"')
 
-    gui.spacer()
+    ui_wrapper.spacing()
 
-    gui.text("Open the Talon Wiki:")
-    if gui.button("open Talon Wiki"):
+    ui.label("Open the Talon Wiki:")
+    if ui_wrapper.command_button("open Talon Wiki"):
         actions.user.open_url("https://talon.wiki")
-    gui.text(
+    ui.label(
         "Open a Slack channel where you can get help and talk with other Talon users:"
     )
-    if gui.button("open Talon Slack"):
+    if ui_wrapper.command_button("open Talon Slack"):
         actions.user.open_url("http://talonvoice.slack.com/messages/help")
-    gui.text("Open a webpage for helping new users learn how to use Talon:")
-    if gui.button("open Talon Practice"):
+    ui.label("Open a webpage for helping new users learn how to use Talon:")
+    if ui_wrapper.command_button("open Talon Practice"):
         actions.user.open_url("https://chaosparrot.github.io/talon_practice/")
 
-    gui.line()
+    ui.separator()
 
-    gui.text(
+    ui.label(
         f"You can see the Talon menu by clicking the Talon icon in the {talon_menu_location}"
     )
 
-    gui.line()
+    ui.separator()
 
-    gui.text("Close this message:")
-    if gui.button("message hide"):
+    ui.label("Close this message:")
+    if ui_wrapper.command_button("message hide"):
         actions.user.new_user_message_hide()
-    gui.text("Close this message and stop seeing it on startup:")
-    if gui.button("message dismiss"):
+    ui.label("Close this message and stop seeing it on startup:")
+    if ui_wrapper.command_button("message dismiss"):
         actions.user.new_user_message_stop_showing_on_startup()
         actions.user.new_user_message_hide()
 
