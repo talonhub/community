@@ -85,6 +85,9 @@ def update_minimum_column_sizes(table: Table, ui_wrapper):
     return minimum_column_sizes
 
 
+GUI_ID = "help"
+
+
 def update_title():
     global live_update
     global show_enabled_contexts_only
@@ -229,7 +232,7 @@ def add_page_navigation_buttons(ui_wrapper, scroller):
         scroller.page_up()
 
 
-@open_gui(y=0, refresh_period="500ms")
+@open_gui(y=0, refresh_period="500ms", id=GUI_ID)
 async def gui_operators(ui, ui_wrapper):
     global operators_text
     title = "Help: Operators"
@@ -733,7 +736,7 @@ LIST_KEY_HEADER = "Spoken Form"
 LIST_VALUE_HEADER = "Value"
 
 
-@open_gui(y=0, refresh_period="500ms")
+@open_gui(y=0, refresh_period="500ms", id=GUI_ID)
 async def gui_list_help(ui, ui_wrapper):
     global selected_list
     global page_scroller
