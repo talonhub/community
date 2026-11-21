@@ -76,22 +76,8 @@ ctx.lists["user.code_type"] = unboxed_types
 mod.list("java_generic_data_structure", desc="Java Generic Data Structures")
 ctx.lists["user.java_generic_data_structure"] = java_generic_data_structures
 
-# Java Modifies
-java_modifiers = {
-    "public": "public",
-    "private": "private",
-    "protected": "protected",
-    "static": "static",
-    "synchronized": "synchronized",
-    "volatile": "volatile",
-    "transient": "transient",
-    "abstract": "abstract",
-    "interface": "interface",
-    "final": "final",
-}
 
 mod.list("java_modifier", desc="Java Modifiers")
-ctx.lists["user.java_modifier"] = java_modifiers
 
 operators = Operators(
     # code_operators_array
