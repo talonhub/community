@@ -3,7 +3,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import IO, Optional, Union
 
-from talon import actions, resource
+from talon import actions, resource, settings
 
 # NOTE: This method requires this module to be one folder below the top-level
 #   community folder.
@@ -195,3 +195,41 @@ def track_csv_rows(
 def warn_about_error(message: str):
     actions.app.notify(message)
     print(message)
+
+
+def get_setting_directories(setting) -> list[Path]:
+    setting_val = settings.get(setting)
+    user_dir = Path(actions.path.talon_user())
+    return parse_directories_setting(setting_val, user_dir)
+
+
+# For inclusion in setting documentation
+setting_directory_documentation = """
+Accepts a single path, or multiple paths separated by new lines.
+Paths must be separated by forward slashs (not the default windows backslash!).
+Spaces inside path names are supported directly and do not need to be escaped.
+Whitespace around the lines is automatically trimmed.
+The `~` character is automatically expanded to the users home directory.
+"""
+
+
+def parse_directories_setting(
+    dir_strings: str | None, base_dir: Path | None = None
+) -> list[Path]:
+    """Parses a newline-separated string of directories into resolved Path objects."""
+    if not dir_strings or not dir_strings.strip():
+        return []
+
+    dirs: list[Path] = []
+    for segment in dir_strings.split("\n"):
+        segment = segment.strip()
+        if not segment:
+            continue
+
+        path = Path(segment).expanduser()
+        if not path.is_absolute() and base_dir is not None:
+            path = base_dir / path
+
+        dirs.append(path.resolve())
+
+    return dirs

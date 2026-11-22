@@ -1,0 +1,9 @@
+list: user.code_libraries
+code.language: rust
+-
+
+collections: std::collections
+envy: std::env
+eye oh: std::io
+I O: std::io
+file system: std::fs

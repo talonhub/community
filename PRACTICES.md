@@ -6,6 +6,7 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 
 ## Table of Contents
 
+- [Directory Structure](#directory-structure)
 - [Breaking Changes](#breaking-changes)
 - [Useless/Unused Code](#uselessunused-code)
 - [When to Use Snippets](#when-to-use-snippets)
@@ -15,6 +16,19 @@ This does not make [the contributing guidelines file](./CONTRIBUTING.md) obsolet
 - [Spoken Form Considerations](#spoken-form-considerations-and-practices)
 - [Sleep Practices](#sleep-practices)
 - [GUI Practices](#gui-practices)
+- [Naming Practices](#naming-practices)
+
+## Directory Structure
+
+- `core` contains dependencies required by other parts of Community and essential features.
+- `apps` contains application-specific functionality. Each subdirectory is for a different application. Commands intended to be used by multiple applications with certain properties typically reside in `tags`.
+- `tags` contains general commands requiring context-specific implementations. Each subdirectory defines a command set associated with a Talon tag. A relevant application or context can use one of these command sets by activating its tag and implementing the associated Talon constructs. See [Generalizing Commands](#generalizing-commands) for more information.
+- `plugin` contains self-contained features. Deleting any of its subdirectories will not affect the rest of Community.
+- `lang` contains programming language commands. `lang/tags` provides functionality used by multiple languages while the other subdirectories each support a specific language.
+- `test` contains unit tests run automatically on pull requests through GitHub Actions. Because of licensing restrictions, these tests cannot run Talon, so they can only test pure Python and some mocked Talon constructs.
+- `migration_helpers` contains utilities for helping users migrate from older versions.
+
+Most of these directories have a README.md file providing more information.
 
 ## Breaking Changes
 
@@ -43,7 +57,7 @@ A snippet inserts text with placeholders so the user can use a command to go to 
 Use the `user.insert_snippet_by_name` action to programmatically insert snippets. The first argument is the name of the snippet and the second is an optional dictionary containing substitutions. The substitution dictionary maps snippet stops (placeholders) to replacement text, such as the following to insert `return False` at stop `$0`:
 
 ```python
-action.user.insert_snippet_by_name("ifStatement", {"0": "return False"})
+actions.user.insert_snippet_by_name("ifStatement", {"0": "return False"})
 ```
 
 See the [snippets README](./core/snippets/README.md) for details on snippets.
@@ -140,3 +154,9 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
 - Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
+
+## Naming Practices
+
+- Use singular form instead of plural form for a Talon list or capture name. Example: Our code keywords list is called `user.code_keyword` and not `user.code_keywords`.
+- The name of a capture returning the string representation of a number should end with `_string`. If the capture converts the result of another capture to a string, the name should start with the name of the input capture.
+- The name of a programming-related tag, action, list, or capture that will be used by multiple languages should start with `code_`. If it is intended to be used by a single language, and other languages are unlikely to use it, the name can instead start with the language name.

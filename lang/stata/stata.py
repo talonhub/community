@@ -9,17 +9,6 @@ ctx.matches = r"""
 code.language: stata
 """
 
-# functions.py
-ctx.lists["user.code_parameter_name"] = {
-    # regressions
-    "V C E cluster": "vce(cluster)",
-    "V C E robust": "vce(robust)",
-}
-
-# libraries.py
-ctx.lists["user.code_libraries"] = {
-    "estout": "estout",
-}
 
 operators = Operators(
     # code_operators_array
@@ -51,14 +40,11 @@ class UserActions:
 
     # functions.py
     def code_private_function(text: str):
-        result = "program {} \n\nend".format(
-            actions.user.formatted_text(
-                text, settings.get("user.code_private_function_formatter")
-            )
+        identifier = actions.user.formatted_text(
+            text, settings.get("user.code_private_function_formatter")
         )
-        actions.user.paste(result)
-        actions.edit.up()
-        actions.key("tab")
+        substitutions = {"1": identifier}
+        actions.user.insert_snippet_by_name("functionDeclaration", substitutions)
 
     def code_default_function(text: str):
         actions.user.code_private_function(text)

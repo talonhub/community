@@ -8,7 +8,7 @@ $0.wrapperScope: statement
 
 language: csharp | java | javascript | typescript | javascriptreact | typescriptreact | php | kotlin
 
-$1.insertionFormatter: PUBLIC_CAMEL_CASE
+$1.insertionFormatter: setting(user.code_class_formatter)
 -
 class $1 {
     $0
@@ -17,7 +17,7 @@ class $1 {
 
 language: python
 
-$1.insertionFormatter: PUBLIC_CAMEL_CASE
+$1.insertionFormatter: setting(user.code_class_formatter)
 -
 class $1:
     $0
@@ -25,7 +25,7 @@ class $1:
 
 language: ruby
 
-$1.insertionFormatter: PUBLIC_CAMEL_CASE
+$1.insertionFormatter: setting(user.code_class_formatter)
 -
 class $1
     $0
@@ -34,14 +34,14 @@ end
 
 language: scala
 
-$1.insertionFormatter: PUBLIC_CAMEL_CASE
+$1.insertionFormatter: setting(user.code_class_formatter)
 -
 class $1 ($0)
 ---
 
 language: cpp
 
-$1.insertionFormatter: PUBLIC_CAMEL_CASE
+$1.insertionFormatter: setting(user.code_class_formatter)
 -
 class $1 {
     $0

@@ -6,7 +6,7 @@ mod.setting(
     "initial_mode",
     type=str,
     default="command",
-    desc="Mode initially enabled on Talon launch (sleep, command or dictation)",
+    desc="Mode initially enabled on Talon launch (sleep, command, mixed or dictation)",
 )
 
 
@@ -21,8 +21,10 @@ def on_ready():
             actions.user.dictation_mode()
         case "command":
             pass  # already the default; nothing to do
+        case "mixed":
+            actions.user.mixed_mode()
         case _:
-            app.notify("Unsupported mode for user.initial_mode: {initial_mode}")
+            app.notify(f"Unsupported mode for user.initial_mode: {initial_mode}")
 
 
 app.register("ready", on_ready)

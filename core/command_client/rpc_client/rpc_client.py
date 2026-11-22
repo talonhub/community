@@ -20,7 +20,7 @@ mod = Module()
 class Actions:
     def rpc_client_run_command(
         dir_name: str,
-        trigger_command_execution: Callable,
+        trigger_command_execution: Callable[[], None],
         command_id: str,
         args: list[Any],
         wait_for_finish: bool = False,

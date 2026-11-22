@@ -1,4 +1,6 @@
-from talon import Context, Module, actions, clip, imgui, speech_system
+from talon import Context, Module, actions, clip, speech_system
+
+from ...core.gui.gui import open_gui
 
 mod = Module()
 
@@ -13,14 +15,13 @@ macro = []
 recording = False
 
 
-@imgui.open(y=0)
-def macro_list_gui(gui: imgui.GUI):
-    gui.text("macros")
-    gui.line()
+@open_gui(y=0)
+async def macro_list_gui(ui, ui_wrapper):
+    ui_wrapper.title("macros")
     for command_name in macros:
-        gui.text(command_name)
+        ui.label(command_name)
 
-    if gui.button("macro list close"):
+    if ui_wrapper.command_button("macro list close"):
         actions.user.macro_list_close()
 
 
@@ -46,6 +47,8 @@ class Actions:
         """Save the macro."""
         actions.user.macro_stop()
         macros[name] = macro
+        macro_list_gui.auto_size_next_frame()
+        macro_list_gui.refresh()
 
         ctx.lists["user.saved_macros"] = macros.keys()
 

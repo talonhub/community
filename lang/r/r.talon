@@ -26,7 +26,7 @@ library <user.code_libraries>:
     # Import library - easier than 'snip import' for impossible to pronounce r
     # library names
     user.code_insert_library(code_libraries, "")
-    key(end enter)
+    edit.line_insert_down()
 
 using <user.code_libraries>:
     # Insert library for function call, eg tidyr::
@@ -51,7 +51,9 @@ state na:
 is N A: user.insert_between("is.na(", ")")
 is not N A: user.insert_between("!is.na(", ")")
 
-^function define <user.text>$: user.code_private_function(text)
+^function define <user.text>$:
+    user.deprecate_command("2026-10-08", "function define <user.text>", "funky <user.text>")
+    user.code_private_function(text)
 
 named arg {user.code_parameter_name}:
     user.code_insert_named_argument(code_parameter_name)
