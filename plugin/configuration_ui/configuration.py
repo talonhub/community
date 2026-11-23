@@ -385,8 +385,8 @@ class Manager:
         setting = page.settings[number - 1]
         if setting.is_tag:
             return
-        error_representation_of_name = compute_readable_name(setting.name, page.prefix)
-        self._toggle_setting_comment(setting, error_representation_of_name)
+        readable_name = compute_readable_name(setting.name, page.prefix)
+        self._toggle_setting_comment(setting, readable_name)
 
     def _is_setting_number_valid(self, number: int) -> bool:
         if number < 1:
