@@ -26,7 +26,7 @@ submitted and the time they were reviewed and merged.
     `percent that` was removed in favor of `percentages that`.
     `quote that` was removed in favor of `twin that`.
     `(double quote | dub quote) that` was removed in favor of `quad that`.
-- `(grave | back tick) that` was deprecated in favor of `skis that`,
+    `(grave | back tick) that` was removed in favor of `skis that`,
 * 2026-11-17 Deprecate `state import` in favor of `snip import`
 * 2026-11-16 Deprecate Python commands `state (def | deaf | deft)`, `state except`, `state raise`, `state past` in favor of `put (deaf | define)`, `put except`, `put raise`, `put pass`.
 * 2026-11-13 Deprecate Java `state var` command in favor of the keyword command `put var`.
