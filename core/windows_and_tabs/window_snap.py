@@ -377,13 +377,6 @@ def _debug_window_order() -> None:
     print("========== END WINDOW ORDER DIAGNOSTIC ==========\\n")
 
 
-@mod.action_class
-class DiagnosticActions:
-    def debug_window_order() -> None:
-        """Log Talon's window order and the native Windows z-order without moving anything."""
-        _debug_window_order()
-
-
 def _move_windows(
     count: int, offset: Optional[int] = None, screen_number: Optional[int] = None
 ) -> None:
@@ -508,6 +501,10 @@ ctx.lists["user.window_snap_positions"] = _snap_positions.keys()
 
 @mod.action_class
 class Actions:
+    def debug_window_order(self) -> None:
+        """Log Talon's window order and the native Windows z-order without moving anything."""
+        _debug_window_order()
+
     def snap_window(
         position: RelativeScreenPos, window: Optional[Window] = None
     ) -> None:
