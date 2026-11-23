@@ -70,7 +70,7 @@ def compute_readable_name(setting_name: str, page_prefix: str):
     else:
         prefix, name = setting_name.split(".")
         if prefix != "user":
-            words.append(prefix)
+            words = [prefix]
     words.extend(name.split("_"))
     capitalized_words = [w.capitalize() for w in words]
     return " ".join(capitalized_words)
