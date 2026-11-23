@@ -10,7 +10,7 @@ from ...core.gui.gui import (
     let_user_use_page_keys_to_scroll_scroll_area,
     open_gui,
 )
-from .pages import create_pages
+from .pages import create_pages, Page
 from .setting_file_paths import RELEVANT_PATHS
 from .setting_uis import Setting
 from .talon_file_output import update_setting
@@ -83,6 +83,17 @@ MAIN_PAGE_NAME = "Main"
 class Manager:
     """Responsible for the configuration UI. Organizes settings into pages, updates settings in response to user input, and updates the rendered state in response to the underlying files changing."""
 
+    __slots__ = ('page', 'pages', 'error_setting', 'chosen_setting_number', '_ui', 'error_message', 'was_just_opened', '_ui_wrapper')
+
+    pages: dict[str, Page]
+    page: str
+    error_message: str
+    error_setting: Setting | None
+    _ui: egui.Ui
+    _ui_wrapper: UIWrapper
+    chosen_setting_number: int | None
+    was_just_opened: bool
+    
     def __init__(self):
         pages = create_pages()
         self.pages = {page.title: page for page in pages}
@@ -96,9 +107,7 @@ class Manager:
             page.title for page in pages
         ] + [MAIN_PAGE_NAME]
 
-        self.chosen_setting = None
-        self._ui: egui.Ui
-        self._ui_wrapper: UIWrapper
+        self.chosen_setting_number = None
         self.was_just_opened = False
 
     def update_page(self, page_name):
@@ -123,7 +132,7 @@ class Manager:
 
     async def render_settings_configuration_gui(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
-        chosen_setting = self.chosen_setting
+        chosen_setting = self.chosen_setting_number
         old_error_message = self.error_message
 
         # if the user chose a valid setting to focus, focus it
@@ -157,7 +166,7 @@ class Manager:
 
         # clean up state
         if chosen_setting is not None:
-            self.chosen_setting = None
+            self.chosen_setting_number = None
             settings_gui.refresh()
         if old_error_message != self.error_message:
             settings_gui.refresh()
@@ -461,7 +470,7 @@ class Actions:
         settings_gui.focus()
         if manager is None:
             return
-        manager.chosen_setting = number
+        manager.chosen_setting_number = number
         settings_gui.refresh()
 
     def settings_window_toggle_commenting_setting(number: int):
