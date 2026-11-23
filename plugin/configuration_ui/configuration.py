@@ -10,7 +10,7 @@ from ...core.gui.gui import (
     let_user_use_page_keys_to_scroll_scroll_area,
     open_gui,
 )
-from .pages import create_pages, Page
+from .pages import Page, create_pages
 from .setting_file_paths import RELEVANT_PATHS
 from .setting_uis import Setting
 from .talon_file_output import update_setting
@@ -83,7 +83,16 @@ MAIN_PAGE_NAME = "Main"
 class Manager:
     """Responsible for the configuration UI. Organizes settings into pages, updates settings in response to user input, and updates the rendered state in response to the underlying files changing."""
 
-    __slots__ = ('page', 'pages', 'error_setting', 'chosen_setting_number', '_ui', 'error_message', 'was_just_opened', '_ui_wrapper')
+    __slots__ = (
+        "page",
+        "pages",
+        "error_setting",
+        "chosen_setting_number",
+        "_ui",
+        "error_message",
+        "was_just_opened",
+        "_ui_wrapper",
+    )
 
     pages: dict[str, Page]
     page: str
@@ -93,7 +102,7 @@ class Manager:
     _ui_wrapper: UIWrapper
     chosen_setting_number: int | None
     was_just_opened: bool
-    
+
     def __init__(self):
         pages = create_pages()
         self.pages = {page.title: page for page in pages}
