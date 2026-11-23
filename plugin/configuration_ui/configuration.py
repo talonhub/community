@@ -39,10 +39,10 @@ def _update_displayed_setting_information(
     setting.value.set(file_setting_information.value)
     setting.is_activated = file_setting_information.is_activated
 
-    if setting.first_value == VALUE_UNAVAILABLE:
+    if setting.first_value is VALUE_UNAVAILABLE:
         setting.first_value = file_setting_information.value
 
-    if not setting.is_tag and setting.default_value == VALUE_UNAVAILABLE:
+    if not setting.is_tag and setting.default_value is VALUE_UNAVAILABLE:
         try:
             declaration = registry.decls.settings[setting.name]
         except KeyError:
@@ -270,7 +270,7 @@ class Manager:
                     self._ui.add_space(5)
                     if not setting.renderer.renders_description:
                         self._ui.label(setting.description)
-                    if setting.value.get() == VALUE_UNAVAILABLE:
+                    if setting.value.get() is VALUE_UNAVAILABLE:
                         type_used = "tag" if setting.is_tag else "setting"
                         error_message = f"Something went wrong. The {type_used} {error_representation_of_name} could not be found or could not be parsed."
                         await self._render_error_message(error_message, setting)
