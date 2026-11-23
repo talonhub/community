@@ -1,7 +1,9 @@
 from .talon_file_parsing import VALUE_UNAVAILABLE, SettingsParser
 
+
 class SettingFileParsingError(Exception):
     """Something went wrong when parsing a .talon file used for setting configuration"""
+
 
 def _convert_value_to_talon_script_literal(value, indentation) -> str:
     """Convert the Python value to a TalonScript literal"""
