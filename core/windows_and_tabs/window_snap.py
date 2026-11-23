@@ -265,6 +265,8 @@ def _debug_window_order() -> None:
     """
 
     def describe(window):
+        if window is None:
+            return "<no active window>"
         try:
             rect = window.rect
             bounds = f"({rect.left}, {rect.top}, {rect.width}, {rect.height})"
