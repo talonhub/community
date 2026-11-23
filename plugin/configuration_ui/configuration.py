@@ -154,7 +154,7 @@ class Manager:
                     total_available_height,
                 )
 
-        # cleanup state
+        # clean up state
         if chosen_setting is not None:
             self.chosen_setting = None
             settings_gui.refresh()
