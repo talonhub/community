@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import egui
@@ -314,8 +315,10 @@ class Manager:
                         setting, "set to default", setting.default_value
                     )
         except Exception as ex:
-            self.error_message = f"Something went wrong in the UI for setting {error_representation_of_name}: {ex}"
+            message_prefix = f"Something went wrong in the UI for setting {error_representation_of_name}"
+            self.error_message = f"{message_prefix}: {ex}"
             self.error_setting = setting
+            logging.exception(message_prefix)
 
     async def _render_toggle_commenting_setting_column(
         self,
@@ -339,8 +342,10 @@ class Manager:
         try:
             update_setting(setting, make_comment=setting.is_activated)
         except Exception as ex:
-            self.error_message = f"Something went wrong trying to toggle commenting {error_representation_of_name}: {ex}"
+            message_prefix = f"Something went wrong trying to toggle commenting {error_representation_of_name}"
+            self.error_message = f"{message_prefix}: {ex}"
             self.error_setting = setting
+            logging.exception(message_prefix)
 
     async def _render_error_message(self, error_message, error_setting):
         async with self._ui.vertical():
