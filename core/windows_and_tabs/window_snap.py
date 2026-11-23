@@ -257,6 +257,133 @@ def _windows_in_z_order():
     return ordered
 
 
+
+def _debug_window_order() -> None:
+    """Print Talon's window order alongside native Windows top-level z-order.
+
+    This action is diagnostic only: it does not focus, move, resize or otherwise
+    change any windows. Native enumeration is Windows-only.
+    """
+    def describe(window):
+        try:
+            rect = window.rect
+            bounds = f"({rect.left}, {rect.top}, {rect.width}, {rect.height})"
+        except Exception as error:
+            bounds = f"<unavailable: {error}>"
+        try:
+            screen = str(window.screen)
+        except Exception as error:
+            screen = f"<unavailable: {error}>"
+        try:
+            app_name = window.app.name
+        except Exception as error:
+            app_name = f"<unavailable: {error}>"
+        try:
+            pid = window.app.pid
+        except Exception:
+            pid = "?"
+        try:
+            valid = is_window_valid(window)
+        except Exception as error:
+            valid = f"<error: {error}>"
+        return (
+            f"id={window.id} pid={pid} app={app_name!r} "
+            f"title={window.title!r} valid={valid} screen={screen} rect={bounds}"
+        )
+
+    windows = list(ui.windows(hidden=False))
+    by_id = {int(window.id): window for window in windows}
+
+    print("\\n========== WINDOW ORDER DIAGNOSTIC ==========")
+    print(f"Platform: {app.platform}")
+    print(f"Active window: {describe(ui.active_window())}")
+    print(f"ui.windows(hidden=False): {len(windows)} window(s), in returned order")
+    for index, window in enumerate(windows):
+        print(f"TALON {index:02d}: {describe(window)}")
+
+    valid_windows = [window for window in windows if is_window_valid(window)]
+    print(f"\\nTALON VALID FILTER: {len(valid_windows)} window(s)")
+    for index, window in enumerate(valid_windows):
+        print(f"VALID {index:02d}: id={window.id} title={window.title!r} app={window.app.name!r}")
+
+    if app.platform != "windows":
+        print("Native Windows z-order comparison skipped (non-Windows platform).")
+        print("========== END WINDOW ORDER DIAGNOSTIC ==========\\n")
+        return
+
+    import ctypes
+
+    user32 = ctypes.windll.user32
+    get_top_window = user32.GetTopWindow
+    get_top_window.argtypes = [ctypes.c_void_p]
+    get_top_window.restype = ctypes.c_void_p
+    get_window = user32.GetWindow
+    get_window.argtypes = [ctypes.c_void_p, ctypes.c_uint]
+    get_window.restype = ctypes.c_void_p
+    is_window_visible = user32.IsWindowVisible
+    is_window_visible.argtypes = [ctypes.c_void_p]
+    is_window_visible.restype = ctypes.c_bool
+    get_window_text = user32.GetWindowTextW
+    get_window_text.argtypes = [ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int]
+    get_window_text.restype = ctypes.c_int
+    get_class_name = user32.GetClassNameW
+    get_class_name.argtypes = [ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int]
+    get_class_name.restype = ctypes.c_int
+    get_window_thread_process_id = user32.GetWindowThreadProcessId
+    get_window_thread_process_id.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_ulong)]
+    get_window_thread_process_id.restype = ctypes.c_ulong
+
+    native_ids = []
+    hwnd = get_top_window(None)
+    visited = set()
+    while hwnd:
+        hwnd_value = int(hwnd)
+        if hwnd_value in visited:
+            print("Native enumeration stopped: repeated HWND detected.")
+            break
+        visited.add(hwnd_value)
+
+        if is_window_visible(hwnd):
+            title_buffer = ctypes.create_unicode_buffer(1024)
+            class_buffer = ctypes.create_unicode_buffer(256)
+            get_window_text(hwnd, title_buffer, len(title_buffer))
+            get_class_name(hwnd, class_buffer, len(class_buffer))
+            pid = ctypes.c_ulong()
+            get_window_thread_process_id(hwnd, ctypes.byref(pid))
+            window = by_id.get(hwnd_value)
+            native_ids.append(hwnd_value)
+            if window is not None:
+                print(
+                    f"NATIVE {len(native_ids) - 1:02d}: HWND={hwnd_value} "
+                    f"TALON-MATCH valid={is_window_valid(window)} "
+                    f"pid={pid.value} class={class_buffer.value!r} "
+                    f"title={title_buffer.value!r}"
+                )
+            else:
+                print(
+                    f"NATIVE {len(native_ids) - 1:02d}: HWND={hwnd_value} "
+                    f"NO-TALON-MATCH pid={pid.value} "
+                    f"class={class_buffer.value!r} title={title_buffer.value!r}"
+                )
+
+        hwnd = get_window(hwnd, 2)  # GW_HWNDNEXT
+
+    talon_ids = [int(window.id) for window in windows if int(window.id) in set(native_ids)]
+    native_talon_ids = [hwnd for hwnd in native_ids if hwnd in by_id]
+    print("\\nORDER COMPARISON (windows represented by both APIs):")
+    print(f"Talon order:  {talon_ids}")
+    print(f"Native order: {native_talon_ids}")
+    print(f"Orders match: {talon_ids == native_talon_ids}")
+    print("========== END WINDOW ORDER DIAGNOSTIC ==========\\n")
+
+
+@mod.action_class
+class DiagnosticActions:
+    def debug_window_order() -> None:
+        """Log Talon's window order and the native Windows z-order without moving anything."""
+        _debug_window_order()
+
+
 def _move_windows(
     count: int, offset: Optional[int] = None, screen_number: Optional[int] = None
 ) -> None:
@@ -426,9 +553,14 @@ class Actions:
         """Move the specified number of most recently used windows to a screen."""
         _move_windows(count, screen_number=screen_number)
 
-    def move_window_to_screen(screen_number: int) -> None:
-        """Move the active window to a specific screen."""
-        _move_to_screen(ui.active_window(), screen_number=screen_number)
+    def move_window_to_screen(
+        screen_number: int, count: Optional[int] = None
+    ) -> None:
+        """Move the active window, or the specified number of recent windows, to a screen."""
+        if count is None:
+            _move_to_screen(ui.active_window(), screen_number=screen_number)
+        else:
+            _move_windows(count, screen_number=screen_number)
 
     def snap_app(app_name: str, position: RelativeScreenPos):
         """Snap a specific application to another screen."""
