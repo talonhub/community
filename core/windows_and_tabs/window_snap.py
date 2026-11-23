@@ -296,7 +296,7 @@ def _debug_window_order() -> None:
     windows = list(ui.windows(hidden=False))
     by_id = {int(window.id): window for window in windows}
 
-    print("\\n========== WINDOW ORDER DIAGNOSTIC ==========")
+    print("\n========== WINDOW ORDER DIAGNOSTIC ==========")
     print(f"Platform: {app.platform}")
     print(f"Active window: {describe(ui.active_window())}")
     print(f"ui.windows(hidden=False): {len(windows)} window(s), in returned order")
@@ -304,7 +304,7 @@ def _debug_window_order() -> None:
         print(f"TALON {index:02d}: {describe(window)}")
 
     valid_windows = [window for window in windows if is_window_valid(window)]
-    print(f"\\nTALON VALID FILTER: {len(valid_windows)} window(s)")
+    print(f"\nTALON VALID FILTER: {len(valid_windows)} window(s)")
     for index, window in enumerate(valid_windows):
         print(
             f"VALID {index:02d}: id={window.id} title={window.title!r} app={window.app.name!r}"
@@ -312,7 +312,7 @@ def _debug_window_order() -> None:
 
     if app.platform != "windows":
         print("Native Windows z-order comparison skipped (non-Windows platform).")
-        print("========== END WINDOW ORDER DIAGNOSTIC ==========\\n")
+        print("========== END WINDOW ORDER DIAGNOSTIC ==========\n")
         return
 
     import ctypes
@@ -379,11 +379,11 @@ def _debug_window_order() -> None:
         int(window.id) for window in windows if int(window.id) in set(native_ids)
     ]
     native_talon_ids = [hwnd for hwnd in native_ids if hwnd in by_id]
-    print("\\nORDER COMPARISON (windows represented by both APIs):")
+    print("\nORDER COMPARISON (windows represented by both APIs):")
     print(f"Talon order:  {talon_ids}")
     print(f"Native order: {native_talon_ids}")
     print(f"Orders match: {talon_ids == native_talon_ids}")
-    print("========== END WINDOW ORDER DIAGNOSTIC ==========\\n")
+    print("========== END WINDOW ORDER DIAGNOSTIC ==========\n")
 
 
 def _move_windows(
