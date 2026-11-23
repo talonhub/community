@@ -7,25 +7,25 @@ and when the change was applied given the delay between changes being
 submitted and the time they were reviewed and merged.
 
 ---
-* 2026-11-23 Remove a bunch of deprecated symbol commands to insert the limiter pairs:
-    `empty dub string` was deprecated in favor of `quad`.
-    `empty escaped (dub string | dub quotes)` was deprecated in favor of `escaped quad`.
-    `empty string` was deprecated in favor of `twin`.
-    `empty escaped string` was deprecated in favor of `escaped twin`.
-    `inside (parens | args)` was deprecated in favor of `round`.
-    `inside (squares | brackets | square brackets | list)` was deprecated in favor of `box`.
-    `inside (braces | curly brackets)` was deprecated in favor of `curly`.
-    `inside percent` was deprecated in favor of `percentages`.
-    `inside (quotes | string)` was deprecated in favor of `twin`.
-    `inside (double quotes | dub quotes)` was deprecated in favor of `quad`.
-    `inside (graves | back ticks)` was deprecated in favor of `skis`.
-    `angle that` was deprecated in favor of `diamond that`.
-    `(square | bracket | square bracket) that` was deprecated in favor of `box that`.
-    `(brace | curly bracket) that` was deprecated in favor of `curly that`.
-    `(parens | args) that` was deprecated in favor of `round that`.
-    `percent that` was deprecated in favor of `percentages that`.
-    `quote that` was deprecated in favor of `twin that`.
-    `(double quote | dub quote) that` was deprecated in favor of `quad that`.
+* 2026-11-23 Remove a bunch of deprecated symbol commands to insert delimiter pairs:
+    `empty dub string` was removed in favor of `quad`.
+    `empty escaped (dub string | dub quotes)` was removed in favor of `escaped quad`.
+    `empty string` was removed in favor of `twin`.
+    `empty escaped string` was removed in favor of `escaped twin`.
+    `inside (parens | args)` was removed in favor of `round`.
+    `inside (squares | brackets | square brackets | list)` was removed in favor of `box`.
+    `inside (braces | curly brackets)` was removed in favor of `curly`.
+    `inside percent` was removed in favor of `percentages`.
+    `inside (quotes | string)` was removed in favor of `twin`.
+    `inside (double quotes | dub quotes)` was removed in favor of `quad`.
+    `inside (graves | back ticks)` was removed in favor of `skis`.
+    `angle that` was removed in favor of `diamond that`.
+    `(square | bracket | square bracket) that` was removed in favor of `box that`.
+    `(brace | curly bracket) that` was removed in favor of `curly that`.
+    `(parens | args) that` was removed in favor of `round that`.
+    `percent that` was removed in favor of `percentages that`.
+    `quote that` was removed in favor of `twin that`.
+    `(double quote | dub quote) that` was removed in favor of `quad that`.
 - `(grave | back tick) that` was deprecated in favor of `skis that`,
 * 2026-11-17 Deprecate `state import` in favor of `snip import`
 * 2026-11-16 Deprecate Python commands `state (def | deaf | deft)`, `state except`, `state raise`, `state past` in favor of `put (deaf | define)`, `put except`, `put raise`, `put pass`.
