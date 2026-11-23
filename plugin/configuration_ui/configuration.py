@@ -73,8 +73,8 @@ def compute_readable_name(setting_name: str, page_prefix: str):
         if prefix != "user":
             words = [prefix]
     words.extend(name.split("_"))
-    capitalized_words = [w.capitalize() for w in words]
-    return " ".join(capitalized_words)
+    # this is doing title formatting and not actually capitalizing all words
+    return actions.user.formatted_text(" ".join(words), "CAPITALIZE_ALL_WORDS")
 
 
 MAIN_PAGE_NAME = "Main"
