@@ -32,10 +32,10 @@ mod.list(
 )
 
 
-def _update_internal_setting_information(
+def _update_displayed_setting_information(
     setting: Setting, file_setting_information: SettingFileSettingInformation
 ):
-    """Update internal setting state using information from the containing file"""
+    """Update displayed setting state using information from the containing file"""
     setting.value.set(file_setting_information.value)
     setting.is_activated = file_setting_information.is_activated
 
@@ -58,7 +58,7 @@ def _update_setting_information_based_on_file_update(setting: Setting, tags, set
     source = tags if setting.is_tag else settings
     if name in source:
         updated_information = source[name]
-        _update_internal_setting_information(setting, updated_information)
+        _update_displayed_setting_information(setting, updated_information)
     else:
         setting.value.set(VALUE_UNAVAILABLE)
 
