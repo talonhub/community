@@ -241,7 +241,7 @@ class Manager:
                     )
                     self._ui.label(": scroll this window")
             self._ui_wrapper.spacing()
-            self._ui.label("* toggle setting that setting in a Community .talon file")
+            self._ui.label("* toggle configuring that setting in a Community .talon file")
             self._ui.separator()
 
             for i, setting in enumerate(page.settings):
