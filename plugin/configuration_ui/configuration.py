@@ -361,7 +361,7 @@ class Manager:
                 )
                 self._ui.add_space(total_available_height / 8)
                 self._ui.label(
-                    "Community provides several .talon files for configuring settings. You can use this graphical interface to edit those files without needing to learn TalonScript.\nYou may encounter unexpected behavior if you have chosen to set those settings in your own .talon files.\n\n\nThis graphical interface may not always work as intended if you have manually edited those files yourself.\nIf you run into issues with that, feel free to ask for help on the slack!"
+                    "Community provides several .talon files for configuring settings. You can use this window to edit those files without needing to learn TalonScript.\nYou may encounter unexpected behavior if you have chosen to set those settings in your own .talon files.\n\n\nThis window may not always work as intended if you have manually edited those files yourself.\nIf you run into issues with that, feel free to ask for help on the Slack!"
                 )
 
     async def _render_error_copy_buttons(self, error_message, setting):
