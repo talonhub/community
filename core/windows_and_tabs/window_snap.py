@@ -257,13 +257,13 @@ def _windows_in_z_order():
     return ordered
 
 
-
 def _debug_window_order() -> None:
     """Print Talon's window order alongside native Windows top-level z-order.
 
     This action is diagnostic only: it does not focus, move, resize or otherwise
     change any windows. Native enumeration is Windows-only.
     """
+
     def describe(window):
         try:
             rect = window.rect
@@ -304,7 +304,9 @@ def _debug_window_order() -> None:
     valid_windows = [window for window in windows if is_window_valid(window)]
     print(f"\\nTALON VALID FILTER: {len(valid_windows)} window(s)")
     for index, window in enumerate(valid_windows):
-        print(f"VALID {index:02d}: id={window.id} title={window.title!r} app={window.app.name!r}")
+        print(
+            f"VALID {index:02d}: id={window.id} title={window.title!r} app={window.app.name!r}"
+        )
 
     if app.platform != "windows":
         print("Native Windows z-order comparison skipped (non-Windows platform).")
@@ -330,7 +332,10 @@ def _debug_window_order() -> None:
     get_class_name.argtypes = [ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int]
     get_class_name.restype = ctypes.c_int
     get_window_thread_process_id = user32.GetWindowThreadProcessId
-    get_window_thread_process_id.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_ulong)]
+    get_window_thread_process_id.argtypes = [
+        ctypes.c_void_p,
+        ctypes.POINTER(ctypes.c_ulong),
+    ]
     get_window_thread_process_id.restype = ctypes.c_ulong
 
     native_ids = []
@@ -368,7 +373,9 @@ def _debug_window_order() -> None:
 
         hwnd = get_window(hwnd, 2)  # GW_HWNDNEXT
 
-    talon_ids = [int(window.id) for window in windows if int(window.id) in set(native_ids)]
+    talon_ids = [
+        int(window.id) for window in windows if int(window.id) in set(native_ids)
+    ]
     native_talon_ids = [hwnd for hwnd in native_ids if hwnd in by_id]
     print("\\nORDER COMPARISON (windows represented by both APIs):")
     print(f"Talon order:  {talon_ids}")
@@ -550,9 +557,7 @@ class Actions:
         """Move the specified number of most recently used windows to a screen."""
         _move_windows(count, screen_number=screen_number)
 
-    def move_window_to_screen(
-        screen_number: int, count: Optional[int] = None
-    ) -> None:
+    def move_window_to_screen(screen_number: int, count: Optional[int] = None) -> None:
         """Move the active window, or the specified number of recent windows, to a screen."""
         if count is None:
             _move_to_screen(ui.active_window(), screen_number=screen_number)
