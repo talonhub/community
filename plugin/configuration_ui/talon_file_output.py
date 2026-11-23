@@ -1,5 +1,7 @@
 from .talon_file_parsing import VALUE_UNAVAILABLE, SettingsParser
 
+class SettingFileParsingError(Exception):
+    """Something went wrong when parsing a .talon file used for setting configuration"""
 
 def _convert_value_to_talon_script_literal(value, indentation) -> str:
     """Convert the Python value to a TalonScript literal"""
@@ -26,11 +28,11 @@ def update_setting(setting, new_value=VALUE_UNAVAILABLE, make_comment=False):
 
     parser = SettingsParser(path)
     if name in parser.duplicate_settings:
-        raise OSError(
+        raise SettingFileParsingError(
             f"Found duplicate setting assignment for {name} inside file {path}"
         )
     if name not in parser.settings:
-        raise OSError(f"Could not find {name} inside file {path}")
+        raise SettingFileParsingError(f"Could not find {name} inside file {path}")
 
     info = parser.settings[name]
     assignment_prefix = info.assignment_prefix
@@ -60,7 +62,7 @@ def update_tag(tag, should_be_active):
     path = tag.path
     parser = SettingsParser(path)
     if name in parser.duplicate_tags:
-        raise OSError(
+        raise SettingFileParsingError(
             f"Found duplicate tag activation for tag {name} in the file {path}!"
         )
     if name in parser.tags and parser.tags[name].value == should_be_active:
