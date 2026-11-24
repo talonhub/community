@@ -193,7 +193,7 @@ class Manager:
                 ).clicked():
                     self.update_page(page)
             if self._ui.selectable_label(
-                self.page == MAIN_PAGE_NAME, create_italic_text("Page main")
+                self.page == MAIN_PAGE_NAME, create_italic_text("Page Main")
             ).clicked():
                 self.update_page(MAIN_PAGE_NAME)
             self._ui_wrapper.spacing()
