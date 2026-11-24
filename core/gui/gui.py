@@ -494,9 +494,7 @@ class UIWrapper:
 
         async def draw_label(ui, background_rectangle):
             async with ui.with_layout(
-                egui.Layout.top_down(egui.Align.Center)
-                .with_main_justify(True)
-                .with_cross_justify(True)
+                egui.Layout.centered_and_justified(egui.Direction.TopDown)
             ):
                 ui.label(label_text)
 
