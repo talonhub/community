@@ -486,11 +486,18 @@ class UIWrapper:
         label_text = egui.RichText(text).strong().color(text_color)
         outline_thickness = 2.0
         text_dimensions = self.compute_text_dimensions(text, ui)
-        background_rectangle_dimensions = egui.Vec2(text_dimensions.x + outline_thickness*2, text_dimensions.y + outline_thickness*2)
+        background_rectangle_dimensions = egui.Vec2(
+            text_dimensions.x + outline_thickness * 2,
+            text_dimensions.y + outline_thickness * 2,
+        )
         corner_radius = 4
 
         async def draw_label(ui, background_rectangle):
-            async with ui.with_layout(egui.Layout.top_down(egui.Align.Center).with_main_justify(True).with_cross_justify(True)):
+            async with ui.with_layout(
+                egui.Layout.top_down(egui.Align.Center)
+                .with_main_justify(True)
+                .with_cross_justify(True)
+            ):
                 ui.label(label_text)
 
         response = await self.render_inside_rectangle(
