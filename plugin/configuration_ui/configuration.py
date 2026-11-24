@@ -334,10 +334,11 @@ class Manager:
                     )
         except Exception as ex:
             await self._render_error_message(
-                f"Something went wrong in the setting's UI: {ex}",
-                setting
+                f"Something went wrong in the setting's UI: {ex}", setting
             )
-            logging.exception(f"Something went wrong in the UI for setting {error_representation_of_name}")
+            logging.exception(
+                f"Something went wrong in the UI for setting {error_representation_of_name}"
+            )
 
     async def _render_toggle_commenting_setting_column(
         self,
