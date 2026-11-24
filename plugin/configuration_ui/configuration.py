@@ -333,10 +333,11 @@ class Manager:
                         setting, "set to default", setting.default_value
                     )
         except Exception as ex:
-            message_prefix = f"Something went wrong in the UI for setting {error_representation_of_name}"
-            self.error_message = f"{message_prefix}: {ex}"
-            self.error_setting = setting
-            logging.exception(message_prefix)
+            await self._render_error_message(
+                f"Something went wrong in the setting's UI: {ex}",
+                setting
+            )
+            logging.exception(f"Something went wrong in the UI for setting {error_representation_of_name}")
 
     async def _render_toggle_commenting_setting_column(
         self,
