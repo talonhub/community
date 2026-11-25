@@ -60,6 +60,8 @@ code_languages = [
     Language("vimscript", "vim script", ["vim", "vimrc"]),
     # These languages doesn't actually have a language mode, but we do have snippets.
     Language("csv", "csv", ["csv"]),
+    # In order to make HTML snippets work in aspnetcorerazor files, include Razor and CSHTML
+    Language("html", "html", ["html", "razor", "cshtml"]),
     Language("json", "json", ["json"]),
     Language("shellscript", "shell script", ["sh"]),
     Language("xml", "xml", ["xml"]),
