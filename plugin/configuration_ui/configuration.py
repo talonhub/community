@@ -304,23 +304,23 @@ class Manager:
                     if not setting.renderer.renders_description:
                         self._ui.label(setting.description)
                     if setting.value.get() is VALUE_UNAVAILABLE:
-                        type_used = setting.implementation_type_description
-                        error_prefix = f"Something went wrong with the {type_used} {error_representation_of_name}: "
-                        if setting.value_unavailable_error_message:
-                            error_message = setting.value_unavailable_error_message
-                        else:
-                            error_message = (
-                                "It could not be found or could not be parsed."
-                            )
-                        await self._render_error_message(
-                            error_prefix + error_message, setting
-                        )
+                        await self._render_value_unavailable_error_message(error_representation_of_name, setting)
                     else:
                         await self._render_settings_ui(
                             setting,
                             error_representation_of_name,
                         )
                 self._ui.separator()
+
+    async def _render_value_unavailable_error_message(self, error_representation_of_name, setting):
+        type_used = setting.implementation_type_description
+        error_prefix = f"Something went wrong with the {type_used} {error_representation_of_name}: "
+        if setting.value_unavailable_error_message:
+            error_message = setting.value_unavailable_error_message
+        else:
+            error_message = "It could not be found or could not be parsed."
+
+        await self._render_error_message(error_prefix + error_message, setting)
 
     async def _render_setting_revert_button(self, setting, button_text, revert_value):
         async with self._ui.group(), self._ui.horizontal_wrapped():
