@@ -427,12 +427,6 @@ class UIWrapper:
             shadow_rectangle = background_rectangle.translate(
                 shadow_rectangle_translation
             )
-            print(
-                "shadow_rectangle",
-                shadow_rectangle,
-                "background_rectangle",
-                background_rectangle,
-            )
             ui.painter().rect(
                 shadow_rectangle,
                 corner_radius,
