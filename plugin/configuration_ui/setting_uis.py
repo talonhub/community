@@ -62,6 +62,8 @@ class Setting:
     first_value = VALUE_UNAVAILABLE
     # the default value of the setting if one is available
     default_value = VALUE_UNAVAILABLE
+    # an explanation for why the value is not available
+    value_unavailable_error_message: str = ""
 
     @property
     def description(self):

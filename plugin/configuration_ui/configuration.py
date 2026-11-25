@@ -17,7 +17,7 @@ from .talon_file_output import update_setting
 from .talon_file_parsing import (
     VALUE_UNAVAILABLE,
     SettingFileSettingInformation,
-    parse_settings,
+    SettingsParser,
 )
 
 mod = Module()
@@ -51,17 +51,6 @@ def _update_displayed_setting_information(
         default = declaration.default
         if isinstance(default, declaration.type):
             setting.default_value = default
-
-
-def _update_setting_information_based_on_file_update(setting: Setting, tags, settings):
-    """Update the setting information in response to its containing file updating. tags and settings are from the parsed file"""
-    name = setting.name
-    source = tags if setting.is_tag else settings
-    if name in source:
-        updated_information = source[name]
-        _update_displayed_setting_information(setting, updated_information)
-    else:
-        setting.value.set(VALUE_UNAVAILABLE)
 
 
 def compute_readable_name(setting_name: str, page_prefix: str):
@@ -136,11 +125,31 @@ class Manager:
     def on_file_change(self, path):
         """Update setting values rendered in response to the .talon file at path changing"""
         try:
-            tags, settings = parse_settings(path)
+            parser = SettingsParser(path)
         except FileNotFoundError:
-            tags, settings = {}, {}
+            parser = None
+
         for setting in self._get_settings_at_path(path):
-            _update_setting_information_based_on_file_update(setting, tags, settings)
+            setting: Setting = setting
+            file_name = setting.path.stem + setting.path.suffix
+            name = setting.name
+            if not parser:
+                setting.value.set(VALUE_UNAVAILABLE)
+                setting.value_unavailable_error_message = f"{file_name} was not found"
+                continue
+
+            source = parser.tags if setting.is_tag else parser.settings
+            duplicates = parser.duplicate_tags if setting.is_tag else parser.duplicate_settings
+            if parser and name in source:
+                updated_information = source[name]
+                _update_displayed_setting_information(setting, updated_information)
+            else:
+                setting.value.set(VALUE_UNAVAILABLE)
+                if name in duplicates:
+                    setting.value_unavailable_error_message = f"the setting appears more than once in {file_name}"
+                else:
+                    setting.value_unavailable_error_message = ""
+                    
 
     async def render_settings_configuration_gui(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state

@@ -144,8 +144,3 @@ class SettingsParser:
                 )
             i += 1
 
-
-def parse_settings(path: Path):
-    """Compute the tags and settings at the path"""
-    parser = SettingsParser(path)
-    return parser.tags, parser.settings
