@@ -152,7 +152,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - Keep operations in an imgui drawing function (decorated by `imgui.open`) efficient and limited because the imgui framework will frequently and repeatedly call the function. For example, cache displayed information in a global variable.
 - Create a button and voice command for closing each imgui window.
 - For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
-- Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
+- imgui OI's can be inconsistent with the "new user message" description because it will evolve to include patterns incompatible with imgui. Therefore, make each imgui UI self explanatory.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
 - Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
 
