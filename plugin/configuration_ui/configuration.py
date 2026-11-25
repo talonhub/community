@@ -304,7 +304,9 @@ class Manager:
                     if not setting.renderer.renders_description:
                         self._ui.label(setting.description)
                     if setting.value.get() is VALUE_UNAVAILABLE:
-                        await self._render_value_unavailable_error_message(error_representation_of_name, setting)
+                        await self._render_value_unavailable_error_message(
+                            error_representation_of_name, setting
+                        )
                     else:
                         await self._render_settings_ui(
                             setting,
@@ -312,7 +314,9 @@ class Manager:
                         )
                 self._ui.separator()
 
-    async def _render_value_unavailable_error_message(self, error_representation_of_name, setting):
+    async def _render_value_unavailable_error_message(
+        self, error_representation_of_name, setting
+    ):
         type_used = setting.implementation_type_description
         error_prefix = f"Something went wrong with the {type_used} {error_representation_of_name}: "
         if setting.value_unavailable_error_message:
