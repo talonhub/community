@@ -164,7 +164,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 
 #### Layout
 - For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options in italics or explain the spoken forms elsewhere in the UI.
-- If your egui window is too tall for some screens, consider using an egui table or scroll area. Make sure the table/scroll area can be scrolled through voice commands and mouse.
+- If your egui window is too tall for some screens, consider using an egui table or scroll area. Ensure that users can scroll tables and scroll areas through voice commands and mouse.
 - Create a button and voice command for closing each egui window. Even if the window provides a conventional close button, such as on the border, include a close button with the close command spoken form so that users know the command name.
 
 #### Format
