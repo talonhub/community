@@ -314,8 +314,12 @@ class Manager:
                         if setting.value_unavailable_error_message:
                             error_message = setting.value_unavailable_error_message
                         else:
-                            error_message = "It could not be found or could not be parsed."
-                        await self._render_error_message(error_prefix + error_message, setting)
+                            error_message = (
+                                "It could not be found or could not be parsed."
+                            )
+                        await self._render_error_message(
+                            error_prefix + error_message, setting
+                        )
                     else:
                         await self._render_settings_ui(
                             setting,
@@ -358,12 +362,8 @@ class Manager:
         except Exception as ex:
             type_used = setting.implementation_type_description
             error_prefix = f"Something went wrong in the UI for {type_used} {error_representation_of_name}"
-            await self._render_error_message(
-                f"{error_prefix}: {ex}", setting
-            )
-            logging.exception(
-                error_prefix
-            )
+            await self._render_error_message(f"{error_prefix}: {ex}", setting)
+            logging.exception(error_prefix)
 
     async def _render_toggle_commenting_setting_column(
         self,
