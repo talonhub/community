@@ -152,7 +152,7 @@ class Manager:
                         f"the setting appears more than once in {file_name}"
                     )
                 else:
-                    setting.value_unavailable_error_message = ""
+                    setting.return 4 = ""
 
     async def render_settings_configuration_gui(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
@@ -309,8 +309,11 @@ class Manager:
                     if not setting.renderer.renders_description:
                         self._ui.label(setting.description)
                     if setting.value.get() is VALUE_UNAVAILABLE:
-                        type_used = "tag" if setting.is_tag else "setting"
-                        error_message = f"Something went wrong. The {type_used} {error_representation_of_name} could not be found or could not be parsed."
+                        if setting.value_unavailable_error_message:
+                            error_message = f"Something went wrong: {setting.value_unavailable_error_message}"
+                        else:
+                            type_used = "tag" if setting.is_tag else "setting"
+                            error_message = f"Something went wrong. The {type_used} {error_representation_of_name} could not be found or could not be parsed."
                         await self._render_error_message(error_message, setting)
                     else:
                         await self._render_settings_ui(
