@@ -120,6 +120,11 @@ class Manager:
     def handle_just_opened(self):
         self._times_to_refresh = 10
 
+    def focus(self):
+        """this handles a bug where the window is not focussed correctly when on another monitor"""
+        settings_gui.focus()
+        self._times_to_refresh = 1
+
     def update_page(self, page_name):
         self.page = page_name
 
@@ -502,16 +507,16 @@ class Actions:
 
     def settings_window_choose_setting_ui(number: int):
         """Focus or toggle the setting by number"""
-        settings_gui.focus()
         if manager is None:
             return
+        manager.focus()
         manager.chosen_setting_number = number
         settings_gui.refresh()
 
     def settings_window_toggle_commenting_setting(number: int):
         """Toggle commenting the setting by number"""
-        settings_gui.focus()
         if manager is None:
             return
+        manager.focus()
         manager.toggle_commenting_setting_by_number(number)
         settings_gui.refresh()
