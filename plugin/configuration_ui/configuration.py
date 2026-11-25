@@ -53,7 +53,9 @@ def _update_displayed_setting_information(
             setting.default_value = default
 
 
-def _handle_setting_parsing_error(setting: Setting, parser: SettingsParser, file_name: str):
+def _handle_setting_parsing_error(
+    setting: Setting, parser: SettingsParser, file_name: str
+):
     error_message = ""
     if setting.name in parser.get_duplicates(setting.is_tag):
         error_message = f"It appears more than once in {file_name}."
