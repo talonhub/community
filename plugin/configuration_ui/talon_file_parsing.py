@@ -87,6 +87,13 @@ class SettingsParser:
         self.lines = []
         self._parse_file(path)
 
+    def get_duplicates(self, is_tag):
+        return self.duplicate_tags if is_tag else self.duplicate_settings
+
+    def get_setting_information(self, name, is_tag):
+        source = self.tags if is_tag else self.settings
+        return source.get(name)
+
     def _add_information(self, name, information, dictionary, duplicates):
         """Handle the information on the tag or setting. Keep the information if it is new and remember that it is a duplicate otherwise"""
         if name not in duplicates and name not in dictionary:

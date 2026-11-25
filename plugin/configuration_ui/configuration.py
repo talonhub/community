@@ -130,25 +130,14 @@ class Manager:
             parser = None
 
         for setting in self._get_settings_at_path(path):
-            setting: Setting = setting
             file_name = setting.path.stem + setting.path.suffix
-            name = setting.name
             if not parser:
                 setting.handle_value_unavailable(f"{file_name} was not found.")
-                continue
-
-            source = parser.tags if setting.is_tag else parser.settings
-            duplicates = (
-                parser.duplicate_tags if setting.is_tag else parser.duplicate_settings
-            )
-            if parser and name in source:
-                updated_information = source[name]
+            elif updated_information := parser.get_setting_information(setting.name, setting.is_tag):
                 _update_displayed_setting_information(setting, updated_information)
             else:
-                if name in duplicates:
-                    setting.handle_value_unavailable(
-                        f"It appears more than once in {file_name}."
-                    )
+                if setting.name in parser.get_duplicates(setting.is_tag):
+                    setting.handle_value_unavailable(f"It appears more than once in {file_name}.")
                 else:
                     setting.handle_value_unavailable()
 
