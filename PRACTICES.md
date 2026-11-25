@@ -169,7 +169,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 
 #### Format
 - Always and only use italics for rendering voice command spoken forms.
-- Use the [gui.py](./core/gui/gui.py) render_key method for rendering keyboard keys for key commands.
+- Use the [gui.py](./core/gui/gui.py) render_key method for rendering key command keys.
 
 #### Consistency
 - Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
