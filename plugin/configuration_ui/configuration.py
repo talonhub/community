@@ -135,7 +135,7 @@ class Manager:
             name = setting.name
             if not parser:
                 setting.value.set(VALUE_UNAVAILABLE)
-                setting.value_unavailable_error_message = f"{file_name} was not found"
+                setting.value_unavailable_error_message = f"{file_name} was not found."
                 continue
 
             source = parser.tags if setting.is_tag else parser.settings
@@ -149,7 +149,7 @@ class Manager:
                 setting.value.set(VALUE_UNAVAILABLE)
                 if name in duplicates:
                     setting.value_unavailable_error_message = (
-                        f"the setting appears more than once in {file_name}"
+                        f"It appears more than once in {file_name}."
                     )
                 else:
                     setting.value_unavailable_error_message = ""
@@ -309,12 +309,13 @@ class Manager:
                     if not setting.renderer.renders_description:
                         self._ui.label(setting.description)
                     if setting.value.get() is VALUE_UNAVAILABLE:
+                        type_used = "tag" if setting.is_tag else "setting"
+                        error_prefix = f"Something went wrong with the {type_used} {error_representation_of_name}: "
                         if setting.value_unavailable_error_message:
-                            error_message = f"Something went wrong: {setting.value_unavailable_error_message}"
+                            error_message = setting.value_unavailable_error_message
                         else:
-                            type_used = "tag" if setting.is_tag else "setting"
-                            error_message = f"Something went wrong. The {type_used} {error_representation_of_name} could not be found or could not be parsed."
-                        await self._render_error_message(error_message, setting)
+                            error_message = "It could not be found or could not be parsed."
+                        await self._render_error_message(error_prefix + error_message, setting)
                     else:
                         await self._render_settings_ui(
                             setting,
