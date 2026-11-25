@@ -154,6 +154,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - Create a button and voice command for closing each imgui window.
 - For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
 - imgui UIs are allowed to conflict with the "new user message" description as that description evolves to discuss egui related practices, but make each imgui UI self-explanatory.
+- The "new user message" will evolve to discuss egui related practices. Because we are using imgui solely to warn about incompatibilities with older Talon versions, it is fine for imgui UIs to contradict the "new user message". Because imgui UIs cannot rely on the context of the "new user message" to help explain them, make imgui UIs self explanatory.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
 
 ### egui Practices#
