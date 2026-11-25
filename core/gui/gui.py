@@ -427,6 +427,7 @@ class UIWrapper:
             shadow_rectangle = background_rectangle.translate(
                 shadow_rectangle_translation
             )
+            print('shadow_rectangle', shadow_rectangle, 'background_rectangle', background_rectangle)
             ui.painter().rect(
                 shadow_rectangle,
                 corner_radius,
@@ -505,7 +506,7 @@ class UIWrapper:
             background_color,
             egui.Stroke(outline_thickness, outline_color),
             egui.StrokeKind.Inside,
-            shadow_rectangle_translation=egui.Vec2(0, 1.5),
+            shadow_rectangle_translation=egui.Vec2(0, 2),
             ui=ui,
         )
         if full_key_name and description:
