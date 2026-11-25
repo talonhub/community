@@ -255,14 +255,17 @@ class Manager:
                 )
                 async with self._ui.horizontal_wrapped():
                     self._ui.label(command_instructions_text)
-                    await self._ui_wrapper.render_key(
-                        "PgUp", "Page Up", "scroll this window up"
-                    )
-                    self._ui.label("/")
-                    await self._ui_wrapper.render_key(
-                        "PgDn", "Page Down", "scroll this window down"
-                    )
-                    self._ui.label(": scroll this window")
+                    # this section will not wrap properly, but without this the layout gets messed up with some text sizes
+                    # other parts of this window will have to be made more wrapping friendly before this matters
+                    async with self._ui.horizontal():
+                        await self._ui_wrapper.render_key(
+                            "PgUp", "Page Up", "scroll this window up"
+                        )
+                        self._ui.label("/")
+                        await self._ui_wrapper.render_key(
+                            "PgDn", "Page Down", "scroll this window down"
+                        )
+                        self._ui.label(": scroll this window")
             self._ui_wrapper.spacing()
             self._ui.label(
                 "* toggle configuring that setting in a Community .talon file"
