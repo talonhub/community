@@ -134,8 +134,7 @@ class Manager:
             file_name = setting.path.stem + setting.path.suffix
             name = setting.name
             if not parser:
-                setting.value.set(VALUE_UNAVAILABLE)
-                setting.value_unavailable_error_message = f"{file_name} was not found."
+                setting.handle_value_unavailable(f"{file_name} was not found.")
                 continue
 
             source = parser.tags if setting.is_tag else parser.settings
@@ -146,13 +145,12 @@ class Manager:
                 updated_information = source[name]
                 _update_displayed_setting_information(setting, updated_information)
             else:
-                setting.value.set(VALUE_UNAVAILABLE)
                 if name in duplicates:
-                    setting.value_unavailable_error_message = (
+                    setting.handle_value_unavailable(
                         f"It appears more than once in {file_name}."
                     )
                 else:
-                    setting.value_unavailable_error_message = ""
+                    setting.handle_value_unavailable()
 
     async def render_settings_configuration_gui(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state

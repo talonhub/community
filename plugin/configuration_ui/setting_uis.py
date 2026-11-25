@@ -80,6 +80,10 @@ class Setting:
     def implementation_type_description(self):
         return "tag" if self.is_tag else "setting"
 
+    def handle_value_unavailable(self, error_message=""):
+        self.value.set(VALUE_UNAVAILABLE)
+        self.value_unavailable_error_message = error_message
+
     @staticmethod
     def tag(name):
         return Setting(
