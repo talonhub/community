@@ -168,7 +168,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - Create a button and voice command for closing each egui window. Each egui window should include at least one button that renders the close command's spoken form.
 
 #### Format
-- Use italics for voice command spoken forms and nothing else.
+- Always render voice command spoken forms in italics. Only use italics for command spoken forms.
 - Use the [gui.py](./core/gui/gui.py) render_key method for rendering keyboard keys for key commands.
 
 #### Consistency
