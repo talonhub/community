@@ -156,7 +156,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - imgui UIs may conflict with the "new user message" description as that description evolves to discuss egui related practices. Therefore, make each imgui UI self-explanatory.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
 
-### egui Practices
+### egui Practices#
 
 #### Code Style
 - Use the reusable code in [gui.py](./core/gui/gui.py) — especially for window management.
@@ -168,7 +168,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - Create a button and voice command for closing each egui window. Each egui window should include at least one button that renders the close command's spoken form.
 
 #### Format
-- Always render voice command spoken forms in italics. Only use italics for command spoken forms.
+- Always and only use italics for rendering voice command spoken forms.
 - Use the [gui.py](./core/gui/gui.py) render_key method for rendering keyboard keys for key commands.
 
 #### Consistency
