@@ -34,14 +34,14 @@ mod.list(
 
 
 def _update_displayed_setting_information(
-    setting: Setting, file_setting_information: SettingFileSettingInformation
+    setting: Setting, new_info: SettingFileSettingInformation
 ):
     """Update displayed setting state using information from the containing file"""
-    setting.value.set(file_setting_information.value)
-    setting.is_activated = file_setting_information.is_activated
+    setting.value.set(new_info.value)
+    setting.is_activated = new_info.is_activated
 
     if setting.first_value is VALUE_UNAVAILABLE:
-        setting.first_value = file_setting_information.value
+        setting.first_value = new_info.value
 
     if not setting.is_tag and setting.default_value is VALUE_UNAVAILABLE:
         try:
@@ -51,6 +51,13 @@ def _update_displayed_setting_information(
         default = declaration.default
         if isinstance(default, declaration.type):
             setting.default_value = default
+
+
+def _handle_setting_parsing_error(setting: Setting, parser: SettingsParser, file_name: str):
+    error_message = ""
+    if setting.name in parser.get_duplicates(setting.is_tag):
+        error_message = f"It appears more than once in {file_name}."
+    setting.handle_value_unavailable(error_message)
 
 
 def compute_readable_name(setting_name: str, page_prefix: str):
@@ -133,17 +140,12 @@ class Manager:
             file_name = setting.path.stem + setting.path.suffix
             if not parser:
                 setting.handle_value_unavailable(f"{file_name} was not found.")
-            elif updated_information := parser.get_setting_information(
+            elif new_info := parser.get_setting_information(
                 setting.name, setting.is_tag
             ):
-                _update_displayed_setting_information(setting, updated_information)
+                _update_displayed_setting_information(setting, new_info)
             else:
-                if setting.name in parser.get_duplicates(setting.is_tag):
-                    setting.handle_value_unavailable(
-                        f"It appears more than once in {file_name}."
-                    )
-                else:
-                    setting.handle_value_unavailable()
+                _handle_setting_parsing_error(setting, parser, file_name)
 
     async def render_settings_configuration_gui(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
