@@ -352,8 +352,8 @@ class TreeRenderer:
                     actions.key("pagedown")
                 if self._ui_wrapper.button(create_italic_text("page up")):
                     actions.key("pageup")
-                await self._ui_wrapper.render_key("PgDn")
-                await self._ui_wrapper.render_key("PgUp")
+                await self._ui_wrapper.render_key("PgDn", "Page Down", "scroll the window down")
+                await self._ui_wrapper.render_key("PgUp", "Page Up", "scroll the window up")
             self._ui.separator()
 
     async def render(
