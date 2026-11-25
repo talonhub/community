@@ -148,11 +148,24 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 
 ### imgui Practices
 
+- Community will no longer use imgui except for version incompatibility messages with old Talon versions because imgui is deprecated in favour of egui. imgui practices are preserved to support maintenance of those messages.
 - Keep operations in an imgui drawing function (decorated by `imgui.open`) efficient and limited because the imgui framework will frequently and repeatedly call the function. For example, cache displayed information in a global variable.
 - Create a button and voice command for closing each imgui window.
 - For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
 - Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
+- Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
+
+### egui Practices
+
+- Use the reusable code in [gui.py](./core/gui/gui.py).
+- Use italics for voice command spoken forms and nothing else.
+- Use the [gui.py](./core/gui/gui.py) render_key method for rendering keyboard keys for key commands.
+- In identifiers and code comments, consistently use the word render in place of other words like draw and display.
+- Create a button and voice command for closing each egui window. Even if the window provides a conventional close button, such as on the border, include a close button with the close command spoken form so that users know the command name.
+- For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options in italics or explain the spoken forms elsewhere in the UI.
+- Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
+- If your egui window is too tall for some screens, consider using an egui table or scroll area. Make sure the table/scroll area can be scrolled through voice command and mouse.
 - Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
 
 ## Naming Practices
