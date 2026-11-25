@@ -143,4 +143,3 @@ class SettingsParser:
                     name, information, self.settings, self.duplicate_settings
                 )
             i += 1
-

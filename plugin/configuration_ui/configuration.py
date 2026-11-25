@@ -139,17 +139,20 @@ class Manager:
                 continue
 
             source = parser.tags if setting.is_tag else parser.settings
-            duplicates = parser.duplicate_tags if setting.is_tag else parser.duplicate_settings
+            duplicates = (
+                parser.duplicate_tags if setting.is_tag else parser.duplicate_settings
+            )
             if parser and name in source:
                 updated_information = source[name]
                 _update_displayed_setting_information(setting, updated_information)
             else:
                 setting.value.set(VALUE_UNAVAILABLE)
                 if name in duplicates:
-                    setting.value_unavailable_error_message = f"the setting appears more than once in {file_name}"
+                    setting.value_unavailable_error_message = (
+                        f"the setting appears more than once in {file_name}"
+                    )
                 else:
                     setting.value_unavailable_error_message = ""
-                    
 
     async def render_settings_configuration_gui(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
