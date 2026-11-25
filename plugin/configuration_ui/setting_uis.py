@@ -76,6 +76,10 @@ class Setting:
                 return description
         return DEFAULT_DESCRIPTION
 
+    @property
+    def implementation_type_description(self):
+        return "tag" if self.is_tag else "setting"
+
     @staticmethod
     def tag(name):
         return Setting(

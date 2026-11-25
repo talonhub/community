@@ -309,17 +309,13 @@ class Manager:
                     if not setting.renderer.renders_description:
                         self._ui.label(setting.description)
                     if setting.value.get() is VALUE_UNAVAILABLE:
-                        type_used = "tag" if setting.is_tag else "setting"
+                        type_used = setting.implementation_type_description
                         error_prefix = f"Something went wrong with the {type_used} {error_representation_of_name}: "
                         if setting.value_unavailable_error_message:
                             error_message = setting.value_unavailable_error_message
                         else:
-                            error_message = (
-                                "It could not be found or could not be parsed."
-                            )
-                        await self._render_error_message(
-                            error_prefix + error_message, setting
-                        )
+                            error_message = "It could not be found or could not be parsed."
+                        await self._render_error_message(error_prefix + error_message, setting)
                     else:
                         await self._render_settings_ui(
                             setting,
@@ -360,11 +356,13 @@ class Manager:
                         setting, "set to default", setting.default_value
                     )
         except Exception as ex:
+            type_used = setting.implementation_type_description
+            error_prefix = f"Something went wrong in the UI for {type_used} {error_representation_of_name}"
             await self._render_error_message(
-                f"Something went wrong in the setting's UI: {ex}", setting
+                f"{error_prefix}: {ex}", setting
             )
             logging.exception(
-                f"Something went wrong in the UI for setting {error_representation_of_name}"
+                error_prefix
             )
 
     async def _render_toggle_commenting_setting_column(
