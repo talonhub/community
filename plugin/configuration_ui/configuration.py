@@ -90,7 +90,7 @@ class Manager:
         "chosen_setting_number",
         "_ui",
         "error_message",
-        "was_just_opened",
+        "_opening_frame_number",
         "_ui_wrapper",
     )
 
@@ -101,7 +101,7 @@ class Manager:
     _ui: egui.Ui
     _ui_wrapper: UIWrapper
     chosen_setting_number: int | None
-    was_just_opened: bool
+    _opening_frame_number: int
 
     def __init__(self):
         pages = create_pages()
@@ -117,7 +117,10 @@ class Manager:
         ] + [MAIN_PAGE_NAME]
 
         self.chosen_setting_number = None
-        self.was_just_opened = False
+        self._opening_frame_number = 0
+ 
+    def handle_just_opened(self):
+        self._opening_frame_number = 3
 
     def update_page(self, page_name):
         self.page = page_name
@@ -180,10 +183,11 @@ class Manager:
         if old_error_message != self.error_message:
             settings_gui.refresh()
 
-        # the refresh is sometimes needed for this to display correctly
-        if self.was_just_opened:
-            self.was_just_opened = False
+        # the refresh and focus is sometimes needed for this to display correctly
+        if self._opening_frame_number > 0:
+            self._opening_frame_number -= 1
             settings_gui.refresh()
+            settings_gui.focus()
 
     async def _render_page_navigation(self, total_available_height):
         async with self._ui.vertical():
@@ -462,7 +466,7 @@ class Actions:
         global manager
         if manager is None:
             manager = Manager()
-        manager.was_just_opened = True
+        manager.handle_just_opened()
         settings_gui.show()
 
     def settings_window_hide():
