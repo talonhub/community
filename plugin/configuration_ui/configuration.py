@@ -118,7 +118,7 @@ class Manager:
 
         self.chosen_setting_number = None
         self._opening_frame_number = 0
- 
+
     def handle_just_opened(self):
         self._opening_frame_number = 3
 
