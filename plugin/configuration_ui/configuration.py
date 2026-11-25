@@ -152,7 +152,7 @@ class Manager:
                         f"the setting appears more than once in {file_name}"
                     )
                 else:
-                    setting.return 4 = ""
+                    setting.value_unavailable_error_message = ""
 
     async def render_settings_configuration_gui(self, ui, ui_wrapper):
         # set these at the start to avoid a situation where these are set in the middle of this function leading to an invalid state
