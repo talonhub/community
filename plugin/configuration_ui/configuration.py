@@ -90,7 +90,7 @@ class Manager:
         "chosen_setting_number",
         "_ui",
         "error_message",
-        "_opening_frame_number",
+        "_times_to_refresh",
         "_ui_wrapper",
     )
 
@@ -101,7 +101,7 @@ class Manager:
     _ui: egui.Ui
     _ui_wrapper: UIWrapper
     chosen_setting_number: int | None
-    _opening_frame_number: int
+    _times_to_refresh: int
 
     def __init__(self):
         pages = create_pages()
@@ -117,10 +117,10 @@ class Manager:
         ] + [MAIN_PAGE_NAME]
 
         self.chosen_setting_number = None
-        self._opening_frame_number = 0
+        self._times_to_refresh = 0
 
     def handle_just_opened(self):
-        self._opening_frame_number = 3
+        self._times_to_refresh = 10
 
     def update_page(self, page_name):
         self.page = page_name
@@ -184,8 +184,8 @@ class Manager:
             settings_gui.refresh()
 
         # the refresh and focus is sometimes needed for this to display correctly
-        if self._opening_frame_number > 0:
-            self._opening_frame_number -= 1
+        if self._times_to_refresh > 0:
+            self._times_to_refresh -= 1
             settings_gui.refresh()
             settings_gui.focus()
 
