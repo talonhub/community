@@ -462,11 +462,8 @@ class Actions:
         global manager
         if manager is None:
             manager = Manager()
-        if settings_gui.showing:
-            settings_gui.focus()
-        else:
-            manager.was_just_opened = True
-            settings_gui.show()
+        manager.was_just_opened = True
+        settings_gui.show()
 
     def settings_window_hide():
         """Hide the Community settings configuration window"""
