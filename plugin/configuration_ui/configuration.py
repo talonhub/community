@@ -133,11 +133,15 @@ class Manager:
             file_name = setting.path.stem + setting.path.suffix
             if not parser:
                 setting.handle_value_unavailable(f"{file_name} was not found.")
-            elif updated_information := parser.get_setting_information(setting.name, setting.is_tag):
+            elif updated_information := parser.get_setting_information(
+                setting.name, setting.is_tag
+            ):
                 _update_displayed_setting_information(setting, updated_information)
             else:
                 if setting.name in parser.get_duplicates(setting.is_tag):
-                    setting.handle_value_unavailable(f"It appears more than once in {file_name}.")
+                    setting.handle_value_unavailable(
+                        f"It appears more than once in {file_name}."
+                    )
                 else:
                     setting.handle_value_unavailable()
 
