@@ -145,6 +145,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 
 - Please add a screenshot showing GUI changes to the PR description to make review easier.
 - Manually activate a `tag` if you want a context to match whether a GUI element is visible.
+- Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
 
 ### imgui Practices
 
@@ -154,7 +155,6 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
 - imgui OI's can be inconsistent with the "new user message" description because it will evolve to include patterns incompatible with imgui. Therefore, make each imgui UI self explanatory.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
-- Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
 
 ### egui Practices
 
@@ -170,7 +170,6 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 #### Format
 - Use italics for voice command spoken forms and nothing else.
 - Use the [gui.py](./core/gui/gui.py) render_key method for rendering keyboard keys for key commands.
-- Try to avoid having multiple spoken forms for the same button. If you must, show alternatives using TalonScript syntax (e.g. `(foo | bar) [baz]`).
 
 #### Consistency
 - Keep the "new user message" description consistent with new UI. Update the description if you have a good reason to not follow the patterns it documents.
