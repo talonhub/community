@@ -153,7 +153,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - Keep operations in an imgui drawing function (decorated by `imgui.open`) efficient and limited because the imgui framework will frequently and repeatedly call the function. For example, cache displayed information in a global variable.
 - Create a button and voice command for closing each imgui window.
 - For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
-- Because the "new user message" onboarding text will evolve to include egui-related practices, it may not be possible to make imgui UIs follow the onboarding text practices. The limited purpose of imgui UIs makes this acceptable, but imgui UIs should be self-explanatory and not rely on the onboarding text for context.
+- Because the "new user message" GUI practices will evolve to include egui-related practices, you do not have to make imgui UIs follow those practices. The limited purpose of imgui UIs makes this acceptable, but imgui UIs should be self-explanatory and not rely on the onboarding text for context.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
 
 ### egui Practices#
