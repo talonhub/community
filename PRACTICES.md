@@ -156,7 +156,7 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 - Because the "new user message" GUI practices will evolve to include egui-related practices, you do not have to make imgui UIs follow those practices. The limited purpose of imgui UIs makes this acceptable, but imgui UIs should be self-explanatory and not rely on the onboarding text for context.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
 
-### egui Practices#
+### egui Practices
 
 #### Code Style
 - Use the reusable code in [gui.py](./core/gui/gui.py) — especially for window management.
