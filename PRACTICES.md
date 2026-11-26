@@ -159,19 +159,23 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 ### egui Practices
 
 #### Code Style
+
 - Use the reusable code in [gui.py](./core/gui/gui.py) — especially for window management.
-- In identifiers and code comments, use the word render in place of other words like draw and display. 
+- In identifiers and code comments, use the word render in place of other words like draw and display.
 
 #### Layout
+
 - For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options in italics or explain the spoken forms elsewhere in the window.
 - If your egui window is too tall for some screens, consider using an egui table or scroll area. Ensure that users can scroll these scrollable containers through voice commands and mouse.
 - Create a button and voice command for closing each egui window. Each egui window should include at least one button that renders the close command's spoken form.
 
 #### Format
+
 - Always and only use italics for voice command spoken forms.
 - Use the [gui.py](./core/gui/gui.py) render_key method for rendering key command keys.
 
 #### Consistency
+
 - Keep the "new user message" description consistent with egui windows. Update the description if you have a good reason to not follow the patterns it documents.
 
 ## Naming Practices
