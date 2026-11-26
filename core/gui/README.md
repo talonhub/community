@@ -10,4 +10,4 @@ The decorator returns a GUI object. Its methods include `show` for showing the g
 
 ## programmatic scrolling
 
-You can scroll programmatically by creating a PageScroller object and passing it to UIWrapper.draw_table. You can call .page_up and .page_down on the PageScroller to scroll the table up and down.
+You can scroll programmatically by creating a PageScroller object and passing it to UIWrapper.render_table. You can call .page_up and .page_down on the PageScroller to scroll the table up and down.
