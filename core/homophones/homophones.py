@@ -146,7 +146,9 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     ctx.tags = ["user.homophones_open"]
     gui.show()
 
+
 WINDOW_TITLE = "Community Homophones Window"
+
 
 @open_gui(y=0, refresh_period="500ms", title=WINDOW_TITLE)
 async def gui(ui, ui_wrapper):
