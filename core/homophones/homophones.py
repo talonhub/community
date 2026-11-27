@@ -146,7 +146,9 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     ctx.tags = ["user.homophones_open"]
     gui.show()
 
+
 WINDOW_TITLE = "Community Homophones Window"
+
 
 @open_gui(y=0, refresh_period="500ms", title=WINDOW_TITLE)
 async def gui(ui, ui_wrapper):
@@ -158,8 +160,10 @@ async def gui(ui, ui_wrapper):
             (create_italic_text(f"Choose {index}"), f": {word}")
         )
         if ui_wrapper.button(option_text):
+
             def create_lambda(index):
-                return lambda : handle_homophone_button_clicked(index)
+                return lambda: handle_homophone_button_clicked(index)
+
             function = create_lambda(index)
             cron.after("0s", function)
         index = index + 1
@@ -168,6 +172,7 @@ async def gui(ui, ui_wrapper):
     close_button_text = create_italic_text("Phones (hide | exit)")
     if ui_wrapper.button(close_button_text):
         actions.user.homophones_hide()
+
 
 def handle_homophone_button_clicked(index):
     current_window = get_current_window()
@@ -183,7 +188,6 @@ def handle_homophone_button_clicked(index):
     actions.user.homophones_hide()
     if focused_window:
         focused_window.focus()
-
 
 
 @mod.capture(rule="{user.homophones_canonicals}")
