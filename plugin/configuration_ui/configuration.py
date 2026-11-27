@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 from pathlib import Path
 
 import egui
@@ -75,10 +75,12 @@ def compute_readable_name(setting_name: str, page_prefix: str):
     # this is doing title formatting and not actually capitalizing all words
     return actions.user.formatted_text(" ".join(words), "CAPITALIZE_ALL_WORDS")
 
+
 @dataclass
 class SettingErrorMessage:
     text: str
     setting: Setting
+
 
 MAIN_PAGE_NAME = "Main"
 
@@ -234,7 +236,7 @@ class Manager:
                 await self._render_error_message(self.error_message)
                 if self._ui_wrapper.button("clear"):
                     self.error_message = None
-            
+
         self._ui.add_space(10)
         await self._render_configuration_page(
             total_available_height,
