@@ -146,9 +146,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     ctx.tags = ["user.homophones_open"]
     gui.show()
 
-
 WINDOW_TITLE = "Community Homophones Window"
-
 
 @open_gui(y=0, refresh_period="500ms", title=WINDOW_TITLE)
 async def gui(ui, ui_wrapper):
@@ -163,10 +161,10 @@ async def gui(ui, ui_wrapper):
             current_window = get_current_window()
             previous_window = get_previous_window()
             actions.user.homophones_hide()
-            if current_window and current_window.title != WINDOW_TITLE:
-                current_window.focus()
-            elif previous_window and previous_window.title != WINDOW_TITLE:
-                previous_window.focus()
+            for window in (current_window, previous_window):
+                if window and window.title != WINDOW_TITLE:
+                    window.focus()
+                    break
             actions.insert(actions.user.homophones_select(index))
         index = index + 1
 
