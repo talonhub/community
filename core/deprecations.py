@@ -49,11 +49,12 @@ Usages:
 See https://github.com/talonhub/community/issues/940 for original discussion
 """
 
-import datetime as dt
 import os.path
 import warnings
 
 from talon import Module, actions, settings, speech_system
+
+from .notifications import debounce_notify
 
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -71,11 +72,6 @@ mod.setting(
     default=False,
     desc="Decides if deprecated commands should throw an exception, which stops the commands from running. You might find this helps you learn the new replacement commands faster.",
 )
-
-# Tells us the last time a notification was shown so we can
-# decide when to re-show it without annoying the user too
-# much
-notification_last_shown = {}
 
 # This gets reset on every phrase, so we avoid notifying more than once per
 # phrase.
@@ -101,16 +97,12 @@ def deprecate_notify(id: str, message: str):
     Notify the user about a deprecation/deactivation. id uniquely
     identifies this deprecation.
     """
-
-    maybe_last_shown = notification_last_shown.get(id)
-    now = dt.datetime.now()
-    interval = settings.get("user.deprecate_warning_interval_hours")
-    threshold = now - dt.timedelta(hours=interval)
-    if maybe_last_shown is not None and maybe_last_shown > threshold:
-        return
-
-    actions.app.notify(message, "Deprecation warning")
-    notification_last_shown[id] = now
+    debounce_notify(
+        "Deprecation warning",
+        message,
+        settings.get("user.deprecate_warning_interval_hours"),
+        title="Deprecation warning",
+    )
 
 
 def post_phrase(_ignored):
