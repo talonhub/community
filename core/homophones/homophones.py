@@ -4,6 +4,7 @@ from typing import Optional
 from talon import Context, Module, actions, app, clip, fs
 
 from ..gui.gui import create_italic_text, open_gui
+from ..gui.previous_window_tracking import get_current_window, get_previous_window
 
 ########################################################################
 # global settings
@@ -145,8 +146,9 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     ctx.tags = ["user.homophones_open"]
     gui.show()
 
+WINDOW_TITLE = "Community Homophones Window"
 
-@open_gui(y=0, refresh_period="500ms")
+@open_gui(y=0, refresh_period="500ms", title=WINDOW_TITLE)
 async def gui(ui, ui_wrapper):
     global active_word_list
     ui_wrapper.title("Select a homophone")
@@ -156,8 +158,14 @@ async def gui(ui, ui_wrapper):
             (create_italic_text(f"Choose {index}"), f": {word}")
         )
         if ui_wrapper.button(option_text):
-            actions.insert(actions.user.homophones_select(index))
+            current_window = get_current_window()
+            previous_window = get_previous_window()
             actions.user.homophones_hide()
+            if current_window and current_window.title != WINDOW_TITLE:
+                current_window.focus()
+            elif previous_window and previous_window.title != WINDOW_TITLE:
+                previous_window.focus()
+            actions.insert(actions.user.homophones_select(index))
         index = index + 1
 
     ui_wrapper.spacing()
