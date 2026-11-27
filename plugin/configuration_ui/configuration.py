@@ -408,7 +408,6 @@ class Manager:
 
     def _toggle_setting_comment(self, setting, error_representation_of_name):
         try:
-            raise ValueError("error")
             update_setting(setting, make_comment=setting.is_activated)
         except Exception as ex:
             error_time = compute_current_time()
