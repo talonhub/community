@@ -76,7 +76,7 @@ def compute_readable_name(setting_name: str, page_prefix: str):
     return actions.user.formatted_text(" ".join(words), "CAPITALIZE_ALL_WORDS")
 
 @dataclass
-class ConfigurationErrorMessage:
+class SettingErrorMessage:
     text: str
     setting: Setting
 
@@ -98,7 +98,7 @@ class Manager:
 
     pages: dict[str, Page]
     page: str
-    error_message: ConfigurationErrorMessage | None
+    error_message: SettingErrorMessage | None
     _ui: egui.Ui
     _ui_wrapper: UIWrapper
     chosen_setting_number: int | None
@@ -335,7 +335,7 @@ class Manager:
         else:
             error_text = "It could not be found or could not be parsed."
 
-        error_message = ConfigurationErrorMessage(error_prefix + error_text, setting)
+        error_message = SettingErrorMessage(error_prefix + error_text, setting)
         await self._render_error_message(error_message)
 
     async def _render_setting_revert_button(self, setting, button_text, revert_value):
@@ -374,7 +374,7 @@ class Manager:
             type_used = setting.implementation_type_description
             error_prefix = f"Something went wrong in the UI for {type_used} {error_representation_of_name}"
 
-            error_message = ConfigurationErrorMessage(f"{error_prefix}: {ex}", setting)
+            error_message = SettingErrorMessage(f"{error_prefix}: {ex}", setting)
             await self._render_error_message(error_message)
             logging.exception(error_prefix)
 
@@ -401,10 +401,10 @@ class Manager:
             update_setting(setting, make_comment=setting.is_activated)
         except Exception as ex:
             message_prefix = f"Something went wrong trying to toggle commenting {error_representation_of_name}"
-            self.error_message = ConfigurationErrorMessage(f"{message_prefix}: {ex}", setting)
+            self.error_message = SettingErrorMessage(f"{message_prefix}: {ex}", setting)
             logging.exception(message_prefix)
 
-    async def _render_error_message(self, error_message: ConfigurationErrorMessage):
+    async def _render_error_message(self, error_message: SettingErrorMessage):
         async with self._ui.vertical():
             await self._ui_wrapper.warning_text(error_message.text)
             async with self._ui.horizontal_wrapped():
@@ -428,7 +428,7 @@ class Manager:
                     "Community provides several .talon files for configuring settings. You can use this window to edit those files without needing to learn TalonScript.\nYou may encounter unexpected behavior if you have chosen to set those settings in your own .talon files.\n\n\nThis window may not always work as intended if you have manually edited those files yourself.\nIf you run into issues with that, feel free to ask for help on the Slack!"
                 )
 
-    async def _render_error_copy_buttons(self, error_message: ConfigurationErrorMessage):
+    async def _render_error_copy_buttons(self, error_message: SettingErrorMessage):
         """Render buttons for copying an error message including one that copies the relevant file for added context"""
         if self._ui_wrapper.button("copy"):
             clip.set_text(error_message.text)
