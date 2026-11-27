@@ -149,11 +149,11 @@ Our voice commands using the clipboard usually have `paste` or `clip` in their s
 
 ### imgui Practices
 
-- Community will no longer use imgui except for version incompatibility warnings for old Talon versions because imgui is deprecated in favour of egui. imgui practices are preserved to support maintenance.
+- Community will stop using imgui except for version incompatibility warnings for old Talon versions because imgui is deprecated in favour of egui. imgui practices are preserved to support maintenance.
 - Keep operations in an imgui drawing function (decorated by `imgui.open`) efficient and limited because the imgui framework will frequently and repeatedly call the function. For example, cache displayed information in a global variable.
 - Create a button and voice command for closing each imgui window.
 - For each option in a list of options, provide a button and voice command. Either make the buttons show the exact spoken forms for selecting the corresponding options or explain the spoken forms elsewhere in the UI.
-- Because the "new user message" will evolve to include egui-related practices and our imgui usage is limited to version compatibility warnings, imgui UIs do not need to follow those practices. Instead, imgui UIs should be self-explanatory and not rely on the onboarding text for context.
+- Because the "new user message" will evolve to include egui-related practices, imgui incompatibility warning UIs do not need to follow those practices. Instead, these UIs should be self-explanatory and not rely on the onboarding text for context.
 - If your imgui window is too tall for some screens, consider using pagination buttons like the help system.
 
 ### egui Practices
