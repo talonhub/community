@@ -35,7 +35,10 @@ async def new_user_gui(ui, ui_wrapper):
         "    buttons corresponding to options in a list will have the command before the : and the option description after."
     )
     reopen_command_text = ui_wrapper.concatenate_formatted_text(
-        ("You can reopen this message by saying: ", create_italic_text("New User Message"))
+        (
+            "You can reopen this message by saying: ",
+            create_italic_text("New User Message"),
+        )
     )
     ui.label(reopen_command_text)
 
