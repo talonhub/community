@@ -2,7 +2,7 @@ import os
 
 from talon import Context, Module, actions, app
 
-from ...core.gui.gui import open_gui
+from ...core.gui.gui import create_italic_text, open_gui
 
 # we know to stop showing the new user message when the following path is defined
 NEW_USER_MESSAGE_DISMISSAL_PATH = os.path.join(
@@ -34,7 +34,10 @@ async def new_user_gui(ui, ui_wrapper):
     ui.label(
         "    buttons corresponding to options in a list will have the command before the : and the option description after."
     )
-    ui.label('You can reopen this message by saying: "New User Message"')
+    reopen_command_text = ui_wrapper.concatenate_formatted_text(
+        ("You can reopen this message by saying: ", create_italic_text("New User Message"))
+    )
+    ui.label(reopen_command_text)
 
     ui_wrapper.spacing()
 
