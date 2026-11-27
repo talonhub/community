@@ -1,7 +1,7 @@
 import os
 from typing import Optional
 
-from talon import Context, Module, actions, app, clip, fs
+from talon import Context, Module, actions, app, clip, cron, fs
 
 from ..gui.gui import create_italic_text, open_gui
 from ..gui.previous_window_tracking import get_current_window, get_previous_window
@@ -146,9 +146,7 @@ def raise_homophones(word_to_find_homophones_for, forced=False, selection=False)
     ctx.tags = ["user.homophones_open"]
     gui.show()
 
-
 WINDOW_TITLE = "Community Homophones Window"
-
 
 @open_gui(y=0, refresh_period="500ms", title=WINDOW_TITLE)
 async def gui(ui, ui_wrapper):
@@ -160,20 +158,32 @@ async def gui(ui, ui_wrapper):
             (create_italic_text(f"Choose {index}"), f": {word}")
         )
         if ui_wrapper.button(option_text):
-            current_window = get_current_window()
-            previous_window = get_previous_window()
-            actions.user.homophones_hide()
-            for window in (current_window, previous_window):
-                if window and window.title != WINDOW_TITLE:
-                    window.focus()
-                    break
-            actions.insert(actions.user.homophones_select(index))
+            def create_lambda(index):
+                return lambda : handle_homophone_button_clicked(index)
+            function = create_lambda(index)
+            cron.after("0s", function)
         index = index + 1
 
     ui_wrapper.spacing()
     close_button_text = create_italic_text("Phones (hide | exit)")
     if ui_wrapper.button(close_button_text):
         actions.user.homophones_hide()
+
+def handle_homophone_button_clicked(index):
+    current_window = get_current_window()
+    previous_window = get_previous_window()
+    focused_window = None
+    for window in (current_window, previous_window):
+        if window and window.title != WINDOW_TITLE:
+            window.focus()
+            focused_window = window
+            print("window title", window.title)
+            break
+    actions.insert(actions.user.homophones_select(index))
+    actions.user.homophones_hide()
+    if focused_window:
+        focused_window.focus()
+
 
 
 @mod.capture(rule="{user.homophones_canonicals}")
