@@ -7,6 +7,7 @@ mod.apps.safari = """
 os: mac
 app.bundle: com.apple.Safari
 app.bundle: com.apple.SafariTechnologyPreview
+app.bundle: /^com.apple.Safari.WebApp.*$/i
 """
 
 ctx.matches = r"""
@@ -23,6 +24,8 @@ class UserActions:
 @ctx.action_class("browser")
 class BrowserActions:
     def address() -> str:
+        if "WebApp" in actions.app.bundle():
+            return ""
         try:
             window = ui.active_app().windows()[0]
         except IndexError:

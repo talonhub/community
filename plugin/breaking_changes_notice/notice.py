@@ -4,7 +4,9 @@
 
 import pathlib
 
-from talon import Context, Module, actions, app, fs, imgui
+from talon import Context, Module, actions, app, fs
+
+from ...core.gui.gui import create_italic_text, open_gui
 
 # used to activate the tag for when the notice is showing
 ctx = Context()
@@ -14,18 +16,21 @@ DO_NOT_SHOW_BREAKING_CHANGES_FILE_NAME: str = "do_not_show_breaking_changes_noti
 STORED_STATE_SUBDIRECTORY_NAME: str = "breaking_changes_update_notice"
 
 
-@imgui.open(y=0)
-def notice_gui(gui: imgui.GUI):
+@open_gui(y=0)
+async def notice_gui(ui, ui_wrapper):
     """Notifies the user that breaking changes has changed"""
-    gui.text("There was a new breaking change.")
-    gui.text("A breaking change changes or removes some preexisting functionality.")
-    gui.text("We document breaking changes in the BREAKING_CHANGES.txt file.")
-    gui.line()
-    if gui.button("read breaking changes"):
+    ui_wrapper.header("There was a new breaking change.")
+    ui.label("A breaking change changes or removes some preexisting functionality.")
+    ui.label("We document breaking changes in the BREAKING_CHANGES.txt file.")
+    ui.separator()
+    if ui_wrapper.command_button("read breaking changes"):
         actions.user.breaking_changes_open()
-    if gui.button("breaking hide"):
+    if ui_wrapper.command_button("breaking hide"):
         actions.user.breaking_changes_notice_hide()
-    if gui.button("breaking dismiss (do not show this again)"):
+    never_show_again_button_text = ui_wrapper.concatenate_formatted_text(
+        (create_italic_text("breaking dismiss"), "  (do not show this again)")
+    )
+    if ui_wrapper.button(never_show_again_button_text):
         actions.user.breaking_changes_notice_never_show_again()
 
 
