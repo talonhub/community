@@ -1,6 +1,6 @@
+import datetime as dt
 import logging
 from dataclasses import dataclass
-import datetime as dt
 from pathlib import Path
 
 import egui
@@ -82,9 +82,11 @@ class SettingErrorMessage:
     text: str
     setting: Setting
 
+
 def compute_current_time():
     """Compute the current time using the same time format as the Talon log to help with looking stuff up in the log"""
     return dt.datetime.now().strftime("%H:%M:%S.%f")[:-3]
+
 
 MAIN_PAGE_NAME = "Main"
 
@@ -236,7 +238,9 @@ class Manager:
             return
 
         if self.error_message:
-            await self._render_error_message(self.error_message, self._clear_main_error_message)
+            await self._render_error_message(
+                self.error_message, self._clear_main_error_message
+            )
 
         self._ui.add_space(10)
         await self._render_configuration_page(
@@ -412,12 +416,16 @@ class Manager:
             self.error_message = SettingErrorMessage(f"{message_prefix}: {ex}", setting)
             logging.exception(message_prefix)
 
-    async def _render_error_message(self, error_message: SettingErrorMessage, clear_error_callback=None):
+    async def _render_error_message(
+        self, error_message: SettingErrorMessage, clear_error_callback=None
+    ):
         async with self._ui.vertical():
             await self._ui_wrapper.warning_text(error_message.text)
             async with self._ui.horizontal_wrapped():
                 await self._render_error_copy_buttons(error_message)
-                if clear_error_callback and self._ui_wrapper.button("clear error message"):
+                if clear_error_callback and self._ui_wrapper.button(
+                    "clear error message"
+                ):
                     clear_error_callback()
 
     async def _render_main_page(self, total_available_height):
