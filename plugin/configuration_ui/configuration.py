@@ -1,6 +1,6 @@
+import datetime as dt
 import logging
 from dataclasses import dataclass
-import datetime as dt
 from pathlib import Path
 
 import egui
@@ -82,9 +82,11 @@ class SettingErrorMessage:
     text: str
     setting: Setting
 
+
 def compute_current_time():
     """Compute the current time using the same time format as the Talon log to help with looking stuff up in the log"""
     dt.datetime.now().strftime("%H:%M:%S.%f")[:-3]
+
 
 MAIN_PAGE_NAME = "Main"
 
@@ -404,7 +406,7 @@ class Manager:
 
     def _toggle_setting_comment(self, setting, error_representation_of_name):
         try:
-            #raise ValueError("error")
+            # raise ValueError("error")
             update_setting(setting, make_comment=setting.is_activated)
         except Exception as ex:
             error_time = compute_current_time()
