@@ -1,6 +1,6 @@
-import datetime as dt
 import logging
 from dataclasses import dataclass
+import datetime as dt
 from pathlib import Path
 
 import egui
@@ -82,11 +82,9 @@ class SettingErrorMessage:
     text: str
     setting: Setting
 
-
 def compute_current_time():
     """Compute the current time using the same time format as the Talon log to help with looking stuff up in the log"""
-    dt.datetime.now().strftime("%H:%M:%S.%f")[:-3]
-
+    return dt.datetime.now().strftime("%H:%M:%S.%f")[:-3]
 
 MAIN_PAGE_NAME = "Main"
 
@@ -238,15 +236,15 @@ class Manager:
             return
 
         if self.error_message:
-            async with self._ui.horizontal_wrapped():
-                await self._render_error_message(self.error_message)
-                if self._ui_wrapper.button("clear"):
-                    self.error_message = None
+            await self._render_error_message(self.error_message, self._clear_main_error_message)
 
         self._ui.add_space(10)
         await self._render_configuration_page(
             total_available_height,
         )
+
+    def _clear_main_error_message(self):
+        self.error_message = None
 
     async def _render_configuration_page(
         self,
@@ -406,19 +404,21 @@ class Manager:
 
     def _toggle_setting_comment(self, setting, error_representation_of_name):
         try:
-            # raise ValueError("error")
+            raise ValueError("error")
             update_setting(setting, make_comment=setting.is_activated)
         except Exception as ex:
             error_time = compute_current_time()
-            message_prefix = f"{error_time} Something went wrong trying to toggle commenting {error_representation_of_name}"
+            message_prefix = f"Something went wrong trying to toggle commenting {error_representation_of_name} (at time {error_time})"
             self.error_message = SettingErrorMessage(f"{message_prefix}: {ex}", setting)
             logging.exception(message_prefix)
 
-    async def _render_error_message(self, error_message: SettingErrorMessage):
+    async def _render_error_message(self, error_message: SettingErrorMessage, clear_error_callback=None):
         async with self._ui.vertical():
             await self._ui_wrapper.warning_text(error_message.text)
             async with self._ui.horizontal_wrapped():
                 await self._render_error_copy_buttons(error_message)
+                if clear_error_callback and self._ui_wrapper.button("clear error message"):
+                    clear_error_callback()
 
     async def _render_main_page(self, total_available_height):
         """Render introductory page"""
