@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module, actions, settings
 
 ctx = Context()
 mod = Module()
@@ -20,6 +20,14 @@ browser.host: app.slack.com
 """
 ctx.matches = r"""
 app: slack
+"""
+
+# Messaging a contact relies on the new message shortcut, which opens a new
+# browser window when Slack runs in a browser, so it is desktop only.
+desktop_ctx = Context()
+desktop_ctx.matches = r"""
+app: slack
+not tag: browser
 """
 
 
@@ -117,3 +125,37 @@ class Actions:
 
     def slack_toggle_right_sidebar():
         """Toggles the visibility of the right sidebar in Slack"""
+
+
+def dialog_delay() -> str:
+    return f"{settings.get('user.messaging_contact_delay')}ms"
+
+
+def submit_to_dialog(text: str):
+    """Replaces the content of a Slack dialog that was just opened and confirms it"""
+    delay = dialog_delay()
+    actions.sleep(delay)
+    actions.edit.select_line()
+    actions.insert(text)
+    actions.sleep(delay)
+    actions.key("enter")
+
+
+@ctx.action_class("user")
+class UserActions:
+    def messaging_search_messages_from(name: str):
+        actions.key("escape")
+        actions.user.messaging_open_search()
+        # This also replaces the "in:#channel" filter that Slack prefills
+        submit_to_dialog(f"from:@{name}")
+
+
+@desktop_ctx.action_class("user")
+class DesktopUserActions:
+    def messaging_message_contact(name: str):
+        actions.key("escape")
+        actions.user.messaging_open_new_message()
+        submit_to_dialog(name)
+        actions.sleep(dialog_delay())
+        # Move focus from the recipient field to the message field
+        actions.key("tab")

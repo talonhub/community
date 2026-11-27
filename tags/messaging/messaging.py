@@ -2,6 +2,12 @@ from talon import Module
 
 mod = Module()
 mod.tag("messaging", desc="Tag for generic multi-channel messaging apps")
+mod.setting(
+    "messaging_contact_delay",
+    type=int,
+    default=400,
+    desc="Milliseconds to wait for dialogs to open when messaging or searching a contact",
+)
 
 
 @mod.action_class
@@ -40,3 +46,14 @@ class messaging_actions:
 
     def messaging_upload_file():
         """Upload a file as a message"""
+
+    # Contacts
+
+    def messaging_open_new_message():
+        """Open a new message"""
+
+    def messaging_message_contact(name: str):
+        """Open a direct message to the given person"""
+
+    def messaging_search_messages_from(name: str):
+        """Search for messages sent by the given person"""

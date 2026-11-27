@@ -123,3 +123,18 @@ class UserActions:
     def slack_toggle_right_sidebar():
         """Toggles the visibility of the right sidebar in Slack"""
         actions.key("cmd-.")
+
+
+# cmd-n opens a new browser window when Slack runs in a browser
+desktop_ctx = Context()
+desktop_ctx.matches = r"""
+os: mac
+app: slack
+not tag: browser
+"""
+
+
+@desktop_ctx.action_class("user")
+class DesktopUserActions:
+    def messaging_open_new_message():
+        actions.key("cmd-n")
