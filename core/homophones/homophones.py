@@ -165,6 +165,7 @@ async def gui(ui, ui_wrapper):
                 return lambda: handle_homophone_button_clicked(index)
 
             function = create_lambda(index)
+            # call in another thread to prevent freeze
             cron.after("0s", function)
         index = index + 1
 
