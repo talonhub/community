@@ -156,9 +156,9 @@ async def gui(ui, ui_wrapper):
     ui_wrapper.title("Select a homophone")
     index = 1
 
-    def create_lambda(index):
+    def create_lambda(number):
         # this prevents a bug from how python handles lambdas defined in a loop
-        homophone = active_word_list[index]
+        homophone = active_word_list[number]
         return lambda: actions.user.homophones_close_with_insert(homophone)
 
     for word in active_word_list:
@@ -166,7 +166,7 @@ async def gui(ui, ui_wrapper):
             (create_italic_text(f"Choose {index}"), f": {word}")
         )
         if ui_wrapper.button(option_text):
-            insert_homophone = create_lambda(index)
+            insert_homophone = create_lambda(index-1)
             # call in another thread to prevent freeze
             cron.after("0s", insert_homophone)
         index = index + 1
