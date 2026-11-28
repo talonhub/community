@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from talon import ui
+from talon import ui, app
 
 
 @dataclass
@@ -21,9 +21,9 @@ def focus_callback(window):
     window_tracking_state.current_window = window
 
 
-def activate_callback(app):
-    if app.active_window:
-        focus_callback(app.active_window)
+def activate_callback(application):
+    if application.active_window:
+        focus_callback(application.active_window)
 
 
 ui.register("win_focus", focus_callback)
@@ -36,3 +36,10 @@ def get_current_window():
 
 def get_previous_window():
     return window_tracking_state.previous_window
+
+
+def on_ready():
+    window_tracking_state.current_window = ui.active_window()
+
+
+app.register("ready", on_ready)
