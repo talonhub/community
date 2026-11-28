@@ -179,10 +179,9 @@ def handle_homophone_button_clicked(index):
     previous_window = get_previous_window()
     focused_window = None
     for window in (current_window, previous_window):
-        if window and window.title != WINDOW_TITLE:
+        if window and not (window.title == WINDOW_TITLE and window.app.name == "Talon"):
             window.focus()
             focused_window = window
-            print("window title", window.title)
             break
     actions.insert(actions.user.homophones_select(index))
     actions.user.homophones_hide()
