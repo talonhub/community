@@ -166,7 +166,7 @@ async def gui(ui, ui_wrapper):
             (create_italic_text(f"Choose {index}"), f": {word}")
         )
         if ui_wrapper.button(option_text):
-            insert_homophone = create_lambda(index-1)
+            insert_homophone = create_lambda(index - 1)
             # call in another thread to prevent freeze
             cron.after("0s", insert_homophone)
         index = index + 1
