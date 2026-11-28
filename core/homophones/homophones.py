@@ -155,42 +155,26 @@ async def gui(ui, ui_wrapper):
     global active_word_list
     ui_wrapper.title("Select a homophone")
     index = 1
+
+    def create_lambda(index):
+        # this prevents a bug from how python handles lambdas defined in a loop
+        homophone = active_word_list[index]
+        return lambda: actions.user.homophones_close_with_insert(homophone)
+
     for word in active_word_list:
         option_text = ui_wrapper.concatenate_formatted_text(
             (create_italic_text(f"Choose {index}"), f": {word}")
         )
         if ui_wrapper.button(option_text):
-
-            def create_lambda(index):
-                return lambda: handle_homophone_button_clicked(index)
-
-            function = create_lambda(index)
+            insert_homophone = create_lambda(index)
             # call in another thread to prevent freeze
-            cron.after("0s", function)
+            cron.after("0s", insert_homophone)
         index = index + 1
 
     ui_wrapper.spacing()
     close_button_text = create_italic_text("Phones (hide | exit)")
     if ui_wrapper.button(close_button_text):
         actions.user.homophones_hide()
-
-
-def handle_homophone_button_clicked(index):
-    current_window = get_current_window()
-    previous_window = get_previous_window()
-    focused_window = None
-    # the current window could be the homophones list or the correct one
-    # if the homophones list is the current window, then try the previous one
-    for window in (current_window, previous_window):
-        if window and not (window.title == WINDOW_TITLE and window.app.name == "Talon"):
-            actions.user.switcher_focus_window(window)
-            focused_window = window
-            break
-    actions.insert(actions.user.homophones_select(index))
-    actions.user.homophones_hide()
-    # because hiding the homophones UI could have unexpected effects on other egui windows with Talon1.0, focus the target window again just to be safe
-    if focused_window:
-        actions.user.switcher_focus_window(focused_window)
 
 
 @mod.capture(rule="{user.homophones_canonicals}")
@@ -248,6 +232,22 @@ class Actions:
             return all_homophones[word]
         return None
 
+    def homophones_close_with_insert(text: str):
+        """Close the homophone window and insert the text in the proper window"""
+        current_window = get_current_window()
+        previous_window = get_previous_window()
+        window_to_focus = None
+        # the current window could be the homophones list or the correct one
+        # if the homophones list is the current window, then try the previous one
+        for window in (current_window, previous_window):
+            if window and not (window.title == WINDOW_TITLE and window.app.name == "Talon"):
+                window_to_focus = window
+                break
+        actions.user.homophones_hide()
+        # because hiding the homophones UI could have unexpected effects on other egui windows with Talon1.0, focus the target window again just to be safe
+        if window_to_focus:
+            actions.user.switcher_focus_window(window_to_focus)
+        actions.insert(text)
 
 ctx_homophones_open = Context()
 ctx_homophones_open.matches = """
@@ -260,5 +260,4 @@ class UserActions:
     def choose(number_small: int):
         """Choose the nth homophone"""
         result = actions.user.homophones_select(number_small)
-        actions.insert(result)
-        actions.user.homophones_hide()
+        actions.user.homophones_close_with_insert(result)
