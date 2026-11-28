@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from talon import ui, app
+from talon import app, ui
 
 
 @dataclass
