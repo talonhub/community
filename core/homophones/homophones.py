@@ -183,14 +183,14 @@ def handle_homophone_button_clicked(index):
     # if the homophones list is the current window, then try the previous one
     for window in (current_window, previous_window):
         if window and not (window.title == WINDOW_TITLE and window.app.name == "Talon"):
-            window.focus()
+            actions.user.switcher_focus_window(window)
             focused_window = window
             break
     actions.insert(actions.user.homophones_select(index))
     actions.user.homophones_hide()
     # because hiding the homophones UI could have unexpected effects on other egui windows with Talon1.0, focus the target window again just to be safe
     if focused_window:
-        focused_window.focus()
+        actions.user.switcher_focus_window(focused_window)
 
 
 @mod.capture(rule="{user.homophones_canonicals}")
