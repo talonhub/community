@@ -240,7 +240,9 @@ class Actions:
         # the current window could be the homophones list or the correct one
         # if the homophones list is the current window, then try the previous one
         for window in (current_window, previous_window):
-            if window and not (window.title == WINDOW_TITLE and window.app.name == "Talon"):
+            if window and not (
+                window.title == WINDOW_TITLE and window.app.name == "Talon"
+            ):
                 window_to_focus = window
                 break
         actions.user.homophones_hide()
@@ -248,6 +250,7 @@ class Actions:
         if window_to_focus:
             actions.user.switcher_focus_window(window_to_focus)
         actions.insert(text)
+
 
 ctx_homophones_open = Context()
 ctx_homophones_open.matches = """
