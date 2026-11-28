@@ -650,6 +650,7 @@ def open_gui(
     refresh_period: str | None = None,
     always_on_top: bool = True,
     decorated: bool = False,
+    title: str = "",
 ):
     """Decorator for for an egui callback rendering function.
     screen: the screen to render the gui on.
@@ -657,6 +658,7 @@ def open_gui(
     refresh_period: an optional string giving a cron time period for how often to refresh the gui. egui only updates a ui when the user interacts with it, so setting this causes a periodic refresh. If you only need to update the ui under specific conditions, call .refresh() on the GUI instead.
     always_on_top: decides if the ui should be rendered as the top level.
     decorated: decides if the gui should be rendered with window borders.
+    title: the window title
     """
 
     def open_inner(render):
@@ -670,6 +672,7 @@ def open_gui(
             refresh_period=refresh_period,
             always_on_top=always_on_top,
             decorated=decorated,
+            title=title,
         )
 
     return open_inner
@@ -687,6 +690,7 @@ class Props:
     height: float | None
     always_on_top: bool
     decorated: bool
+    title: str
 
     def will_auto_size(self):
         return self.width is None or self.height is None
@@ -694,6 +698,8 @@ class Props:
     def create_window(self, callback):
         """Create a window for rendering the callback on a ui. This allows wrapping the render callable."""
         window = Window()
+        if self.title:
+            window.title = self.title
         window.draggable = True
         window.autosize = self.will_auto_size()
         window.decorated = self.decorated
@@ -724,6 +730,7 @@ class GUI:
         refresh_period: str | None,
         always_on_top: bool,
         decorated: bool,
+        title: str,
     ):
         self._props = Props(
             render=render,
@@ -734,6 +741,7 @@ class GUI:
             height=height,
             always_on_top=always_on_top,
             decorated=decorated,
+            title=title,
         )
         self._window = None
         self._egui = None
